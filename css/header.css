@@ -1,0 +1,14 @@
+header{
+	border-bottom: 1px solid grey; 
+}
+
+.my_header_address {
+  font-size: calc(10px + 0.5vw);
+  font-family: 'Vollkorn', serif;
+}
+
+.my_gps_icon{
+	max-height: 25px;
+	padding-bottom: 7px;
+	margin: 0px;
+}
