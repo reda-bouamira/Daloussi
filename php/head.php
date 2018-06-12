@@ -11,6 +11,7 @@
 <link rel="stylesheet" type="text/css" href="css/header.css">
 <link rel="stylesheet" type="text/css" href="css/social_media.css">
 <link rel="stylesheet" type="text/css" href="css/underline_effect.css">
+<link rel="stylesheet" type="text/css" href="css/carousel.css">
 <!-- logo -->
 <link rel="icon" href="img/logo.png">
 

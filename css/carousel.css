@@ -1,0 +1,8 @@
+.my-slideshow{
+  background-color: #2e3a56; 
+}
+
+.carousel-item img {
+  background-color: black;
+  opacity: 0.8;
+}
