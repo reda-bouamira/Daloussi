@@ -2,7 +2,8 @@
   background-color: #2e3a56; 
 }
 
-.carousel-item img {
+.carousel-item {
   background-color: black;
   opacity: 0.8;
+  max-height: 800px;
 }

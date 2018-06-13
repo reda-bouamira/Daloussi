@@ -3,7 +3,7 @@
     }
 
 /**************************************HEADER SOCIAL MEDIA ICONS*************************************/
-.fa {
+/*.fa {
   padding: 7px;
   font-size: 15px;
   width: 30px;
@@ -51,6 +51,48 @@ header .fa-envelope {
   color: #EEE9E9 ;
   background: #f15245;
 }
+
+  .fa-envelope:hover, .fa-envelope:focus{
+    color: #f15245;
+    background: #EEE9E9;
+  }*/
+
+.fa {
+  padding: 7px;
+  font-size: 15px;
+  width: 30px;
+  text-align: center;
+  text-decoration: none;
+  margin: 2px 2px;
+  border-radius: 70%;
+}
+
+    .fa:hover, .fa:focus {
+      transition: 0.7s
+    }
+
+.fa-facebook, .fa-twitter, .fa-instagram, .fa-envelope {
+  /*background: #3B5998;*/
+  /*border: 1px solid #990000;*/
+  color: #cc0000;
+  opacity: 0.9;
+}
+
+    .fa-facebook:hover, .fa-facebook:focus {
+      background: #EEE9E9;
+      color: #3B5998;
+    }
+
+
+    .fa-twitter:hover, .fa-twitter:focus{
+      background: white;
+      color: #55ACEE;
+    }
+
+  .fa-instagram:hover, .fa-instagram:focus{
+    color: #f15245;
+    background: #FFF;
+  }
 
   .fa-envelope:hover, .fa-envelope:focus{
     color: #f15245;
