@@ -4,7 +4,7 @@ header{
     background-repeat: repeat;
 }
 
-.my_header_address a:link, .my_header_address:visited, .my_phone_num a:link, .my_phone_num a:visited{
+.my_header_address a:link, .my_header_address a:visited, .my_phone_num a:link, .my_phone_num a:visited{
 	color: #e5e5e5;
 }
 
