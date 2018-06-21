@@ -16,6 +16,7 @@
 <link rel="stylesheet" type="text/css" href="css/underline_effect.css">
 <link rel="stylesheet" type="text/css" href="css/carousel.css">
 <link rel="stylesheet" type="text/css" href="css/car_type.css">
+<link rel="stylesheet" type="text/css" href="css/about_us_Home.css">
 <!-- logo -->
 <link rel="icon" href="img/logo.png">
 <title>Daloussi Auto</title>

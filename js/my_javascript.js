@@ -9,7 +9,7 @@ function load(){
 
 		if (browserWidth <= 500) {
 			document.getElementById('all_types').src = "img/car_types/group_cars1.png"
-			document.getElementsByClassName("my_empty_col").remove();
+			// document.getElementsByClassName("my_empty_col").remove();
 		}
 		else{
 			// alert("The browser width is" + browserWidth);
