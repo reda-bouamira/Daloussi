@@ -4,7 +4,7 @@
 			<img src="img/logo.png" class="img-fluid my_logo" alt="logo">
 		</div>	
 		<div class="offset-sm-3 col-md-4 pt-2 mb-2 align-self-center d-flex flex-column">
-			<ul class="social-icons pl-0 pb-0 mb-0 d-flex flex-row">
+			<ul class="social-icons ml-0 pl-0 pb-0 mb-0 d-flex flex-row">
   		   		<li><a href="#" target="_blank" class="fa fa-facebook mr-2"></a></li>
   		   		<li><a href="#" class="fa fa-twitter mr-2"></a></li>
 		   		<li><a href="#" class="fa fa-instagram mr-2"></a></li>

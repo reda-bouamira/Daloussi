@@ -10,6 +10,7 @@
         <div class="my-content container-fluid p-0">
             <?php include "php/carousel.php" ?>
             <?php include "php/car_type.php" ?>
+            <?php include "php/service_home.php" ?>
             <?php include "php/about_us_home.php" ?>
         </div>
         <!-- Schedule Service: Usethis API https://github.com/n8barr/automotive-model-year-data for the car make and model. -->

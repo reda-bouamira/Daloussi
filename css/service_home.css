@@ -1,0 +1,9 @@
+.my_service_home{
+	background-image: url("../img/engine2.jpg");
+    background-repeat: no-repeat;
+}
+
+.my_service_home input{
+	height: 30px;
+	background-color: black;
+}
