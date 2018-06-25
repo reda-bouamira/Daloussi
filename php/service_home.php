@@ -17,7 +17,7 @@
 	    		<h6 class="p-0 m-0">Appointment Info:</h6>
 				<div id="datetimepicker4" class="input-append">
 					<label for="my_service_date">Service Date:</label>
-					<input class="form-control form-control-lg" data-format="yyyy-MM-dd" type="text"></input>
+					<input class="form-control form-control-lg" data-format="yyyy-MM-dd" type="text" id="my_service_date">
 					<span class="add-on">
 							<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
 					</span>	

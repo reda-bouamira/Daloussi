@@ -1,7 +1,7 @@
 <div class="about_us_home container my_about_us_home">
 	<div class="row justify-content-sm-center no-gutters">
 		<div class="col-sm-6">
-			<img class="img-fluid my_dealer_img" src="img/dealership.jpg">
+			<img class="img-fluid my_dealer_img" src="img/dealership.jpg" alt="dealership">
 		</div>
 		<div class="col-sm-6 pr-3 pl-0">
 			<div class="row ml-0">

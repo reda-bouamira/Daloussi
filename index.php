@@ -3,7 +3,7 @@
     <head>
     	<?php include 'php/head.php' ?>
     </head>
-    <body>
+    <body class="p-0">
         <header>
             <?php include 'php/header.php' ?>
         </header>
