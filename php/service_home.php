@@ -3,7 +3,7 @@
 		<h3 class="text-white">Schedule Service:</h3>
 	</div>
 	<form>
-		<div class="form-row">
+		<div class="form-row justify-content-md-center">
 			<div class="form-group col-md-2 form-group-lg">
 				<h6 class="p-0 m-0">Contact Info:</h6>
 	      		<label for="my_service_name">Name:</label>
@@ -30,10 +30,15 @@
 					<option>Evening</option>
 				</select>
 	    	</div>
-	    	<div class="form-group col-md-2">
-	    		<label for="my_service_car_year">Service Time:</label>
+	    	<div class="form-group col-md-2 ml-5">
+	    		<h6 class="p-0 m-0">Vehicle Info:</h6>
+	    		<label for="my_service_car_year">Year:</label>
 				<select id="my_service_car_year" class="form-control">
 				</select>
+				<label for="my_service_make">Make:</label>
+	      		<input type="text" class="form-control" id="my_service_make">
+	      		<label for="my_service_model">Model:</label>
+	      		<input type="text" class="form-control" id="my_service_model">
 	    	</div>
     	</div>
 	</form>
