@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container px-0">
 	<div class="car_type jumbotron pt-4 pb-2 mb-0">
 		<h2 class="text-center mb-5">Select car type: </h2>
 		<div class="d-flex flex-row flex-wrap justify-content-center mt-3">

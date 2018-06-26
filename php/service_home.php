@@ -1,10 +1,10 @@
-<div class="container-fluid my_service_home mt-0 mt-0">
+<div class="container-fluid my_service_home mt-0 pb-4">
 	<div class="row pl-5">
 		<h3 class="text-white">Schedule Service:</h3>
 	</div>
-	<form>
-		<div class="form-row justify-content-md-center">
-			<div class="form-group col-md-2 form-group-lg">
+	<form class=" container justify-content-md-center">
+		<div class="form-row justify-content-md-center my_service_home_form_input">
+			<div class="form-group col-lg-2 form-group-lg mx-2">
 				<h6 class="p-0 m-0">Contact Info:</h6>
 	      		<label for="my_service_name">Name:</label>
 	      		<input type="text" class="form-control" id="my_service_name" placeholder="Full Name">
@@ -13,7 +13,7 @@
 	      		<label for="my_service_email">Email</label>
 	      		<input type="email" class="form-control" id="my_service_email" placeholder="Email">
 	    	</div>
-	    	<div class="form-group col-md-2">
+	    	<div class="form-group col-lg-2 mx-2">
 	    		<h6 class="p-0 m-0">Appointment Info:</h6>
 				<div id="datetimepicker4" class="input-append">
 					<label for="my_service_date">Service Date:</label>
@@ -30,7 +30,7 @@
 					<option>Evening</option>
 				</select>
 	    	</div>
-	    	<div class="form-group col-md-2 ml-5">
+	    	<div class="form-group col-lg-2 mx-2">
 	    		<h6 class="p-0 m-0">Vehicle Info:</h6>
 	    		<label for="my_service_car_year">Year:</label>
 				<select id="my_service_car_year" class="form-control">
