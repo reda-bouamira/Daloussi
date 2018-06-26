@@ -27,9 +27,9 @@ header{
 	font-size: calc(5px + 0.5vw);
 }
 
-/*nav{
+nav{
 	border-top: 1px solid #383838;
-}*/
+}
 
 .my_logo{
 	-webkit-filter: contrast(200%);

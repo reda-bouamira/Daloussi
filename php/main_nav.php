@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-sm navbar-dark container-fluid pb-0 pt-0">
+<nav class="navbar navbar-expand-lg navbar-dark container-fluid pb-0 pt-0">
   <!-- <a class="navbar-brand" href="#">Home</a> -->
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -33,3 +33,4 @@
     </form>
   </div>
 </nav>
+
