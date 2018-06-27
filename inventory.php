@@ -7,13 +7,11 @@
         <header>
             <?php include 'php/header.php' ?>
         </header>
-        <div class="my-content container-fluid p-0">
-            <?php include "php/carousel.php" ?>
-            <?php include "php/car_type.php" ?>
-            <?php include "php/service_home.php" ?>
-            <?php include "php/about_us_home.php" ?>
+        <div class="my-content container-fluid p-0 my_inventory">
+            <div class="row justify-content-md-center my_header_title">
+                <h2>Inventory</h2>
+            </div>
         </div>
-        <!-- use image modals when displaying the cars -->
         <footer>
             <?php include 'php/footer.php'; ?>
         </footer>

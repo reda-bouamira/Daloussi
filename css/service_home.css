@@ -1,5 +1,9 @@
+.my_service_home form{
+	max-width: 1000px;
+}
+
 .my_service_home_form_input, .my_about_service{
-	max-width: 500px;
+	max-width: 800px;
 	background: rgba(0, 0, 0, 0.8);
 }
 
@@ -24,5 +28,9 @@
 
 .my_about_service{
 	color: #cccccc;
-	font-size: 1.2rem;
+	font-size: calc(12px + 0.4vw);
+}
+
+.my_service_home label{
+	margin: 0px;
 }

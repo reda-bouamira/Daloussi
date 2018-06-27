@@ -98,3 +98,34 @@ header .fa-envelope {
     color: #f15245;
     background: #EEE9E9;
   }
+
+  /*Footer*****************************************/
+footer .fa {
+  border: 1px solid #848484;
+  color: #848484;
+}
+
+  footer .fa-facebook:hover, footer .fa-facebook:focus {
+      color: #330000;
+      background-color: #848484;
+      border: 1px solid #330000;
+    }
+
+
+  footer .fa-twitter:hover, footer .fa-twitter:focus{
+      color: #330000;
+      background-color: #848484;
+      border: 1px solid #330000;
+    }
+
+  footer .fa-instagram:hover, footer .fa-instagram:focus{
+    color: #330000;
+    background-color: #848484;
+    border: 1px solid #330000;
+  }
+
+  footer .fa-envelope:hover, footer .fa-envelope:focus{
+    color: #330000;
+    background-color: #848484;
+    border: 1px solid #330000;
+  }
