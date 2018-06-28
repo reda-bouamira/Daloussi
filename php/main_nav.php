@@ -1,11 +1,11 @@
-<nav class="navbar navbar-expand-md navbar-dark container-fluid pb-0 pt-0 navbar-fixed-top">
+<nav class="navbar navbar-expand-md navbar-dark container-fluid pb-0 pt-0">
   <!-- <a class="navbar-brand" href="#">Home</a> -->
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse font-weight-bold" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
+    <ul class="navbar-nav mr-auto my_main_navbar">
       <li class="nav-item active ml-4">
         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
         <div class="underline"></div>

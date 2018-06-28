@@ -1,0 +1,10 @@
+.car_type{
+	max-width: 1200px;
+}
+
+.car_type img{
+	max-height: 80px;
+}
+
+.grow { transition: all .2s ease-in-out; }
+.grow:hover { transform: scale(1.1); }
