@@ -1,0 +1,28 @@
+.my_service_home_form_input, .my_about_service{
+	max-width: 500px;
+	background: rgba(0, 0, 0, 0.8);
+}
+
+.my_service_home{
+	background-image: url("../img/engine_n.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.my_service_home input{
+	height: 30px;
+}
+
+.my_service_home_form_input h6{
+	color: #7f7f7f;
+}
+
+.my_service_home_form_input label{
+	color: #cccccc;
+
+}
+
+.my_about_service{
+	color: #cccccc;
+	font-size: 1.2rem;
+}

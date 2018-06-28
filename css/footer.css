@@ -1,9 +1,9 @@
 .demo-bg{
-background: #e57e00;
+background: #190707;
 margin-top: 60px;
 }
 .business-hours {
-background: #222; 
+background: #848484; 
 padding: 40px 14px;
 margin-top: -15px;
 position: relative;
@@ -21,13 +21,13 @@ z-index: -1;
 }
 .business-hours .title {
 font-size: 20px;
-color: #BBB;
+color: #333;
 text-transform: uppercase;
 padding-left: 5px;
-border-left: 4px solid #e57e00; 
+border-left: 4px solid #610B0B; 
 }
 .business-hours li {
-color: #888;
+color: #333;
 line-height: 30px;
 border-bottom: 1px solid #333; 
 }
@@ -35,5 +35,5 @@ border-bottom: 1px solid #333;
 border-bottom: none; 
 }
 .business-hours .opening-hours li.today {
-color: #e57e00; 
+color: #610B0B; 
 }

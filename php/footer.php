@@ -1,9 +1,9 @@
-<div class="container demo-bg">
+<div class="container-fluid demo-bg">
 	<div class="row">
+		<div class="col-sm-5"></div>
 		<div class="col-sm-4"></div>
-		<div class="col-sm-4"></div>
-		<div class="col-sm-4">
-			<div class="business-hours">
+		<div class="col-sm-3">
+			<div class="business-hours pb-1 mb-1">
 				<h2 class="title">Opening Hours</h2>
 				<ul class="list-unstyled opening-hours">
 					<li>Sunday <span class="pull-right">Closed</span></li>
