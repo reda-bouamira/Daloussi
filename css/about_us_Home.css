@@ -1,4 +1,4 @@
-.my_about_us_home_header{
+/*.my_about_us_home_header{
 	background-color: #232526;
 	color: #ff1919;
 }
@@ -12,8 +12,19 @@
 	opacity: 0.7;
 
 }
+*/
+
+.about_us_home{
+	background-image: url(../img/about-video-bg.jpg);
+    background-size: cover;
+    background-position: center center;
+}
 
 .my_about_us_home_text{
-	background-color: #151515;
-	color: #d3d3d3;
+	font-family: 'Open Sans', sans-serif;
+	color: #888;
 }
+
+/*.about_us_home_content{
+	max-width: 887.5px;
+}*/
