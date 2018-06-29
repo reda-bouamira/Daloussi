@@ -7,11 +7,11 @@
   <div class="collapse navbar-collapse font-weight-bold" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto my_main_navbar">
       <li class="nav-item active ml-4">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
         <div class="underline"></div>
       </li>
       <li class="nav-item ml-4">
-        <a class="nav-link" href="#">Used Vehicles</a>
+        <a class="nav-link" href="inventory.php">Used Vehicles</a>
         <div class="underline"></div>
       </li>
       <li class="nav-item ml-4">
@@ -20,6 +20,10 @@
       </li>
       <li class="nav-item ml-4">
         <a class="nav-link" href="#">Service</a>
+        <div class="underline"></div>
+      </li>
+      <li class="nav-item ml-4">
+        <a class="nav-link" href="#">Parts</a>
         <div class="underline"></div>
       </li>
       <li class="nav-item ml-4">

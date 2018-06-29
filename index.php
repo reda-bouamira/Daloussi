@@ -18,5 +18,6 @@
             <?php include 'php/footer.php'; ?>
         </footer>
     	<?php include 'php/scripts.php' ?>
+        <script src="js/index.js"></script>
     </body>
 </html>

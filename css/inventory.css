@@ -1,4 +1,56 @@
 .my_inventory .my_header_title{
-	background-color: rgb(51,0,0, 1);
-	color: #333;
+	background-color: #333;
+	color: rgb(255,255,255, 0.6); 
+}
+
+.my_search_year{
+	min-width: 7rem;
+}
+
+.my_search_year li{
+	/*border-bottom: 1px solid black;*/
+}
+
+.my_inventory_search_options ul{
+	max-height: 200px;
+	overflow-y: auto;
+}
+
+.my_inventory_search_options ul li:first-child{
+	border-top: none;
+}
+
+.my_inventory_search_options ul li{
+	border-top: 1px dashed rgb(150,150,150, 0.9);
+}
+
+.my_inventory_search_options ul li a{
+	padding-left: 10px;
+}
+
+.my_inventory_search_options .dropdown-menu{
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+}
+
+.my_inventory_sort_form{
+	border-left: 1px solid grey;
+}
+
+.my_car_info_table td{
+		padding: 3px;
+		font-size: 	calc(5px + 0.4rem);
+}
+
+.my_car_info_table tr td:nth-child(2){
+	font-size: 	calc(5px + 0.4rem);
+	font-weight: bold;
+}
+
+.my_comment{
+	font-size: calc(5px + 0.3rem);
+}
+
+.my_info_text_header{
+	font-size: calc(13px + 0.5rem);
 }
