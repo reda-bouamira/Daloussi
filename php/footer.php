@@ -1,4 +1,4 @@
-<div class="container-fluid demo-bg">
+<div class="container-fluid demo-bg mt-0">
 	<div class="row my_footer_content">
 		<div class="col-sm-5 py-5 pl-5">
 			<div class="d-flex flex-column my_footer_contact_us text-light">

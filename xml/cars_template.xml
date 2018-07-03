@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<car>
+	<year></year>
+	<make></make>
+	<model></model>
+	<trim></trim>
+	<price></price>
+	<km></km>
+	<bodytype></bodytype>
+	<colour></colour>
+	<transmission></transmission>
+	<fuel></fuel>
+	<drivetrain></drivetrain>
+	<pics></pics>
+	<description></description>
+</car>

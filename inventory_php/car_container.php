@@ -47,8 +47,8 @@
 	      						<td>Gasoline</td>
 	    					</tr>
 	    					<tr>
-	      						<td class="text-secondary">Exterior Colour:</td>
-	      						<td>Silver</td>
+	      						<td class="text-secondary">Drivetrain:</td>
+	      						<td>Front-wheel drive (FWD)</td>
 	    					</tr>
 	  					</tbody>
 					</table>
