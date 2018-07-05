@@ -19,6 +19,7 @@
 <link rel="stylesheet" type="text/css" href="css/about_us_home.css">
 <link rel="stylesheet" type="text/css" href="css/service_home.css">
 <link rel="stylesheet" type="text/css" href="css/inventory.css">
+<link rel="stylesheet" type="text/css" href="css/finance.css">
 <!-- logo -->
 <link rel="icon" href="img/logo.png">
 <title>Daloussi Auto</title>

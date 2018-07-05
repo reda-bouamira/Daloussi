@@ -15,7 +15,7 @@
         <div class="underline"></div>
       </li>
       <li class="nav-item ml-4">
-        <a class="nav-link" href="#">Finance</a>
+        <a class="nav-link" href="finance.php">Finance</a>
         <div class="underline"></div>
       </li>
       <li class="nav-item ml-4">

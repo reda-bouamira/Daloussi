@@ -1,3 +1,9 @@
+<?php 
+  $cars_xml = simplexml_load_file('xml/cars.xml');
+  $cars_array = json_decode(  json_encode($cars_xml), 1);
+?>
+
+<div><?= print_r($cars_array); ?></div>
 <ul class="nav justify-content-center bg-dark">
   <li class="nav-item dropdown bg-dark btn-group my_inventory_search_options">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Year</a>

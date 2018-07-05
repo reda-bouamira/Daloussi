@@ -7,6 +7,7 @@
 	<price></price>
 	<km></km>
 	<bodytype></bodytype>
+	<engine></engine>
 	<colour></colour>
 	<transmission></transmission>
 	<fuel></fuel>
