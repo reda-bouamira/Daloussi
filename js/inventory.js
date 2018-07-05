@@ -8,14 +8,10 @@ function load(){
 
 }
 
-// function setOverflowYScroll(){
-// 	var inventorySearchOptions = document.getElementsByClassName('my_inventory_search_options');
-
-// 	var dropdowns = inventorySearchOptions.getElementsByTagName('ul');
-
-// 	console.log(dropdowns);
-// }
-
+function loadOptions()
+{
+	=
+}
 
 function dropDownMenuCheckBoxes(){
 	$(function() {
