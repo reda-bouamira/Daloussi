@@ -1,9 +1,17 @@
 .demo-bg{
-background: #190707;
+background: #000;
 margin-top: 60px;
 }
+
+.my_footer_content{
+	background-color: rgb(21,21,21, 0.2);
+	border-top: 3px solid #330000; 
+	border-bottom: 1px solid #330000; 
+
+}
+
 .business-hours {
-background: #848484; 
+background: #686868; 
 padding: 40px 14px;
 margin-top: -15px;
 position: relative;
@@ -21,10 +29,10 @@ z-index: -1;
 }
 .business-hours .title {
 font-size: 20px;
-color: #333;
+color: #990000;/*#333;*/
 text-transform: uppercase;
 padding-left: 5px;
-border-left: 4px solid #610B0B; 
+border-left: 4px solid #333; 
 }
 .business-hours li {
 color: #333;
@@ -35,5 +43,21 @@ border-bottom: 1px solid #333;
 border-bottom: none; 
 }
 .business-hours .opening-hours li.today {
-color: #610B0B; 
+	color: #990000; 
+	font-weight: bold;
 }
+
+.my_copyright{
+	background-color: #000;
+}
+
+.my_red_color{
+	color: #990000;
+	opacity: 0.9;
+}
+
+.demo-bg .my_grey_color{
+	color: #848484;
+}
+
+

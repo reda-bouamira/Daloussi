@@ -7,13 +7,25 @@
 function load(){
 	var browserWidth = getWidth();
 	myServiceCarYear();
+	var service_home_row = document.getElementById('my_service_home_row');
+
+	var service_home_container = document.getElementById('my_service_home_container');
+
 
 		if (browserWidth <= 500) {
 			document.getElementById('all_types').src = "img/car_types/group_cars1.png"
 			// document.getElementsByClassName("my_empty_col").remove();
+
+			service_home_container.classList.remove("pb-4");
+
+			service_home_row.classList.remove("py-5");
+			service_home_row.classList.add("py-0");
 		}
 		else{
-			// alert("The browser width is" + browserWidth);
+			service_home_container.classList.add("pb-4");
+
+			service_home_row.classList.add("py-5");
+			service_home_row.classList.remove("py-0");
 		}
 }
 

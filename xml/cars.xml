@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cars>
+	<car>
+		<year>2012</year>
+		<make>Ford</make>
+		<model>Focus</model>
+		<trim>SE</trim>
+		<price>4999.00</price>
+		<km>250000</km>
+		<bodytype>Sedan</bodytype>
+		<engine>2.0L , 4cyl</engine>
+		<colour>Red</colour>
+		<transmission>Automatic</transmission>
+		<fuel>Gasoline</fuel>
+		<drivetrain>Front-wheel drive (FWD)</drivetrain>
+		<pics>1</pics>
+		<description>Selling 2012 Ford Focus se , 2.0L , 4cyl , automatic transmission has 250kms, 5 seats , loaded with keyless entrey , AC,FM/AM , power windows , power lock cloth seats ,heated seats , block heater , and much more...</description>
+	</car>
+	<car>
+		<year>2002</year>
+		<make>Toyota</make>
+		<model>Celica</model>
+		<trim>GT</trim>
+		<price>4999.00</price>
+		<km>223000</km>
+		<bodytype>Coupe</bodytype>
+		<engine>1.8L , 4cyl</engine>
+		<colour>Dark Blue</colour>
+		<transmission>Automatic</transmission>
+		<fuel>Gasoline</fuel>
+		<drivetrain>Front-wheel drive (FWD)</drivetrain>
+		<pics>2</pics>
+		<description>Selling 2002 Toyota Celica , 1.8L , 4cyl , automatic transmission has only 223kms , 5seats , loaded with keyless entry , AC,FM/AM , power windows , power lock cloth seats ,sunroof, block heater, and much more..</description>
+	</car>
+	<car>
+		<year>2011</year>
+		<make>Dodge</make>
+		<model>Grand Caravan</model>
+		<trim>SXT</trim>
+		<price>4799.00</price>
+		<km>321000</km>
+		<bodytype>Minivan</bodytype>
+		<engine>3.6L , 6cyl</engine>
+		<colour>Red</colour>
+		<transmission>Automatic</transmission>
+		<fuel>Gasoline</fuel>
+		<drivetrain>Front-wheel drive (FWD)</drivetrain>
+		<pics>3</pics>
+		<description>Selling 2011 Dodge Grand Caravan, 3.6L, 6cyl, automatic transmission has 320kms ,7seats , loaded with keyless entrey , AC,FM/AM , power windows , power lock , cloth seats ,block heater, stow and go seats , back up camera , touch screen , and much more...</description>
+	</car>
+	<car>
+		<year>2003</year>
+		<make>BMW</make>
+		<model>X-5</model>
+		<trim>3.0i</trim>
+		<price>4999.00</price>
+		<km>205000</km>
+		<bodytype>SUV</bodytype>
+		<engine>3.0L</engine>
+		<colour>Black</colour>
+		<transmission>Automatic</transmission>
+		<fuel>Gasoline</fuel>
+		<drivetrain>All-wheel drive (AWD)</drivetrain>
+		<pics>4</pics>
+		<description>Selling 2003 BMW X5 3.0i AWD , automatic transmission has 205kms , 5 seats , loaded with keyless entry , AC,FM/AM , power windows , power lock , Leather seats, heated seats , block heater, sunroof and much more...</description>
+	</car>
+	<car>
+		<year></year>
+		<make></make>
+		<model></model>
+		<trim></trim>
+		<price></price>
+		<km></km>
+		<bodytype></bodytype>
+		<engine></engine>
+		<colour></colour>
+		<transmission></transmission>
+		<fuel></fuel>
+		<drivetrain></drivetrain>
+		<pics></pics>
+		<description></description>
+	</car>
+</cars>
