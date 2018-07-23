@@ -19,15 +19,15 @@
         <div class="underline"></div>
       </li>
       <li class="nav-item ml-4">
-        <a class="nav-link" href="#">Service</a>
+        <a class="nav-link" href="service.php">Service</a>
         <div class="underline"></div>
       </li>
-      <li class="nav-item ml-4">
+<!--       <li class="nav-item ml-4">
         <a class="nav-link" href="#">Parts</a>
         <div class="underline"></div>
-      </li>
+      </li> -->
       <li class="nav-item ml-4">
-        <a class="nav-link" href="#">About Us</a>
+        <a class="nav-link" href="about_us.php">About Us</a>
         <div class="underline"></div>
       </li>
     </ul>

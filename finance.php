@@ -78,6 +78,68 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="ml-2">
+                            <div class="form-row">
+                                <div class="form-group col-lg-7">
+                                    <label for="co_fname">First Name(Co-Signer)</label>
+                                    <input type="text" class="form-control" id="co_fname" name="co_fname">
+                                </div>
+                                <div class="form-group col-lg-5">
+                                    <label for="co_sname">Middle Name(Co-Signer)</label>
+                                    <input type="text" class="form-control" id="co_sname">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-lg-12">
+                                    <label for="co_lname">Last Name(Co-Signer)</label>
+                                    <input type="text" class="form-control" id="co_lname" >
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-lg-6">
+                                    <label for="co_sin_num">SIN(Co-Signer)</label>
+                                    <input type="number" class="form-control" id="co_sin_num">
+                                </div>
+                                <div class="form-group col-lg-2">
+                                    <label for="co_name_title">Title(Co-Signer)</label>
+                                    <select id="co_name_title" class="form-control">
+                                        <option selected>Mr</option>
+                                        <option>Miss</option>
+                                        <option>Mrs</option>
+                                        <option>Ms</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <label for="co_bdate">Date of Birth(Co-Signer)</label>
+                                    <input type="date" class="form-control" id="co_bdate">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-lg-2">
+                                    <label for="co_status">Marital Status(Co-Signer)</label>
+                                    <select id="co_status" class="form-control">
+                                        <option selected>Single</option>
+                                        <option>Common Law</option>
+                                        <option>Separated</option>
+                                        <option>Married</option>
+                                        <option>Divorced</option>
+                                        <option>Widowed</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-lg-3">
+                                    <label for="co_dependants">No. Of Dependents(Co-Signer)</label>
+                                    <input type="number" class="form-control" id="co_dependants">
+                                </div>
+                                <div class="form-group col-lg-3">
+                                    <label for="co_h_phone">Home Phone(Co-Signer)</label>
+                                    <input type="tel" class="form-control" id="co_h_phone" placeholder="(XXX) XXX-XXXX" maxlength="14">
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <label for="co_c_phone">Cell Phone(Co-Signer)</label>
+                                    <input type="tel" class="form-control" id="co_c_phone" placeholder="(XXX) XXX-XXXX" maxlength="14">
+                                </div>
+                            </div>
+                        </div>
                         <div class="my_current_address mt-4">
                             <h5>Current Address</h5>
                             <div class="form-row">

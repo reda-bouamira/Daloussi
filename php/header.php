@@ -1,7 +1,7 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-4">
-			<img src="img/logo.png" class="img-fluid my_logo" alt="logo">
+			<a href="index.php"><img src="img/logo.png" class="img-fluid my_logo" alt="logo"></a>
 		</div>	
 		<div class="offset-sm-3 col-md-4 pt-2 mb-2 align-self-center d-flex flex-column">
 			<ul class="social-icons ml-0 pl-0 pb-0 mb-0 d-flex flex-row">

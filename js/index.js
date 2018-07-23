@@ -39,7 +39,7 @@ function myServiceCarYear(){
 	var currentDate = new Date();
 	var currentYear = currentDate.getFullYear();
 
-	for (var i = currentYear; i >= 1975; i--) {
+	for (var i = currentYear; i >= 1955; i--) {
 		var yearOption = document.createElement("option");
 		yearOption.setAttribute("value", i);
 		var year = document.createTextNode(i);
