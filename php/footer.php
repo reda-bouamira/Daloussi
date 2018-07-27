@@ -19,18 +19,18 @@
 			<div class="business-hours pb-1 mb-1">
 				<h2 class="title">Opening Hours</h2>
 				<ul class="list-unstyled opening-hours">
-					<li>Sunday <span class="pull-right">10:00-17:00</span></li>
-					<li>Monday <span class="pull-right">9:00-22:00</span></li>
-					<li>Tuesday <span class="pull-right">9:00-22:00</span></li>
-					<li>Wednesday <span class="pull-right">9:00-22:00</span></li>
-					<li>Thursday <span class="pull-right">9:00-22:00</span></li>
-					<li>Friday <span class="pull-right">9:00-23:30</span></li>
-					<li>Saturday <span class="pull-right">14:00-23:30</span></li>
+					<li>Sunday <span class="pull-right">12Am - 5Pm</span></li>
+					<li>Monday <span class="pull-right">7Am - 7Pm</span></li>
+					<li>Tuesday <span class="pull-right">7Am - 7Pm</span></li>
+					<li>Wednesday <span class="pull-right">7Am - 7Pm</span></li>
+					<li>Thursday <span class="pull-right">7Am - 7Pm</span></li>
+					<li>Friday <span class="pull-right">7Am - 7Pm</span></li>
+					<li>Saturday <span class="pull-right">7Am - 7Pm</span></li>
 				</ul>
 			</div>
 		</div>
 	</div>
 	<div class="row my_copyright pt-1 px-5">
-		<h6>© Copyright by <span class="my_red_color">Daloussi Auto</span> All rights reserved.</h6>
+		<h6>© Copyrightsby <span class="my_red_color">Daloussi Auto</span> All rights reserved.</h6>
 	</div>	
 </div>

@@ -7,28 +7,11 @@
 	min-width: 7rem;
 }
 
-.my_search_year li{
-	/*border-bottom: 1px solid black;*/
-}
-
-.my_inventory_search_options ul{
-	max-height: 200px;
-	overflow-y: auto;
-}
-
-.my_inventory_search_options ul li:first-child{
-	border-top: none;
-}
-
-.my_inventory_search_options ul li{
-	border-top: 1px dashed rgb(150,150,150, 0.9);
-}
-
 .my_inventory_search_options ul li a{
 	padding-left: 10px;
 }
 
-.my_inventory_search_options .dropdown-menu{
+.my_inventory_search_options .btn{
 	border-top-left-radius: 0px;
 	border-top-right-radius: 0px;
 }

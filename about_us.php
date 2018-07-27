@@ -8,7 +8,10 @@
             <?php include 'php/header.php' ?>
         </header>
         <div class="my-content container-fluid p-0 bg-white">
-            <div class="container-fluid pt-5 px-0 mt-5">
+            <div class="container-fluid pt-0 px-0 my_about_us">
+            	<div class="row justify-content-center my_header_title mb-0">
+            		<h2>About Us</h2>
+            	</div>
 				<div class="row justify-content-sm-center">
 					<div class="col-sm-9 bg-white about_us_home_content px-0">
 						<div class="row justify-content-sm-center no-gutters">

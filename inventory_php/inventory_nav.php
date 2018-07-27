@@ -1,4 +1,13 @@
-<?php 
+<?php
+  $get_values = "?";
+  if (isset($_GET['sort'])) {
+    $sort_option = filter_input(INPUT_GET, 'sort', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+      if ($sort_option != "") {
+        $get_values = "?sort=" . $sort_option . "&";
+      }
+  }
+
+
   $cars_xml = simplexml_load_file('xml/cars.xml');
   $json_decode_cars = json_decode(  json_encode($cars_xml), true);
   $cars_array = array_values($json_decode_cars);
@@ -18,7 +27,7 @@
   sort($car_makes);
 
   $car_transmissions = array("Automatic", "Manual");
-  $car_fuels = array("Gasoline", "Diesel", "Hybrid");
+  $car_fuels = array("Gasoline", "Diesel");
 
   $car_colours = array();
   foreach ($cars_array[0] as $car) {
@@ -28,70 +37,45 @@
   sort($car_colours);
 ?>
 
-<!-- <div><?= print_r($cars_array[0][0]['year']); ?></div> -->
-<!-- <div><?= var_dump($car_makes); ?></div> -->
 <ul class="nav justify-content-center bg-dark">
-  <li class="nav-item dropdown bg-dark btn-group my_inventory_search_options">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Year</a>
-    <ul class="dropdown-menu my_search_year py-0 mt-0">
-      <?php foreach ($car_years as $car_year): ?>
-        <li class="py-1"><a href="#" class="small" data-value="<?php $car_year ?>" tabIndex="-1"><input type="checkbox"/>&nbsp;<?= $car_year; ?></a></li>
-      <?php endforeach ?>
-    </ul>
-  </li>
-  <li class="nav-item dropdown bg-dark btn-group my_inventory_search_options">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Make</a>
-    <ul class="dropdown-menu py-0 mt-0">
-      <?php foreach ($car_makes as $car_make): ?>
-        <li class="py-1"><a href="#" class="small" data-value="<?= $car_make ?>" tabIndex="-1"><input type="checkbox"/>&nbsp;<?= $car_make; ?></a></li>
-      <?php endforeach ?>
-    </ul>
-  </li>
-  <!-- <li class="nav-item dropdown bg-dark btn-group my_inventory_search_options">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Model</a>
-    <ul class="dropdown-menu py-0 mt-0">
-      <li><a href="#" class="small" data-value="2018" tabIndex="-1"><input type="checkbox"/>&nbsp;C300</a></li>
-      <li><a href="#" class="small" data-value="2017" tabIndex="-1"><input type="checkbox"/>&nbsp;525i</a></li>
-      <li><a href="#" class="small" data-value="2016" tabIndex="-1"><input type="checkbox"/>&nbsp;A8</a></li>
-      <li><a href="#" class="small" data-value="2015" tabIndex="-1"><input type="checkbox"/>&nbsp;Golf</a></li>
-      <li><a href="#" class="small" data-value="2014" tabIndex="-1"><input type="checkbox"/>&nbsp;Raptor</a></li>
-      <li><a href="#" class="small" data-value="2013" tabIndex="-1"><input type="checkbox"/>&nbsp;Outlander</a></li>
-    </ul>
-    </li> -->
-  <li class="nav-item dropdown bg-dark btn-group my_inventory_search_options">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Transmission</a>
-    <ul class="dropdown-menu py-0 mt-0">
-      <?php foreach ($car_transmissions as $car_transmission): ?>
-        <li class="py-1"><a href="#" class="small" data-value="2017" tabIndex="-1"><input type="checkbox"/>&nbsp;<?= $car_transmission; ?></a></li>
-      <?php endforeach ?>
-    </ul>
-  </li>
-  </li>
-  <li class="nav-item dropdown bg-dark btn-group my_inventory_search_options">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Fuel</a>
-    <ul class="dropdown-menu py-0 mt-0">
-      <?php foreach ($car_fuels as $car_fuel): ?>
-        <li><a href="#" class="small" data-value="<?= $car_fuel ?>" tabIndex="-1"><input type="checkbox"/>&nbsp;<?= $car_fuel; ?></a></li>
-      <?php endforeach ?>
-    </ul>
-  </li>
-  <li class="nav-item dropdown bg-dark btn-group my_inventory_search_options">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Color</a>
-    <ul class="dropdown-menu py-0 mt-0">
-      <?php foreach ($car_colours as $car_colour): ?>
-        <li><a href="#" class="small" data-value="<?= $car_colour; ?>" tabIndex="-1"><input type="checkbox"/>&nbsp;<?= $car_colour; ?></a></li>
-      <?php endforeach ?>
-    </ul>
-  </li>
-  <!-- <li class="nav-item dropdown bg-dark btn-group my_inventory_search_options">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Type</a>
-    <ul class="dropdown-menu py-0 mt-0">
-      <li><a href="#" class="small" data-value="2018" tabIndex="-1"><input type="checkbox"/>&nbsp;2018</a></li>
-      <li><a href="#" class="small" data-value="2017" tabIndex="-1"><input type="checkbox"/>&nbsp;2017</a></li>
-      <li><a href="#" class="small" data-value="2016" tabIndex="-1"><input type="checkbox"/>&nbsp;2016</a></li>
-      <li><a href="#" class="small" data-value="2015" tabIndex="-1"><input type="checkbox"/>&nbsp;2015</a></li>
-      <li><a href="#" class="small" data-value="2014" tabIndex="-1"><input type="checkbox"/>&nbsp;2014</a></li>
-      <li><a href="#" class="small" data-value="2013" tabIndex="-1"><input type="checkbox"/>&nbsp;2013</a></li>
-    </ul>
-  </li> -->
+  <div class="dropdown mx-2 py-1">
+        <button class="btn bg-dark text-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Year</button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <?php foreach ($car_years as $car_year): ?>
+                <a class="dropdown-item" href="<?= $get_values . "year=" . $car_year ?>"><?= $car_year; ?></a>
+            <?php endforeach ?>
+        </div>
+    </div>
+    <div class="dropdown mx-2 py-1">
+        <button class="btn bg-dark text-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Make</button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <?php foreach ($car_makes as $car_make): ?>
+                <a class="dropdown-item" href="<?= $get_values . "make=" . $car_make ?>"><?= $car_make; ?></a>
+            <?php endforeach ?>
+        </div>
+    </div>
+    <div class="dropdown mx-2 py-1">
+        <button class="btn bg-dark text-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Transmission</button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <?php foreach ($car_transmissions as $car_transmission): ?>
+                <a class="dropdown-item" href="<?= $get_values . "transmission=" . $car_transmission ?>"><?= $car_transmission; ?></a>
+            <?php endforeach ?>
+        </div>
+    </div>
+    <div class="dropdown mx-2 py-1">
+        <button class="btn bg-dark text-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Fuel</button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <?php foreach ($car_fuels as $car_fuel): ?>
+                <a class="dropdown-item" href="<?= $get_values . "fuel=" . $car_fuel ?>"><?= $car_fuel; ?></a>
+            <?php endforeach ?>
+        </div>
+    </div>
+  <div class="dropdown mx-2 py-1">
+        <button class="btn bg-dark text-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Color</button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <?php foreach ($car_colours as $car_colour): ?>
+                <a class="dropdown-item" href="<?= $get_values . "colour=" . $car_colour ?>"><?= $car_colour; ?></a>
+            <?php endforeach ?>
+        </div>
+    </div>
 </ul>

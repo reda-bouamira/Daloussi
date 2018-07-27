@@ -1,3 +1,13 @@
+<?php   
+        if (!isset($_SESSION)) {
+                session_start();
+        }
+
+        if (isset($_GET['sort'])) {
+            $sort_option = filter_input(INPUT_GET, 'sort', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -15,15 +25,40 @@
                 <?php include 'inventory_php/inventory_nav.php'; ?>
             </div>
             <div class="row my_vehicles_header justify-content-end pt-3">
-                <div class="col-sm-2 my-2">SHOWING <span class="font-weight-bold">1 - 20</span> OF <span class="font-weight-bold">100</span></div>
+                <div class="col-sm-2 my-2">SHOWING <span class="font-weight-bold" id="my_cars_count"></span> OF <span class="font-weight-bold"><?= $_SESSION['cars_count'] ?></span> CARS</div>
                 <div class="form-inline col-sm-4 my_inventory_sort_form">
+
                     <label class="col-form-label mr-2" for="my_inventory_sort">SORT BY:</label>
-                    <select class="custom-select form-control-sm pb-1" id="my_inventory_sort">
-                        <option value="date">Date Added</option>
-                        <option value="lprice">Price (Low to High)</option>
-                        <option value="hprice">Price (High to Low)</option>
-                        <option value="hyear">Year (Newest to Oldest)</option>
-                        <option value="lyear">Year (Oldest to Newest)</option>
+                    <select class="custom-select form-control-sm pb-1" id="my_inventory_sort" onchange="location = this.value;">
+                        <?php if (!isset($_GET['sort'])): ?>
+                            <option value=""></option>
+                            <option value="?sort=lprice">Price (Low to High)</option>
+                            <option value="?sort=hprice">Price (High to Low)</option>
+                            <option value="?sort=hyear">Year (Newest to Oldest)</option>
+                            <option value="?sort=lyear">Year (Oldest to Newest)</option>
+                        <?php else: ?>
+                            <?php if ($sort_option == 'lprice'): ?>
+                                <option value="?sort=lprice">Price (Low to High)</option>
+                                <option value="?sort=hprice">Price (High to Low)</option>
+                                <option value="?sort=hyear">Year (Newest to Oldest)</option>
+                                <option value="?sort=lyear">Year (Oldest to Newest)</option>
+                            <?php elseif ($sort_option == 'hprice'): ?>
+                                <option value="?sort=hprice">Price (High to Low)</option>
+                                <option value="?sort=lprice">Price (Low to High)</option>
+                                <option value="?sort=hyear">Year (Newest to Oldest)</option>
+                                <option value="?sort=lyear">Year (Oldest to Newest)</option>
+                            <?php elseif ($sort_option == 'hyear'): ?>
+                                <option value="?sort=hyear">Year (Newest to Oldest)</option>
+                                <option value="?sort=lprice">Price (Low to High)</option>
+                                <option value="?sort=hprice">Price (High to Low)</option>
+                                <option value="?sort=lyear">Year (Oldest to Newest)</option>
+                            <?php elseif ($sort_option == 'lyear'): ?>
+                                <option value="?sort=lyear">Year (Oldest to Newest)</option>
+                                <option value="?sort=hprice">Price (High to Low)</option>
+                                <option value="?sort=lprice">Price (Low to High)</option>
+                                <option value="?sort=hyear">Year (Newest to Oldest)</option>
+                            <?php endif ?>
+                        <?php endif ?>
                     </select>
                 </div>
             </div>

@@ -10,4 +10,13 @@
 	$my_service_model = filter_input(INPUT_POST, 'my_service_model', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 	echo $my_service_model;
+
+	$email_from = "reda-bouamira@outlook.fr";
+	$email_subject = "Car Service Booking";
+	$email_body = "Here is the email";
+	$email_to = "reda-bouamira@outlook.com";
+	$headers = "From: $email_from \r\n";
+
+	mail($email_to, $email_subject, $email_body, $headers);
 ?>
+
