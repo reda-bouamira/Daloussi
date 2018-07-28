@@ -10,7 +10,7 @@ function load(){
 
 function loadOptions()
 {
-	=
+	
 }
 
 function dropDownMenuCheckBoxes(){

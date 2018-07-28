@@ -66,11 +66,11 @@
                                 </div>
                                 <div class="form-group col-lg-2">
                                     <label for="dependants">No. Of Dependents*</label>
-                                    <input type="number" class="form-control" id="dependants" required>
+                                    <input type="number" class="form-control" id="dependants">
                                 </div>
                                 <div class="form-group col-lg-4">
                                     <label for="h_phone">Home Phone</label>
-                                    <input type="tel" class="form-control" id="h_phone" placeholder="(XXX) XXX-XXXX" maxlength="14" required>
+                                    <input type="tel" class="form-control" id="h_phone" placeholder="(XXX) XXX-XXXX" maxlength="14">
                                 </div>
                                 <div class="form-group col-lg-4">
                                     <label for="c_phone">Cell Phone*</label>
@@ -83,7 +83,7 @@
                             <div class="form-row">
                                 <div class="form-group col-lg-2">
                                     <label for="c_app_num">Apartment Number</label>
-                                    <input type="number" class="form-control" id="c_app_num" required>
+                                    <input type="number" class="form-control" id="c_app_num">
                                 </div>
                                 <div class="form-group col-lg-2">
                                     <label for="c_street_num">Street Number*</label>
@@ -132,7 +132,7 @@
                             <div class="form-row">
                                 <div class="form-group col-lg-2">
                                     <label for="p_app_num">Apartment Number</label>
-                                    <input type="number" class="form-control" id="p_app_num" required>
+                                    <input type="number" class="form-control" id="p_app_num">
                                 </div>
                                 <div class="form-group col-lg-2">
                                     <label for="p_street_num">Street Number*</label>
@@ -223,7 +223,7 @@
                             <div class="form-row">
                                 <div class="form-group col-lg-7">
                                     <label for="c_y_employed">Years Employed*</label>
-                                    <input id="c_y_employed" type="number" class="form-control" min="1900" max="2018" step="1" value="2018">
+                                    <input id="c_y_employed" type="number" class="form-control" min="0" max="100" step="1" value="0">
                                 </div>
                                 <div class="form-group col-lg-5">
                                     <label for="c_m_employed">Months Employed*</label>
@@ -278,7 +278,7 @@
                             <div class="form-row">
                                 <div class="form-group col-lg-7">
                                     <label for="c_y_employed">Years Employed*</label>
-                                    <input id="c_y_employed" type="number" class="form-control" min="1900" max="2018" step="1" value="2018">
+                                    <input id="c_y_employed" type="number" class="form-control" min="0" max="100" step="1" value="0">
                                 </div>
                                 <div class="form-group col-lg-5">
                                     <label for="c_m_employed">Months Employed*</label>
@@ -291,7 +291,7 @@
                             <div class="form-row">
                                 <div class="form-group col-lg-3">
                                     <label for="gross_monthly_income">Gross Monthly Income*</label>
-                                    <input id="gross_monthly_income" type="number" class="form-control" min="0">
+                                    <input id="gross_monthly_income" type="number" class="form-control" min="0" step="10">
                                 </div>
                                 <div class="form-group col-lg-3">
                                     <label for="other_monthly_income">Other Monthly Income*</label>
