@@ -20,12 +20,12 @@
 				<h2 class="title">Opening Hours</h2>
 				<ul class="list-unstyled opening-hours">
 					<li>Sunday <span class="pull-right">12Am - 5Pm</span></li>
-					<li>Monday <span class="pull-right">7Am - 7Pm</span></li>
-					<li>Tuesday <span class="pull-right">7Am - 7Pm</span></li>
-					<li>Wednesday <span class="pull-right">7Am - 7Pm</span></li>
-					<li>Thursday <span class="pull-right">7Am - 7Pm</span></li>
-					<li>Friday <span class="pull-right">7Am - 7Pm</span></li>
-					<li>Saturday <span class="pull-right">7Am - 7Pm</span></li>
+					<li>Monday <span class="pull-right">9Am - 7Pm</span></li>
+					<li>Tuesday <span class="pull-right">9Am - 7Pm</span></li>
+					<li>Wednesday <span class="pull-right">9Am - 7Pm</span></li>
+					<li>Thursday <span class="pull-right">9Am - 7Pm</span></li>
+					<li>Friday <span class="pull-right">9Am - 7Pm</span></li>
+					<li>Saturday <span class="pull-right">9Am - 7Pm</span></li>
 				</ul>
 			</div>
 		</div>

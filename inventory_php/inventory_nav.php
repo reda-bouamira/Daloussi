@@ -38,6 +38,9 @@
 ?>
 
 <ul class="nav justify-content-center bg-dark">
+  <div class="mx-2 py-1">
+        <a href="inventory.php"><button class="btn bg-dark text-light" type="button">All Cars</button></a>
+  </div>
   <div class="dropdown mx-2 py-1">
         <button class="btn bg-dark text-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Year</button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
