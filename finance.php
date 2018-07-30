@@ -198,17 +198,17 @@
                                 </div>
                                 <div class="form-group col-lg-2">
                                     <label for="p_street_num">Street Number*</label>
-                                    <input type="number" class="form-control" name="p_street_num" id="p_street_num" required>
+                                    <input type="number" class="form-control" name="p_street_num" id="p_street_num" >
                                 </div>
                                 <div class="form-group col-lg-8">
                                     <label for="p_street_name">Street Name*</label>
-                                    <input type="text" class="form-control" name="p_street_name" id="p_street_name" required>
+                                    <input type="text" class="form-control" name="p_street_name" id="p_street_name" >
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-4">
                                     <label for="p_city">City*</label>
-                                    <input type="text" class="form-control" name="p_city" id="p_city" required>
+                                    <input type="text" class="form-control" name="p_city" id="p_city" >
                                 </div>
                                 <div class="form-group col-lg-3">
                                     <label for="p_province">Province*</label>
@@ -230,11 +230,11 @@
                                 </div>
                                 <div class="form-group col-lg-2">
                                     <label for="p_postal_code">Postal Code*</label>
-                                    <input type="text" class="form-control" name="p_postal_code" id="p_postal_code" required>
+                                    <input type="text" class="form-control" name="p_postal_code" id="p_postal_code" >
                                 </div>
                                 <div class="form-group col-lg-3">    
                                     <label for="p_address_since">Since*</label>
-                                    <input type="date" class="form-control" name="p_address_since" id="p_address_since" required>
+                                    <input type="date" class="form-control" name="p_address_since" id="p_address_since" >
                                 </div>
                             </div>
                         </div>
@@ -285,11 +285,11 @@
                             <div class="form-row">
                                 <div class="form-group col-lg-7">
                                     <label for="c_y_employed">Years Employed*</label>
-                                    <input name="c_y_employed" id="c_y_employed" type="number" class="form-control" min="0" max="100" step="1" value="0">
+                                    <input name="c_y_employed" id="c_y_employed" type="number" class="form-control" min="0" max="100" step="1" value="0" required>
                                 </div>
                                 <div class="form-group col-lg-5">
                                     <label for="c_m_employed">Months Employed*</label>
-                                    <input name="c_m_employed" id="c_m_employed" type="number" class="form-control" min="0" max="11" step="1" value="0">
+                                    <input name="c_m_employed" id="c_m_employed" type="number" class="form-control" min="0" max="11" step="1" value="0" required>
                                 </div>
                             </div>
                         </div>
@@ -353,7 +353,7 @@
                             <div class="form-row">
                                 <div class="form-group col-lg-3">
                                     <label for="gross_monthly_income">Gross Monthly Income*</label>
-                                    <input name="gross_monthly_income" id="gross_monthly_income" type="number" class="form-control" min="0" step="10">
+                                    <input name="gross_monthly_income" id="gross_monthly_income" type="number" class="form-control" min="0" step="10" required>
                                 </div>
                                 <div class="form-group col-lg-3">
                                     <label for="other_monthly_income">Other Monthly Income*</label>
@@ -384,7 +384,7 @@
                                 </div>
                                 <div class="form-group col-lg-3">
                                     <label for="landl_mort_holder">Landlord/Mortgage Holder</label>
-                                    <input name="landl_mort_holder" id="landl_mort_holder" type="text" class="form-control">
+                                    <input name="landl_mort_holder" id="landl_mort_holder" type="text" class="form-control" required>
                                 </div>
                                 <div class="form-group col-lg-3">
                                     <label for="monthly_payment">Monthly Payment*</label>
@@ -411,10 +411,10 @@
                                 </div>
                                 <div class="form-group col-lg-2">
                                     <label class="radio-inline pr-2">
-                                        <input class="mr-1" type="radio" name="bankruptcy">Yes
+                                        <input class="mr-1" type="radio" name="bankruptcy" value="yes">Yes
                                     </label>
                                     <label class="radio-inline">
-                                        <input class="mr-1" type="radio" name="bankruptcy">No
+                                        <input class="mr-1" type="radio" name="bankruptcy" value="no" checked>No
                                     </label>
                                 </div>
                             </div>
@@ -424,10 +424,10 @@
                                 </div>    
                                 <div class="form-group col-lg-2">
                                     <label class="radio-inline pr-2">
-                                        <input class="mr-1" type="radio" name="past_due_payments">Yes
+                                        <input class="mr-1" type="radio" name="past_due_payments" value="yes">Yes
                                     </label>
                                     <label class="radio-inline">
-                                        <input class="mr-1" type="radio" name="past_due_payments">No
+                                        <input class="mr-1" type="radio" name="past_due_payments" value="no" checked>No
                                     </label>
                                 </div>
                             </div>
@@ -437,10 +437,10 @@
                                 </div>    
                                 <div class="form-group col-lg-2">
                                     <label class="radio-inline pr-2">
-                                        <input class="mr-1" type="radio" name="collection">Yes
+                                        <input class="mr-1" type="radio" name="collection" value="yes">Yes
                                     </label>
                                     <label class="radio-inline">
-                                        <input class="mr-1" type="radio" name="collection">No
+                                        <input class="mr-1" type="radio" name="collection" value="no" checked>No
                                     </label>
                                 </div>
                             </div>
@@ -451,7 +451,7 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label class="checkbox-inline"><input class="mr-2" type="checkbox" value="accept_aggreement">I accept*</label>
+                                    <label class="checkbox-inline"><input class="mr-2" type="checkbox" value="accept_aggreement" required>I accept*</label>
                                 </div>
                             </div>
                         </div>
@@ -463,7 +463,7 @@
                             </div>
                             <div class="form-row justify-content-end">
                                 <div class="form-group col-lg-2">
-                                    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                                    <button type="submit" class="btn btn-primary btn-lg" name="submit">Submit</button>
                                 </div>
                             </div>
                         </div>
