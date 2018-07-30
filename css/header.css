@@ -38,6 +38,9 @@ nav{
 
 .my_logo{
 	-webkit-filter: contrast(200%);
+<<<<<<< HEAD
+	-webkit-filter: brightness(200%); 
+=======
 	-webkit-filter: brightness(100%); 
 }
 
@@ -48,4 +51,5 @@ nav{
 
 br{
     line-height: 0.5;
+>>>>>>> edac24e627b92c3be2ba242d9748aa4afd6abc0b
 }
