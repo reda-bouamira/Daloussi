@@ -31,6 +31,6 @@
 		</div>
 	</div>
 	<div class="row my_copyright pt-1 px-5">
-		<h6>© Copyrightsby <span class="my_red_color">Daloussi Auto</span> All rights reserved.</h6>
+		<h6>© Copyrights by <span class="my_red_color">Daloussi Auto</span> All rights reserved.</h6>
 	</div>	
 </div>
