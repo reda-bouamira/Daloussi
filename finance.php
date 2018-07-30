@@ -400,7 +400,7 @@
                                 </div>
                                 <div class="form-group col-lg-5">
                                     <label for="mort_amount">Original Mortgage Amount</label>
-                                    <input id="mort_amount" type="number" class="form-control" min="0" step="1000">
+                                    <input name="mort_amount" id="mort_amount" type="number" class="form-control" min="0" step="1000">
                                 </div>
                             </div>
                         </div>
@@ -411,10 +411,10 @@
                                 </div>
                                 <div class="form-group col-lg-2">
                                     <label class="radio-inline pr-2">
-                                        <input class="mr-1" type="radio" name="optradio">Yes
+                                        <input class="mr-1" type="radio" name="bankruptcy">Yes
                                     </label>
                                     <label class="radio-inline">
-                                        <input class="mr-1" type="radio" name="optradio">No
+                                        <input class="mr-1" type="radio" name="bankruptcy">No
                                     </label>
                                 </div>
                             </div>
@@ -424,10 +424,10 @@
                                 </div>    
                                 <div class="form-group col-lg-2">
                                     <label class="radio-inline pr-2">
-                                        <input class="mr-1" type="radio" name="optradio">Yes
+                                        <input class="mr-1" type="radio" name="past_due_payments">Yes
                                     </label>
                                     <label class="radio-inline">
-                                        <input class="mr-1" type="radio" name="optradio">No
+                                        <input class="mr-1" type="radio" name="past_due_payments">No
                                     </label>
                                 </div>
                             </div>
@@ -437,10 +437,10 @@
                                 </div>    
                                 <div class="form-group col-lg-2">
                                     <label class="radio-inline pr-2">
-                                        <input class="mr-1" type="radio" name="optradio">Yes
+                                        <input class="mr-1" type="radio" name="collection">Yes
                                     </label>
                                     <label class="radio-inline">
-                                        <input class="mr-1" type="radio" name="optradio">No
+                                        <input class="mr-1" type="radio" name="collection">No
                                     </label>
                                 </div>
                             </div>
