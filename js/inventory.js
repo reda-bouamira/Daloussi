@@ -1,5 +1,4 @@
 function load(){
-
 	loadDoc();
 	postCarsCount();
 }
@@ -18,12 +17,13 @@ function loadDoc() {
 	function myFunction(xml) {
 	  var i;
 	  var xmlDoc = xml.responseXML;
-	  var x = xmlDoc.getElementsByTagName("car");
-	  console.log(x.nodeName);
+	  var cars = xmlDoc.getElementsByTagName("car");
 
-	  document.cookie = x;
+	  var carsCount = cars.length;
 
-	  console.log(document.cookie);
+	  var totalCarsCount = document.getElementById("my_total_cars_count");
+
+	  totalCarsCount.innerHTML = "4";
 	}
 }
 

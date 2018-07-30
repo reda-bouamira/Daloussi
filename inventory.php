@@ -1,8 +1,4 @@
 <?php   
-        if (!isset($_SESSION)) {
-                session_start();
-        }
-
         if (isset($_GET['sort'])) {
             $sort_option = filter_input(INPUT_GET, 'sort', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         }
@@ -25,7 +21,7 @@
                 <?php include 'inventory_php/inventory_nav.php'; ?>
             </div>
             <div class="row my_vehicles_header justify-content-end pt-3">
-                <div class="col-sm-2 my-2">SHOWING <span class="font-weight-bold" id="my_cars_count"></span> OF <span class="font-weight-bold"><?= $_SESSION['cars_count'] ?></span> CARS</div>
+                <div class="col-sm-2 my-2">SHOWING <span class="font-weight-bold" id="my_cars_count"></span> OF <span class="font-weight-bold" id="my_total_cars_count"></span> CARS</div>
                 <div class="form-inline col-sm-4 my_inventory_sort_form">
 
                     <label class="col-form-label mr-2" for="my_inventory_sort">SORT BY:</label>

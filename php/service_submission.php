@@ -1,5 +1,5 @@
 <?php 
-	$my_service_name = filter_input(INPUT_POST, 'my_service_name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+	$my_service_name = 	filter_input(INPUT_POST, 'my_service_name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 	$my_service_phone = filter_input(INPUT_POST, 'my_service_phone', FILTER_SANITIZE_NUMBER_INT);
 	$my_service_email = filter_input(INPUT_POST, 'my_service_email', FILTER_SANITIZE_EMAIL);
 	$my_service_reason = filter_input(INPUT_POST, 'my_service_reason', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -11,7 +11,7 @@
 
 	echo $my_service_model;
 
-	$email_from = "reda-bouamira@outlook.fr";
+	$email_from = "daloussiautoweb@gmail.com";
 	$email_subject = "Car Service Booking";
 	$email_body = "Here is the email";
 	$email_to = "reda-bouamira@outlook.com";

@@ -24,23 +24,23 @@
                                 </div>
                                 <div class="form-group col-lg-5">
                                     <label for="sname">Middle Name</label>
-                                    <input type="text" class="form-control" id="sname">
+                                    <input type="text" class="form-control" name="sname" id="sname">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-12">
                                     <label for="lname">Last Name*</label>
-                                    <input type="text" class="form-control" id="lname" required>
+                                    <input type="text" class="form-control" name="lname" id="lname" required>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-6">
                                     <label for="sin_num">SIN*</label>
-                                    <input type="number" class="form-control" id="sin_num" required>
+                                    <input type="number" class="form-control" name="sin_num" id="sin_num" required>
                                 </div>
                                 <div class="form-group col-lg-2">
                                     <label for="name_title">Title*</label>
-                                    <select id="name_title" class="form-control">
+                                    <select id="name_title" name="name_title" class="form-control">
                                         <option selected>Mr</option>
                                         <option>Miss</option>
                                         <option>Mrs</option>
@@ -49,13 +49,13 @@
                                 </div>
                                 <div class="form-group col-lg-4">
                                     <label for="bdate">Date of Birth*</label>
-                                    <input type="date" class="form-control" id="bdate" required>
+                                    <input type="date" class="form-control" name="bdate" id="bdate" required>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-2">
                                     <label for="status">Marital Status*</label>
-                                    <select id="status" class="form-control">
+                                    <select id="status" name="status" class="form-control">
                                         <option selected>Single</option>
                                         <option>Common Law</option>
                                         <option>Separated</option>
@@ -66,15 +66,15 @@
                                 </div>
                                 <div class="form-group col-lg-2">
                                     <label for="dependants">No. Of Dependents*</label>
-                                    <input type="number" class="form-control" id="dependants">
+                                    <input type="number"  name="dependants" class="form-control" id="dependants">
                                 </div>
                                 <div class="form-group col-lg-4">
                                     <label for="h_phone">Home Phone</label>
-                                    <input type="tel" class="form-control" id="h_phone" placeholder="(XXX) XXX-XXXX" maxlength="14">
+                                    <input type="tel" class="form-control" name="h_phone" id="h_phone" placeholder="(XXX) XXX-XXXX" maxlength="14">
                                 </div>
                                 <div class="form-group col-lg-4">
                                     <label for="c_phone">Cell Phone*</label>
-                                    <input type="tel" class="form-control" id="c_phone" placeholder="(XXX) XXX-XXXX" maxlength="14" required>
+                                    <input type="tel" class="form-control" id="c_phone" name="c_phone" placeholder="(XXX) XXX-XXXX" maxlength="14" required>
                                 </div>
                             </div>
                         </div>
@@ -86,23 +86,23 @@
                                 </div>
                                 <div class="form-group col-lg-5">
                                     <label for="co_sname">Middle Name(Co-Signer)</label>
-                                    <input type="text" class="form-control" id="co_sname">
+                                    <input type="text" class="form-control" name="co_sname" id="co_sname">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-12">
                                     <label for="co_lname">Last Name(Co-Signer)</label>
-                                    <input type="text" class="form-control" id="co_lname" >
+                                    <input type="text" class="form-control" name="co_lname" id="co_lname" >
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-6">
                                     <label for="co_sin_num">SIN(Co-Signer)</label>
-                                    <input type="number" class="form-control" id="co_sin_num">
+                                    <input type="number" class="form-control" name="co_sin_num" id="co_sin_num">
                                 </div>
                                 <div class="form-group col-lg-2">
                                     <label for="co_name_title">Title(Co-Signer)</label>
-                                    <select id="co_name_title" class="form-control">
+                                    <select id="co_name_title" name="co_name_title" class="form-control">
                                         <option selected>Mr</option>
                                         <option>Miss</option>
                                         <option>Mrs</option>
@@ -111,13 +111,13 @@
                                 </div>
                                 <div class="form-group col-lg-4">
                                     <label for="co_bdate">Date of Birth(Co-Signer)</label>
-                                    <input type="date" class="form-control" id="co_bdate">
+                                    <input type="date" class="form-control" name="co_bdate" id="co_bdate">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-2">
                                     <label for="co_status">Marital Status(Co-Signer)</label>
-                                    <select id="co_status" class="form-control">
+                                    <select id="co_status" name="co_status" class="form-control">
                                         <option selected>Single</option>
                                         <option>Common Law</option>
                                         <option>Separated</option>
@@ -128,15 +128,15 @@
                                 </div>
                                 <div class="form-group col-lg-3">
                                     <label for="co_dependants">No. Of Dependents(Co-Signer)</label>
-                                    <input type="number" class="form-control" id="co_dependants">
+                                    <input type="number" class="form-control" name="co_dependants" id="co_dependants">
                                 </div>
                                 <div class="form-group col-lg-3">
                                     <label for="co_h_phone">Home Phone(Co-Signer)</label>
-                                    <input type="tel" class="form-control" id="co_h_phone" placeholder="(XXX) XXX-XXXX" maxlength="14">
+                                    <input type="tel" class="form-control" id="co_h_phone" name="co_h_phone" placeholder="(XXX) XXX-XXXX" maxlength="14">
                                 </div>
                                 <div class="form-group col-lg-4">
                                     <label for="co_c_phone">Cell Phone(Co-Signer)</label>
-                                    <input type="tel" class="form-control" id="co_c_phone" placeholder="(XXX) XXX-XXXX" maxlength="14">
+                                    <input type="tel" class="form-control" name="co_c_phone" id="co_c_phone" placeholder="(XXX) XXX-XXXX" maxlength="14">
                                 </div>
                             </div>
                         </div>
@@ -145,25 +145,25 @@
                             <div class="form-row">
                                 <div class="form-group col-lg-2">
                                     <label for="c_app_num">Apartment Number</label>
-                                    <input type="number" class="form-control" id="c_app_num">
+                                    <input type="number" class="form-control" name="c_app_num" id="c_app_num">
                                 </div>
                                 <div class="form-group col-lg-2">
                                     <label for="c_street_num">Street Number*</label>
-                                    <input type="number" class="form-control" id="c_street_num" required>
+                                    <input type="number" class="form-control" name="c_street_num" id="c_street_num" required>
                                 </div>
                                 <div class="form-group col-lg-8">
                                     <label for="c_street_name">Street Name*</label>
-                                    <input type="text" class="form-control" id="c_street_name" required>
+                                    <input type="text" class="form-control" name="c_street_name" id="c_street_name" required>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-4">
                                     <label for="c_city">City*</label>
-                                    <input type="text" class="form-control" id="c_city" required>
+                                    <input type="text" class="form-control" name="c_city" id="c_city" required>
                                 </div>
                                 <div class="form-group col-lg-3">
                                     <label for="c_province">Province*</label>
-                                    <select id="c_province" class="form-control">
+                                    <select id="c_province" name="c_province" class="form-control">
                                         <option>Alberta</option>
                                         <option>British Columbia</option>
                                         <option selected>Manitoba</option>
@@ -181,11 +181,11 @@
                                 </div>
                                 <div class="form-group col-lg-2">
                                     <label for="c_postal_code">Postal Code*</label>
-                                    <input type="text" class="form-control" id="c_postal_code" required>
+                                    <input type="text" class="form-control" name="c_postal_code" id="c_postal_code" required>
                                 </div>
                                 <div class="form-group col-lg-3">    
                                     <label for="c_address_since">Since*</label>
-                                    <input type="date" class="form-control" id="c_address_since" required>
+                                    <input type="date" class="form-control" name="c_address_since" id="c_address_since" required>
                                 </div>
                             </div>
                         </div>
@@ -194,25 +194,25 @@
                             <div class="form-row">
                                 <div class="form-group col-lg-2">
                                     <label for="p_app_num">Apartment Number</label>
-                                    <input type="number" class="form-control" id="p_app_num">
+                                    <input type="number" class="form-control" name="p_app_num" id="p_app_num">
                                 </div>
                                 <div class="form-group col-lg-2">
                                     <label for="p_street_num">Street Number*</label>
-                                    <input type="number" class="form-control" id="p_street_num" required>
+                                    <input type="number" class="form-control" name="p_street_num" id="p_street_num" required>
                                 </div>
                                 <div class="form-group col-lg-8">
                                     <label for="p_street_name">Street Name*</label>
-                                    <input type="text" class="form-control" id="p_street_name" required>
+                                    <input type="text" class="form-control" name="p_street_name" id="p_street_name" required>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-4">
                                     <label for="p_city">City*</label>
-                                    <input type="text" class="form-control" id="p_city" required>
+                                    <input type="text" class="form-control" name="p_city" id="p_city" required>
                                 </div>
                                 <div class="form-group col-lg-3">
                                     <label for="p_province">Province*</label>
-                                    <select id="p_province" class="form-control">
+                                    <select id="p_province" name="p_province" class="form-control">
                                         <option>Alberta</option>
                                         <option>British Columbia</option>
                                         <option selected>Manitoba</option>
@@ -230,11 +230,11 @@
                                 </div>
                                 <div class="form-group col-lg-2">
                                     <label for="p_postal_code">Postal Code*</label>
-                                    <input type="text" class="form-control" id="p_postal_code" required>
+                                    <input type="text" class="form-control" name="p_postal_code" id="p_postal_code" required>
                                 </div>
                                 <div class="form-group col-lg-3">    
                                     <label for="p_address_since">Since*</label>
-                                    <input type="date" class="form-control" id="p_address_since" required>
+                                    <input type="date" class="form-control" name="p_address_since" id="p_address_since" required>
                                 </div>
                             </div>
                         </div>
@@ -243,29 +243,29 @@
                             <div class="form-row">
                                 <div class="form-group col-lg-4">
                                     <label for="c_employer">Employer*</label>
-                                    <input type="text" class="form-control" id="c_employer" required>
+                                    <input type="text" class="form-control" name="c_employer" id="c_employer" required>
                                 </div>  
                                 <div class="form-group col-lg-4">
                                     <label for="c_occupation">Occupation*</label>
-                                    <input type="text" class="form-control" id="c_occupation" required>
+                                    <input type="text" class="form-control" name="c_occupation" id="c_occupation" required>
                                 </div>
                                 <div class="form-group col-lg-4">
                                     <label for="c_emp_phone">Phone*</label>
-                                    <input type="tel" class="form-control" id="c_emp_phone" required>
+                                    <input type="tel" class="form-control" name="c_emp_phone" id="c_emp_phone" required>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-6">
                                     <label for="c_emp_address">Address*</label>
-                                    <input type="text" class="form-control" id="c_emp_address" required>
+                                    <input type="text" class="form-control" name="c_emp_address" id="c_emp_address" required>
                                 </div>
                                 <div class="form-group col-lg-3">
                                     <label for="c_emp_city">City*</label>
-                                    <input type="text" class="form-control" id="c_emp_city" required>
+                                    <input type="text" class="form-control" name="c_emp_city" id="c_emp_city" required>
                                 </div>
                                 <div class="form-group col-lg-3">
                                     <label for="c_emp_province">Province*</label>
-                                    <select id="c_emp_province" class="form-control">
+                                    <select name="c_emp_province" id="c_emp_province" class="form-control">
                                         <option>Alberta</option>
                                         <option>British Columbia</option>
                                         <option selected>Manitoba</option>
@@ -285,11 +285,11 @@
                             <div class="form-row">
                                 <div class="form-group col-lg-7">
                                     <label for="c_y_employed">Years Employed*</label>
-                                    <input id="c_y_employed" type="number" class="form-control" min="0" max="100" step="1" value="0">
+                                    <input name="c_y_employed" id="c_y_employed" type="number" class="form-control" min="0" max="100" step="1" value="0">
                                 </div>
                                 <div class="form-group col-lg-5">
                                     <label for="c_m_employed">Months Employed*</label>
-                                    <input id="c_m_employed" type="number" class="form-control" min="0" max="11" step="1" value="0">
+                                    <input name="c_m_employed" id="c_m_employed" type="number" class="form-control" min="0" max="11" step="1" value="0">
                                 </div>
                             </div>
                         </div>
@@ -298,29 +298,29 @@
                             <div class="form-row">
                                 <div class="form-group col-lg-4">
                                     <label for="p_employer">Employer*</label>
-                                    <input type="text" class="form-control" id="p_employer" required>
+                                    <input type="text" class="form-control" name="p_employer" id="p_employer">
                                 </div>  
                                 <div class="form-group col-lg-4">
                                     <label for="p_occupation">Occupation*</label>
-                                    <input type="text" class="form-control" id="p_occupation" required>
+                                    <input type="text" class="form-control" name="p_occupation" id="p_occupation">
                                 </div>
                                 <div class="form-group col-lg-4">
                                     <label for="p_emp_phone">Phone*</label>
-                                    <input type="tel" class="form-control" id="p_emp_phone" required>
+                                    <input type="tel" class="form-control" name="p_emp_phone" id="p_emp_phone">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-6">
                                     <label for="p_emp_address">Address*</label>
-                                    <input type="text" class="form-control" id="p_emp_address" required>
+                                    <input type="text" class="form-control" name="p_emp_address" id="p_emp_address">
                                 </div>
                                 <div class="form-group col-lg-3">
                                     <label for="p_emp_city">City*</label>
-                                    <input type="text" class="form-control" id="p_emp_city" required>
+                                    <input type="text" class="form-control" name="p_emp_city" id="p_emp_city">
                                 </div>
                                 <div class="form-group col-lg-3">
                                     <label for="p_emp_province">Province*</label>
-                                    <select id="p_emp_province" class="form-control">
+                                    <select id="p_emp_province" name="p_emp_province" class="form-control">
                                         <option>Alberta</option>
                                         <option>British Columbia</option>
                                         <option selected>Manitoba</option>
@@ -339,12 +339,12 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-7">
-                                    <label for="c_y_employed">Years Employed*</label>
-                                    <input id="c_y_employed" type="number" class="form-control" min="0" max="100" step="1" value="0">
+                                    <label for="p_y_employed">Years Employed*</label>
+                                    <input id="p_y_employed" name="p_y_employed" type="number" class="form-control" min="0" max="100" step="1" value="0">
                                 </div>
                                 <div class="form-group col-lg-5">
-                                    <label for="c_m_employed">Months Employed*</label>
-                                    <input id="c_m_employed" type="number" class="form-control" min="0" max="11" step="1" value="0">
+                                    <label for="p_m_employed">Months Employed*</label>
+                                    <input name="p_m_employed" id="p_m_employed" type="number" class="form-control" min="0" max="11" step="1" value="0">
                                 </div>
                             </div>
                         </div>
@@ -353,21 +353,21 @@
                             <div class="form-row">
                                 <div class="form-group col-lg-3">
                                     <label for="gross_monthly_income">Gross Monthly Income*</label>
-                                    <input id="gross_monthly_income" type="number" class="form-control" min="0" step="10">
+                                    <input name="gross_monthly_income" id="gross_monthly_income" type="number" class="form-control" min="0" step="10">
                                 </div>
                                 <div class="form-group col-lg-3">
                                     <label for="other_monthly_income">Other Monthly Income*</label>
-                                    <input id="other_monthly_income" type="number" class="form-control" min="0">
+                                    <input name="other_monthly_income" id="other_monthly_income" type="number" class="form-control" min="0">
                                 </div>
                                 <div class="form-group col-lg-6">
                                     <label for="other_monthly_income_desc">Description of Other</label>
-                                    <input id="other_monthly_income_desc" type="text" class="form-control">
+                                    <input name="other_monthly_income_desc" id="other_monthly_income_desc" type="text" class="form-control">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-lg-8">
                                     <label for="total_monthly_income">Total Monthly Income*</label>
-                                    <input id="total_monthly_income" type="number" class="form-control" min="0" required>
+                                    <input name="total_monthly_income" id="total_monthly_income" type="number" class="form-control" min="0" required>
                                 </div>
                             </div>
                         </div>
@@ -376,7 +376,7 @@
                             <div class="form-row">
                                 <div class="form-group col-lg-2">
                                     <label for="home_status">Home Status*</label>
-                                    <select id="home_status" class="form-control">
+                                    <select name="home_status" id="home_status" class="form-control">
                                         <option selected>Renting</option>
                                         <option>Owning</option>
                                         <option>Other</option>
@@ -384,19 +384,19 @@
                                 </div>
                                 <div class="form-group col-lg-3">
                                     <label for="landl_mort_holder">Landlord/Mortgage Holder</label>
-                                    <input id="landl_mort_holder" type="text" class="form-control">
+                                    <input name="landl_mort_holder" id="landl_mort_holder" type="text" class="form-control">
                                 </div>
                                 <div class="form-group col-lg-3">
                                     <label for="monthly_payment">Monthly Payment*</label>
-                                    <input id="monthly_payment" type="number" class="form-control" min="0" step="10" required>
+                                    <input name="monthly_payment" id="monthly_payment" type="number" class="form-control" min="0" step="10" required>
                                 </div>
                                 <div class="form-group col-lg-3">
                                     <label for="market_value">Market value</label>
-                                    <input id="market_value" type="number" class="form-control" min="0" step="1000">
+                                    <input name="market_value" id="market_value" type="number" class="form-control" min="0" step="1000">
                                 </div>
                                 <div class="form-group col-lg-5">
                                     <label for="mort_balance">Mortgage Balance</label>
-                                    <input id="mort_balance" type="number" class="form-control" min="0" step="1000">
+                                    <input name="mort_balance" id="mort_balance" type="number" class="form-control" min="0" step="1000">
                                 </div>
                                 <div class="form-group col-lg-5">
                                     <label for="mort_amount">Original Mortgage Amount</label>

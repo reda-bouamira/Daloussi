@@ -26,6 +26,13 @@
   $car_makes = array_unique($car_makes);
   sort($car_makes);
 
+  // $car_types = array();
+  // foreach ($cars_array[0] as $car) {
+  //   array_push($car_types, $car['type']);
+  // }
+  // $car_types = array_unique($car_types);
+  // sort($car_types);
+
   $car_transmissions = array("Automatic", "Manual");
   $car_fuels = array("Gasoline", "Diesel");
 

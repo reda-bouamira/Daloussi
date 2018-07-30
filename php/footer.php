@@ -7,10 +7,10 @@
 				<p><span class="my_grey_color mr-2 font-weight-bold">Email Address:</span> daloussi@gmail.com</p>
 				<h5 class="pb-2 my_red_color">FOLLOW US</h5>
 				<ul class="social-icons ml-0 pl-0 pb-0 mb-0 d-flex flex-row">
-	  		   		<li><a href="#" target="_blank" class="fa fa-facebook mr-2"></a></li>
-	  		   		<li><a href="#" class="fa fa-twitter mr-2"></a></li>
-			   		<li><a href="#" class="fa fa-instagram mr-2"></a></li>
-			   		<li><a href="#" class="fa fa-envelope"></a></li>
+	  		   		<li><a href="https://www.facebook.com/daloussiauto/" target="_blank" class="fa fa-facebook mr-2"></a></li>
+	  		   		<li><a href="#" class="fa fa-twitter mr-2" target="_blank"></a></li>
+			   		<li><a href="https://www.instagram.com/daloussi_auto/?hl=en" class="fa fa-instagram mr-2" target="_blank"></a></li>
+			   		<li><a href="#" class="fa fa-envelope" target="_blank"></a></li>
 	    		</ul>
 			</div>
 		</div>
@@ -31,6 +31,6 @@
 		</div>
 	</div>
 	<div class="row my_copyright pt-1 px-5">
-		<h6>© Copyrights by <span class="my_red_color">Daloussi Auto</span> All rights reserved.</h6>
+		<h6>© Copyrights <span class="my_red_color">2018</span> by <span class="my_red_color">Daloussi Auto</span> | All rights reserved.</h6>
 	</div>	
 </div>
