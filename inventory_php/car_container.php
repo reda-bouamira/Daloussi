@@ -107,7 +107,7 @@
 						<h3><?= $car['year'] ?> <?= $car['make'] ?> <?= $car['model'] ?> <?= $car['trim'] ?></h3>
 					</div>
 					<div class="col-lg-3">
-						<a href="#link" class="btn btn-info" role="button">View Details</a>
+						<a href="inventory_php/car_page.php?car=<?= $car['pics'] ?>" class="btn btn-info" role="button">View Details</a>
 					</div>
 				</div>
 				<div class="row my_info_text_header pt-3">Price:&nbsp;<span class="text-primary">$<?= number_format((float)$car['price'], 2) ?></span></div>
@@ -153,6 +153,6 @@
 				</div>
 			</div>
 		</div>
-<?php endforeach; ?>
-<?php 	$_SESSION['cars_count'] = $cars_count; ?>
+	<?php endforeach; ?>
+	<?php 	$_SESSION['cars_count'] = $cars_count; ?>
 </div>

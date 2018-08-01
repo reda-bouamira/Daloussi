@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-    	<?php include 'php/head.php' ?>
+    	<?php include 'head.php' ?>
     </head>
     <!--Start of Tawk.to Script-->
     <script type="text/javascript">
@@ -17,16 +17,16 @@
     </script>
     <!--End of Tawk.to Script-->
     <body class="p-0">
-        <header>
-            <?php include 'php/header.php' ?>
-        </header>
         <div class="my-content container-fluid p-0">
-            <?php include "php/service_home.php" ?>
+            <div class="jumbotron text-xs-center">
+			    <h1 class="display-3">Thank You!</h1>
+			    <p class="lead"><strong>Your submission has been successful.</strong> You'll be contacted by one of our agents shortly.</p>
+			    <hr>
+			    <p class="lead">
+		        	<a class="btn btn-primary btn-sm" href="../index.php" role="button">Continue to homepage</a>
+			    </p>
+			</div>
         </div>
-        <footer>
-            <?php include 'php/footer.php'; ?>
-        </footer>
-    	<?php include 'php/scripts.php' ?>
-        <script src="js/index.js"></script>
+    	<?php include 'scripts.php' ?>
     </body>
 </html>
