@@ -2,7 +2,7 @@
   background-color: #2e3a56; 
 }
 
-.carousel-item {
+.my_home .carousel-item {
   background-color: black;
   opacity: 0.8;
   max-height: 800px;
