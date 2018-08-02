@@ -4,7 +4,7 @@
 			<div class="d-flex flex-column my_footer_contact_us text-light">
 				<h5 class="pb-2">CONTACT US</h5>
 				<p><span class="my_grey_color mr-1 font-weight-bold">Phone Number:</span> (204) 583-4617</p>
-				<p><span class="my_grey_color mr-2 font-weight-bold">Email Address:</span> daloussi@gmail.com</p>
+				<p><span class="my_grey_color mr-2 font-weight-bold">Email Address:</span> daloussiauto@gmail.com</p>
 				<h5 class="pb-2 my_red_color">FOLLOW US</h5>
 				<ul class="social-icons ml-0 pl-0 pb-0 mb-0 d-flex flex-row">
 	  		   		<li><a href="https://www.facebook.com/daloussiauto/" target="_blank" class="fa fa-facebook mr-2"></a></li>
