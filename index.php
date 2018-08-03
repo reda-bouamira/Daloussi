@@ -20,7 +20,7 @@
         <header>
             <?php include 'php/header.php' ?>
         </header>
-        <div class="my-content container-fluid p-0">
+        <div class="my-content container-fluid p-0 my_home">
             <?php include "php/carousel.php" ?>
             <?php include "php/car_type.php" ?>
             <?php include "php/service_home.php" ?>
