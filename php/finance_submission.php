@@ -79,42 +79,42 @@
 	$outstandingCollection = "Have Outstanding Collection: " . filter_input(INPUT_POST, 'collection', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 	$disclaimer = array($claimedBankruptcy, $pastDueOnPayments, $outstandingCollection);
 
-	$Personal_info = "Personal information:"
+	$Personal_info = "Personal information:";
 	foreach ($personal_information as $info) {
 		$Personal_info .= "\n $info";
 	}
 
-	$co_signer_info = "Co-Signer information:"
+	$co_signer_info = "Co-Signer information:";
 	foreach ($co_signer_information as $info) {
 		$co_signer_info .= "\n $info";
 	}
 
-	$current_address_info = "Current Address:"
+	$current_address_info = "Current Address:";
 	foreach ($current_address as $info) {
 		$current_address_info .= "\n $info";
 	}
 
-	$previous_address_info = "Previous Address:"
+	$previous_address_info = "Previous Address:";
 	foreach ($previous_address as $info) {
 		$previous_address_info .= "\n $info";
 	}
 
-	$employer_info = "Employer Information:"
+	$employer_info = "Employer Information:";
 	foreach ($employer_information as $info) {
 		$employer_info .= "\n $info";
 	}
 
-	$income_info = "Income Information:"
+	$income_info = "Income Information:";
 	foreach ($income_information as $info) {
 		$income_info .= "\n $info";
 	}
 
-	$mortgage_info = "Mortgage Information:"
+	$mortgage_info = "Mortgage Information:";
 	foreach ($mortgage_information as $info) {
 		$mortgage_info .= "\n $info";
 	}
 
-	$additional_info = "Additional Information:"
+	$additional_info = "Additional Information:";
 	foreach ($disclaimer as $info) {
 		$additional_info .= "\n $info";
 	}

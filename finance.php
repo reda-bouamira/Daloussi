@@ -25,7 +25,7 @@
                 <h2>Finance</h2>
             </div>
             <div class="row justify-content-center">
-                <form class="needs-validation jumbotron col-9 pt-3" id="finance_form">
+                <form method="post" action="php/finance_submission.php" class="needs-validation jumbotron col-9 pt-3" id="finance_form">
                     <center><h3 class="pb-4">Application Form</h3></center>
                     <div class="my_personal_info">
                         <h5>Personal Information</h5>
@@ -464,7 +464,7 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label class="checkbox-inline"><input class="mr-2" type="checkbox" value="accept_aggreement" required>I accept*</label>
+                                    <label class="checkbox-inline"><input class="mr-2" type="checkbox" name="accepting" required>I accept*</label>
                                 </div>
                             </div>
                         </div>
