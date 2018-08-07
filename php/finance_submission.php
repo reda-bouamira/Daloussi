@@ -74,31 +74,67 @@
 	$mort_amount = "Mortgage Amount: " . filter_input(INPUT_POST, 'mort_amount', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 	$mortgage_information = array($home_status,$landl_mort_holder,$monthly_payment,$market_value,$mort_balance,$mort_amount);
 
+	$claimedBankruptcy = "Claimed bankruptcy in the last 7 years: " . filter_input(INPUT_POST, 'bankruptcy', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+	$pastDueOnPayments = "Currently past Due on Payments: " . filter_input(INPUT_POST, 'past_due_payments', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+	$outstandingCollection = "Have Outstanding Collection: " . filter_input(INPUT_POST, 'collection', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+	$disclaimer = array($claimedBankruptcy, $pastDueOnPayments, $outstandingCollection);
+
 	$Personal_info = "Personal information:"
 	foreach ($personal_information as $info) {
 		$Personal_info .= "\n $info";
 	}
 
+	$co_signer_info = "Co-Signer information:"
+	foreach ($co_signer_information as $info) {
+		$co_signer_info .= "\n $info";
+	}
+
+	$current_address_info = "Current Address:"
+	foreach ($current_address as $info) {
+		$current_address_info .= "\n $info";
+	}
+
+	$previous_address_info = "Previous Address:"
+	foreach ($previous_address as $info) {
+		$previous_address_info .= "\n $info";
+	}
+
+	$employer_info = "Employer Information:"
+	foreach ($employer_information as $info) {
+		$employer_info .= "\n $info";
+	}
+
+	$income_info = "Income Information:"
+	foreach ($income_information as $info) {
+		$income_info .= "\n $info";
+	}
+
+	$mortgage_info = "Mortgage Information:"
+	foreach ($mortgage_information as $info) {
+		$mortgage_info .= "\n $info";
+	}
+
+	$additional_info = "Additional Information:"
+	foreach ($disclaimer as $info) {
+		$additional_info .= "\n $info";
+	}
 
 	$email_from = "daloussiautoweb@gmail.com";
-	$email_subject = "Car Service Booking";
-	$email_body = "Service Request: \n
-					$my_service_name \n
-					$my_service_phone \n
-					$my_service_email \n
-					$my_service_reason \n
-					$my_service_date \n
-					$my_service_time \n
-					$my_service_car_year \n
-					$my_service_make \n
-					$my_service_model \n
-Please check the service and contact the customer as required!";
+	$email_subject = "Finance Application";
+	$email_body = "Fincance Application: \n
+					$Personal_info \n
+					$co_signer_info \n
+					$current_address_info \n
+					$previous_address_info \n
+					$employer_info \n
+					$income_info \n
+					$mortgage_info \n
+					$additional_info \n
+Please check the application and contact the customer as required! (Request Photo ID and bank statements from the customer)";
 	$email_to = "redabouamira6@gmail.com";
 	$headers = "From: $email_from \r\n";
 	
 	mail($email_to, $email_subject, $email_body, $headers);
-
-	// header("Location: ../index.php");
 
 	include 'submission.php';
 ?>
