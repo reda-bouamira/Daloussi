@@ -9,6 +9,7 @@
     <head>
     	<?php include 'php/head.php' ?>
     </head>
+    <script src="js/kijiji-scraper/bundle.js"></script>
         <!--Start of Tawk.to Script-->
     <script type="text/javascript">
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();

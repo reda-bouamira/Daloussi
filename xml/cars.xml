@@ -64,20 +64,4 @@
 		<pics>4</pics>
 		<description>Selling 2003 BMW X5 3.0i AWD , automatic transmission has 205kms , 5 seats , loaded with keyless entry , AC,FM/AM , power windows , power lock , Leather seats, heated seats , block heater, sunroof and much more...</description>
 	</car>
-	<!-- <car>
-		<year></year>
-		<make></make>
-		<model></model>
-		<trim></trim>
-		<price></price>
-		<km></km>
-		<bodytype></bodytype>
-		<engine></engine>
-		<colour></colour>
-		<transmission></transmission>
-		<fuel></fuel>
-		<drivetrain></drivetrain>
-		<pics></pics>
-		<description></description>
-	</car> -->
 </cars>

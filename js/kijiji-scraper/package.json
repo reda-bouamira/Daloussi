@@ -1,0 +1,14 @@
+{
+  "name": "kijiji",
+  "version": "1.0.0",
+  "description": "Scrapes data from kijiji",
+  "main": "kijiji.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Reda Bouamira",
+  "license": "MIT",
+  "dependencies": {
+    "kijiji-scraper": "^4.0.2"
+  }
+}
