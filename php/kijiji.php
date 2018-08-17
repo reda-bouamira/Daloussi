@@ -3,7 +3,16 @@
 ?>
 
 <?php 
-echo 'Thank you '. $_POST['firstname'] . ' ' . $_POST['lastname'] . ', says the PHP file';
+	// echo 'Thank you '. $_POST . ' ' . $_POST . ', says the PHP file';
+	foreach ($_POST as $key => $value) {
+		echo "Field ".htmlspecialchars($key)." is ".htmlspecialchars(json_decode($value, true))."<br>";
+		$ad = json_decode($value, true);
+
+		foreach($ad as $key => $value){
+			echo $key . " : " . $value;
+		}
+
+	}
 ?>
 
 <!DOCTYPE html>

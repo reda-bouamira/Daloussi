@@ -45,24 +45,46 @@
                 var promiseAd = getAd(urls[i]['url']);
                 
                 var ad = promiseAd.then(function(value){
-                    var car = 
-                        {   year : value.attributes.caryear,
-                            make : value.attributes.carmake;,
-                            model : value.attributes.carmodel,
-                            trim : value.attributes.cartrim,
-                            price : ad.attributes.price;
-                            km : ad.attributes.carmileageinkms;
-                            bodytype : ad.attributes.carbodytype;
-                            engine : "n/a";
-                            colour : ad.attributes.carcolor;
-                            transmission : transmissions[ad.attributes.cartransmission - 1];
-                            fuel : ad.attributes.carfueltype;
-                            drivetrain : ad.attributes.drivetrain;
-                            pics : ad.attributes.caryear;
-                            description : ad.description;}
-                    ;
+                    // var car = 
+                    //     {   year : value.attributes.caryear,
+                    //         make : value.attributes.carmake;,
+                    //         model : value.attributes.carmodel,
+                    //         trim : value.attributes.cartrim,
+                    //         price : ad.attributes.price;
+                    //         km : ad.attributes.carmileageinkms;
+                    //         bodytype : ad.attributes.carbodytype;
+                    //         engine : "n/a";
+                    //         colour : ad.attributes.carcolor;
+                    //         transmission : transmissions[ad.attributes.cartransmission - 1];
+                    //         fuel : ad.attributes.carfueltype;
+                    //         drivetrain : ad.attributes.drivetrain;
+                    //         pics : ad.attributes.caryear;
+                    //         description : ad.description;}
+                    // ;
 
-                    console.log(car);
+                    // Create our XMLHttpRequest object
+                    var hr = new XMLHttpRequest();
+                    // Create some variables we need to send to our PHP file
+                    var url = "php/kijiji.php";
+                    var vars = value.url + "=" + JSON.stringify(value);
+                    
+                    // alert(vars);
+
+                    hr.open("POST", url, true);
+                    // Set content type header information for sending url encoded variables in the request
+                    hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    // Access the onreadystatechange event for the XMLHttpRequest object
+                    hr.onreadystatechange = function() {
+                        if(hr.readyState == 4 && hr.status == 200) {
+                            var return_data = hr.responseText;
+                            alert('success');
+                            // document.getElementById("status").innerHTML = return_data;
+                        }
+                    }
+                    // Send the data to PHP now... and wait for response to update the status div
+                    hr.send(vars); // Actually execute the request
+
+                    // console.log(car);
                     
 
 
@@ -70,35 +92,6 @@
                 });
                 console.log(ad);
             }
-
-
-            var adAttributes = localStorage['ad_attributes'];
-            // alert(JSON.parse(adAttributes).caryear);
-            // alert(localStorage['ad_images']);
-
-            // Create our XMLHttpRequest object
-            var hr = new XMLHttpRequest();
-            // Create some variables we need to send to our PHP file
-            var url = "php/kijiji.php";
-            var fn = 'hi';
-            var ln = 'hello';
-            var vars = "firstname="+fn+"&lastname="+ln;
-            
-            // alert(vars);
-
-            hr.open("POST", url, true);
-            // Set content type header information for sending url encoded variables in the request
-            hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            // Access the onreadystatechange event for the XMLHttpRequest object
-            hr.onreadystatechange = function() {
-                if(hr.readyState == 4 && hr.status == 200) {
-                    var return_data = hr.responseText;
-                    alert('success');
-                    // document.getElementById("status").innerHTML = return_data;
-                }
-            }
-            // Send the data to PHP now... and wait for response to update the status div
-            hr.send(vars); // Actually execute the request
         }	
     </script>
     <body class="p-0" onload='ajax_kijiji()'>
