@@ -13,8 +13,9 @@
         } 
 
         print_r($urls);
-        $url = 'https://www.kijiji.ca/v-cars-trucks/winnipeg/finance-available-2007-suzuki-xl7-7seats-awd/1340310966?enableSearchNavigationFlag=true';
-?>
+
+        $urls_js = json_encode($urls);
+        ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -35,16 +36,41 @@
     })();
     </script> -->
     <!--End of Tawk.to Script-->
-    <?php foreach($urls as $url): ?>
-<?php endforeach; ?>
     <script>
         function ajax_kijiji(){
-            var js_array = [<?php echo '"'.implode('","', $urls).'"'; ?>];
+            var urls = <?php echo $urls_js; ?>;
             
-            alert(js_array);
+            var i;
+            for(i=0; i < urls.length; i++) {
+                var promiseAd = getAd(urls[i]['url']);
+                
+                var ad = promiseAd.then(function(value){
+                    var car = 
+                        {   year : value.attributes.caryear,
+                            make : value.attributes.carmake;,
+                            model : value.attributes.carmodel,
+                            trim : value.attributes.cartrim,
+                            price : ad.attributes.price;
+                            km : ad.attributes.carmileageinkms;
+                            bodytype : ad.attributes.carbodytype;
+                            engine : "n/a";
+                            colour : ad.attributes.carcolor;
+                            transmission : transmissions[ad.attributes.cartransmission - 1];
+                            fuel : ad.attributes.carfueltype;
+                            drivetrain : ad.attributes.drivetrain;
+                            pics : ad.attributes.caryear;
+                            description : ad.description;}
+                    ;
 
-            var ad = getAd(urls[0]);
-            alert(ad);
+                    console.log(car);
+                    
+
+
+                    return value
+                });
+                console.log(ad);
+            }
+
 
             var adAttributes = localStorage['ad_attributes'];
             // alert(JSON.parse(adAttributes).caryear);

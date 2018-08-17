@@ -2,7 +2,7 @@
     require('db_connect.php');
     
      // SQL is written as a String.
-     $query = "SELECT * FROM carurl";
+     $query = "SELECT url FROM carurl";
 
      // A PDO::Statement is prepared from the query.
      $statement = $db->prepare($query);
