@@ -1,7 +1,19 @@
 <?php   
+    require 'php/select.php';
+
         if (isset($_GET['sort'])) {
             $sort_option = filter_input(INPUT_GET, 'sort', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         }
+
+        if (isset($_POST['car']))   {
+            print_r($_POST['car']);
+        }
+        else{
+            print_r($_POST);
+        } 
+
+        print_r($urls);
+        $url = 'https://www.kijiji.ca/v-cars-trucks/winnipeg/finance-available-2007-suzuki-xl7-7seats-awd/1340310966?enableSearchNavigationFlag=true';
 ?>
 
 <!DOCTYPE html>
@@ -9,9 +21,9 @@
     <head>
     	<?php include 'php/head.php' ?>
     </head>
-    <script src="js/kijiji-scraper/bundle.js"></script>
+    <!-- <script src="js/kijiji-scraper/bundle.js"></script> -->
         <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
     (function(){
     var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
@@ -21,9 +33,49 @@
     s1.setAttribute('crossorigin','*');
     s0.parentNode.insertBefore(s1,s0);
     })();
-    </script>
+    </script> -->
     <!--End of Tawk.to Script-->
-    <body class="p-0">
+    <?php foreach($urls as $url): ?>
+<?php endforeach; ?>
+    <script>
+        function ajax_kijiji(){
+            var js_array = [<?php echo '"'.implode('","', $urls).'"'; ?>];
+            
+            alert(js_array);
+
+            var ad = getAd(urls[0]);
+            alert(ad);
+
+            var adAttributes = localStorage['ad_attributes'];
+            // alert(JSON.parse(adAttributes).caryear);
+            // alert(localStorage['ad_images']);
+
+            // Create our XMLHttpRequest object
+            var hr = new XMLHttpRequest();
+            // Create some variables we need to send to our PHP file
+            var url = "php/kijiji.php";
+            var fn = 'hi';
+            var ln = 'hello';
+            var vars = "firstname="+fn+"&lastname="+ln;
+            
+            // alert(vars);
+
+            hr.open("POST", url, true);
+            // Set content type header information for sending url encoded variables in the request
+            hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            // Access the onreadystatechange event for the XMLHttpRequest object
+            hr.onreadystatechange = function() {
+                if(hr.readyState == 4 && hr.status == 200) {
+                    var return_data = hr.responseText;
+                    alert('success');
+                    // document.getElementById("status").innerHTML = return_data;
+                }
+            }
+            // Send the data to PHP now... and wait for response to update the status div
+            hr.send(vars); // Actually execute the request
+        }	
+    </script>
+    <body class="p-0" onload='ajax_kijiji()'>
         <header>
             <?php include 'php/header.php' ?>
         </header>
@@ -80,6 +132,8 @@
             <?php include 'php/footer.php'; ?>
         </footer>
     	<?php include 'php/scripts.php' ?>
+        <script src="js/kijiji-scraper/bundle.js"></script>
         <script src="js/inventory.js"></script>
+        <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js" crossorigin="anonymous"></script>
     </body>
 </html>
