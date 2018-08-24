@@ -1,17 +1,70 @@
-<?php
-	require('db_connect.php');
-?>
-
 <?php 
-	// echo 'Thank you '. $_POST . ' ' . $_POST . ', says the PHP file';
-	foreach ($_POST as $key => $value) {
-		echo "Field ".htmlspecialchars($key)." is ".htmlspecialchars(json_decode($value, true))."<br>";
-		$ad = json_decode($value, true);
+	// for each url post to and insert to the database 
+	require('db_connect.php');
 
-		foreach($ad as $key => $value){
-			echo $key . " : " . $value;
+	if ($_POST && !empty($_POST['attributes']) && !empty($_POST['images']) && !empty($_POST['description']) && !empty($_POST['title']) && !empty($_POST['main_image']) && !empty($_POST['url'])) {
+		$transmissions = ['manual', 'automatic'];
+
+		$attributes = json_decode($_POST['attributes']);
+		$images = json_decode($_POST['images']);
+		$description = filter_input(INPUT_POST, "description", FILTER_SANITIZE_STRING);
+		$title = filter_input(INPUT_POST, "title", FILTER_SANITIZE_STRING);
+		$main_image = filter_input(INPUT_POST, "main_image", FILTER_SANITIZE_URL);
+		$url = filter_input(INPUT_POST, "url", FILTER_SANITIZE_URL);
+
+		var_dump($main_image);
+
+		$year = $attributes->caryear;
+		$make = $attributes->carmake;
+		$model = $attributes->carmodel;
+		$trim = $attributes->cartrim;
+		$price = $attributes->price;
+		$km = $attributes->carmileageinkms;
+		$bodytype = $attributes->carbodytype;
+		$engine = "n/a";
+		$colour = $attributes->carcolor;
+		$transmission = $transmissions[$attributes->cartransmission - 1];
+		$fuel = $attributes->carfueltype;
+		$drivetrain = $attributes->drivetrain;
+
+		// $query = "INSERT INTO cars (url, title, year, make, model, trim, price, km, bodytype, engine, colour, transmission, fuel, drivetrain, description, main_image, images) VALUES (:url,:title,:year,:make,:model,:trim,:price,:km,:bodytype,:engine,:colour,:transmission,:fuel,:drivetrain,:description,:main_image,:images)";
+		$query = "INSERT INTO cars (url, title, year, make, model, trim, price, km, bodytype, engine, colour, transmission, fuel, drivetrain, description, main_image, images) VALUES (:url,:title,:year,:make,:model,:trim,:price,:km,:bodytype,:engine,:colour,:transmission,:fuel,:drivetrain,:description,:main_image,:images)";
+		$statement = $db->prepare($query);
+        
+        //  Bind values to the parameters
+        $statement->bindvalue(':url', $url);
+		$statement->bindvalue(':title', $title);
+		$statement->bindvalue(':year', $year);
+		$statement->bindvalue(':make', $make);
+		$statement->bindvalue(':model', $model);
+		$statement->bindvalue(':trim', $trim);
+		$statement->bindvalue(':price', $price);
+		$statement->bindvalue(':km', $km);
+		$statement->bindvalue(':bodytype', $bodytype);
+		$statement->bindvalue(':engine', $engine);
+		$statement->bindvalue(':colour', $colour);
+		$statement->bindvalue(':transmission', $transmission);
+		$statement->bindvalue(':fuel', $fuel);
+		$statement->bindvalue(':drivetrain', $drivetrain);
+		$statement->bindvalue(':description', $description);
+		$statement->bindvalue(':main_image', $main_image);
+		
+		$all_images = " ";
+
+		foreach ($images as $image) {
+			$all_images .= $image . ",";
 		}
 
+		$statement->bindvalue(':images', $all_images);
+
+        //  Execute the INSERT.
+        //  execute() will check for possible SQL injection and remove if necessary
+        if($statement->execute()){
+        	echo "Success";
+		}
+		else {
+			echo "no success";
+		}
 	}
 ?>
 
@@ -23,42 +76,5 @@
 	<script src="../js/kijiji-scraper/bundle.js"></script>
 </head>
 <body>
-	Hello
 </body>
 </html>
-
-<!-- <html>
-<head>
-<script>
-function ajax_post(){
-    // Create our XMLHttpRequest object
-    var hr = new XMLHttpRequest();
-    // Create some variables we need to send to our PHP file
-    var url = "../inventory.php";
-    var fn = document.getElementById("first_name").value;
-    var ln = document.getElementById("last_name").value;
-    var vars = "firstname="+fn+"&lastname="+ln;
-    hr.open("POST", url, true);
-    // Set content type header information for sending url encoded variables in the request
-    hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    // Access the onreadystatechange event for the XMLHttpRequest object
-    hr.onreadystatechange = function() {
-	    if(hr.readyState == 4 && hr.status == 200) {
-		    var return_data = hr.responseText;
-			document.getElementById("status").innerHTML = return_data;
-	    }
-    }
-    // Send the data to PHP now... and wait for response to update the status div
-    hr.send(vars); // Actually execute the request
-    document.getElementById("status").innerHTML = "processing...";
-}
-</script>
-</head>
-<body>
-<h2>Ajax Post to PHP and Get Return Data</h2>
-First Name: <input id="first_name" name="first_name" type="text">  <br><br>
-Last Name: <input id="last_name" name="last_name" type="text"> <br><br>
-<input name="myBtn" type="submit" value="Submit Data" onclick="ajax_post();"> <br><br>
-<div id="status"></div>
-</body>
-</html> -->

@@ -1,5 +1,5 @@
 <?php
-    require('db_connect.php');
+    // require('db_connect.php');
     
      // SQL is written as a String.
      $query = "SELECT url FROM carurl";

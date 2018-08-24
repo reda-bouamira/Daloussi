@@ -32563,17 +32563,2949 @@ function extend() {
 }
 
 },{}],188:[function(require,module,exports){
+// var express = require('express');
+// var http = require('http');
+var mysql = require('mysql');
+// var app = express();
+// var bodyParser = require('body-parser');
 var kijiji = require("kijiji-scraper");
+
+// var server = app.listen(4000,function(){
+// 	console.log("Server started on 4000...");
+// });
+
+window.insertCars = function(url){
+	var connection = mysql.createConnection({
+		host     : 'localhost',
+		user     : 'daloussiauto',
+		password : 'halaMadrid7',
+		database : 'kijiji_cars'
+	  });
+
+	var ad = kijiji.Ad.Get (url).then(function(ad) {
+		connection.connect();
+		var post  = {car_url: 'ad.url', car_title: 'hi'};
+		var query = connection.query('INSERT INTO cars SET ?', post, function (error) {
+			if (error) throw error;
+			// Neat!
+		  });
+		  console.log('success');
+		  console.log(query.sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQL'
+		  connection.end();
+	}).catch(console.error);
+}
+
 
 window.getAd = function(url){
 	var adAttributes;
 	var ad = kijiji.Ad.Get (url).then(function(ad) {
 		return ad;
 	}).catch(console.error);
+	return ad;
+}
+
+/*var getAd = function(){
+	let ad = kijiji.Ad.Get ("https://www.kijiji.ca/v-cars-trucks/winnipeg/2010-mazda-mazdaspeed3-one-owner-nav-bluetooth-htd-seats/1361254109?enableSearchNavigationFlag=true").then(function(ad) {
+	// Use the ad object
+		console.log(ad.attributes);
+		console.log(ad.images);
+
+		document.cookie = "ad=" + ad.attributes;
+
+		var adAttributes = JSON.stringify(ad.attributes);
+		var adImages = ad.images;
+
+		localStorage['ad_attributes'] = adAttributes;
+
+		localStorage['ad_images'] = adImages;
+	}).catch(console.error);
 
 	return ad;
 }
-},{"kijiji-scraper":226}],189:[function(require,module,exports){
+
+exports.getAd = getAd;*/
+
+/*
+// Scrape using returned promise
+	let ad = kijiji.Ad.Get ("https://www.kijiji.ca/v-cars-trucks/winnipeg/2010-mazda-mazdaspeed3-one-owner-nav-bluetooth-htd-seats/1361254109?enableSearchNavigationFlag=true").then(function(ad) {
+	// Use the ad object
+		console.log(ad.attributes);
+		console.log(ad.images);
+
+		document.cookie = "ad=" + ad.attributes;
+
+		var adAttributes = JSON.stringify(ad.attributes);
+		var adImages = ad.images;
+
+		localStorage['ad_attributes'] = adAttributes;
+
+		localStorage['ad_images'] = adImages;
+		
+		// var xhttp = new XMLHttpRequest();
+		// xhttp.onreadystatechange = function() {
+		// 	if (xhttp.readyState == 4 && xhttp.status == 200) {
+		// 		myFunction(this);
+		// 	}
+		// };
+		// xhttp.open("GET", "xml/cars.xml", true);
+		// xhttp.send();
+
+		// function myFunction(xml) {
+		// 	var x, y, i, car, txt, xmlDoc;
+		// 	xmlDoc = xml.responseXML;
+		// 	car = xmlDoc.createElement("car");
+
+		// 	year = xmlDoc.createElement("year");
+		// 	make = xmlDoc.createElement("make");
+		// 	model = xmlDoc.createElement("model");
+		// 	trim = xmlDoc.createElement("trim");
+		// 	price = xmlDoc.createElement("price");
+		// 	km = xmlDoc.createElement("km");
+		// 	bodytype = xmlDoc.createElement("bodytype");
+		// 	engine = xmlDoc.createElement("engine");
+		// 	colour = xmlDoc.createElement("colour");
+		// 	transmission = xmlDoc.createElement("transmission");
+		// 	fuel = xmlDoc.createElement("fuel");
+		// 	drivetrain = xmlDoc.createElement("drivetrain");
+		// 	pics = xmlDoc.createElement("pics");
+		// 	description = xmlDoc.createElement("description");
+
+		// 	var transmissions = ['manual', 'automatic'];
+
+		// 	year.textContent = ad.attributes.caryear;
+		// 	make.textContent = ad.attributes.carmake;
+		// 	model.textContent = ad.attributes.carmodel;
+		// 	trim.textContent = ad.attributes.cartrim;
+		// 	price.textContent = ad.attributes.price;
+		// 	km.textContent = ad.attributes.carmileageinkms;
+		// 	bodytype.textContent = ad.attributes.carbodytype;
+		// 	engine.textContent = "n/a";
+		// 	colour.textContent = ad.attributes.carcolor;
+		// 	transmission.textContent = transmissions[ad.attributes.cartransmission - 1];
+		// 	fuel.textContent = ad.attributes.carfueltype;
+		// 	drivetrain.textContent = ad.attributes.drivetrain;
+		// 	pics.textContent = ad.attributes.caryear;
+		// 	description.textContent = ad.description;
+
+
+		// 	car.appendChild(year);
+		// 	car.appendChild(make);
+		// 	car.appendChild(model);
+		// 	car.appendChild(trim);
+		// 	car.appendChild(price);
+		// 	car.appendChild(km);
+		// 	car.appendChild(bodytype);
+		// 	car.appendChild(engine);
+		// 	car.appendChild(colour);
+		// 	car.appendChild(transmission);
+		// 	car.appendChild(fuel);
+		// 	car.appendChild(drivetrain);
+		// 	car.appendChild(pics);
+		// 	car.appendChild(description);
+
+		// 	x = xmlDoc.getElementsByTagName("cars")[0];
+		// 	x.appendChild(car);
+		// 	console.log(xmlDoc.getElementsByTagName("car")[4]);
+		// 	console.log(ad.attributes.caryear);
+		// 	window.location.replace('inventory_php/car_container.php');
+		// }	
+
+	}).catch(console.error);
+	 
+	// Scrape using optional callback paramater
+	// kijiji.Ad.Get("https://www.kijiji.ca/v-cars-trucks/winnipeg/2013-hyundai-elantra-coupe-gls-only-034-000kms/1353372624?enableSearchNavigationFlag=true", function(err, ad) {
+	//     if (!err) {
+	//         // Use the ad object
+	//         console.log(ad.title);
+	//     }
+	// });
+
+// 	var xhttp = new XMLHttpRequest();
+// 	xhttp.onreadystatechange = function() {
+// 	    if (xhttp.readyState == 4 && xhttp.status == 200) {
+// 	        myFunction(xhttp);
+// 	    }
+// 	};
+// 	xhttp.open("GET", "xml/cars.xml", true);
+// 	xhttp.send();
+
+// 	function myFunction(xml) {
+//     var x, y, i, car, txt, xmlDoc;
+//     xmlDoc = xml.responseXML;
+// 	car = xmlDoc.createElement("car");
+
+// 	year = xmlDoc.createElement("year");
+// 	make = xmlDoc.createElement("make");
+// 	model = xmlDoc.createElement("model");
+// 	trim = xmlDoc.createElement("trim");
+// 	price = xmlDoc.createElement("price");
+// 	km = xmlDoc.createElement("km");
+// 	bodytype = xmlDoc.createElement("bodytype");
+// 	engine = xmlDoc.createElement("engine");
+// 	colour = xmlDoc.createElement("colour");
+// 	transmission = xmlDoc.createElement("transmission");
+// 	fuel = xmlDoc.createElement("fuel");
+// 	drivetrain = xmlDoc.createElement("drivetrain");
+// 	pics = xmlDoc.createElement("pics");
+// 	description = xmlDoc.createElement("description");
+
+
+
+// 	car.appendChild(year);
+// 	car.appendChild(make);
+// 	car.appendChild(model);
+// 	car.appendChild(trim);
+// 	car.appendChild(price);
+// 	car.appendChild(km);
+// 	car.appendChild(bodytype);
+// 	car.appendChild(engine);
+// 	car.appendChild(colour);
+// 	car.appendChild(transmission);
+// 	car.appendChild(fuel);
+// 	car.appendChild(drivetrain);
+// 	car.appendChild(pics);
+// 	car.appendChild(description);
+
+//     x = xmlDoc.getElementsByTagName("cars")[0];
+//     x.appendChild(car);
+// }*/
+},{"kijiji-scraper":227,"mysql":341}],189:[function(require,module,exports){
+/*! bignumber.js v4.1.0 https://github.com/MikeMcl/bignumber.js/LICENCE */
+
+;(function (globalObj) {
+    'use strict';
+
+    /*
+      bignumber.js v4.1.0
+      A JavaScript library for arbitrary-precision arithmetic.
+      https://github.com/MikeMcl/bignumber.js
+      Copyright (c) 2017 Michael Mclaughlin <M8ch88l@gmail.com>
+      MIT Expat Licence
+    */
+
+
+    var BigNumber,
+        isNumeric = /^-?(\d+(\.\d*)?|\.\d+)(e[+-]?\d+)?$/i,
+        mathceil = Math.ceil,
+        mathfloor = Math.floor,
+        notBool = ' not a boolean or binary digit',
+        roundingMode = 'rounding mode',
+        tooManyDigits = 'number type has more than 15 significant digits',
+        ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$_',
+        BASE = 1e14,
+        LOG_BASE = 14,
+        MAX_SAFE_INTEGER = 0x1fffffffffffff,         // 2^53 - 1
+        // MAX_INT32 = 0x7fffffff,                   // 2^31 - 1
+        POWS_TEN = [1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 1e10, 1e11, 1e12, 1e13],
+        SQRT_BASE = 1e7,
+
+        /*
+         * The limit on the value of DECIMAL_PLACES, TO_EXP_NEG, TO_EXP_POS, MIN_EXP, MAX_EXP, and
+         * the arguments to toExponential, toFixed, toFormat, and toPrecision, beyond which an
+         * exception is thrown (if ERRORS is true).
+         */
+        MAX = 1E9;                                   // 0 to MAX_INT32
+
+
+    /*
+     * Create and return a BigNumber constructor.
+     */
+    function constructorFactory(config) {
+        var div, parseNumeric,
+
+            // id tracks the caller function, so its name can be included in error messages.
+            id = 0,
+            P = BigNumber.prototype,
+            ONE = new BigNumber(1),
+
+
+            /********************************* EDITABLE DEFAULTS **********************************/
+
+
+            /*
+             * The default values below must be integers within the inclusive ranges stated.
+             * The values can also be changed at run-time using BigNumber.config.
+             */
+
+            // The maximum number of decimal places for operations involving division.
+            DECIMAL_PLACES = 20,                     // 0 to MAX
+
+            /*
+             * The rounding mode used when rounding to the above decimal places, and when using
+             * toExponential, toFixed, toFormat and toPrecision, and round (default value).
+             * UP         0 Away from zero.
+             * DOWN       1 Towards zero.
+             * CEIL       2 Towards +Infinity.
+             * FLOOR      3 Towards -Infinity.
+             * HALF_UP    4 Towards nearest neighbour. If equidistant, up.
+             * HALF_DOWN  5 Towards nearest neighbour. If equidistant, down.
+             * HALF_EVEN  6 Towards nearest neighbour. If equidistant, towards even neighbour.
+             * HALF_CEIL  7 Towards nearest neighbour. If equidistant, towards +Infinity.
+             * HALF_FLOOR 8 Towards nearest neighbour. If equidistant, towards -Infinity.
+             */
+            ROUNDING_MODE = 4,                       // 0 to 8
+
+            // EXPONENTIAL_AT : [TO_EXP_NEG , TO_EXP_POS]
+
+            // The exponent value at and beneath which toString returns exponential notation.
+            // Number type: -7
+            TO_EXP_NEG = -7,                         // 0 to -MAX
+
+            // The exponent value at and above which toString returns exponential notation.
+            // Number type: 21
+            TO_EXP_POS = 21,                         // 0 to MAX
+
+            // RANGE : [MIN_EXP, MAX_EXP]
+
+            // The minimum exponent value, beneath which underflow to zero occurs.
+            // Number type: -324  (5e-324)
+            MIN_EXP = -1e7,                          // -1 to -MAX
+
+            // The maximum exponent value, above which overflow to Infinity occurs.
+            // Number type:  308  (1.7976931348623157e+308)
+            // For MAX_EXP > 1e7, e.g. new BigNumber('1e100000000').plus(1) may be slow.
+            MAX_EXP = 1e7,                           // 1 to MAX
+
+            // Whether BigNumber Errors are ever thrown.
+            ERRORS = true,                           // true or false
+
+            // Change to intValidatorNoErrors if ERRORS is false.
+            isValidInt = intValidatorWithErrors,     // intValidatorWithErrors/intValidatorNoErrors
+
+            // Whether to use cryptographically-secure random number generation, if available.
+            CRYPTO = false,                          // true or false
+
+            /*
+             * The modulo mode used when calculating the modulus: a mod n.
+             * The quotient (q = a / n) is calculated according to the corresponding rounding mode.
+             * The remainder (r) is calculated as: r = a - n * q.
+             *
+             * UP        0 The remainder is positive if the dividend is negative, else is negative.
+             * DOWN      1 The remainder has the same sign as the dividend.
+             *             This modulo mode is commonly known as 'truncated division' and is
+             *             equivalent to (a % n) in JavaScript.
+             * FLOOR     3 The remainder has the same sign as the divisor (Python %).
+             * HALF_EVEN 6 This modulo mode implements the IEEE 754 remainder function.
+             * EUCLID    9 Euclidian division. q = sign(n) * floor(a / abs(n)).
+             *             The remainder is always positive.
+             *
+             * The truncated division, floored division, Euclidian division and IEEE 754 remainder
+             * modes are commonly used for the modulus operation.
+             * Although the other rounding modes can also be used, they may not give useful results.
+             */
+            MODULO_MODE = 1,                         // 0 to 9
+
+            // The maximum number of significant digits of the result of the toPower operation.
+            // If POW_PRECISION is 0, there will be unlimited significant digits.
+            POW_PRECISION = 0,                       // 0 to MAX
+
+            // The format specification used by the BigNumber.prototype.toFormat method.
+            FORMAT = {
+                decimalSeparator: '.',
+                groupSeparator: ',',
+                groupSize: 3,
+                secondaryGroupSize: 0,
+                fractionGroupSeparator: '\xA0',      // non-breaking space
+                fractionGroupSize: 0
+            };
+
+
+        /******************************************************************************************/
+
+
+        // CONSTRUCTOR
+
+
+        /*
+         * The BigNumber constructor and exported function.
+         * Create and return a new instance of a BigNumber object.
+         *
+         * n {number|string|BigNumber} A numeric value.
+         * [b] {number} The base of n. Integer, 2 to 64 inclusive.
+         */
+        function BigNumber( n, b ) {
+            var c, e, i, num, len, str,
+                x = this;
+
+            // Enable constructor usage without new.
+            if ( !( x instanceof BigNumber ) ) {
+
+                // 'BigNumber() constructor call without new: {n}'
+                if (ERRORS) raise( 26, 'constructor call without new', n );
+                return new BigNumber( n, b );
+            }
+
+            // 'new BigNumber() base not an integer: {b}'
+            // 'new BigNumber() base out of range: {b}'
+            if ( b == null || !isValidInt( b, 2, 64, id, 'base' ) ) {
+
+                // Duplicate.
+                if ( n instanceof BigNumber ) {
+                    x.s = n.s;
+                    x.e = n.e;
+                    x.c = ( n = n.c ) ? n.slice() : n;
+                    id = 0;
+                    return;
+                }
+
+                if ( ( num = typeof n == 'number' ) && n * 0 == 0 ) {
+                    x.s = 1 / n < 0 ? ( n = -n, -1 ) : 1;
+
+                    // Fast path for integers.
+                    if ( n === ~~n ) {
+                        for ( e = 0, i = n; i >= 10; i /= 10, e++ );
+                        x.e = e;
+                        x.c = [n];
+                        id = 0;
+                        return;
+                    }
+
+                    str = n + '';
+                } else {
+                    if ( !isNumeric.test( str = n + '' ) ) return parseNumeric( x, str, num );
+                    x.s = str.charCodeAt(0) === 45 ? ( str = str.slice(1), -1 ) : 1;
+                }
+            } else {
+                b = b | 0;
+                str = n + '';
+
+                // Ensure return value is rounded to DECIMAL_PLACES as with other bases.
+                // Allow exponential notation to be used with base 10 argument.
+                if ( b == 10 ) {
+                    x = new BigNumber( n instanceof BigNumber ? n : str );
+                    return round( x, DECIMAL_PLACES + x.e + 1, ROUNDING_MODE );
+                }
+
+                // Avoid potential interpretation of Infinity and NaN as base 44+ values.
+                // Any number in exponential form will fail due to the [Ee][+-].
+                if ( ( num = typeof n == 'number' ) && n * 0 != 0 ||
+                  !( new RegExp( '^-?' + ( c = '[' + ALPHABET.slice( 0, b ) + ']+' ) +
+                    '(?:\\.' + c + ')?$',b < 37 ? 'i' : '' ) ).test(str) ) {
+                    return parseNumeric( x, str, num, b );
+                }
+
+                if (num) {
+                    x.s = 1 / n < 0 ? ( str = str.slice(1), -1 ) : 1;
+
+                    if ( ERRORS && str.replace( /^0\.0*|\./, '' ).length > 15 ) {
+
+                        // 'new BigNumber() number type has more than 15 significant digits: {n}'
+                        raise( id, tooManyDigits, n );
+                    }
+
+                    // Prevent later check for length on converted number.
+                    num = false;
+                } else {
+                    x.s = str.charCodeAt(0) === 45 ? ( str = str.slice(1), -1 ) : 1;
+                }
+
+                str = convertBase( str, 10, b, x.s );
+            }
+
+            // Decimal point?
+            if ( ( e = str.indexOf('.') ) > -1 ) str = str.replace( '.', '' );
+
+            // Exponential form?
+            if ( ( i = str.search( /e/i ) ) > 0 ) {
+
+                // Determine exponent.
+                if ( e < 0 ) e = i;
+                e += +str.slice( i + 1 );
+                str = str.substring( 0, i );
+            } else if ( e < 0 ) {
+
+                // Integer.
+                e = str.length;
+            }
+
+            // Determine leading zeros.
+            for ( i = 0; str.charCodeAt(i) === 48; i++ );
+
+            // Determine trailing zeros.
+            for ( len = str.length; str.charCodeAt(--len) === 48; );
+            str = str.slice( i, len + 1 );
+
+            if (str) {
+                len = str.length;
+
+                // Disallow numbers with over 15 significant digits if number type.
+                // 'new BigNumber() number type has more than 15 significant digits: {n}'
+                if ( num && ERRORS && len > 15 && ( n > MAX_SAFE_INTEGER || n !== mathfloor(n) ) ) {
+                    raise( id, tooManyDigits, x.s * n );
+                }
+
+                e = e - i - 1;
+
+                 // Overflow?
+                if ( e > MAX_EXP ) {
+
+                    // Infinity.
+                    x.c = x.e = null;
+
+                // Underflow?
+                } else if ( e < MIN_EXP ) {
+
+                    // Zero.
+                    x.c = [ x.e = 0 ];
+                } else {
+                    x.e = e;
+                    x.c = [];
+
+                    // Transform base
+
+                    // e is the base 10 exponent.
+                    // i is where to slice str to get the first element of the coefficient array.
+                    i = ( e + 1 ) % LOG_BASE;
+                    if ( e < 0 ) i += LOG_BASE;
+
+                    if ( i < len ) {
+                        if (i) x.c.push( +str.slice( 0, i ) );
+
+                        for ( len -= LOG_BASE; i < len; ) {
+                            x.c.push( +str.slice( i, i += LOG_BASE ) );
+                        }
+
+                        str = str.slice(i);
+                        i = LOG_BASE - str.length;
+                    } else {
+                        i -= len;
+                    }
+
+                    for ( ; i--; str += '0' );
+                    x.c.push( +str );
+                }
+            } else {
+
+                // Zero.
+                x.c = [ x.e = 0 ];
+            }
+
+            id = 0;
+        }
+
+
+        // CONSTRUCTOR PROPERTIES
+
+
+        BigNumber.another = constructorFactory;
+
+        BigNumber.ROUND_UP = 0;
+        BigNumber.ROUND_DOWN = 1;
+        BigNumber.ROUND_CEIL = 2;
+        BigNumber.ROUND_FLOOR = 3;
+        BigNumber.ROUND_HALF_UP = 4;
+        BigNumber.ROUND_HALF_DOWN = 5;
+        BigNumber.ROUND_HALF_EVEN = 6;
+        BigNumber.ROUND_HALF_CEIL = 7;
+        BigNumber.ROUND_HALF_FLOOR = 8;
+        BigNumber.EUCLID = 9;
+
+
+        /*
+         * Configure infrequently-changing library-wide settings.
+         *
+         * Accept an object or an argument list, with one or many of the following properties or
+         * parameters respectively:
+         *
+         *   DECIMAL_PLACES  {number}  Integer, 0 to MAX inclusive
+         *   ROUNDING_MODE   {number}  Integer, 0 to 8 inclusive
+         *   EXPONENTIAL_AT  {number|number[]}  Integer, -MAX to MAX inclusive or
+         *                                      [integer -MAX to 0 incl., 0 to MAX incl.]
+         *   RANGE           {number|number[]}  Non-zero integer, -MAX to MAX inclusive or
+         *                                      [integer -MAX to -1 incl., integer 1 to MAX incl.]
+         *   ERRORS          {boolean|number}   true, false, 1 or 0
+         *   CRYPTO          {boolean|number}   true, false, 1 or 0
+         *   MODULO_MODE     {number}           0 to 9 inclusive
+         *   POW_PRECISION   {number}           0 to MAX inclusive
+         *   FORMAT          {object}           See BigNumber.prototype.toFormat
+         *      decimalSeparator       {string}
+         *      groupSeparator         {string}
+         *      groupSize              {number}
+         *      secondaryGroupSize     {number}
+         *      fractionGroupSeparator {string}
+         *      fractionGroupSize      {number}
+         *
+         * (The values assigned to the above FORMAT object properties are not checked for validity.)
+         *
+         * E.g.
+         * BigNumber.config(20, 4) is equivalent to
+         * BigNumber.config({ DECIMAL_PLACES : 20, ROUNDING_MODE : 4 })
+         *
+         * Ignore properties/parameters set to null or undefined.
+         * Return an object with the properties current values.
+         */
+        BigNumber.config = BigNumber.set = function () {
+            var v, p,
+                i = 0,
+                r = {},
+                a = arguments,
+                o = a[0],
+                has = o && typeof o == 'object'
+                  ? function () { if ( o.hasOwnProperty(p) ) return ( v = o[p] ) != null; }
+                  : function () { if ( a.length > i ) return ( v = a[i++] ) != null; };
+
+            // DECIMAL_PLACES {number} Integer, 0 to MAX inclusive.
+            // 'config() DECIMAL_PLACES not an integer: {v}'
+            // 'config() DECIMAL_PLACES out of range: {v}'
+            if ( has( p = 'DECIMAL_PLACES' ) && isValidInt( v, 0, MAX, 2, p ) ) {
+                DECIMAL_PLACES = v | 0;
+            }
+            r[p] = DECIMAL_PLACES;
+
+            // ROUNDING_MODE {number} Integer, 0 to 8 inclusive.
+            // 'config() ROUNDING_MODE not an integer: {v}'
+            // 'config() ROUNDING_MODE out of range: {v}'
+            if ( has( p = 'ROUNDING_MODE' ) && isValidInt( v, 0, 8, 2, p ) ) {
+                ROUNDING_MODE = v | 0;
+            }
+            r[p] = ROUNDING_MODE;
+
+            // EXPONENTIAL_AT {number|number[]}
+            // Integer, -MAX to MAX inclusive or [integer -MAX to 0 inclusive, 0 to MAX inclusive].
+            // 'config() EXPONENTIAL_AT not an integer: {v}'
+            // 'config() EXPONENTIAL_AT out of range: {v}'
+            if ( has( p = 'EXPONENTIAL_AT' ) ) {
+
+                if ( isArray(v) ) {
+                    if ( isValidInt( v[0], -MAX, 0, 2, p ) && isValidInt( v[1], 0, MAX, 2, p ) ) {
+                        TO_EXP_NEG = v[0] | 0;
+                        TO_EXP_POS = v[1] | 0;
+                    }
+                } else if ( isValidInt( v, -MAX, MAX, 2, p ) ) {
+                    TO_EXP_NEG = -( TO_EXP_POS = ( v < 0 ? -v : v ) | 0 );
+                }
+            }
+            r[p] = [ TO_EXP_NEG, TO_EXP_POS ];
+
+            // RANGE {number|number[]} Non-zero integer, -MAX to MAX inclusive or
+            // [integer -MAX to -1 inclusive, integer 1 to MAX inclusive].
+            // 'config() RANGE not an integer: {v}'
+            // 'config() RANGE cannot be zero: {v}'
+            // 'config() RANGE out of range: {v}'
+            if ( has( p = 'RANGE' ) ) {
+
+                if ( isArray(v) ) {
+                    if ( isValidInt( v[0], -MAX, -1, 2, p ) && isValidInt( v[1], 1, MAX, 2, p ) ) {
+                        MIN_EXP = v[0] | 0;
+                        MAX_EXP = v[1] | 0;
+                    }
+                } else if ( isValidInt( v, -MAX, MAX, 2, p ) ) {
+                    if ( v | 0 ) MIN_EXP = -( MAX_EXP = ( v < 0 ? -v : v ) | 0 );
+                    else if (ERRORS) raise( 2, p + ' cannot be zero', v );
+                }
+            }
+            r[p] = [ MIN_EXP, MAX_EXP ];
+
+            // ERRORS {boolean|number} true, false, 1 or 0.
+            // 'config() ERRORS not a boolean or binary digit: {v}'
+            if ( has( p = 'ERRORS' ) ) {
+
+                if ( v === !!v || v === 1 || v === 0 ) {
+                    id = 0;
+                    isValidInt = ( ERRORS = !!v ) ? intValidatorWithErrors : intValidatorNoErrors;
+                } else if (ERRORS) {
+                    raise( 2, p + notBool, v );
+                }
+            }
+            r[p] = ERRORS;
+
+            // CRYPTO {boolean|number} true, false, 1 or 0.
+            // 'config() CRYPTO not a boolean or binary digit: {v}'
+            // 'config() crypto unavailable: {crypto}'
+            if ( has( p = 'CRYPTO' ) ) {
+
+                if ( v === true || v === false || v === 1 || v === 0 ) {
+                    if (v) {
+                        v = typeof crypto == 'undefined';
+                        if ( !v && crypto && (crypto.getRandomValues || crypto.randomBytes)) {
+                            CRYPTO = true;
+                        } else if (ERRORS) {
+                            raise( 2, 'crypto unavailable', v ? void 0 : crypto );
+                        } else {
+                            CRYPTO = false;
+                        }
+                    } else {
+                        CRYPTO = false;
+                    }
+                } else if (ERRORS) {
+                    raise( 2, p + notBool, v );
+                }
+            }
+            r[p] = CRYPTO;
+
+            // MODULO_MODE {number} Integer, 0 to 9 inclusive.
+            // 'config() MODULO_MODE not an integer: {v}'
+            // 'config() MODULO_MODE out of range: {v}'
+            if ( has( p = 'MODULO_MODE' ) && isValidInt( v, 0, 9, 2, p ) ) {
+                MODULO_MODE = v | 0;
+            }
+            r[p] = MODULO_MODE;
+
+            // POW_PRECISION {number} Integer, 0 to MAX inclusive.
+            // 'config() POW_PRECISION not an integer: {v}'
+            // 'config() POW_PRECISION out of range: {v}'
+            if ( has( p = 'POW_PRECISION' ) && isValidInt( v, 0, MAX, 2, p ) ) {
+                POW_PRECISION = v | 0;
+            }
+            r[p] = POW_PRECISION;
+
+            // FORMAT {object}
+            // 'config() FORMAT not an object: {v}'
+            if ( has( p = 'FORMAT' ) ) {
+
+                if ( typeof v == 'object' ) {
+                    FORMAT = v;
+                } else if (ERRORS) {
+                    raise( 2, p + ' not an object', v );
+                }
+            }
+            r[p] = FORMAT;
+
+            return r;
+        };
+
+
+        /*
+         * Return a new BigNumber whose value is the maximum of the arguments.
+         *
+         * arguments {number|string|BigNumber}
+         */
+        BigNumber.max = function () { return maxOrMin( arguments, P.lt ); };
+
+
+        /*
+         * Return a new BigNumber whose value is the minimum of the arguments.
+         *
+         * arguments {number|string|BigNumber}
+         */
+        BigNumber.min = function () { return maxOrMin( arguments, P.gt ); };
+
+
+        /*
+         * Return a new BigNumber with a random value equal to or greater than 0 and less than 1,
+         * and with dp, or DECIMAL_PLACES if dp is omitted, decimal places (or less if trailing
+         * zeros are produced).
+         *
+         * [dp] {number} Decimal places. Integer, 0 to MAX inclusive.
+         *
+         * 'random() decimal places not an integer: {dp}'
+         * 'random() decimal places out of range: {dp}'
+         * 'random() crypto unavailable: {crypto}'
+         */
+        BigNumber.random = (function () {
+            var pow2_53 = 0x20000000000000;
+
+            // Return a 53 bit integer n, where 0 <= n < 9007199254740992.
+            // Check if Math.random() produces more than 32 bits of randomness.
+            // If it does, assume at least 53 bits are produced, otherwise assume at least 30 bits.
+            // 0x40000000 is 2^30, 0x800000 is 2^23, 0x1fffff is 2^21 - 1.
+            var random53bitInt = (Math.random() * pow2_53) & 0x1fffff
+              ? function () { return mathfloor( Math.random() * pow2_53 ); }
+              : function () { return ((Math.random() * 0x40000000 | 0) * 0x800000) +
+                  (Math.random() * 0x800000 | 0); };
+
+            return function (dp) {
+                var a, b, e, k, v,
+                    i = 0,
+                    c = [],
+                    rand = new BigNumber(ONE);
+
+                dp = dp == null || !isValidInt( dp, 0, MAX, 14 ) ? DECIMAL_PLACES : dp | 0;
+                k = mathceil( dp / LOG_BASE );
+
+                if (CRYPTO) {
+
+                    // Browsers supporting crypto.getRandomValues.
+                    if (crypto.getRandomValues) {
+
+                        a = crypto.getRandomValues( new Uint32Array( k *= 2 ) );
+
+                        for ( ; i < k; ) {
+
+                            // 53 bits:
+                            // ((Math.pow(2, 32) - 1) * Math.pow(2, 21)).toString(2)
+                            // 11111 11111111 11111111 11111111 11100000 00000000 00000000
+                            // ((Math.pow(2, 32) - 1) >>> 11).toString(2)
+                            //                                     11111 11111111 11111111
+                            // 0x20000 is 2^21.
+                            v = a[i] * 0x20000 + (a[i + 1] >>> 11);
+
+                            // Rejection sampling:
+                            // 0 <= v < 9007199254740992
+                            // Probability that v >= 9e15, is
+                            // 7199254740992 / 9007199254740992 ~= 0.0008, i.e. 1 in 1251
+                            if ( v >= 9e15 ) {
+                                b = crypto.getRandomValues( new Uint32Array(2) );
+                                a[i] = b[0];
+                                a[i + 1] = b[1];
+                            } else {
+
+                                // 0 <= v <= 8999999999999999
+                                // 0 <= (v % 1e14) <= 99999999999999
+                                c.push( v % 1e14 );
+                                i += 2;
+                            }
+                        }
+                        i = k / 2;
+
+                    // Node.js supporting crypto.randomBytes.
+                    } else if (crypto.randomBytes) {
+
+                        // buffer
+                        a = crypto.randomBytes( k *= 7 );
+
+                        for ( ; i < k; ) {
+
+                            // 0x1000000000000 is 2^48, 0x10000000000 is 2^40
+                            // 0x100000000 is 2^32, 0x1000000 is 2^24
+                            // 11111 11111111 11111111 11111111 11111111 11111111 11111111
+                            // 0 <= v < 9007199254740992
+                            v = ( ( a[i] & 31 ) * 0x1000000000000 ) + ( a[i + 1] * 0x10000000000 ) +
+                                  ( a[i + 2] * 0x100000000 ) + ( a[i + 3] * 0x1000000 ) +
+                                  ( a[i + 4] << 16 ) + ( a[i + 5] << 8 ) + a[i + 6];
+
+                            if ( v >= 9e15 ) {
+                                crypto.randomBytes(7).copy( a, i );
+                            } else {
+
+                                // 0 <= (v % 1e14) <= 99999999999999
+                                c.push( v % 1e14 );
+                                i += 7;
+                            }
+                        }
+                        i = k / 7;
+                    } else {
+                        CRYPTO = false;
+                        if (ERRORS) raise( 14, 'crypto unavailable', crypto );
+                    }
+                }
+
+                // Use Math.random.
+                if (!CRYPTO) {
+
+                    for ( ; i < k; ) {
+                        v = random53bitInt();
+                        if ( v < 9e15 ) c[i++] = v % 1e14;
+                    }
+                }
+
+                k = c[--i];
+                dp %= LOG_BASE;
+
+                // Convert trailing digits to zeros according to dp.
+                if ( k && dp ) {
+                    v = POWS_TEN[LOG_BASE - dp];
+                    c[i] = mathfloor( k / v ) * v;
+                }
+
+                // Remove trailing elements which are zero.
+                for ( ; c[i] === 0; c.pop(), i-- );
+
+                // Zero?
+                if ( i < 0 ) {
+                    c = [ e = 0 ];
+                } else {
+
+                    // Remove leading elements which are zero and adjust exponent accordingly.
+                    for ( e = -1 ; c[0] === 0; c.splice(0, 1), e -= LOG_BASE);
+
+                    // Count the digits of the first element of c to determine leading zeros, and...
+                    for ( i = 1, v = c[0]; v >= 10; v /= 10, i++);
+
+                    // adjust the exponent accordingly.
+                    if ( i < LOG_BASE ) e -= LOG_BASE - i;
+                }
+
+                rand.e = e;
+                rand.c = c;
+                return rand;
+            };
+        })();
+
+
+        // PRIVATE FUNCTIONS
+
+
+        // Convert a numeric string of baseIn to a numeric string of baseOut.
+        function convertBase( str, baseOut, baseIn, sign ) {
+            var d, e, k, r, x, xc, y,
+                i = str.indexOf( '.' ),
+                dp = DECIMAL_PLACES,
+                rm = ROUNDING_MODE;
+
+            if ( baseIn < 37 ) str = str.toLowerCase();
+
+            // Non-integer.
+            if ( i >= 0 ) {
+                k = POW_PRECISION;
+
+                // Unlimited precision.
+                POW_PRECISION = 0;
+                str = str.replace( '.', '' );
+                y = new BigNumber(baseIn);
+                x = y.pow( str.length - i );
+                POW_PRECISION = k;
+
+                // Convert str as if an integer, then restore the fraction part by dividing the
+                // result by its base raised to a power.
+                y.c = toBaseOut( toFixedPoint( coeffToString( x.c ), x.e ), 10, baseOut );
+                y.e = y.c.length;
+            }
+
+            // Convert the number as integer.
+            xc = toBaseOut( str, baseIn, baseOut );
+            e = k = xc.length;
+
+            // Remove trailing zeros.
+            for ( ; xc[--k] == 0; xc.pop() );
+            if ( !xc[0] ) return '0';
+
+            if ( i < 0 ) {
+                --e;
+            } else {
+                x.c = xc;
+                x.e = e;
+
+                // sign is needed for correct rounding.
+                x.s = sign;
+                x = div( x, y, dp, rm, baseOut );
+                xc = x.c;
+                r = x.r;
+                e = x.e;
+            }
+
+            d = e + dp + 1;
+
+            // The rounding digit, i.e. the digit to the right of the digit that may be rounded up.
+            i = xc[d];
+            k = baseOut / 2;
+            r = r || d < 0 || xc[d + 1] != null;
+
+            r = rm < 4 ? ( i != null || r ) && ( rm == 0 || rm == ( x.s < 0 ? 3 : 2 ) )
+                       : i > k || i == k &&( rm == 4 || r || rm == 6 && xc[d - 1] & 1 ||
+                         rm == ( x.s < 0 ? 8 : 7 ) );
+
+            if ( d < 1 || !xc[0] ) {
+
+                // 1^-dp or 0.
+                str = r ? toFixedPoint( '1', -dp ) : '0';
+            } else {
+                xc.length = d;
+
+                if (r) {
+
+                    // Rounding up may mean the previous digit has to be rounded up and so on.
+                    for ( --baseOut; ++xc[--d] > baseOut; ) {
+                        xc[d] = 0;
+
+                        if ( !d ) {
+                            ++e;
+                            xc = [1].concat(xc);
+                        }
+                    }
+                }
+
+                // Determine trailing zeros.
+                for ( k = xc.length; !xc[--k]; );
+
+                // E.g. [4, 11, 15] becomes 4bf.
+                for ( i = 0, str = ''; i <= k; str += ALPHABET.charAt( xc[i++] ) );
+                str = toFixedPoint( str, e );
+            }
+
+            // The caller will add the sign.
+            return str;
+        }
+
+
+        // Perform division in the specified base. Called by div and convertBase.
+        div = (function () {
+
+            // Assume non-zero x and k.
+            function multiply( x, k, base ) {
+                var m, temp, xlo, xhi,
+                    carry = 0,
+                    i = x.length,
+                    klo = k % SQRT_BASE,
+                    khi = k / SQRT_BASE | 0;
+
+                for ( x = x.slice(); i--; ) {
+                    xlo = x[i] % SQRT_BASE;
+                    xhi = x[i] / SQRT_BASE | 0;
+                    m = khi * xlo + xhi * klo;
+                    temp = klo * xlo + ( ( m % SQRT_BASE ) * SQRT_BASE ) + carry;
+                    carry = ( temp / base | 0 ) + ( m / SQRT_BASE | 0 ) + khi * xhi;
+                    x[i] = temp % base;
+                }
+
+                if (carry) x = [carry].concat(x);
+
+                return x;
+            }
+
+            function compare( a, b, aL, bL ) {
+                var i, cmp;
+
+                if ( aL != bL ) {
+                    cmp = aL > bL ? 1 : -1;
+                } else {
+
+                    for ( i = cmp = 0; i < aL; i++ ) {
+
+                        if ( a[i] != b[i] ) {
+                            cmp = a[i] > b[i] ? 1 : -1;
+                            break;
+                        }
+                    }
+                }
+                return cmp;
+            }
+
+            function subtract( a, b, aL, base ) {
+                var i = 0;
+
+                // Subtract b from a.
+                for ( ; aL--; ) {
+                    a[aL] -= i;
+                    i = a[aL] < b[aL] ? 1 : 0;
+                    a[aL] = i * base + a[aL] - b[aL];
+                }
+
+                // Remove leading zeros.
+                for ( ; !a[0] && a.length > 1; a.splice(0, 1) );
+            }
+
+            // x: dividend, y: divisor.
+            return function ( x, y, dp, rm, base ) {
+                var cmp, e, i, more, n, prod, prodL, q, qc, rem, remL, rem0, xi, xL, yc0,
+                    yL, yz,
+                    s = x.s == y.s ? 1 : -1,
+                    xc = x.c,
+                    yc = y.c;
+
+                // Either NaN, Infinity or 0?
+                if ( !xc || !xc[0] || !yc || !yc[0] ) {
+
+                    return new BigNumber(
+
+                      // Return NaN if either NaN, or both Infinity or 0.
+                      !x.s || !y.s || ( xc ? yc && xc[0] == yc[0] : !yc ) ? NaN :
+
+                        // Return ±0 if x is ±0 or y is ±Infinity, or return ±Infinity as y is ±0.
+                        xc && xc[0] == 0 || !yc ? s * 0 : s / 0
+                    );
+                }
+
+                q = new BigNumber(s);
+                qc = q.c = [];
+                e = x.e - y.e;
+                s = dp + e + 1;
+
+                if ( !base ) {
+                    base = BASE;
+                    e = bitFloor( x.e / LOG_BASE ) - bitFloor( y.e / LOG_BASE );
+                    s = s / LOG_BASE | 0;
+                }
+
+                // Result exponent may be one less then the current value of e.
+                // The coefficients of the BigNumbers from convertBase may have trailing zeros.
+                for ( i = 0; yc[i] == ( xc[i] || 0 ); i++ );
+                if ( yc[i] > ( xc[i] || 0 ) ) e--;
+
+                if ( s < 0 ) {
+                    qc.push(1);
+                    more = true;
+                } else {
+                    xL = xc.length;
+                    yL = yc.length;
+                    i = 0;
+                    s += 2;
+
+                    // Normalise xc and yc so highest order digit of yc is >= base / 2.
+
+                    n = mathfloor( base / ( yc[0] + 1 ) );
+
+                    // Not necessary, but to handle odd bases where yc[0] == ( base / 2 ) - 1.
+                    // if ( n > 1 || n++ == 1 && yc[0] < base / 2 ) {
+                    if ( n > 1 ) {
+                        yc = multiply( yc, n, base );
+                        xc = multiply( xc, n, base );
+                        yL = yc.length;
+                        xL = xc.length;
+                    }
+
+                    xi = yL;
+                    rem = xc.slice( 0, yL );
+                    remL = rem.length;
+
+                    // Add zeros to make remainder as long as divisor.
+                    for ( ; remL < yL; rem[remL++] = 0 );
+                    yz = yc.slice();
+                    yz = [0].concat(yz);
+                    yc0 = yc[0];
+                    if ( yc[1] >= base / 2 ) yc0++;
+                    // Not necessary, but to prevent trial digit n > base, when using base 3.
+                    // else if ( base == 3 && yc0 == 1 ) yc0 = 1 + 1e-15;
+
+                    do {
+                        n = 0;
+
+                        // Compare divisor and remainder.
+                        cmp = compare( yc, rem, yL, remL );
+
+                        // If divisor < remainder.
+                        if ( cmp < 0 ) {
+
+                            // Calculate trial digit, n.
+
+                            rem0 = rem[0];
+                            if ( yL != remL ) rem0 = rem0 * base + ( rem[1] || 0 );
+
+                            // n is how many times the divisor goes into the current remainder.
+                            n = mathfloor( rem0 / yc0 );
+
+                            //  Algorithm:
+                            //  1. product = divisor * trial digit (n)
+                            //  2. if product > remainder: product -= divisor, n--
+                            //  3. remainder -= product
+                            //  4. if product was < remainder at 2:
+                            //    5. compare new remainder and divisor
+                            //    6. If remainder > divisor: remainder -= divisor, n++
+
+                            if ( n > 1 ) {
+
+                                // n may be > base only when base is 3.
+                                if (n >= base) n = base - 1;
+
+                                // product = divisor * trial digit.
+                                prod = multiply( yc, n, base );
+                                prodL = prod.length;
+                                remL = rem.length;
+
+                                // Compare product and remainder.
+                                // If product > remainder.
+                                // Trial digit n too high.
+                                // n is 1 too high about 5% of the time, and is not known to have
+                                // ever been more than 1 too high.
+                                while ( compare( prod, rem, prodL, remL ) == 1 ) {
+                                    n--;
+
+                                    // Subtract divisor from product.
+                                    subtract( prod, yL < prodL ? yz : yc, prodL, base );
+                                    prodL = prod.length;
+                                    cmp = 1;
+                                }
+                            } else {
+
+                                // n is 0 or 1, cmp is -1.
+                                // If n is 0, there is no need to compare yc and rem again below,
+                                // so change cmp to 1 to avoid it.
+                                // If n is 1, leave cmp as -1, so yc and rem are compared again.
+                                if ( n == 0 ) {
+
+                                    // divisor < remainder, so n must be at least 1.
+                                    cmp = n = 1;
+                                }
+
+                                // product = divisor
+                                prod = yc.slice();
+                                prodL = prod.length;
+                            }
+
+                            if ( prodL < remL ) prod = [0].concat(prod);
+
+                            // Subtract product from remainder.
+                            subtract( rem, prod, remL, base );
+                            remL = rem.length;
+
+                             // If product was < remainder.
+                            if ( cmp == -1 ) {
+
+                                // Compare divisor and new remainder.
+                                // If divisor < new remainder, subtract divisor from remainder.
+                                // Trial digit n too low.
+                                // n is 1 too low about 5% of the time, and very rarely 2 too low.
+                                while ( compare( yc, rem, yL, remL ) < 1 ) {
+                                    n++;
+
+                                    // Subtract divisor from remainder.
+                                    subtract( rem, yL < remL ? yz : yc, remL, base );
+                                    remL = rem.length;
+                                }
+                            }
+                        } else if ( cmp === 0 ) {
+                            n++;
+                            rem = [0];
+                        } // else cmp === 1 and n will be 0
+
+                        // Add the next digit, n, to the result array.
+                        qc[i++] = n;
+
+                        // Update the remainder.
+                        if ( rem[0] ) {
+                            rem[remL++] = xc[xi] || 0;
+                        } else {
+                            rem = [ xc[xi] ];
+                            remL = 1;
+                        }
+                    } while ( ( xi++ < xL || rem[0] != null ) && s-- );
+
+                    more = rem[0] != null;
+
+                    // Leading zero?
+                    if ( !qc[0] ) qc.splice(0, 1);
+                }
+
+                if ( base == BASE ) {
+
+                    // To calculate q.e, first get the number of digits of qc[0].
+                    for ( i = 1, s = qc[0]; s >= 10; s /= 10, i++ );
+                    round( q, dp + ( q.e = i + e * LOG_BASE - 1 ) + 1, rm, more );
+
+                // Caller is convertBase.
+                } else {
+                    q.e = e;
+                    q.r = +more;
+                }
+
+                return q;
+            };
+        })();
+
+
+        /*
+         * Return a string representing the value of BigNumber n in fixed-point or exponential
+         * notation rounded to the specified decimal places or significant digits.
+         *
+         * n is a BigNumber.
+         * i is the index of the last digit required (i.e. the digit that may be rounded up).
+         * rm is the rounding mode.
+         * caller is caller id: toExponential 19, toFixed 20, toFormat 21, toPrecision 24.
+         */
+        function format( n, i, rm, caller ) {
+            var c0, e, ne, len, str;
+
+            rm = rm != null && isValidInt( rm, 0, 8, caller, roundingMode )
+              ? rm | 0 : ROUNDING_MODE;
+
+            if ( !n.c ) return n.toString();
+            c0 = n.c[0];
+            ne = n.e;
+
+            if ( i == null ) {
+                str = coeffToString( n.c );
+                str = caller == 19 || caller == 24 && ne <= TO_EXP_NEG
+                  ? toExponential( str, ne )
+                  : toFixedPoint( str, ne );
+            } else {
+                n = round( new BigNumber(n), i, rm );
+
+                // n.e may have changed if the value was rounded up.
+                e = n.e;
+
+                str = coeffToString( n.c );
+                len = str.length;
+
+                // toPrecision returns exponential notation if the number of significant digits
+                // specified is less than the number of digits necessary to represent the integer
+                // part of the value in fixed-point notation.
+
+                // Exponential notation.
+                if ( caller == 19 || caller == 24 && ( i <= e || e <= TO_EXP_NEG ) ) {
+
+                    // Append zeros?
+                    for ( ; len < i; str += '0', len++ );
+                    str = toExponential( str, e );
+
+                // Fixed-point notation.
+                } else {
+                    i -= ne;
+                    str = toFixedPoint( str, e );
+
+                    // Append zeros?
+                    if ( e + 1 > len ) {
+                        if ( --i > 0 ) for ( str += '.'; i--; str += '0' );
+                    } else {
+                        i += e - len;
+                        if ( i > 0 ) {
+                            if ( e + 1 == len ) str += '.';
+                            for ( ; i--; str += '0' );
+                        }
+                    }
+                }
+            }
+
+            return n.s < 0 && c0 ? '-' + str : str;
+        }
+
+
+        // Handle BigNumber.max and BigNumber.min.
+        function maxOrMin( args, method ) {
+            var m, n,
+                i = 0;
+
+            if ( isArray( args[0] ) ) args = args[0];
+            m = new BigNumber( args[0] );
+
+            for ( ; ++i < args.length; ) {
+                n = new BigNumber( args[i] );
+
+                // If any number is NaN, return NaN.
+                if ( !n.s ) {
+                    m = n;
+                    break;
+                } else if ( method.call( m, n ) ) {
+                    m = n;
+                }
+            }
+
+            return m;
+        }
+
+
+        /*
+         * Return true if n is an integer in range, otherwise throw.
+         * Use for argument validation when ERRORS is true.
+         */
+        function intValidatorWithErrors( n, min, max, caller, name ) {
+            if ( n < min || n > max || n != truncate(n) ) {
+                raise( caller, ( name || 'decimal places' ) +
+                  ( n < min || n > max ? ' out of range' : ' not an integer' ), n );
+            }
+
+            return true;
+        }
+
+
+        /*
+         * Strip trailing zeros, calculate base 10 exponent and check against MIN_EXP and MAX_EXP.
+         * Called by minus, plus and times.
+         */
+        function normalise( n, c, e ) {
+            var i = 1,
+                j = c.length;
+
+             // Remove trailing zeros.
+            for ( ; !c[--j]; c.pop() );
+
+            // Calculate the base 10 exponent. First get the number of digits of c[0].
+            for ( j = c[0]; j >= 10; j /= 10, i++ );
+
+            // Overflow?
+            if ( ( e = i + e * LOG_BASE - 1 ) > MAX_EXP ) {
+
+                // Infinity.
+                n.c = n.e = null;
+
+            // Underflow?
+            } else if ( e < MIN_EXP ) {
+
+                // Zero.
+                n.c = [ n.e = 0 ];
+            } else {
+                n.e = e;
+                n.c = c;
+            }
+
+            return n;
+        }
+
+
+        // Handle values that fail the validity test in BigNumber.
+        parseNumeric = (function () {
+            var basePrefix = /^(-?)0([xbo])(?=\w[\w.]*$)/i,
+                dotAfter = /^([^.]+)\.$/,
+                dotBefore = /^\.([^.]+)$/,
+                isInfinityOrNaN = /^-?(Infinity|NaN)$/,
+                whitespaceOrPlus = /^\s*\+(?=[\w.])|^\s+|\s+$/g;
+
+            return function ( x, str, num, b ) {
+                var base,
+                    s = num ? str : str.replace( whitespaceOrPlus, '' );
+
+                // No exception on ±Infinity or NaN.
+                if ( isInfinityOrNaN.test(s) ) {
+                    x.s = isNaN(s) ? null : s < 0 ? -1 : 1;
+                } else {
+                    if ( !num ) {
+
+                        // basePrefix = /^(-?)0([xbo])(?=\w[\w.]*$)/i
+                        s = s.replace( basePrefix, function ( m, p1, p2 ) {
+                            base = ( p2 = p2.toLowerCase() ) == 'x' ? 16 : p2 == 'b' ? 2 : 8;
+                            return !b || b == base ? p1 : m;
+                        });
+
+                        if (b) {
+                            base = b;
+
+                            // E.g. '1.' to '1', '.1' to '0.1'
+                            s = s.replace( dotAfter, '$1' ).replace( dotBefore, '0.$1' );
+                        }
+
+                        if ( str != s ) return new BigNumber( s, base );
+                    }
+
+                    // 'new BigNumber() not a number: {n}'
+                    // 'new BigNumber() not a base {b} number: {n}'
+                    if (ERRORS) raise( id, 'not a' + ( b ? ' base ' + b : '' ) + ' number', str );
+                    x.s = null;
+                }
+
+                x.c = x.e = null;
+                id = 0;
+            }
+        })();
+
+
+        // Throw a BigNumber Error.
+        function raise( caller, msg, val ) {
+            var error = new Error( [
+                'new BigNumber',     // 0
+                'cmp',               // 1
+                'config',            // 2
+                'div',               // 3
+                'divToInt',          // 4
+                'eq',                // 5
+                'gt',                // 6
+                'gte',               // 7
+                'lt',                // 8
+                'lte',               // 9
+                'minus',             // 10
+                'mod',               // 11
+                'plus',              // 12
+                'precision',         // 13
+                'random',            // 14
+                'round',             // 15
+                'shift',             // 16
+                'times',             // 17
+                'toDigits',          // 18
+                'toExponential',     // 19
+                'toFixed',           // 20
+                'toFormat',          // 21
+                'toFraction',        // 22
+                'pow',               // 23
+                'toPrecision',       // 24
+                'toString',          // 25
+                'BigNumber'          // 26
+            ][caller] + '() ' + msg + ': ' + val );
+
+            error.name = 'BigNumber Error';
+            id = 0;
+            throw error;
+        }
+
+
+        /*
+         * Round x to sd significant digits using rounding mode rm. Check for over/under-flow.
+         * If r is truthy, it is known that there are more digits after the rounding digit.
+         */
+        function round( x, sd, rm, r ) {
+            var d, i, j, k, n, ni, rd,
+                xc = x.c,
+                pows10 = POWS_TEN;
+
+            // if x is not Infinity or NaN...
+            if (xc) {
+
+                // rd is the rounding digit, i.e. the digit after the digit that may be rounded up.
+                // n is a base 1e14 number, the value of the element of array x.c containing rd.
+                // ni is the index of n within x.c.
+                // d is the number of digits of n.
+                // i is the index of rd within n including leading zeros.
+                // j is the actual index of rd within n (if < 0, rd is a leading zero).
+                out: {
+
+                    // Get the number of digits of the first element of xc.
+                    for ( d = 1, k = xc[0]; k >= 10; k /= 10, d++ );
+                    i = sd - d;
+
+                    // If the rounding digit is in the first element of xc...
+                    if ( i < 0 ) {
+                        i += LOG_BASE;
+                        j = sd;
+                        n = xc[ ni = 0 ];
+
+                        // Get the rounding digit at index j of n.
+                        rd = n / pows10[ d - j - 1 ] % 10 | 0;
+                    } else {
+                        ni = mathceil( ( i + 1 ) / LOG_BASE );
+
+                        if ( ni >= xc.length ) {
+
+                            if (r) {
+
+                                // Needed by sqrt.
+                                for ( ; xc.length <= ni; xc.push(0) );
+                                n = rd = 0;
+                                d = 1;
+                                i %= LOG_BASE;
+                                j = i - LOG_BASE + 1;
+                            } else {
+                                break out;
+                            }
+                        } else {
+                            n = k = xc[ni];
+
+                            // Get the number of digits of n.
+                            for ( d = 1; k >= 10; k /= 10, d++ );
+
+                            // Get the index of rd within n.
+                            i %= LOG_BASE;
+
+                            // Get the index of rd within n, adjusted for leading zeros.
+                            // The number of leading zeros of n is given by LOG_BASE - d.
+                            j = i - LOG_BASE + d;
+
+                            // Get the rounding digit at index j of n.
+                            rd = j < 0 ? 0 : n / pows10[ d - j - 1 ] % 10 | 0;
+                        }
+                    }
+
+                    r = r || sd < 0 ||
+
+                    // Are there any non-zero digits after the rounding digit?
+                    // The expression  n % pows10[ d - j - 1 ]  returns all digits of n to the right
+                    // of the digit at j, e.g. if n is 908714 and j is 2, the expression gives 714.
+                      xc[ni + 1] != null || ( j < 0 ? n : n % pows10[ d - j - 1 ] );
+
+                    r = rm < 4
+                      ? ( rd || r ) && ( rm == 0 || rm == ( x.s < 0 ? 3 : 2 ) )
+                      : rd > 5 || rd == 5 && ( rm == 4 || r || rm == 6 &&
+
+                        // Check whether the digit to the left of the rounding digit is odd.
+                        ( ( i > 0 ? j > 0 ? n / pows10[ d - j ] : 0 : xc[ni - 1] ) % 10 ) & 1 ||
+                          rm == ( x.s < 0 ? 8 : 7 ) );
+
+                    if ( sd < 1 || !xc[0] ) {
+                        xc.length = 0;
+
+                        if (r) {
+
+                            // Convert sd to decimal places.
+                            sd -= x.e + 1;
+
+                            // 1, 0.1, 0.01, 0.001, 0.0001 etc.
+                            xc[0] = pows10[ ( LOG_BASE - sd % LOG_BASE ) % LOG_BASE ];
+                            x.e = -sd || 0;
+                        } else {
+
+                            // Zero.
+                            xc[0] = x.e = 0;
+                        }
+
+                        return x;
+                    }
+
+                    // Remove excess digits.
+                    if ( i == 0 ) {
+                        xc.length = ni;
+                        k = 1;
+                        ni--;
+                    } else {
+                        xc.length = ni + 1;
+                        k = pows10[ LOG_BASE - i ];
+
+                        // E.g. 56700 becomes 56000 if 7 is the rounding digit.
+                        // j > 0 means i > number of leading zeros of n.
+                        xc[ni] = j > 0 ? mathfloor( n / pows10[ d - j ] % pows10[j] ) * k : 0;
+                    }
+
+                    // Round up?
+                    if (r) {
+
+                        for ( ; ; ) {
+
+                            // If the digit to be rounded up is in the first element of xc...
+                            if ( ni == 0 ) {
+
+                                // i will be the length of xc[0] before k is added.
+                                for ( i = 1, j = xc[0]; j >= 10; j /= 10, i++ );
+                                j = xc[0] += k;
+                                for ( k = 1; j >= 10; j /= 10, k++ );
+
+                                // if i != k the length has increased.
+                                if ( i != k ) {
+                                    x.e++;
+                                    if ( xc[0] == BASE ) xc[0] = 1;
+                                }
+
+                                break;
+                            } else {
+                                xc[ni] += k;
+                                if ( xc[ni] != BASE ) break;
+                                xc[ni--] = 0;
+                                k = 1;
+                            }
+                        }
+                    }
+
+                    // Remove trailing zeros.
+                    for ( i = xc.length; xc[--i] === 0; xc.pop() );
+                }
+
+                // Overflow? Infinity.
+                if ( x.e > MAX_EXP ) {
+                    x.c = x.e = null;
+
+                // Underflow? Zero.
+                } else if ( x.e < MIN_EXP ) {
+                    x.c = [ x.e = 0 ];
+                }
+            }
+
+            return x;
+        }
+
+
+        // PROTOTYPE/INSTANCE METHODS
+
+
+        /*
+         * Return a new BigNumber whose value is the absolute value of this BigNumber.
+         */
+        P.absoluteValue = P.abs = function () {
+            var x = new BigNumber(this);
+            if ( x.s < 0 ) x.s = 1;
+            return x;
+        };
+
+
+        /*
+         * Return a new BigNumber whose value is the value of this BigNumber rounded to a whole
+         * number in the direction of Infinity.
+         */
+        P.ceil = function () {
+            return round( new BigNumber(this), this.e + 1, 2 );
+        };
+
+
+        /*
+         * Return
+         * 1 if the value of this BigNumber is greater than the value of BigNumber(y, b),
+         * -1 if the value of this BigNumber is less than the value of BigNumber(y, b),
+         * 0 if they have the same value,
+         * or null if the value of either is NaN.
+         */
+        P.comparedTo = P.cmp = function ( y, b ) {
+            id = 1;
+            return compare( this, new BigNumber( y, b ) );
+        };
+
+
+        /*
+         * Return the number of decimal places of the value of this BigNumber, or null if the value
+         * of this BigNumber is ±Infinity or NaN.
+         */
+        P.decimalPlaces = P.dp = function () {
+            var n, v,
+                c = this.c;
+
+            if ( !c ) return null;
+            n = ( ( v = c.length - 1 ) - bitFloor( this.e / LOG_BASE ) ) * LOG_BASE;
+
+            // Subtract the number of trailing zeros of the last number.
+            if ( v = c[v] ) for ( ; v % 10 == 0; v /= 10, n-- );
+            if ( n < 0 ) n = 0;
+
+            return n;
+        };
+
+
+        /*
+         *  n / 0 = I
+         *  n / N = N
+         *  n / I = 0
+         *  0 / n = 0
+         *  0 / 0 = N
+         *  0 / N = N
+         *  0 / I = 0
+         *  N / n = N
+         *  N / 0 = N
+         *  N / N = N
+         *  N / I = N
+         *  I / n = I
+         *  I / 0 = I
+         *  I / N = N
+         *  I / I = N
+         *
+         * Return a new BigNumber whose value is the value of this BigNumber divided by the value of
+         * BigNumber(y, b), rounded according to DECIMAL_PLACES and ROUNDING_MODE.
+         */
+        P.dividedBy = P.div = function ( y, b ) {
+            id = 3;
+            return div( this, new BigNumber( y, b ), DECIMAL_PLACES, ROUNDING_MODE );
+        };
+
+
+        /*
+         * Return a new BigNumber whose value is the integer part of dividing the value of this
+         * BigNumber by the value of BigNumber(y, b).
+         */
+        P.dividedToIntegerBy = P.divToInt = function ( y, b ) {
+            id = 4;
+            return div( this, new BigNumber( y, b ), 0, 1 );
+        };
+
+
+        /*
+         * Return true if the value of this BigNumber is equal to the value of BigNumber(y, b),
+         * otherwise returns false.
+         */
+        P.equals = P.eq = function ( y, b ) {
+            id = 5;
+            return compare( this, new BigNumber( y, b ) ) === 0;
+        };
+
+
+        /*
+         * Return a new BigNumber whose value is the value of this BigNumber rounded to a whole
+         * number in the direction of -Infinity.
+         */
+        P.floor = function () {
+            return round( new BigNumber(this), this.e + 1, 3 );
+        };
+
+
+        /*
+         * Return true if the value of this BigNumber is greater than the value of BigNumber(y, b),
+         * otherwise returns false.
+         */
+        P.greaterThan = P.gt = function ( y, b ) {
+            id = 6;
+            return compare( this, new BigNumber( y, b ) ) > 0;
+        };
+
+
+        /*
+         * Return true if the value of this BigNumber is greater than or equal to the value of
+         * BigNumber(y, b), otherwise returns false.
+         */
+        P.greaterThanOrEqualTo = P.gte = function ( y, b ) {
+            id = 7;
+            return ( b = compare( this, new BigNumber( y, b ) ) ) === 1 || b === 0;
+
+        };
+
+
+        /*
+         * Return true if the value of this BigNumber is a finite number, otherwise returns false.
+         */
+        P.isFinite = function () {
+            return !!this.c;
+        };
+
+
+        /*
+         * Return true if the value of this BigNumber is an integer, otherwise return false.
+         */
+        P.isInteger = P.isInt = function () {
+            return !!this.c && bitFloor( this.e / LOG_BASE ) > this.c.length - 2;
+        };
+
+
+        /*
+         * Return true if the value of this BigNumber is NaN, otherwise returns false.
+         */
+        P.isNaN = function () {
+            return !this.s;
+        };
+
+
+        /*
+         * Return true if the value of this BigNumber is negative, otherwise returns false.
+         */
+        P.isNegative = P.isNeg = function () {
+            return this.s < 0;
+        };
+
+
+        /*
+         * Return true if the value of this BigNumber is 0 or -0, otherwise returns false.
+         */
+        P.isZero = function () {
+            return !!this.c && this.c[0] == 0;
+        };
+
+
+        /*
+         * Return true if the value of this BigNumber is less than the value of BigNumber(y, b),
+         * otherwise returns false.
+         */
+        P.lessThan = P.lt = function ( y, b ) {
+            id = 8;
+            return compare( this, new BigNumber( y, b ) ) < 0;
+        };
+
+
+        /*
+         * Return true if the value of this BigNumber is less than or equal to the value of
+         * BigNumber(y, b), otherwise returns false.
+         */
+        P.lessThanOrEqualTo = P.lte = function ( y, b ) {
+            id = 9;
+            return ( b = compare( this, new BigNumber( y, b ) ) ) === -1 || b === 0;
+        };
+
+
+        /*
+         *  n - 0 = n
+         *  n - N = N
+         *  n - I = -I
+         *  0 - n = -n
+         *  0 - 0 = 0
+         *  0 - N = N
+         *  0 - I = -I
+         *  N - n = N
+         *  N - 0 = N
+         *  N - N = N
+         *  N - I = N
+         *  I - n = I
+         *  I - 0 = I
+         *  I - N = N
+         *  I - I = N
+         *
+         * Return a new BigNumber whose value is the value of this BigNumber minus the value of
+         * BigNumber(y, b).
+         */
+        P.minus = P.sub = function ( y, b ) {
+            var i, j, t, xLTy,
+                x = this,
+                a = x.s;
+
+            id = 10;
+            y = new BigNumber( y, b );
+            b = y.s;
+
+            // Either NaN?
+            if ( !a || !b ) return new BigNumber(NaN);
+
+            // Signs differ?
+            if ( a != b ) {
+                y.s = -b;
+                return x.plus(y);
+            }
+
+            var xe = x.e / LOG_BASE,
+                ye = y.e / LOG_BASE,
+                xc = x.c,
+                yc = y.c;
+
+            if ( !xe || !ye ) {
+
+                // Either Infinity?
+                if ( !xc || !yc ) return xc ? ( y.s = -b, y ) : new BigNumber( yc ? x : NaN );
+
+                // Either zero?
+                if ( !xc[0] || !yc[0] ) {
+
+                    // Return y if y is non-zero, x if x is non-zero, or zero if both are zero.
+                    return yc[0] ? ( y.s = -b, y ) : new BigNumber( xc[0] ? x :
+
+                      // IEEE 754 (2008) 6.3: n - n = -0 when rounding to -Infinity
+                      ROUNDING_MODE == 3 ? -0 : 0 );
+                }
+            }
+
+            xe = bitFloor(xe);
+            ye = bitFloor(ye);
+            xc = xc.slice();
+
+            // Determine which is the bigger number.
+            if ( a = xe - ye ) {
+
+                if ( xLTy = a < 0 ) {
+                    a = -a;
+                    t = xc;
+                } else {
+                    ye = xe;
+                    t = yc;
+                }
+
+                t.reverse();
+
+                // Prepend zeros to equalise exponents.
+                for ( b = a; b--; t.push(0) );
+                t.reverse();
+            } else {
+
+                // Exponents equal. Check digit by digit.
+                j = ( xLTy = ( a = xc.length ) < ( b = yc.length ) ) ? a : b;
+
+                for ( a = b = 0; b < j; b++ ) {
+
+                    if ( xc[b] != yc[b] ) {
+                        xLTy = xc[b] < yc[b];
+                        break;
+                    }
+                }
+            }
+
+            // x < y? Point xc to the array of the bigger number.
+            if (xLTy) t = xc, xc = yc, yc = t, y.s = -y.s;
+
+            b = ( j = yc.length ) - ( i = xc.length );
+
+            // Append zeros to xc if shorter.
+            // No need to add zeros to yc if shorter as subtract only needs to start at yc.length.
+            if ( b > 0 ) for ( ; b--; xc[i++] = 0 );
+            b = BASE - 1;
+
+            // Subtract yc from xc.
+            for ( ; j > a; ) {
+
+                if ( xc[--j] < yc[j] ) {
+                    for ( i = j; i && !xc[--i]; xc[i] = b );
+                    --xc[i];
+                    xc[j] += BASE;
+                }
+
+                xc[j] -= yc[j];
+            }
+
+            // Remove leading zeros and adjust exponent accordingly.
+            for ( ; xc[0] == 0; xc.splice(0, 1), --ye );
+
+            // Zero?
+            if ( !xc[0] ) {
+
+                // Following IEEE 754 (2008) 6.3,
+                // n - n = +0  but  n - n = -0  when rounding towards -Infinity.
+                y.s = ROUNDING_MODE == 3 ? -1 : 1;
+                y.c = [ y.e = 0 ];
+                return y;
+            }
+
+            // No need to check for Infinity as +x - +y != Infinity && -x - -y != Infinity
+            // for finite x and y.
+            return normalise( y, xc, ye );
+        };
+
+
+        /*
+         *   n % 0 =  N
+         *   n % N =  N
+         *   n % I =  n
+         *   0 % n =  0
+         *  -0 % n = -0
+         *   0 % 0 =  N
+         *   0 % N =  N
+         *   0 % I =  0
+         *   N % n =  N
+         *   N % 0 =  N
+         *   N % N =  N
+         *   N % I =  N
+         *   I % n =  N
+         *   I % 0 =  N
+         *   I % N =  N
+         *   I % I =  N
+         *
+         * Return a new BigNumber whose value is the value of this BigNumber modulo the value of
+         * BigNumber(y, b). The result depends on the value of MODULO_MODE.
+         */
+        P.modulo = P.mod = function ( y, b ) {
+            var q, s,
+                x = this;
+
+            id = 11;
+            y = new BigNumber( y, b );
+
+            // Return NaN if x is Infinity or NaN, or y is NaN or zero.
+            if ( !x.c || !y.s || y.c && !y.c[0] ) {
+                return new BigNumber(NaN);
+
+            // Return x if y is Infinity or x is zero.
+            } else if ( !y.c || x.c && !x.c[0] ) {
+                return new BigNumber(x);
+            }
+
+            if ( MODULO_MODE == 9 ) {
+
+                // Euclidian division: q = sign(y) * floor(x / abs(y))
+                // r = x - qy    where  0 <= r < abs(y)
+                s = y.s;
+                y.s = 1;
+                q = div( x, y, 0, 3 );
+                y.s = s;
+                q.s *= s;
+            } else {
+                q = div( x, y, 0, MODULO_MODE );
+            }
+
+            return x.minus( q.times(y) );
+        };
+
+
+        /*
+         * Return a new BigNumber whose value is the value of this BigNumber negated,
+         * i.e. multiplied by -1.
+         */
+        P.negated = P.neg = function () {
+            var x = new BigNumber(this);
+            x.s = -x.s || null;
+            return x;
+        };
+
+
+        /*
+         *  n + 0 = n
+         *  n + N = N
+         *  n + I = I
+         *  0 + n = n
+         *  0 + 0 = 0
+         *  0 + N = N
+         *  0 + I = I
+         *  N + n = N
+         *  N + 0 = N
+         *  N + N = N
+         *  N + I = N
+         *  I + n = I
+         *  I + 0 = I
+         *  I + N = N
+         *  I + I = I
+         *
+         * Return a new BigNumber whose value is the value of this BigNumber plus the value of
+         * BigNumber(y, b).
+         */
+        P.plus = P.add = function ( y, b ) {
+            var t,
+                x = this,
+                a = x.s;
+
+            id = 12;
+            y = new BigNumber( y, b );
+            b = y.s;
+
+            // Either NaN?
+            if ( !a || !b ) return new BigNumber(NaN);
+
+            // Signs differ?
+             if ( a != b ) {
+                y.s = -b;
+                return x.minus(y);
+            }
+
+            var xe = x.e / LOG_BASE,
+                ye = y.e / LOG_BASE,
+                xc = x.c,
+                yc = y.c;
+
+            if ( !xe || !ye ) {
+
+                // Return ±Infinity if either ±Infinity.
+                if ( !xc || !yc ) return new BigNumber( a / 0 );
+
+                // Either zero?
+                // Return y if y is non-zero, x if x is non-zero, or zero if both are zero.
+                if ( !xc[0] || !yc[0] ) return yc[0] ? y : new BigNumber( xc[0] ? x : a * 0 );
+            }
+
+            xe = bitFloor(xe);
+            ye = bitFloor(ye);
+            xc = xc.slice();
+
+            // Prepend zeros to equalise exponents. Faster to use reverse then do unshifts.
+            if ( a = xe - ye ) {
+                if ( a > 0 ) {
+                    ye = xe;
+                    t = yc;
+                } else {
+                    a = -a;
+                    t = xc;
+                }
+
+                t.reverse();
+                for ( ; a--; t.push(0) );
+                t.reverse();
+            }
+
+            a = xc.length;
+            b = yc.length;
+
+            // Point xc to the longer array, and b to the shorter length.
+            if ( a - b < 0 ) t = yc, yc = xc, xc = t, b = a;
+
+            // Only start adding at yc.length - 1 as the further digits of xc can be ignored.
+            for ( a = 0; b; ) {
+                a = ( xc[--b] = xc[b] + yc[b] + a ) / BASE | 0;
+                xc[b] = BASE === xc[b] ? 0 : xc[b] % BASE;
+            }
+
+            if (a) {
+                xc = [a].concat(xc);
+                ++ye;
+            }
+
+            // No need to check for zero, as +x + +y != 0 && -x + -y != 0
+            // ye = MAX_EXP + 1 possible
+            return normalise( y, xc, ye );
+        };
+
+
+        /*
+         * Return the number of significant digits of the value of this BigNumber.
+         *
+         * [z] {boolean|number} Whether to count integer-part trailing zeros: true, false, 1 or 0.
+         */
+        P.precision = P.sd = function (z) {
+            var n, v,
+                x = this,
+                c = x.c;
+
+            // 'precision() argument not a boolean or binary digit: {z}'
+            if ( z != null && z !== !!z && z !== 1 && z !== 0 ) {
+                if (ERRORS) raise( 13, 'argument' + notBool, z );
+                if ( z != !!z ) z = null;
+            }
+
+            if ( !c ) return null;
+            v = c.length - 1;
+            n = v * LOG_BASE + 1;
+
+            if ( v = c[v] ) {
+
+                // Subtract the number of trailing zeros of the last element.
+                for ( ; v % 10 == 0; v /= 10, n-- );
+
+                // Add the number of digits of the first element.
+                for ( v = c[0]; v >= 10; v /= 10, n++ );
+            }
+
+            if ( z && x.e + 1 > n ) n = x.e + 1;
+
+            return n;
+        };
+
+
+        /*
+         * Return a new BigNumber whose value is the value of this BigNumber rounded to a maximum of
+         * dp decimal places using rounding mode rm, or to 0 and ROUNDING_MODE respectively if
+         * omitted.
+         *
+         * [dp] {number} Decimal places. Integer, 0 to MAX inclusive.
+         * [rm] {number} Rounding mode. Integer, 0 to 8 inclusive.
+         *
+         * 'round() decimal places out of range: {dp}'
+         * 'round() decimal places not an integer: {dp}'
+         * 'round() rounding mode not an integer: {rm}'
+         * 'round() rounding mode out of range: {rm}'
+         */
+        P.round = function ( dp, rm ) {
+            var n = new BigNumber(this);
+
+            if ( dp == null || isValidInt( dp, 0, MAX, 15 ) ) {
+                round( n, ~~dp + this.e + 1, rm == null ||
+                  !isValidInt( rm, 0, 8, 15, roundingMode ) ? ROUNDING_MODE : rm | 0 );
+            }
+
+            return n;
+        };
+
+
+        /*
+         * Return a new BigNumber whose value is the value of this BigNumber shifted by k places
+         * (powers of 10). Shift to the right if n > 0, and to the left if n < 0.
+         *
+         * k {number} Integer, -MAX_SAFE_INTEGER to MAX_SAFE_INTEGER inclusive.
+         *
+         * If k is out of range and ERRORS is false, the result will be ±0 if k < 0, or ±Infinity
+         * otherwise.
+         *
+         * 'shift() argument not an integer: {k}'
+         * 'shift() argument out of range: {k}'
+         */
+        P.shift = function (k) {
+            var n = this;
+            return isValidInt( k, -MAX_SAFE_INTEGER, MAX_SAFE_INTEGER, 16, 'argument' )
+
+              // k < 1e+21, or truncate(k) will produce exponential notation.
+              ? n.times( '1e' + truncate(k) )
+              : new BigNumber( n.c && n.c[0] && ( k < -MAX_SAFE_INTEGER || k > MAX_SAFE_INTEGER )
+                ? n.s * ( k < 0 ? 0 : 1 / 0 )
+                : n );
+        };
+
+
+        /*
+         *  sqrt(-n) =  N
+         *  sqrt( N) =  N
+         *  sqrt(-I) =  N
+         *  sqrt( I) =  I
+         *  sqrt( 0) =  0
+         *  sqrt(-0) = -0
+         *
+         * Return a new BigNumber whose value is the square root of the value of this BigNumber,
+         * rounded according to DECIMAL_PLACES and ROUNDING_MODE.
+         */
+        P.squareRoot = P.sqrt = function () {
+            var m, n, r, rep, t,
+                x = this,
+                c = x.c,
+                s = x.s,
+                e = x.e,
+                dp = DECIMAL_PLACES + 4,
+                half = new BigNumber('0.5');
+
+            // Negative/NaN/Infinity/zero?
+            if ( s !== 1 || !c || !c[0] ) {
+                return new BigNumber( !s || s < 0 && ( !c || c[0] ) ? NaN : c ? x : 1 / 0 );
+            }
+
+            // Initial estimate.
+            s = Math.sqrt( +x );
+
+            // Math.sqrt underflow/overflow?
+            // Pass x to Math.sqrt as integer, then adjust the exponent of the result.
+            if ( s == 0 || s == 1 / 0 ) {
+                n = coeffToString(c);
+                if ( ( n.length + e ) % 2 == 0 ) n += '0';
+                s = Math.sqrt(n);
+                e = bitFloor( ( e + 1 ) / 2 ) - ( e < 0 || e % 2 );
+
+                if ( s == 1 / 0 ) {
+                    n = '1e' + e;
+                } else {
+                    n = s.toExponential();
+                    n = n.slice( 0, n.indexOf('e') + 1 ) + e;
+                }
+
+                r = new BigNumber(n);
+            } else {
+                r = new BigNumber( s + '' );
+            }
+
+            // Check for zero.
+            // r could be zero if MIN_EXP is changed after the this value was created.
+            // This would cause a division by zero (x/t) and hence Infinity below, which would cause
+            // coeffToString to throw.
+            if ( r.c[0] ) {
+                e = r.e;
+                s = e + dp;
+                if ( s < 3 ) s = 0;
+
+                // Newton-Raphson iteration.
+                for ( ; ; ) {
+                    t = r;
+                    r = half.times( t.plus( div( x, t, dp, 1 ) ) );
+
+                    if ( coeffToString( t.c   ).slice( 0, s ) === ( n =
+                         coeffToString( r.c ) ).slice( 0, s ) ) {
+
+                        // The exponent of r may here be one less than the final result exponent,
+                        // e.g 0.0009999 (e-4) --> 0.001 (e-3), so adjust s so the rounding digits
+                        // are indexed correctly.
+                        if ( r.e < e ) --s;
+                        n = n.slice( s - 3, s + 1 );
+
+                        // The 4th rounding digit may be in error by -1 so if the 4 rounding digits
+                        // are 9999 or 4999 (i.e. approaching a rounding boundary) continue the
+                        // iteration.
+                        if ( n == '9999' || !rep && n == '4999' ) {
+
+                            // On the first iteration only, check to see if rounding up gives the
+                            // exact result as the nines may infinitely repeat.
+                            if ( !rep ) {
+                                round( t, t.e + DECIMAL_PLACES + 2, 0 );
+
+                                if ( t.times(t).eq(x) ) {
+                                    r = t;
+                                    break;
+                                }
+                            }
+
+                            dp += 4;
+                            s += 4;
+                            rep = 1;
+                        } else {
+
+                            // If rounding digits are null, 0{0,4} or 50{0,3}, check for exact
+                            // result. If not, then there are further digits and m will be truthy.
+                            if ( !+n || !+n.slice(1) && n.charAt(0) == '5' ) {
+
+                                // Truncate to the first rounding digit.
+                                round( r, r.e + DECIMAL_PLACES + 2, 1 );
+                                m = !r.times(r).eq(x);
+                            }
+
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return round( r, r.e + DECIMAL_PLACES + 1, ROUNDING_MODE, m );
+        };
+
+
+        /*
+         *  n * 0 = 0
+         *  n * N = N
+         *  n * I = I
+         *  0 * n = 0
+         *  0 * 0 = 0
+         *  0 * N = N
+         *  0 * I = N
+         *  N * n = N
+         *  N * 0 = N
+         *  N * N = N
+         *  N * I = N
+         *  I * n = I
+         *  I * 0 = N
+         *  I * N = N
+         *  I * I = I
+         *
+         * Return a new BigNumber whose value is the value of this BigNumber times the value of
+         * BigNumber(y, b).
+         */
+        P.times = P.mul = function ( y, b ) {
+            var c, e, i, j, k, m, xcL, xlo, xhi, ycL, ylo, yhi, zc,
+                base, sqrtBase,
+                x = this,
+                xc = x.c,
+                yc = ( id = 17, y = new BigNumber( y, b ) ).c;
+
+            // Either NaN, ±Infinity or ±0?
+            if ( !xc || !yc || !xc[0] || !yc[0] ) {
+
+                // Return NaN if either is NaN, or one is 0 and the other is Infinity.
+                if ( !x.s || !y.s || xc && !xc[0] && !yc || yc && !yc[0] && !xc ) {
+                    y.c = y.e = y.s = null;
+                } else {
+                    y.s *= x.s;
+
+                    // Return ±Infinity if either is ±Infinity.
+                    if ( !xc || !yc ) {
+                        y.c = y.e = null;
+
+                    // Return ±0 if either is ±0.
+                    } else {
+                        y.c = [0];
+                        y.e = 0;
+                    }
+                }
+
+                return y;
+            }
+
+            e = bitFloor( x.e / LOG_BASE ) + bitFloor( y.e / LOG_BASE );
+            y.s *= x.s;
+            xcL = xc.length;
+            ycL = yc.length;
+
+            // Ensure xc points to longer array and xcL to its length.
+            if ( xcL < ycL ) zc = xc, xc = yc, yc = zc, i = xcL, xcL = ycL, ycL = i;
+
+            // Initialise the result array with zeros.
+            for ( i = xcL + ycL, zc = []; i--; zc.push(0) );
+
+            base = BASE;
+            sqrtBase = SQRT_BASE;
+
+            for ( i = ycL; --i >= 0; ) {
+                c = 0;
+                ylo = yc[i] % sqrtBase;
+                yhi = yc[i] / sqrtBase | 0;
+
+                for ( k = xcL, j = i + k; j > i; ) {
+                    xlo = xc[--k] % sqrtBase;
+                    xhi = xc[k] / sqrtBase | 0;
+                    m = yhi * xlo + xhi * ylo;
+                    xlo = ylo * xlo + ( ( m % sqrtBase ) * sqrtBase ) + zc[j] + c;
+                    c = ( xlo / base | 0 ) + ( m / sqrtBase | 0 ) + yhi * xhi;
+                    zc[j--] = xlo % base;
+                }
+
+                zc[j] = c;
+            }
+
+            if (c) {
+                ++e;
+            } else {
+                zc.splice(0, 1);
+            }
+
+            return normalise( y, zc, e );
+        };
+
+
+        /*
+         * Return a new BigNumber whose value is the value of this BigNumber rounded to a maximum of
+         * sd significant digits using rounding mode rm, or ROUNDING_MODE if rm is omitted.
+         *
+         * [sd] {number} Significant digits. Integer, 1 to MAX inclusive.
+         * [rm] {number} Rounding mode. Integer, 0 to 8 inclusive.
+         *
+         * 'toDigits() precision out of range: {sd}'
+         * 'toDigits() precision not an integer: {sd}'
+         * 'toDigits() rounding mode not an integer: {rm}'
+         * 'toDigits() rounding mode out of range: {rm}'
+         */
+        P.toDigits = function ( sd, rm ) {
+            var n = new BigNumber(this);
+            sd = sd == null || !isValidInt( sd, 1, MAX, 18, 'precision' ) ? null : sd | 0;
+            rm = rm == null || !isValidInt( rm, 0, 8, 18, roundingMode ) ? ROUNDING_MODE : rm | 0;
+            return sd ? round( n, sd, rm ) : n;
+        };
+
+
+        /*
+         * Return a string representing the value of this BigNumber in exponential notation and
+         * rounded using ROUNDING_MODE to dp fixed decimal places.
+         *
+         * [dp] {number} Decimal places. Integer, 0 to MAX inclusive.
+         * [rm] {number} Rounding mode. Integer, 0 to 8 inclusive.
+         *
+         * 'toExponential() decimal places not an integer: {dp}'
+         * 'toExponential() decimal places out of range: {dp}'
+         * 'toExponential() rounding mode not an integer: {rm}'
+         * 'toExponential() rounding mode out of range: {rm}'
+         */
+        P.toExponential = function ( dp, rm ) {
+            return format( this,
+              dp != null && isValidInt( dp, 0, MAX, 19 ) ? ~~dp + 1 : null, rm, 19 );
+        };
+
+
+        /*
+         * Return a string representing the value of this BigNumber in fixed-point notation rounding
+         * to dp fixed decimal places using rounding mode rm, or ROUNDING_MODE if rm is omitted.
+         *
+         * Note: as with JavaScript's number type, (-0).toFixed(0) is '0',
+         * but e.g. (-0.00001).toFixed(0) is '-0'.
+         *
+         * [dp] {number} Decimal places. Integer, 0 to MAX inclusive.
+         * [rm] {number} Rounding mode. Integer, 0 to 8 inclusive.
+         *
+         * 'toFixed() decimal places not an integer: {dp}'
+         * 'toFixed() decimal places out of range: {dp}'
+         * 'toFixed() rounding mode not an integer: {rm}'
+         * 'toFixed() rounding mode out of range: {rm}'
+         */
+        P.toFixed = function ( dp, rm ) {
+            return format( this, dp != null && isValidInt( dp, 0, MAX, 20 )
+              ? ~~dp + this.e + 1 : null, rm, 20 );
+        };
+
+
+        /*
+         * Return a string representing the value of this BigNumber in fixed-point notation rounded
+         * using rm or ROUNDING_MODE to dp decimal places, and formatted according to the properties
+         * of the FORMAT object (see BigNumber.config).
+         *
+         * FORMAT = {
+         *      decimalSeparator : '.',
+         *      groupSeparator : ',',
+         *      groupSize : 3,
+         *      secondaryGroupSize : 0,
+         *      fractionGroupSeparator : '\xA0',    // non-breaking space
+         *      fractionGroupSize : 0
+         * };
+         *
+         * [dp] {number} Decimal places. Integer, 0 to MAX inclusive.
+         * [rm] {number} Rounding mode. Integer, 0 to 8 inclusive.
+         *
+         * 'toFormat() decimal places not an integer: {dp}'
+         * 'toFormat() decimal places out of range: {dp}'
+         * 'toFormat() rounding mode not an integer: {rm}'
+         * 'toFormat() rounding mode out of range: {rm}'
+         */
+        P.toFormat = function ( dp, rm ) {
+            var str = format( this, dp != null && isValidInt( dp, 0, MAX, 21 )
+              ? ~~dp + this.e + 1 : null, rm, 21 );
+
+            if ( this.c ) {
+                var i,
+                    arr = str.split('.'),
+                    g1 = +FORMAT.groupSize,
+                    g2 = +FORMAT.secondaryGroupSize,
+                    groupSeparator = FORMAT.groupSeparator,
+                    intPart = arr[0],
+                    fractionPart = arr[1],
+                    isNeg = this.s < 0,
+                    intDigits = isNeg ? intPart.slice(1) : intPart,
+                    len = intDigits.length;
+
+                if (g2) i = g1, g1 = g2, g2 = i, len -= i;
+
+                if ( g1 > 0 && len > 0 ) {
+                    i = len % g1 || g1;
+                    intPart = intDigits.substr( 0, i );
+
+                    for ( ; i < len; i += g1 ) {
+                        intPart += groupSeparator + intDigits.substr( i, g1 );
+                    }
+
+                    if ( g2 > 0 ) intPart += groupSeparator + intDigits.slice(i);
+                    if (isNeg) intPart = '-' + intPart;
+                }
+
+                str = fractionPart
+                  ? intPart + FORMAT.decimalSeparator + ( ( g2 = +FORMAT.fractionGroupSize )
+                    ? fractionPart.replace( new RegExp( '\\d{' + g2 + '}\\B', 'g' ),
+                      '$&' + FORMAT.fractionGroupSeparator )
+                    : fractionPart )
+                  : intPart;
+            }
+
+            return str;
+        };
+
+
+        /*
+         * Return a string array representing the value of this BigNumber as a simple fraction with
+         * an integer numerator and an integer denominator. The denominator will be a positive
+         * non-zero value less than or equal to the specified maximum denominator. If a maximum
+         * denominator is not specified, the denominator will be the lowest value necessary to
+         * represent the number exactly.
+         *
+         * [md] {number|string|BigNumber} Integer >= 1 and < Infinity. The maximum denominator.
+         *
+         * 'toFraction() max denominator not an integer: {md}'
+         * 'toFraction() max denominator out of range: {md}'
+         */
+        P.toFraction = function (md) {
+            var arr, d0, d2, e, exp, n, n0, q, s,
+                k = ERRORS,
+                x = this,
+                xc = x.c,
+                d = new BigNumber(ONE),
+                n1 = d0 = new BigNumber(ONE),
+                d1 = n0 = new BigNumber(ONE);
+
+            if ( md != null ) {
+                ERRORS = false;
+                n = new BigNumber(md);
+                ERRORS = k;
+
+                if ( !( k = n.isInt() ) || n.lt(ONE) ) {
+
+                    if (ERRORS) {
+                        raise( 22,
+                          'max denominator ' + ( k ? 'out of range' : 'not an integer' ), md );
+                    }
+
+                    // ERRORS is false:
+                    // If md is a finite non-integer >= 1, round it to an integer and use it.
+                    md = !k && n.c && round( n, n.e + 1, 1 ).gte(ONE) ? n : null;
+                }
+            }
+
+            if ( !xc ) return x.toString();
+            s = coeffToString(xc);
+
+            // Determine initial denominator.
+            // d is a power of 10 and the minimum max denominator that specifies the value exactly.
+            e = d.e = s.length - x.e - 1;
+            d.c[0] = POWS_TEN[ ( exp = e % LOG_BASE ) < 0 ? LOG_BASE + exp : exp ];
+            md = !md || n.cmp(d) > 0 ? ( e > 0 ? d : n1 ) : n;
+
+            exp = MAX_EXP;
+            MAX_EXP = 1 / 0;
+            n = new BigNumber(s);
+
+            // n0 = d1 = 0
+            n0.c[0] = 0;
+
+            for ( ; ; )  {
+                q = div( n, d, 0, 1 );
+                d2 = d0.plus( q.times(d1) );
+                if ( d2.cmp(md) == 1 ) break;
+                d0 = d1;
+                d1 = d2;
+                n1 = n0.plus( q.times( d2 = n1 ) );
+                n0 = d2;
+                d = n.minus( q.times( d2 = d ) );
+                n = d2;
+            }
+
+            d2 = div( md.minus(d0), d1, 0, 1 );
+            n0 = n0.plus( d2.times(n1) );
+            d0 = d0.plus( d2.times(d1) );
+            n0.s = n1.s = x.s;
+            e *= 2;
+
+            // Determine which fraction is closer to x, n0/d0 or n1/d1
+            arr = div( n1, d1, e, ROUNDING_MODE ).minus(x).abs().cmp(
+                  div( n0, d0, e, ROUNDING_MODE ).minus(x).abs() ) < 1
+                    ? [ n1.toString(), d1.toString() ]
+                    : [ n0.toString(), d0.toString() ];
+
+            MAX_EXP = exp;
+            return arr;
+        };
+
+
+        /*
+         * Return the value of this BigNumber converted to a number primitive.
+         */
+        P.toNumber = function () {
+            return +this;
+        };
+
+
+        /*
+         * Return a BigNumber whose value is the value of this BigNumber raised to the power n.
+         * If m is present, return the result modulo m.
+         * If n is negative round according to DECIMAL_PLACES and ROUNDING_MODE.
+         * If POW_PRECISION is non-zero and m is not present, round to POW_PRECISION using
+         * ROUNDING_MODE.
+         *
+         * The modular power operation works efficiently when x, n, and m are positive integers,
+         * otherwise it is equivalent to calculating x.toPower(n).modulo(m) (with POW_PRECISION 0).
+         *
+         * n {number} Integer, -MAX_SAFE_INTEGER to MAX_SAFE_INTEGER inclusive.
+         * [m] {number|string|BigNumber} The modulus.
+         *
+         * 'pow() exponent not an integer: {n}'
+         * 'pow() exponent out of range: {n}'
+         *
+         * Performs 54 loop iterations for n of 9007199254740991.
+         */
+        P.toPower = P.pow = function ( n, m ) {
+            var k, y, z,
+                i = mathfloor( n < 0 ? -n : +n ),
+                x = this;
+
+            if ( m != null ) {
+                id = 23;
+                m = new BigNumber(m);
+            }
+
+            // Pass ±Infinity to Math.pow if exponent is out of range.
+            if ( !isValidInt( n, -MAX_SAFE_INTEGER, MAX_SAFE_INTEGER, 23, 'exponent' ) &&
+              ( !isFinite(n) || i > MAX_SAFE_INTEGER && ( n /= 0 ) ||
+                parseFloat(n) != n && !( n = NaN ) ) || n == 0 ) {
+                k = Math.pow( +x, n );
+                return new BigNumber( m ? k % m : k );
+            }
+
+            if (m) {
+                if ( n > 1 && x.gt(ONE) && x.isInt() && m.gt(ONE) && m.isInt() ) {
+                    x = x.mod(m);
+                } else {
+                    z = m;
+
+                    // Nullify m so only a single mod operation is performed at the end.
+                    m = null;
+                }
+            } else if (POW_PRECISION) {
+
+                // Truncating each coefficient array to a length of k after each multiplication
+                // equates to truncating significant digits to POW_PRECISION + [28, 41],
+                // i.e. there will be a minimum of 28 guard digits retained.
+                // (Using + 1.5 would give [9, 21] guard digits.)
+                k = mathceil( POW_PRECISION / LOG_BASE + 2 );
+            }
+
+            y = new BigNumber(ONE);
+
+            for ( ; ; ) {
+                if ( i % 2 ) {
+                    y = y.times(x);
+                    if ( !y.c ) break;
+                    if (k) {
+                        if ( y.c.length > k ) y.c.length = k;
+                    } else if (m) {
+                        y = y.mod(m);
+                    }
+                }
+
+                i = mathfloor( i / 2 );
+                if ( !i ) break;
+                x = x.times(x);
+                if (k) {
+                    if ( x.c && x.c.length > k ) x.c.length = k;
+                } else if (m) {
+                    x = x.mod(m);
+                }
+            }
+
+            if (m) return y;
+            if ( n < 0 ) y = ONE.div(y);
+
+            return z ? y.mod(z) : k ? round( y, POW_PRECISION, ROUNDING_MODE ) : y;
+        };
+
+
+        /*
+         * Return a string representing the value of this BigNumber rounded to sd significant digits
+         * using rounding mode rm or ROUNDING_MODE. If sd is less than the number of digits
+         * necessary to represent the integer part of the value in fixed-point notation, then use
+         * exponential notation.
+         *
+         * [sd] {number} Significant digits. Integer, 1 to MAX inclusive.
+         * [rm] {number} Rounding mode. Integer, 0 to 8 inclusive.
+         *
+         * 'toPrecision() precision not an integer: {sd}'
+         * 'toPrecision() precision out of range: {sd}'
+         * 'toPrecision() rounding mode not an integer: {rm}'
+         * 'toPrecision() rounding mode out of range: {rm}'
+         */
+        P.toPrecision = function ( sd, rm ) {
+            return format( this, sd != null && isValidInt( sd, 1, MAX, 24, 'precision' )
+              ? sd | 0 : null, rm, 24 );
+        };
+
+
+        /*
+         * Return a string representing the value of this BigNumber in base b, or base 10 if b is
+         * omitted. If a base is specified, including base 10, round according to DECIMAL_PLACES and
+         * ROUNDING_MODE. If a base is not specified, and this BigNumber has a positive exponent
+         * that is equal to or greater than TO_EXP_POS, or a negative exponent equal to or less than
+         * TO_EXP_NEG, return exponential notation.
+         *
+         * [b] {number} Integer, 2 to 64 inclusive.
+         *
+         * 'toString() base not an integer: {b}'
+         * 'toString() base out of range: {b}'
+         */
+        P.toString = function (b) {
+            var str,
+                n = this,
+                s = n.s,
+                e = n.e;
+
+            // Infinity or NaN?
+            if ( e === null ) {
+
+                if (s) {
+                    str = 'Infinity';
+                    if ( s < 0 ) str = '-' + str;
+                } else {
+                    str = 'NaN';
+                }
+            } else {
+                str = coeffToString( n.c );
+
+                if ( b == null || !isValidInt( b, 2, 64, 25, 'base' ) ) {
+                    str = e <= TO_EXP_NEG || e >= TO_EXP_POS
+                      ? toExponential( str, e )
+                      : toFixedPoint( str, e );
+                } else {
+                    str = convertBase( toFixedPoint( str, e ), b | 0, 10, s );
+                }
+
+                if ( s < 0 && n.c[0] ) str = '-' + str;
+            }
+
+            return str;
+        };
+
+
+        /*
+         * Return a new BigNumber whose value is the value of this BigNumber truncated to a whole
+         * number.
+         */
+        P.truncated = P.trunc = function () {
+            return round( new BigNumber(this), this.e + 1, 1 );
+        };
+
+
+        /*
+         * Return as toString, but do not accept a base argument, and include the minus sign for
+         * negative zero.
+         */
+        P.valueOf = P.toJSON = function () {
+            var str,
+                n = this,
+                e = n.e;
+
+            if ( e === null ) return n.toString();
+
+            str = coeffToString( n.c );
+
+            str = e <= TO_EXP_NEG || e >= TO_EXP_POS
+                ? toExponential( str, e )
+                : toFixedPoint( str, e );
+
+            return n.s < 0 ? '-' + str : str;
+        };
+
+
+        P.isBigNumber = true;
+
+        if ( config != null ) BigNumber.config(config);
+
+        return BigNumber;
+    }
+
+
+    // PRIVATE HELPER FUNCTIONS
+
+
+    function bitFloor(n) {
+        var i = n | 0;
+        return n > 0 || n === i ? i : i - 1;
+    }
+
+
+    // Return a coefficient array as a string of base 10 digits.
+    function coeffToString(a) {
+        var s, z,
+            i = 1,
+            j = a.length,
+            r = a[0] + '';
+
+        for ( ; i < j; ) {
+            s = a[i++] + '';
+            z = LOG_BASE - s.length;
+            for ( ; z--; s = '0' + s );
+            r += s;
+        }
+
+        // Determine trailing zeros.
+        for ( j = r.length; r.charCodeAt(--j) === 48; );
+        return r.slice( 0, j + 1 || 1 );
+    }
+
+
+    // Compare the value of BigNumbers x and y.
+    function compare( x, y ) {
+        var a, b,
+            xc = x.c,
+            yc = y.c,
+            i = x.s,
+            j = y.s,
+            k = x.e,
+            l = y.e;
+
+        // Either NaN?
+        if ( !i || !j ) return null;
+
+        a = xc && !xc[0];
+        b = yc && !yc[0];
+
+        // Either zero?
+        if ( a || b ) return a ? b ? 0 : -j : i;
+
+        // Signs differ?
+        if ( i != j ) return i;
+
+        a = i < 0;
+        b = k == l;
+
+        // Either Infinity?
+        if ( !xc || !yc ) return b ? 0 : !xc ^ a ? 1 : -1;
+
+        // Compare exponents.
+        if ( !b ) return k > l ^ a ? 1 : -1;
+
+        j = ( k = xc.length ) < ( l = yc.length ) ? k : l;
+
+        // Compare digit by digit.
+        for ( i = 0; i < j; i++ ) if ( xc[i] != yc[i] ) return xc[i] > yc[i] ^ a ? 1 : -1;
+
+        // Compare lengths.
+        return k == l ? 0 : k > l ^ a ? 1 : -1;
+    }
+
+
+    /*
+     * Return true if n is a valid number in range, otherwise false.
+     * Use for argument validation when ERRORS is false.
+     * Note: parseInt('1e+1') == 1 but parseFloat('1e+1') == 10.
+     */
+    function intValidatorNoErrors( n, min, max ) {
+        return ( n = truncate(n) ) >= min && n <= max;
+    }
+
+
+    function isArray(obj) {
+        return Object.prototype.toString.call(obj) == '[object Array]';
+    }
+
+
+    /*
+     * Convert string of baseIn to an array of numbers of baseOut.
+     * Eg. convertBase('255', 10, 16) returns [15, 15].
+     * Eg. convertBase('ff', 16, 10) returns [2, 5, 5].
+     */
+    function toBaseOut( str, baseIn, baseOut ) {
+        var j,
+            arr = [0],
+            arrL,
+            i = 0,
+            len = str.length;
+
+        for ( ; i < len; ) {
+            for ( arrL = arr.length; arrL--; arr[arrL] *= baseIn );
+            arr[ j = 0 ] += ALPHABET.indexOf( str.charAt( i++ ) );
+
+            for ( ; j < arr.length; j++ ) {
+
+                if ( arr[j] > baseOut - 1 ) {
+                    if ( arr[j + 1] == null ) arr[j + 1] = 0;
+                    arr[j + 1] += arr[j] / baseOut | 0;
+                    arr[j] %= baseOut;
+                }
+            }
+        }
+
+        return arr.reverse();
+    }
+
+
+    function toExponential( str, e ) {
+        return ( str.length > 1 ? str.charAt(0) + '.' + str.slice(1) : str ) +
+          ( e < 0 ? 'e' : 'e+' ) + e;
+    }
+
+
+    function toFixedPoint( str, e ) {
+        var len, z;
+
+        // Negative exponent?
+        if ( e < 0 ) {
+
+            // Prepend zeros.
+            for ( z = '0.'; ++e; z += '0' );
+            str = z + str;
+
+        // Positive exponent
+        } else {
+            len = str.length;
+
+            // Append zeros.
+            if ( ++e > len ) {
+                for ( z = '0', e -= len; --e; z += '0' );
+                str += z;
+            } else if ( e < len ) {
+                str = str.slice( 0, e ) + '.' + str.slice(e);
+            }
+        }
+
+        return str;
+    }
+
+
+    function truncate(n) {
+        n = parseFloat(n);
+        return n < 0 ? mathceil(n) : mathfloor(n);
+    }
+
+
+    // EXPORT
+
+
+    BigNumber = constructorFactory();
+    BigNumber['default'] = BigNumber.BigNumber = BigNumber;
+
+
+    // AMD.
+    if ( typeof define == 'function' && define.amd ) {
+        define( function () { return BigNumber; } );
+
+    // Node.js and other environments that support module.exports.
+    } else if ( typeof module != 'undefined' && module.exports ) {
+        module.exports = BigNumber;
+
+    // Browser.
+    } else {
+        if ( !globalObj ) globalObj = typeof self != 'undefined' ? self : Function('return this')();
+        globalObj.BigNumber = BigNumber;
+    }
+})(this);
+
+},{}],190:[function(require,module,exports){
 (function (Buffer){
 var DuplexStream = require('readable-stream/duplex')
   , util         = require('util')
@@ -32798,10 +35730,10 @@ BufferList.prototype.destroy = function () {
 module.exports = BufferList
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":54,"readable-stream/duplex":190,"util":185}],190:[function(require,module,exports){
+},{"buffer":54,"readable-stream/duplex":191,"util":185}],191:[function(require,module,exports){
 module.exports = require("./lib/_stream_duplex.js")
 
-},{"./lib/_stream_duplex.js":191}],191:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":192}],192:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -32894,7 +35826,7 @@ function forEach (xs, f) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_readable":192,"./_stream_writable":193,"_process":137,"core-util-is":197,"inherits":217}],192:[function(require,module,exports){
+},{"./_stream_readable":193,"./_stream_writable":194,"_process":137,"core-util-is":198,"inherits":218}],193:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -33880,7 +36812,7 @@ function indexOf (xs, x) {
 }
 
 }).call(this,require('_process'))
-},{"_process":137,"buffer":54,"core-util-is":197,"events":90,"inherits":217,"isarray":222,"stream":173,"string_decoder/":345}],193:[function(require,module,exports){
+},{"_process":137,"buffer":54,"core-util-is":198,"events":90,"inherits":218,"isarray":223,"stream":173,"string_decoder/":416}],194:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -34270,7 +37202,7 @@ function endWritable(stream, state, cb) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_duplex":191,"_process":137,"buffer":54,"core-util-is":197,"inherits":217,"stream":173}],194:[function(require,module,exports){
+},{"./_stream_duplex":192,"_process":137,"buffer":54,"core-util-is":198,"inherits":218,"stream":173}],195:[function(require,module,exports){
 module.exports = {
 	trueFunc: function trueFunc(){
 		return true;
@@ -34279,7 +37211,7 @@ module.exports = {
 		return false;
 	}
 };
-},{}],195:[function(require,module,exports){
+},{}],196:[function(require,module,exports){
 (function (Buffer){
 var util = require('util');
 var Stream = require('stream').Stream;
@@ -34472,7 +37404,7 @@ CombinedStream.prototype._emitError = function(err) {
 };
 
 }).call(this,{"isBuffer":require("../../../../../../../../../Users/rbouamira/AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js")})
-},{"../../../../../../../../../Users/rbouamira/AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js":109,"./defer.js":196,"delayed-stream":201,"stream":173,"util":185}],196:[function(require,module,exports){
+},{"../../../../../../../../../Users/rbouamira/AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js":109,"./defer.js":197,"delayed-stream":202,"stream":173,"util":185}],197:[function(require,module,exports){
 (function (process,setImmediate){
 module.exports = defer;
 
@@ -34502,7 +37434,7 @@ function defer(fn)
 }
 
 }).call(this,require('_process'),require("timers").setImmediate)
-},{"_process":137,"timers":179}],197:[function(require,module,exports){
+},{"_process":137,"timers":179}],198:[function(require,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -34613,7 +37545,7 @@ function objectToString(o) {
 }
 
 }).call(this,{"isBuffer":require("../../../../../../../../../Users/rbouamira/AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js")})
-},{"../../../../../../../../../Users/rbouamira/AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js":109}],198:[function(require,module,exports){
+},{"../../../../../../../../../Users/rbouamira/AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js":109}],199:[function(require,module,exports){
 /*
  * ctf.js
  *
@@ -34860,7 +37792,7 @@ function ctfParseJson(json, ctype)
 
 exports.ctfParseJson = ctfParseJson;
 
-},{"assert":16}],199:[function(require,module,exports){
+},{"assert":16}],200:[function(require,module,exports){
 /*
  * rm - Feb 2011
  * ctio.js:
@@ -36347,7 +39279,7 @@ exports.rdouble = rdouble;
 exports.wfloat = wfloat;
 exports.wdouble = wdouble;
 
-},{"assert":16}],200:[function(require,module,exports){
+},{"assert":16}],201:[function(require,module,exports){
 (function (Buffer){
 /*
  * rm - Feb 2011
@@ -37295,7 +40227,7 @@ exports.wfloat = mod_ctio.wfloat;
 exports.wdouble = mod_ctio.wdouble;
 
 }).call(this,require("buffer").Buffer)
-},{"./ctf.js":198,"./ctio.js":199,"assert":16,"buffer":54}],201:[function(require,module,exports){
+},{"./ctf.js":199,"./ctio.js":200,"assert":16,"buffer":54}],202:[function(require,module,exports){
 var Stream = require('stream').Stream;
 var util = require('util');
 
@@ -37404,7 +40336,7 @@ DelayedStream.prototype._checkIfMaxDataSizeExceeded = function() {
   this.emit('error', new Error(message));
 };
 
-},{"stream":173,"util":185}],202:[function(require,module,exports){
+},{"stream":173,"util":185}],203:[function(require,module,exports){
 /*
   Module dependencies
 */
@@ -37584,7 +40516,7 @@ function renderComment(elem) {
   return '<!--' + elem.data + '-->';
 }
 
-},{"domelementtype":203,"entities":205}],203:[function(require,module,exports){
+},{"domelementtype":204,"entities":206}],204:[function(require,module,exports){
 //Types of elements found in the DOM
 module.exports = {
 	Text: "text", //Text
@@ -37599,7 +40531,7 @@ module.exports = {
 		return elem.type === "tag" || elem.type === "script" || elem.type === "style";
 	}
 };
-},{}],204:[function(require,module,exports){
+},{}],205:[function(require,module,exports){
 //Types of elements found in the DOM
 module.exports = {
 	Text: "text", //Text
@@ -37616,7 +40548,7 @@ module.exports = {
 	}
 };
 
-},{}],205:[function(require,module,exports){
+},{}],206:[function(require,module,exports){
 var encode = require("./lib/encode.js"),
     decode = require("./lib/decode.js");
 
@@ -37651,7 +40583,7 @@ exports.decodeHTMLStrict = decode.HTMLStrict;
 
 exports.escape = encode.escape;
 
-},{"./lib/decode.js":206,"./lib/encode.js":208}],206:[function(require,module,exports){
+},{"./lib/decode.js":207,"./lib/encode.js":209}],207:[function(require,module,exports){
 var entityMap = require("../maps/entities.json"),
     legacyMap = require("../maps/legacy.json"),
     xmlMap    = require("../maps/xml.json"),
@@ -37724,7 +40656,7 @@ module.exports = {
 	HTML: decodeHTML,
 	HTMLStrict: decodeHTMLStrict
 };
-},{"../maps/entities.json":210,"../maps/legacy.json":211,"../maps/xml.json":212,"./decode_codepoint.js":207}],207:[function(require,module,exports){
+},{"../maps/entities.json":211,"../maps/legacy.json":212,"../maps/xml.json":213,"./decode_codepoint.js":208}],208:[function(require,module,exports){
 var decodeMap = require("../maps/decode.json");
 
 module.exports = decodeCodePoint;
@@ -37752,7 +40684,7 @@ function decodeCodePoint(codePoint){
 	return output;
 }
 
-},{"../maps/decode.json":209}],208:[function(require,module,exports){
+},{"../maps/decode.json":210}],209:[function(require,module,exports){
 var inverseXML = getInverseObj(require("../maps/xml.json")),
     xmlReplacer = getInverseReplacer(inverseXML);
 
@@ -37827,16 +40759,16 @@ function escapeXML(data){
 
 exports.escape = escapeXML;
 
-},{"../maps/entities.json":210,"../maps/xml.json":212}],209:[function(require,module,exports){
+},{"../maps/entities.json":211,"../maps/xml.json":213}],210:[function(require,module,exports){
 module.exports={"0":65533,"128":8364,"130":8218,"131":402,"132":8222,"133":8230,"134":8224,"135":8225,"136":710,"137":8240,"138":352,"139":8249,"140":338,"142":381,"145":8216,"146":8217,"147":8220,"148":8221,"149":8226,"150":8211,"151":8212,"152":732,"153":8482,"154":353,"155":8250,"156":339,"158":382,"159":376}
-},{}],210:[function(require,module,exports){
-module.exports={"Aacute":"\u00C1","aacute":"\u00E1","Abreve":"\u0102","abreve":"\u0103","ac":"\u223E","acd":"\u223F","acE":"\u223E\u0333","Acirc":"\u00C2","acirc":"\u00E2","acute":"\u00B4","Acy":"\u0410","acy":"\u0430","AElig":"\u00C6","aelig":"\u00E6","af":"\u2061","Afr":"\uD835\uDD04","afr":"\uD835\uDD1E","Agrave":"\u00C0","agrave":"\u00E0","alefsym":"\u2135","aleph":"\u2135","Alpha":"\u0391","alpha":"\u03B1","Amacr":"\u0100","amacr":"\u0101","amalg":"\u2A3F","amp":"&","AMP":"&","andand":"\u2A55","And":"\u2A53","and":"\u2227","andd":"\u2A5C","andslope":"\u2A58","andv":"\u2A5A","ang":"\u2220","ange":"\u29A4","angle":"\u2220","angmsdaa":"\u29A8","angmsdab":"\u29A9","angmsdac":"\u29AA","angmsdad":"\u29AB","angmsdae":"\u29AC","angmsdaf":"\u29AD","angmsdag":"\u29AE","angmsdah":"\u29AF","angmsd":"\u2221","angrt":"\u221F","angrtvb":"\u22BE","angrtvbd":"\u299D","angsph":"\u2222","angst":"\u00C5","angzarr":"\u237C","Aogon":"\u0104","aogon":"\u0105","Aopf":"\uD835\uDD38","aopf":"\uD835\uDD52","apacir":"\u2A6F","ap":"\u2248","apE":"\u2A70","ape":"\u224A","apid":"\u224B","apos":"'","ApplyFunction":"\u2061","approx":"\u2248","approxeq":"\u224A","Aring":"\u00C5","aring":"\u00E5","Ascr":"\uD835\uDC9C","ascr":"\uD835\uDCB6","Assign":"\u2254","ast":"*","asymp":"\u2248","asympeq":"\u224D","Atilde":"\u00C3","atilde":"\u00E3","Auml":"\u00C4","auml":"\u00E4","awconint":"\u2233","awint":"\u2A11","backcong":"\u224C","backepsilon":"\u03F6","backprime":"\u2035","backsim":"\u223D","backsimeq":"\u22CD","Backslash":"\u2216","Barv":"\u2AE7","barvee":"\u22BD","barwed":"\u2305","Barwed":"\u2306","barwedge":"\u2305","bbrk":"\u23B5","bbrktbrk":"\u23B6","bcong":"\u224C","Bcy":"\u0411","bcy":"\u0431","bdquo":"\u201E","becaus":"\u2235","because":"\u2235","Because":"\u2235","bemptyv":"\u29B0","bepsi":"\u03F6","bernou":"\u212C","Bernoullis":"\u212C","Beta":"\u0392","beta":"\u03B2","beth":"\u2136","between":"\u226C","Bfr":"\uD835\uDD05","bfr":"\uD835\uDD1F","bigcap":"\u22C2","bigcirc":"\u25EF","bigcup":"\u22C3","bigodot":"\u2A00","bigoplus":"\u2A01","bigotimes":"\u2A02","bigsqcup":"\u2A06","bigstar":"\u2605","bigtriangledown":"\u25BD","bigtriangleup":"\u25B3","biguplus":"\u2A04","bigvee":"\u22C1","bigwedge":"\u22C0","bkarow":"\u290D","blacklozenge":"\u29EB","blacksquare":"\u25AA","blacktriangle":"\u25B4","blacktriangledown":"\u25BE","blacktriangleleft":"\u25C2","blacktriangleright":"\u25B8","blank":"\u2423","blk12":"\u2592","blk14":"\u2591","blk34":"\u2593","block":"\u2588","bne":"=\u20E5","bnequiv":"\u2261\u20E5","bNot":"\u2AED","bnot":"\u2310","Bopf":"\uD835\uDD39","bopf":"\uD835\uDD53","bot":"\u22A5","bottom":"\u22A5","bowtie":"\u22C8","boxbox":"\u29C9","boxdl":"\u2510","boxdL":"\u2555","boxDl":"\u2556","boxDL":"\u2557","boxdr":"\u250C","boxdR":"\u2552","boxDr":"\u2553","boxDR":"\u2554","boxh":"\u2500","boxH":"\u2550","boxhd":"\u252C","boxHd":"\u2564","boxhD":"\u2565","boxHD":"\u2566","boxhu":"\u2534","boxHu":"\u2567","boxhU":"\u2568","boxHU":"\u2569","boxminus":"\u229F","boxplus":"\u229E","boxtimes":"\u22A0","boxul":"\u2518","boxuL":"\u255B","boxUl":"\u255C","boxUL":"\u255D","boxur":"\u2514","boxuR":"\u2558","boxUr":"\u2559","boxUR":"\u255A","boxv":"\u2502","boxV":"\u2551","boxvh":"\u253C","boxvH":"\u256A","boxVh":"\u256B","boxVH":"\u256C","boxvl":"\u2524","boxvL":"\u2561","boxVl":"\u2562","boxVL":"\u2563","boxvr":"\u251C","boxvR":"\u255E","boxVr":"\u255F","boxVR":"\u2560","bprime":"\u2035","breve":"\u02D8","Breve":"\u02D8","brvbar":"\u00A6","bscr":"\uD835\uDCB7","Bscr":"\u212C","bsemi":"\u204F","bsim":"\u223D","bsime":"\u22CD","bsolb":"\u29C5","bsol":"\\","bsolhsub":"\u27C8","bull":"\u2022","bullet":"\u2022","bump":"\u224E","bumpE":"\u2AAE","bumpe":"\u224F","Bumpeq":"\u224E","bumpeq":"\u224F","Cacute":"\u0106","cacute":"\u0107","capand":"\u2A44","capbrcup":"\u2A49","capcap":"\u2A4B","cap":"\u2229","Cap":"\u22D2","capcup":"\u2A47","capdot":"\u2A40","CapitalDifferentialD":"\u2145","caps":"\u2229\uFE00","caret":"\u2041","caron":"\u02C7","Cayleys":"\u212D","ccaps":"\u2A4D","Ccaron":"\u010C","ccaron":"\u010D","Ccedil":"\u00C7","ccedil":"\u00E7","Ccirc":"\u0108","ccirc":"\u0109","Cconint":"\u2230","ccups":"\u2A4C","ccupssm":"\u2A50","Cdot":"\u010A","cdot":"\u010B","cedil":"\u00B8","Cedilla":"\u00B8","cemptyv":"\u29B2","cent":"\u00A2","centerdot":"\u00B7","CenterDot":"\u00B7","cfr":"\uD835\uDD20","Cfr":"\u212D","CHcy":"\u0427","chcy":"\u0447","check":"\u2713","checkmark":"\u2713","Chi":"\u03A7","chi":"\u03C7","circ":"\u02C6","circeq":"\u2257","circlearrowleft":"\u21BA","circlearrowright":"\u21BB","circledast":"\u229B","circledcirc":"\u229A","circleddash":"\u229D","CircleDot":"\u2299","circledR":"\u00AE","circledS":"\u24C8","CircleMinus":"\u2296","CirclePlus":"\u2295","CircleTimes":"\u2297","cir":"\u25CB","cirE":"\u29C3","cire":"\u2257","cirfnint":"\u2A10","cirmid":"\u2AEF","cirscir":"\u29C2","ClockwiseContourIntegral":"\u2232","CloseCurlyDoubleQuote":"\u201D","CloseCurlyQuote":"\u2019","clubs":"\u2663","clubsuit":"\u2663","colon":":","Colon":"\u2237","Colone":"\u2A74","colone":"\u2254","coloneq":"\u2254","comma":",","commat":"@","comp":"\u2201","compfn":"\u2218","complement":"\u2201","complexes":"\u2102","cong":"\u2245","congdot":"\u2A6D","Congruent":"\u2261","conint":"\u222E","Conint":"\u222F","ContourIntegral":"\u222E","copf":"\uD835\uDD54","Copf":"\u2102","coprod":"\u2210","Coproduct":"\u2210","copy":"\u00A9","COPY":"\u00A9","copysr":"\u2117","CounterClockwiseContourIntegral":"\u2233","crarr":"\u21B5","cross":"\u2717","Cross":"\u2A2F","Cscr":"\uD835\uDC9E","cscr":"\uD835\uDCB8","csub":"\u2ACF","csube":"\u2AD1","csup":"\u2AD0","csupe":"\u2AD2","ctdot":"\u22EF","cudarrl":"\u2938","cudarrr":"\u2935","cuepr":"\u22DE","cuesc":"\u22DF","cularr":"\u21B6","cularrp":"\u293D","cupbrcap":"\u2A48","cupcap":"\u2A46","CupCap":"\u224D","cup":"\u222A","Cup":"\u22D3","cupcup":"\u2A4A","cupdot":"\u228D","cupor":"\u2A45","cups":"\u222A\uFE00","curarr":"\u21B7","curarrm":"\u293C","curlyeqprec":"\u22DE","curlyeqsucc":"\u22DF","curlyvee":"\u22CE","curlywedge":"\u22CF","curren":"\u00A4","curvearrowleft":"\u21B6","curvearrowright":"\u21B7","cuvee":"\u22CE","cuwed":"\u22CF","cwconint":"\u2232","cwint":"\u2231","cylcty":"\u232D","dagger":"\u2020","Dagger":"\u2021","daleth":"\u2138","darr":"\u2193","Darr":"\u21A1","dArr":"\u21D3","dash":"\u2010","Dashv":"\u2AE4","dashv":"\u22A3","dbkarow":"\u290F","dblac":"\u02DD","Dcaron":"\u010E","dcaron":"\u010F","Dcy":"\u0414","dcy":"\u0434","ddagger":"\u2021","ddarr":"\u21CA","DD":"\u2145","dd":"\u2146","DDotrahd":"\u2911","ddotseq":"\u2A77","deg":"\u00B0","Del":"\u2207","Delta":"\u0394","delta":"\u03B4","demptyv":"\u29B1","dfisht":"\u297F","Dfr":"\uD835\uDD07","dfr":"\uD835\uDD21","dHar":"\u2965","dharl":"\u21C3","dharr":"\u21C2","DiacriticalAcute":"\u00B4","DiacriticalDot":"\u02D9","DiacriticalDoubleAcute":"\u02DD","DiacriticalGrave":"`","DiacriticalTilde":"\u02DC","diam":"\u22C4","diamond":"\u22C4","Diamond":"\u22C4","diamondsuit":"\u2666","diams":"\u2666","die":"\u00A8","DifferentialD":"\u2146","digamma":"\u03DD","disin":"\u22F2","div":"\u00F7","divide":"\u00F7","divideontimes":"\u22C7","divonx":"\u22C7","DJcy":"\u0402","djcy":"\u0452","dlcorn":"\u231E","dlcrop":"\u230D","dollar":"$","Dopf":"\uD835\uDD3B","dopf":"\uD835\uDD55","Dot":"\u00A8","dot":"\u02D9","DotDot":"\u20DC","doteq":"\u2250","doteqdot":"\u2251","DotEqual":"\u2250","dotminus":"\u2238","dotplus":"\u2214","dotsquare":"\u22A1","doublebarwedge":"\u2306","DoubleContourIntegral":"\u222F","DoubleDot":"\u00A8","DoubleDownArrow":"\u21D3","DoubleLeftArrow":"\u21D0","DoubleLeftRightArrow":"\u21D4","DoubleLeftTee":"\u2AE4","DoubleLongLeftArrow":"\u27F8","DoubleLongLeftRightArrow":"\u27FA","DoubleLongRightArrow":"\u27F9","DoubleRightArrow":"\u21D2","DoubleRightTee":"\u22A8","DoubleUpArrow":"\u21D1","DoubleUpDownArrow":"\u21D5","DoubleVerticalBar":"\u2225","DownArrowBar":"\u2913","downarrow":"\u2193","DownArrow":"\u2193","Downarrow":"\u21D3","DownArrowUpArrow":"\u21F5","DownBreve":"\u0311","downdownarrows":"\u21CA","downharpoonleft":"\u21C3","downharpoonright":"\u21C2","DownLeftRightVector":"\u2950","DownLeftTeeVector":"\u295E","DownLeftVectorBar":"\u2956","DownLeftVector":"\u21BD","DownRightTeeVector":"\u295F","DownRightVectorBar":"\u2957","DownRightVector":"\u21C1","DownTeeArrow":"\u21A7","DownTee":"\u22A4","drbkarow":"\u2910","drcorn":"\u231F","drcrop":"\u230C","Dscr":"\uD835\uDC9F","dscr":"\uD835\uDCB9","DScy":"\u0405","dscy":"\u0455","dsol":"\u29F6","Dstrok":"\u0110","dstrok":"\u0111","dtdot":"\u22F1","dtri":"\u25BF","dtrif":"\u25BE","duarr":"\u21F5","duhar":"\u296F","dwangle":"\u29A6","DZcy":"\u040F","dzcy":"\u045F","dzigrarr":"\u27FF","Eacute":"\u00C9","eacute":"\u00E9","easter":"\u2A6E","Ecaron":"\u011A","ecaron":"\u011B","Ecirc":"\u00CA","ecirc":"\u00EA","ecir":"\u2256","ecolon":"\u2255","Ecy":"\u042D","ecy":"\u044D","eDDot":"\u2A77","Edot":"\u0116","edot":"\u0117","eDot":"\u2251","ee":"\u2147","efDot":"\u2252","Efr":"\uD835\uDD08","efr":"\uD835\uDD22","eg":"\u2A9A","Egrave":"\u00C8","egrave":"\u00E8","egs":"\u2A96","egsdot":"\u2A98","el":"\u2A99","Element":"\u2208","elinters":"\u23E7","ell":"\u2113","els":"\u2A95","elsdot":"\u2A97","Emacr":"\u0112","emacr":"\u0113","empty":"\u2205","emptyset":"\u2205","EmptySmallSquare":"\u25FB","emptyv":"\u2205","EmptyVerySmallSquare":"\u25AB","emsp13":"\u2004","emsp14":"\u2005","emsp":"\u2003","ENG":"\u014A","eng":"\u014B","ensp":"\u2002","Eogon":"\u0118","eogon":"\u0119","Eopf":"\uD835\uDD3C","eopf":"\uD835\uDD56","epar":"\u22D5","eparsl":"\u29E3","eplus":"\u2A71","epsi":"\u03B5","Epsilon":"\u0395","epsilon":"\u03B5","epsiv":"\u03F5","eqcirc":"\u2256","eqcolon":"\u2255","eqsim":"\u2242","eqslantgtr":"\u2A96","eqslantless":"\u2A95","Equal":"\u2A75","equals":"=","EqualTilde":"\u2242","equest":"\u225F","Equilibrium":"\u21CC","equiv":"\u2261","equivDD":"\u2A78","eqvparsl":"\u29E5","erarr":"\u2971","erDot":"\u2253","escr":"\u212F","Escr":"\u2130","esdot":"\u2250","Esim":"\u2A73","esim":"\u2242","Eta":"\u0397","eta":"\u03B7","ETH":"\u00D0","eth":"\u00F0","Euml":"\u00CB","euml":"\u00EB","euro":"\u20AC","excl":"!","exist":"\u2203","Exists":"\u2203","expectation":"\u2130","exponentiale":"\u2147","ExponentialE":"\u2147","fallingdotseq":"\u2252","Fcy":"\u0424","fcy":"\u0444","female":"\u2640","ffilig":"\uFB03","fflig":"\uFB00","ffllig":"\uFB04","Ffr":"\uD835\uDD09","ffr":"\uD835\uDD23","filig":"\uFB01","FilledSmallSquare":"\u25FC","FilledVerySmallSquare":"\u25AA","fjlig":"fj","flat":"\u266D","fllig":"\uFB02","fltns":"\u25B1","fnof":"\u0192","Fopf":"\uD835\uDD3D","fopf":"\uD835\uDD57","forall":"\u2200","ForAll":"\u2200","fork":"\u22D4","forkv":"\u2AD9","Fouriertrf":"\u2131","fpartint":"\u2A0D","frac12":"\u00BD","frac13":"\u2153","frac14":"\u00BC","frac15":"\u2155","frac16":"\u2159","frac18":"\u215B","frac23":"\u2154","frac25":"\u2156","frac34":"\u00BE","frac35":"\u2157","frac38":"\u215C","frac45":"\u2158","frac56":"\u215A","frac58":"\u215D","frac78":"\u215E","frasl":"\u2044","frown":"\u2322","fscr":"\uD835\uDCBB","Fscr":"\u2131","gacute":"\u01F5","Gamma":"\u0393","gamma":"\u03B3","Gammad":"\u03DC","gammad":"\u03DD","gap":"\u2A86","Gbreve":"\u011E","gbreve":"\u011F","Gcedil":"\u0122","Gcirc":"\u011C","gcirc":"\u011D","Gcy":"\u0413","gcy":"\u0433","Gdot":"\u0120","gdot":"\u0121","ge":"\u2265","gE":"\u2267","gEl":"\u2A8C","gel":"\u22DB","geq":"\u2265","geqq":"\u2267","geqslant":"\u2A7E","gescc":"\u2AA9","ges":"\u2A7E","gesdot":"\u2A80","gesdoto":"\u2A82","gesdotol":"\u2A84","gesl":"\u22DB\uFE00","gesles":"\u2A94","Gfr":"\uD835\uDD0A","gfr":"\uD835\uDD24","gg":"\u226B","Gg":"\u22D9","ggg":"\u22D9","gimel":"\u2137","GJcy":"\u0403","gjcy":"\u0453","gla":"\u2AA5","gl":"\u2277","glE":"\u2A92","glj":"\u2AA4","gnap":"\u2A8A","gnapprox":"\u2A8A","gne":"\u2A88","gnE":"\u2269","gneq":"\u2A88","gneqq":"\u2269","gnsim":"\u22E7","Gopf":"\uD835\uDD3E","gopf":"\uD835\uDD58","grave":"`","GreaterEqual":"\u2265","GreaterEqualLess":"\u22DB","GreaterFullEqual":"\u2267","GreaterGreater":"\u2AA2","GreaterLess":"\u2277","GreaterSlantEqual":"\u2A7E","GreaterTilde":"\u2273","Gscr":"\uD835\uDCA2","gscr":"\u210A","gsim":"\u2273","gsime":"\u2A8E","gsiml":"\u2A90","gtcc":"\u2AA7","gtcir":"\u2A7A","gt":">","GT":">","Gt":"\u226B","gtdot":"\u22D7","gtlPar":"\u2995","gtquest":"\u2A7C","gtrapprox":"\u2A86","gtrarr":"\u2978","gtrdot":"\u22D7","gtreqless":"\u22DB","gtreqqless":"\u2A8C","gtrless":"\u2277","gtrsim":"\u2273","gvertneqq":"\u2269\uFE00","gvnE":"\u2269\uFE00","Hacek":"\u02C7","hairsp":"\u200A","half":"\u00BD","hamilt":"\u210B","HARDcy":"\u042A","hardcy":"\u044A","harrcir":"\u2948","harr":"\u2194","hArr":"\u21D4","harrw":"\u21AD","Hat":"^","hbar":"\u210F","Hcirc":"\u0124","hcirc":"\u0125","hearts":"\u2665","heartsuit":"\u2665","hellip":"\u2026","hercon":"\u22B9","hfr":"\uD835\uDD25","Hfr":"\u210C","HilbertSpace":"\u210B","hksearow":"\u2925","hkswarow":"\u2926","hoarr":"\u21FF","homtht":"\u223B","hookleftarrow":"\u21A9","hookrightarrow":"\u21AA","hopf":"\uD835\uDD59","Hopf":"\u210D","horbar":"\u2015","HorizontalLine":"\u2500","hscr":"\uD835\uDCBD","Hscr":"\u210B","hslash":"\u210F","Hstrok":"\u0126","hstrok":"\u0127","HumpDownHump":"\u224E","HumpEqual":"\u224F","hybull":"\u2043","hyphen":"\u2010","Iacute":"\u00CD","iacute":"\u00ED","ic":"\u2063","Icirc":"\u00CE","icirc":"\u00EE","Icy":"\u0418","icy":"\u0438","Idot":"\u0130","IEcy":"\u0415","iecy":"\u0435","iexcl":"\u00A1","iff":"\u21D4","ifr":"\uD835\uDD26","Ifr":"\u2111","Igrave":"\u00CC","igrave":"\u00EC","ii":"\u2148","iiiint":"\u2A0C","iiint":"\u222D","iinfin":"\u29DC","iiota":"\u2129","IJlig":"\u0132","ijlig":"\u0133","Imacr":"\u012A","imacr":"\u012B","image":"\u2111","ImaginaryI":"\u2148","imagline":"\u2110","imagpart":"\u2111","imath":"\u0131","Im":"\u2111","imof":"\u22B7","imped":"\u01B5","Implies":"\u21D2","incare":"\u2105","in":"\u2208","infin":"\u221E","infintie":"\u29DD","inodot":"\u0131","intcal":"\u22BA","int":"\u222B","Int":"\u222C","integers":"\u2124","Integral":"\u222B","intercal":"\u22BA","Intersection":"\u22C2","intlarhk":"\u2A17","intprod":"\u2A3C","InvisibleComma":"\u2063","InvisibleTimes":"\u2062","IOcy":"\u0401","iocy":"\u0451","Iogon":"\u012E","iogon":"\u012F","Iopf":"\uD835\uDD40","iopf":"\uD835\uDD5A","Iota":"\u0399","iota":"\u03B9","iprod":"\u2A3C","iquest":"\u00BF","iscr":"\uD835\uDCBE","Iscr":"\u2110","isin":"\u2208","isindot":"\u22F5","isinE":"\u22F9","isins":"\u22F4","isinsv":"\u22F3","isinv":"\u2208","it":"\u2062","Itilde":"\u0128","itilde":"\u0129","Iukcy":"\u0406","iukcy":"\u0456","Iuml":"\u00CF","iuml":"\u00EF","Jcirc":"\u0134","jcirc":"\u0135","Jcy":"\u0419","jcy":"\u0439","Jfr":"\uD835\uDD0D","jfr":"\uD835\uDD27","jmath":"\u0237","Jopf":"\uD835\uDD41","jopf":"\uD835\uDD5B","Jscr":"\uD835\uDCA5","jscr":"\uD835\uDCBF","Jsercy":"\u0408","jsercy":"\u0458","Jukcy":"\u0404","jukcy":"\u0454","Kappa":"\u039A","kappa":"\u03BA","kappav":"\u03F0","Kcedil":"\u0136","kcedil":"\u0137","Kcy":"\u041A","kcy":"\u043A","Kfr":"\uD835\uDD0E","kfr":"\uD835\uDD28","kgreen":"\u0138","KHcy":"\u0425","khcy":"\u0445","KJcy":"\u040C","kjcy":"\u045C","Kopf":"\uD835\uDD42","kopf":"\uD835\uDD5C","Kscr":"\uD835\uDCA6","kscr":"\uD835\uDCC0","lAarr":"\u21DA","Lacute":"\u0139","lacute":"\u013A","laemptyv":"\u29B4","lagran":"\u2112","Lambda":"\u039B","lambda":"\u03BB","lang":"\u27E8","Lang":"\u27EA","langd":"\u2991","langle":"\u27E8","lap":"\u2A85","Laplacetrf":"\u2112","laquo":"\u00AB","larrb":"\u21E4","larrbfs":"\u291F","larr":"\u2190","Larr":"\u219E","lArr":"\u21D0","larrfs":"\u291D","larrhk":"\u21A9","larrlp":"\u21AB","larrpl":"\u2939","larrsim":"\u2973","larrtl":"\u21A2","latail":"\u2919","lAtail":"\u291B","lat":"\u2AAB","late":"\u2AAD","lates":"\u2AAD\uFE00","lbarr":"\u290C","lBarr":"\u290E","lbbrk":"\u2772","lbrace":"{","lbrack":"[","lbrke":"\u298B","lbrksld":"\u298F","lbrkslu":"\u298D","Lcaron":"\u013D","lcaron":"\u013E","Lcedil":"\u013B","lcedil":"\u013C","lceil":"\u2308","lcub":"{","Lcy":"\u041B","lcy":"\u043B","ldca":"\u2936","ldquo":"\u201C","ldquor":"\u201E","ldrdhar":"\u2967","ldrushar":"\u294B","ldsh":"\u21B2","le":"\u2264","lE":"\u2266","LeftAngleBracket":"\u27E8","LeftArrowBar":"\u21E4","leftarrow":"\u2190","LeftArrow":"\u2190","Leftarrow":"\u21D0","LeftArrowRightArrow":"\u21C6","leftarrowtail":"\u21A2","LeftCeiling":"\u2308","LeftDoubleBracket":"\u27E6","LeftDownTeeVector":"\u2961","LeftDownVectorBar":"\u2959","LeftDownVector":"\u21C3","LeftFloor":"\u230A","leftharpoondown":"\u21BD","leftharpoonup":"\u21BC","leftleftarrows":"\u21C7","leftrightarrow":"\u2194","LeftRightArrow":"\u2194","Leftrightarrow":"\u21D4","leftrightarrows":"\u21C6","leftrightharpoons":"\u21CB","leftrightsquigarrow":"\u21AD","LeftRightVector":"\u294E","LeftTeeArrow":"\u21A4","LeftTee":"\u22A3","LeftTeeVector":"\u295A","leftthreetimes":"\u22CB","LeftTriangleBar":"\u29CF","LeftTriangle":"\u22B2","LeftTriangleEqual":"\u22B4","LeftUpDownVector":"\u2951","LeftUpTeeVector":"\u2960","LeftUpVectorBar":"\u2958","LeftUpVector":"\u21BF","LeftVectorBar":"\u2952","LeftVector":"\u21BC","lEg":"\u2A8B","leg":"\u22DA","leq":"\u2264","leqq":"\u2266","leqslant":"\u2A7D","lescc":"\u2AA8","les":"\u2A7D","lesdot":"\u2A7F","lesdoto":"\u2A81","lesdotor":"\u2A83","lesg":"\u22DA\uFE00","lesges":"\u2A93","lessapprox":"\u2A85","lessdot":"\u22D6","lesseqgtr":"\u22DA","lesseqqgtr":"\u2A8B","LessEqualGreater":"\u22DA","LessFullEqual":"\u2266","LessGreater":"\u2276","lessgtr":"\u2276","LessLess":"\u2AA1","lesssim":"\u2272","LessSlantEqual":"\u2A7D","LessTilde":"\u2272","lfisht":"\u297C","lfloor":"\u230A","Lfr":"\uD835\uDD0F","lfr":"\uD835\uDD29","lg":"\u2276","lgE":"\u2A91","lHar":"\u2962","lhard":"\u21BD","lharu":"\u21BC","lharul":"\u296A","lhblk":"\u2584","LJcy":"\u0409","ljcy":"\u0459","llarr":"\u21C7","ll":"\u226A","Ll":"\u22D8","llcorner":"\u231E","Lleftarrow":"\u21DA","llhard":"\u296B","lltri":"\u25FA","Lmidot":"\u013F","lmidot":"\u0140","lmoustache":"\u23B0","lmoust":"\u23B0","lnap":"\u2A89","lnapprox":"\u2A89","lne":"\u2A87","lnE":"\u2268","lneq":"\u2A87","lneqq":"\u2268","lnsim":"\u22E6","loang":"\u27EC","loarr":"\u21FD","lobrk":"\u27E6","longleftarrow":"\u27F5","LongLeftArrow":"\u27F5","Longleftarrow":"\u27F8","longleftrightarrow":"\u27F7","LongLeftRightArrow":"\u27F7","Longleftrightarrow":"\u27FA","longmapsto":"\u27FC","longrightarrow":"\u27F6","LongRightArrow":"\u27F6","Longrightarrow":"\u27F9","looparrowleft":"\u21AB","looparrowright":"\u21AC","lopar":"\u2985","Lopf":"\uD835\uDD43","lopf":"\uD835\uDD5D","loplus":"\u2A2D","lotimes":"\u2A34","lowast":"\u2217","lowbar":"_","LowerLeftArrow":"\u2199","LowerRightArrow":"\u2198","loz":"\u25CA","lozenge":"\u25CA","lozf":"\u29EB","lpar":"(","lparlt":"\u2993","lrarr":"\u21C6","lrcorner":"\u231F","lrhar":"\u21CB","lrhard":"\u296D","lrm":"\u200E","lrtri":"\u22BF","lsaquo":"\u2039","lscr":"\uD835\uDCC1","Lscr":"\u2112","lsh":"\u21B0","Lsh":"\u21B0","lsim":"\u2272","lsime":"\u2A8D","lsimg":"\u2A8F","lsqb":"[","lsquo":"\u2018","lsquor":"\u201A","Lstrok":"\u0141","lstrok":"\u0142","ltcc":"\u2AA6","ltcir":"\u2A79","lt":"<","LT":"<","Lt":"\u226A","ltdot":"\u22D6","lthree":"\u22CB","ltimes":"\u22C9","ltlarr":"\u2976","ltquest":"\u2A7B","ltri":"\u25C3","ltrie":"\u22B4","ltrif":"\u25C2","ltrPar":"\u2996","lurdshar":"\u294A","luruhar":"\u2966","lvertneqq":"\u2268\uFE00","lvnE":"\u2268\uFE00","macr":"\u00AF","male":"\u2642","malt":"\u2720","maltese":"\u2720","Map":"\u2905","map":"\u21A6","mapsto":"\u21A6","mapstodown":"\u21A7","mapstoleft":"\u21A4","mapstoup":"\u21A5","marker":"\u25AE","mcomma":"\u2A29","Mcy":"\u041C","mcy":"\u043C","mdash":"\u2014","mDDot":"\u223A","measuredangle":"\u2221","MediumSpace":"\u205F","Mellintrf":"\u2133","Mfr":"\uD835\uDD10","mfr":"\uD835\uDD2A","mho":"\u2127","micro":"\u00B5","midast":"*","midcir":"\u2AF0","mid":"\u2223","middot":"\u00B7","minusb":"\u229F","minus":"\u2212","minusd":"\u2238","minusdu":"\u2A2A","MinusPlus":"\u2213","mlcp":"\u2ADB","mldr":"\u2026","mnplus":"\u2213","models":"\u22A7","Mopf":"\uD835\uDD44","mopf":"\uD835\uDD5E","mp":"\u2213","mscr":"\uD835\uDCC2","Mscr":"\u2133","mstpos":"\u223E","Mu":"\u039C","mu":"\u03BC","multimap":"\u22B8","mumap":"\u22B8","nabla":"\u2207","Nacute":"\u0143","nacute":"\u0144","nang":"\u2220\u20D2","nap":"\u2249","napE":"\u2A70\u0338","napid":"\u224B\u0338","napos":"\u0149","napprox":"\u2249","natural":"\u266E","naturals":"\u2115","natur":"\u266E","nbsp":"\u00A0","nbump":"\u224E\u0338","nbumpe":"\u224F\u0338","ncap":"\u2A43","Ncaron":"\u0147","ncaron":"\u0148","Ncedil":"\u0145","ncedil":"\u0146","ncong":"\u2247","ncongdot":"\u2A6D\u0338","ncup":"\u2A42","Ncy":"\u041D","ncy":"\u043D","ndash":"\u2013","nearhk":"\u2924","nearr":"\u2197","neArr":"\u21D7","nearrow":"\u2197","ne":"\u2260","nedot":"\u2250\u0338","NegativeMediumSpace":"\u200B","NegativeThickSpace":"\u200B","NegativeThinSpace":"\u200B","NegativeVeryThinSpace":"\u200B","nequiv":"\u2262","nesear":"\u2928","nesim":"\u2242\u0338","NestedGreaterGreater":"\u226B","NestedLessLess":"\u226A","NewLine":"\n","nexist":"\u2204","nexists":"\u2204","Nfr":"\uD835\uDD11","nfr":"\uD835\uDD2B","ngE":"\u2267\u0338","nge":"\u2271","ngeq":"\u2271","ngeqq":"\u2267\u0338","ngeqslant":"\u2A7E\u0338","nges":"\u2A7E\u0338","nGg":"\u22D9\u0338","ngsim":"\u2275","nGt":"\u226B\u20D2","ngt":"\u226F","ngtr":"\u226F","nGtv":"\u226B\u0338","nharr":"\u21AE","nhArr":"\u21CE","nhpar":"\u2AF2","ni":"\u220B","nis":"\u22FC","nisd":"\u22FA","niv":"\u220B","NJcy":"\u040A","njcy":"\u045A","nlarr":"\u219A","nlArr":"\u21CD","nldr":"\u2025","nlE":"\u2266\u0338","nle":"\u2270","nleftarrow":"\u219A","nLeftarrow":"\u21CD","nleftrightarrow":"\u21AE","nLeftrightarrow":"\u21CE","nleq":"\u2270","nleqq":"\u2266\u0338","nleqslant":"\u2A7D\u0338","nles":"\u2A7D\u0338","nless":"\u226E","nLl":"\u22D8\u0338","nlsim":"\u2274","nLt":"\u226A\u20D2","nlt":"\u226E","nltri":"\u22EA","nltrie":"\u22EC","nLtv":"\u226A\u0338","nmid":"\u2224","NoBreak":"\u2060","NonBreakingSpace":"\u00A0","nopf":"\uD835\uDD5F","Nopf":"\u2115","Not":"\u2AEC","not":"\u00AC","NotCongruent":"\u2262","NotCupCap":"\u226D","NotDoubleVerticalBar":"\u2226","NotElement":"\u2209","NotEqual":"\u2260","NotEqualTilde":"\u2242\u0338","NotExists":"\u2204","NotGreater":"\u226F","NotGreaterEqual":"\u2271","NotGreaterFullEqual":"\u2267\u0338","NotGreaterGreater":"\u226B\u0338","NotGreaterLess":"\u2279","NotGreaterSlantEqual":"\u2A7E\u0338","NotGreaterTilde":"\u2275","NotHumpDownHump":"\u224E\u0338","NotHumpEqual":"\u224F\u0338","notin":"\u2209","notindot":"\u22F5\u0338","notinE":"\u22F9\u0338","notinva":"\u2209","notinvb":"\u22F7","notinvc":"\u22F6","NotLeftTriangleBar":"\u29CF\u0338","NotLeftTriangle":"\u22EA","NotLeftTriangleEqual":"\u22EC","NotLess":"\u226E","NotLessEqual":"\u2270","NotLessGreater":"\u2278","NotLessLess":"\u226A\u0338","NotLessSlantEqual":"\u2A7D\u0338","NotLessTilde":"\u2274","NotNestedGreaterGreater":"\u2AA2\u0338","NotNestedLessLess":"\u2AA1\u0338","notni":"\u220C","notniva":"\u220C","notnivb":"\u22FE","notnivc":"\u22FD","NotPrecedes":"\u2280","NotPrecedesEqual":"\u2AAF\u0338","NotPrecedesSlantEqual":"\u22E0","NotReverseElement":"\u220C","NotRightTriangleBar":"\u29D0\u0338","NotRightTriangle":"\u22EB","NotRightTriangleEqual":"\u22ED","NotSquareSubset":"\u228F\u0338","NotSquareSubsetEqual":"\u22E2","NotSquareSuperset":"\u2290\u0338","NotSquareSupersetEqual":"\u22E3","NotSubset":"\u2282\u20D2","NotSubsetEqual":"\u2288","NotSucceeds":"\u2281","NotSucceedsEqual":"\u2AB0\u0338","NotSucceedsSlantEqual":"\u22E1","NotSucceedsTilde":"\u227F\u0338","NotSuperset":"\u2283\u20D2","NotSupersetEqual":"\u2289","NotTilde":"\u2241","NotTildeEqual":"\u2244","NotTildeFullEqual":"\u2247","NotTildeTilde":"\u2249","NotVerticalBar":"\u2224","nparallel":"\u2226","npar":"\u2226","nparsl":"\u2AFD\u20E5","npart":"\u2202\u0338","npolint":"\u2A14","npr":"\u2280","nprcue":"\u22E0","nprec":"\u2280","npreceq":"\u2AAF\u0338","npre":"\u2AAF\u0338","nrarrc":"\u2933\u0338","nrarr":"\u219B","nrArr":"\u21CF","nrarrw":"\u219D\u0338","nrightarrow":"\u219B","nRightarrow":"\u21CF","nrtri":"\u22EB","nrtrie":"\u22ED","nsc":"\u2281","nsccue":"\u22E1","nsce":"\u2AB0\u0338","Nscr":"\uD835\uDCA9","nscr":"\uD835\uDCC3","nshortmid":"\u2224","nshortparallel":"\u2226","nsim":"\u2241","nsime":"\u2244","nsimeq":"\u2244","nsmid":"\u2224","nspar":"\u2226","nsqsube":"\u22E2","nsqsupe":"\u22E3","nsub":"\u2284","nsubE":"\u2AC5\u0338","nsube":"\u2288","nsubset":"\u2282\u20D2","nsubseteq":"\u2288","nsubseteqq":"\u2AC5\u0338","nsucc":"\u2281","nsucceq":"\u2AB0\u0338","nsup":"\u2285","nsupE":"\u2AC6\u0338","nsupe":"\u2289","nsupset":"\u2283\u20D2","nsupseteq":"\u2289","nsupseteqq":"\u2AC6\u0338","ntgl":"\u2279","Ntilde":"\u00D1","ntilde":"\u00F1","ntlg":"\u2278","ntriangleleft":"\u22EA","ntrianglelefteq":"\u22EC","ntriangleright":"\u22EB","ntrianglerighteq":"\u22ED","Nu":"\u039D","nu":"\u03BD","num":"#","numero":"\u2116","numsp":"\u2007","nvap":"\u224D\u20D2","nvdash":"\u22AC","nvDash":"\u22AD","nVdash":"\u22AE","nVDash":"\u22AF","nvge":"\u2265\u20D2","nvgt":">\u20D2","nvHarr":"\u2904","nvinfin":"\u29DE","nvlArr":"\u2902","nvle":"\u2264\u20D2","nvlt":"<\u20D2","nvltrie":"\u22B4\u20D2","nvrArr":"\u2903","nvrtrie":"\u22B5\u20D2","nvsim":"\u223C\u20D2","nwarhk":"\u2923","nwarr":"\u2196","nwArr":"\u21D6","nwarrow":"\u2196","nwnear":"\u2927","Oacute":"\u00D3","oacute":"\u00F3","oast":"\u229B","Ocirc":"\u00D4","ocirc":"\u00F4","ocir":"\u229A","Ocy":"\u041E","ocy":"\u043E","odash":"\u229D","Odblac":"\u0150","odblac":"\u0151","odiv":"\u2A38","odot":"\u2299","odsold":"\u29BC","OElig":"\u0152","oelig":"\u0153","ofcir":"\u29BF","Ofr":"\uD835\uDD12","ofr":"\uD835\uDD2C","ogon":"\u02DB","Ograve":"\u00D2","ograve":"\u00F2","ogt":"\u29C1","ohbar":"\u29B5","ohm":"\u03A9","oint":"\u222E","olarr":"\u21BA","olcir":"\u29BE","olcross":"\u29BB","oline":"\u203E","olt":"\u29C0","Omacr":"\u014C","omacr":"\u014D","Omega":"\u03A9","omega":"\u03C9","Omicron":"\u039F","omicron":"\u03BF","omid":"\u29B6","ominus":"\u2296","Oopf":"\uD835\uDD46","oopf":"\uD835\uDD60","opar":"\u29B7","OpenCurlyDoubleQuote":"\u201C","OpenCurlyQuote":"\u2018","operp":"\u29B9","oplus":"\u2295","orarr":"\u21BB","Or":"\u2A54","or":"\u2228","ord":"\u2A5D","order":"\u2134","orderof":"\u2134","ordf":"\u00AA","ordm":"\u00BA","origof":"\u22B6","oror":"\u2A56","orslope":"\u2A57","orv":"\u2A5B","oS":"\u24C8","Oscr":"\uD835\uDCAA","oscr":"\u2134","Oslash":"\u00D8","oslash":"\u00F8","osol":"\u2298","Otilde":"\u00D5","otilde":"\u00F5","otimesas":"\u2A36","Otimes":"\u2A37","otimes":"\u2297","Ouml":"\u00D6","ouml":"\u00F6","ovbar":"\u233D","OverBar":"\u203E","OverBrace":"\u23DE","OverBracket":"\u23B4","OverParenthesis":"\u23DC","para":"\u00B6","parallel":"\u2225","par":"\u2225","parsim":"\u2AF3","parsl":"\u2AFD","part":"\u2202","PartialD":"\u2202","Pcy":"\u041F","pcy":"\u043F","percnt":"%","period":".","permil":"\u2030","perp":"\u22A5","pertenk":"\u2031","Pfr":"\uD835\uDD13","pfr":"\uD835\uDD2D","Phi":"\u03A6","phi":"\u03C6","phiv":"\u03D5","phmmat":"\u2133","phone":"\u260E","Pi":"\u03A0","pi":"\u03C0","pitchfork":"\u22D4","piv":"\u03D6","planck":"\u210F","planckh":"\u210E","plankv":"\u210F","plusacir":"\u2A23","plusb":"\u229E","pluscir":"\u2A22","plus":"+","plusdo":"\u2214","plusdu":"\u2A25","pluse":"\u2A72","PlusMinus":"\u00B1","plusmn":"\u00B1","plussim":"\u2A26","plustwo":"\u2A27","pm":"\u00B1","Poincareplane":"\u210C","pointint":"\u2A15","popf":"\uD835\uDD61","Popf":"\u2119","pound":"\u00A3","prap":"\u2AB7","Pr":"\u2ABB","pr":"\u227A","prcue":"\u227C","precapprox":"\u2AB7","prec":"\u227A","preccurlyeq":"\u227C","Precedes":"\u227A","PrecedesEqual":"\u2AAF","PrecedesSlantEqual":"\u227C","PrecedesTilde":"\u227E","preceq":"\u2AAF","precnapprox":"\u2AB9","precneqq":"\u2AB5","precnsim":"\u22E8","pre":"\u2AAF","prE":"\u2AB3","precsim":"\u227E","prime":"\u2032","Prime":"\u2033","primes":"\u2119","prnap":"\u2AB9","prnE":"\u2AB5","prnsim":"\u22E8","prod":"\u220F","Product":"\u220F","profalar":"\u232E","profline":"\u2312","profsurf":"\u2313","prop":"\u221D","Proportional":"\u221D","Proportion":"\u2237","propto":"\u221D","prsim":"\u227E","prurel":"\u22B0","Pscr":"\uD835\uDCAB","pscr":"\uD835\uDCC5","Psi":"\u03A8","psi":"\u03C8","puncsp":"\u2008","Qfr":"\uD835\uDD14","qfr":"\uD835\uDD2E","qint":"\u2A0C","qopf":"\uD835\uDD62","Qopf":"\u211A","qprime":"\u2057","Qscr":"\uD835\uDCAC","qscr":"\uD835\uDCC6","quaternions":"\u210D","quatint":"\u2A16","quest":"?","questeq":"\u225F","quot":"\"","QUOT":"\"","rAarr":"\u21DB","race":"\u223D\u0331","Racute":"\u0154","racute":"\u0155","radic":"\u221A","raemptyv":"\u29B3","rang":"\u27E9","Rang":"\u27EB","rangd":"\u2992","range":"\u29A5","rangle":"\u27E9","raquo":"\u00BB","rarrap":"\u2975","rarrb":"\u21E5","rarrbfs":"\u2920","rarrc":"\u2933","rarr":"\u2192","Rarr":"\u21A0","rArr":"\u21D2","rarrfs":"\u291E","rarrhk":"\u21AA","rarrlp":"\u21AC","rarrpl":"\u2945","rarrsim":"\u2974","Rarrtl":"\u2916","rarrtl":"\u21A3","rarrw":"\u219D","ratail":"\u291A","rAtail":"\u291C","ratio":"\u2236","rationals":"\u211A","rbarr":"\u290D","rBarr":"\u290F","RBarr":"\u2910","rbbrk":"\u2773","rbrace":"}","rbrack":"]","rbrke":"\u298C","rbrksld":"\u298E","rbrkslu":"\u2990","Rcaron":"\u0158","rcaron":"\u0159","Rcedil":"\u0156","rcedil":"\u0157","rceil":"\u2309","rcub":"}","Rcy":"\u0420","rcy":"\u0440","rdca":"\u2937","rdldhar":"\u2969","rdquo":"\u201D","rdquor":"\u201D","rdsh":"\u21B3","real":"\u211C","realine":"\u211B","realpart":"\u211C","reals":"\u211D","Re":"\u211C","rect":"\u25AD","reg":"\u00AE","REG":"\u00AE","ReverseElement":"\u220B","ReverseEquilibrium":"\u21CB","ReverseUpEquilibrium":"\u296F","rfisht":"\u297D","rfloor":"\u230B","rfr":"\uD835\uDD2F","Rfr":"\u211C","rHar":"\u2964","rhard":"\u21C1","rharu":"\u21C0","rharul":"\u296C","Rho":"\u03A1","rho":"\u03C1","rhov":"\u03F1","RightAngleBracket":"\u27E9","RightArrowBar":"\u21E5","rightarrow":"\u2192","RightArrow":"\u2192","Rightarrow":"\u21D2","RightArrowLeftArrow":"\u21C4","rightarrowtail":"\u21A3","RightCeiling":"\u2309","RightDoubleBracket":"\u27E7","RightDownTeeVector":"\u295D","RightDownVectorBar":"\u2955","RightDownVector":"\u21C2","RightFloor":"\u230B","rightharpoondown":"\u21C1","rightharpoonup":"\u21C0","rightleftarrows":"\u21C4","rightleftharpoons":"\u21CC","rightrightarrows":"\u21C9","rightsquigarrow":"\u219D","RightTeeArrow":"\u21A6","RightTee":"\u22A2","RightTeeVector":"\u295B","rightthreetimes":"\u22CC","RightTriangleBar":"\u29D0","RightTriangle":"\u22B3","RightTriangleEqual":"\u22B5","RightUpDownVector":"\u294F","RightUpTeeVector":"\u295C","RightUpVectorBar":"\u2954","RightUpVector":"\u21BE","RightVectorBar":"\u2953","RightVector":"\u21C0","ring":"\u02DA","risingdotseq":"\u2253","rlarr":"\u21C4","rlhar":"\u21CC","rlm":"\u200F","rmoustache":"\u23B1","rmoust":"\u23B1","rnmid":"\u2AEE","roang":"\u27ED","roarr":"\u21FE","robrk":"\u27E7","ropar":"\u2986","ropf":"\uD835\uDD63","Ropf":"\u211D","roplus":"\u2A2E","rotimes":"\u2A35","RoundImplies":"\u2970","rpar":")","rpargt":"\u2994","rppolint":"\u2A12","rrarr":"\u21C9","Rrightarrow":"\u21DB","rsaquo":"\u203A","rscr":"\uD835\uDCC7","Rscr":"\u211B","rsh":"\u21B1","Rsh":"\u21B1","rsqb":"]","rsquo":"\u2019","rsquor":"\u2019","rthree":"\u22CC","rtimes":"\u22CA","rtri":"\u25B9","rtrie":"\u22B5","rtrif":"\u25B8","rtriltri":"\u29CE","RuleDelayed":"\u29F4","ruluhar":"\u2968","rx":"\u211E","Sacute":"\u015A","sacute":"\u015B","sbquo":"\u201A","scap":"\u2AB8","Scaron":"\u0160","scaron":"\u0161","Sc":"\u2ABC","sc":"\u227B","sccue":"\u227D","sce":"\u2AB0","scE":"\u2AB4","Scedil":"\u015E","scedil":"\u015F","Scirc":"\u015C","scirc":"\u015D","scnap":"\u2ABA","scnE":"\u2AB6","scnsim":"\u22E9","scpolint":"\u2A13","scsim":"\u227F","Scy":"\u0421","scy":"\u0441","sdotb":"\u22A1","sdot":"\u22C5","sdote":"\u2A66","searhk":"\u2925","searr":"\u2198","seArr":"\u21D8","searrow":"\u2198","sect":"\u00A7","semi":";","seswar":"\u2929","setminus":"\u2216","setmn":"\u2216","sext":"\u2736","Sfr":"\uD835\uDD16","sfr":"\uD835\uDD30","sfrown":"\u2322","sharp":"\u266F","SHCHcy":"\u0429","shchcy":"\u0449","SHcy":"\u0428","shcy":"\u0448","ShortDownArrow":"\u2193","ShortLeftArrow":"\u2190","shortmid":"\u2223","shortparallel":"\u2225","ShortRightArrow":"\u2192","ShortUpArrow":"\u2191","shy":"\u00AD","Sigma":"\u03A3","sigma":"\u03C3","sigmaf":"\u03C2","sigmav":"\u03C2","sim":"\u223C","simdot":"\u2A6A","sime":"\u2243","simeq":"\u2243","simg":"\u2A9E","simgE":"\u2AA0","siml":"\u2A9D","simlE":"\u2A9F","simne":"\u2246","simplus":"\u2A24","simrarr":"\u2972","slarr":"\u2190","SmallCircle":"\u2218","smallsetminus":"\u2216","smashp":"\u2A33","smeparsl":"\u29E4","smid":"\u2223","smile":"\u2323","smt":"\u2AAA","smte":"\u2AAC","smtes":"\u2AAC\uFE00","SOFTcy":"\u042C","softcy":"\u044C","solbar":"\u233F","solb":"\u29C4","sol":"/","Sopf":"\uD835\uDD4A","sopf":"\uD835\uDD64","spades":"\u2660","spadesuit":"\u2660","spar":"\u2225","sqcap":"\u2293","sqcaps":"\u2293\uFE00","sqcup":"\u2294","sqcups":"\u2294\uFE00","Sqrt":"\u221A","sqsub":"\u228F","sqsube":"\u2291","sqsubset":"\u228F","sqsubseteq":"\u2291","sqsup":"\u2290","sqsupe":"\u2292","sqsupset":"\u2290","sqsupseteq":"\u2292","square":"\u25A1","Square":"\u25A1","SquareIntersection":"\u2293","SquareSubset":"\u228F","SquareSubsetEqual":"\u2291","SquareSuperset":"\u2290","SquareSupersetEqual":"\u2292","SquareUnion":"\u2294","squarf":"\u25AA","squ":"\u25A1","squf":"\u25AA","srarr":"\u2192","Sscr":"\uD835\uDCAE","sscr":"\uD835\uDCC8","ssetmn":"\u2216","ssmile":"\u2323","sstarf":"\u22C6","Star":"\u22C6","star":"\u2606","starf":"\u2605","straightepsilon":"\u03F5","straightphi":"\u03D5","strns":"\u00AF","sub":"\u2282","Sub":"\u22D0","subdot":"\u2ABD","subE":"\u2AC5","sube":"\u2286","subedot":"\u2AC3","submult":"\u2AC1","subnE":"\u2ACB","subne":"\u228A","subplus":"\u2ABF","subrarr":"\u2979","subset":"\u2282","Subset":"\u22D0","subseteq":"\u2286","subseteqq":"\u2AC5","SubsetEqual":"\u2286","subsetneq":"\u228A","subsetneqq":"\u2ACB","subsim":"\u2AC7","subsub":"\u2AD5","subsup":"\u2AD3","succapprox":"\u2AB8","succ":"\u227B","succcurlyeq":"\u227D","Succeeds":"\u227B","SucceedsEqual":"\u2AB0","SucceedsSlantEqual":"\u227D","SucceedsTilde":"\u227F","succeq":"\u2AB0","succnapprox":"\u2ABA","succneqq":"\u2AB6","succnsim":"\u22E9","succsim":"\u227F","SuchThat":"\u220B","sum":"\u2211","Sum":"\u2211","sung":"\u266A","sup1":"\u00B9","sup2":"\u00B2","sup3":"\u00B3","sup":"\u2283","Sup":"\u22D1","supdot":"\u2ABE","supdsub":"\u2AD8","supE":"\u2AC6","supe":"\u2287","supedot":"\u2AC4","Superset":"\u2283","SupersetEqual":"\u2287","suphsol":"\u27C9","suphsub":"\u2AD7","suplarr":"\u297B","supmult":"\u2AC2","supnE":"\u2ACC","supne":"\u228B","supplus":"\u2AC0","supset":"\u2283","Supset":"\u22D1","supseteq":"\u2287","supseteqq":"\u2AC6","supsetneq":"\u228B","supsetneqq":"\u2ACC","supsim":"\u2AC8","supsub":"\u2AD4","supsup":"\u2AD6","swarhk":"\u2926","swarr":"\u2199","swArr":"\u21D9","swarrow":"\u2199","swnwar":"\u292A","szlig":"\u00DF","Tab":"\t","target":"\u2316","Tau":"\u03A4","tau":"\u03C4","tbrk":"\u23B4","Tcaron":"\u0164","tcaron":"\u0165","Tcedil":"\u0162","tcedil":"\u0163","Tcy":"\u0422","tcy":"\u0442","tdot":"\u20DB","telrec":"\u2315","Tfr":"\uD835\uDD17","tfr":"\uD835\uDD31","there4":"\u2234","therefore":"\u2234","Therefore":"\u2234","Theta":"\u0398","theta":"\u03B8","thetasym":"\u03D1","thetav":"\u03D1","thickapprox":"\u2248","thicksim":"\u223C","ThickSpace":"\u205F\u200A","ThinSpace":"\u2009","thinsp":"\u2009","thkap":"\u2248","thksim":"\u223C","THORN":"\u00DE","thorn":"\u00FE","tilde":"\u02DC","Tilde":"\u223C","TildeEqual":"\u2243","TildeFullEqual":"\u2245","TildeTilde":"\u2248","timesbar":"\u2A31","timesb":"\u22A0","times":"\u00D7","timesd":"\u2A30","tint":"\u222D","toea":"\u2928","topbot":"\u2336","topcir":"\u2AF1","top":"\u22A4","Topf":"\uD835\uDD4B","topf":"\uD835\uDD65","topfork":"\u2ADA","tosa":"\u2929","tprime":"\u2034","trade":"\u2122","TRADE":"\u2122","triangle":"\u25B5","triangledown":"\u25BF","triangleleft":"\u25C3","trianglelefteq":"\u22B4","triangleq":"\u225C","triangleright":"\u25B9","trianglerighteq":"\u22B5","tridot":"\u25EC","trie":"\u225C","triminus":"\u2A3A","TripleDot":"\u20DB","triplus":"\u2A39","trisb":"\u29CD","tritime":"\u2A3B","trpezium":"\u23E2","Tscr":"\uD835\uDCAF","tscr":"\uD835\uDCC9","TScy":"\u0426","tscy":"\u0446","TSHcy":"\u040B","tshcy":"\u045B","Tstrok":"\u0166","tstrok":"\u0167","twixt":"\u226C","twoheadleftarrow":"\u219E","twoheadrightarrow":"\u21A0","Uacute":"\u00DA","uacute":"\u00FA","uarr":"\u2191","Uarr":"\u219F","uArr":"\u21D1","Uarrocir":"\u2949","Ubrcy":"\u040E","ubrcy":"\u045E","Ubreve":"\u016C","ubreve":"\u016D","Ucirc":"\u00DB","ucirc":"\u00FB","Ucy":"\u0423","ucy":"\u0443","udarr":"\u21C5","Udblac":"\u0170","udblac":"\u0171","udhar":"\u296E","ufisht":"\u297E","Ufr":"\uD835\uDD18","ufr":"\uD835\uDD32","Ugrave":"\u00D9","ugrave":"\u00F9","uHar":"\u2963","uharl":"\u21BF","uharr":"\u21BE","uhblk":"\u2580","ulcorn":"\u231C","ulcorner":"\u231C","ulcrop":"\u230F","ultri":"\u25F8","Umacr":"\u016A","umacr":"\u016B","uml":"\u00A8","UnderBar":"_","UnderBrace":"\u23DF","UnderBracket":"\u23B5","UnderParenthesis":"\u23DD","Union":"\u22C3","UnionPlus":"\u228E","Uogon":"\u0172","uogon":"\u0173","Uopf":"\uD835\uDD4C","uopf":"\uD835\uDD66","UpArrowBar":"\u2912","uparrow":"\u2191","UpArrow":"\u2191","Uparrow":"\u21D1","UpArrowDownArrow":"\u21C5","updownarrow":"\u2195","UpDownArrow":"\u2195","Updownarrow":"\u21D5","UpEquilibrium":"\u296E","upharpoonleft":"\u21BF","upharpoonright":"\u21BE","uplus":"\u228E","UpperLeftArrow":"\u2196","UpperRightArrow":"\u2197","upsi":"\u03C5","Upsi":"\u03D2","upsih":"\u03D2","Upsilon":"\u03A5","upsilon":"\u03C5","UpTeeArrow":"\u21A5","UpTee":"\u22A5","upuparrows":"\u21C8","urcorn":"\u231D","urcorner":"\u231D","urcrop":"\u230E","Uring":"\u016E","uring":"\u016F","urtri":"\u25F9","Uscr":"\uD835\uDCB0","uscr":"\uD835\uDCCA","utdot":"\u22F0","Utilde":"\u0168","utilde":"\u0169","utri":"\u25B5","utrif":"\u25B4","uuarr":"\u21C8","Uuml":"\u00DC","uuml":"\u00FC","uwangle":"\u29A7","vangrt":"\u299C","varepsilon":"\u03F5","varkappa":"\u03F0","varnothing":"\u2205","varphi":"\u03D5","varpi":"\u03D6","varpropto":"\u221D","varr":"\u2195","vArr":"\u21D5","varrho":"\u03F1","varsigma":"\u03C2","varsubsetneq":"\u228A\uFE00","varsubsetneqq":"\u2ACB\uFE00","varsupsetneq":"\u228B\uFE00","varsupsetneqq":"\u2ACC\uFE00","vartheta":"\u03D1","vartriangleleft":"\u22B2","vartriangleright":"\u22B3","vBar":"\u2AE8","Vbar":"\u2AEB","vBarv":"\u2AE9","Vcy":"\u0412","vcy":"\u0432","vdash":"\u22A2","vDash":"\u22A8","Vdash":"\u22A9","VDash":"\u22AB","Vdashl":"\u2AE6","veebar":"\u22BB","vee":"\u2228","Vee":"\u22C1","veeeq":"\u225A","vellip":"\u22EE","verbar":"|","Verbar":"\u2016","vert":"|","Vert":"\u2016","VerticalBar":"\u2223","VerticalLine":"|","VerticalSeparator":"\u2758","VerticalTilde":"\u2240","VeryThinSpace":"\u200A","Vfr":"\uD835\uDD19","vfr":"\uD835\uDD33","vltri":"\u22B2","vnsub":"\u2282\u20D2","vnsup":"\u2283\u20D2","Vopf":"\uD835\uDD4D","vopf":"\uD835\uDD67","vprop":"\u221D","vrtri":"\u22B3","Vscr":"\uD835\uDCB1","vscr":"\uD835\uDCCB","vsubnE":"\u2ACB\uFE00","vsubne":"\u228A\uFE00","vsupnE":"\u2ACC\uFE00","vsupne":"\u228B\uFE00","Vvdash":"\u22AA","vzigzag":"\u299A","Wcirc":"\u0174","wcirc":"\u0175","wedbar":"\u2A5F","wedge":"\u2227","Wedge":"\u22C0","wedgeq":"\u2259","weierp":"\u2118","Wfr":"\uD835\uDD1A","wfr":"\uD835\uDD34","Wopf":"\uD835\uDD4E","wopf":"\uD835\uDD68","wp":"\u2118","wr":"\u2240","wreath":"\u2240","Wscr":"\uD835\uDCB2","wscr":"\uD835\uDCCC","xcap":"\u22C2","xcirc":"\u25EF","xcup":"\u22C3","xdtri":"\u25BD","Xfr":"\uD835\uDD1B","xfr":"\uD835\uDD35","xharr":"\u27F7","xhArr":"\u27FA","Xi":"\u039E","xi":"\u03BE","xlarr":"\u27F5","xlArr":"\u27F8","xmap":"\u27FC","xnis":"\u22FB","xodot":"\u2A00","Xopf":"\uD835\uDD4F","xopf":"\uD835\uDD69","xoplus":"\u2A01","xotime":"\u2A02","xrarr":"\u27F6","xrArr":"\u27F9","Xscr":"\uD835\uDCB3","xscr":"\uD835\uDCCD","xsqcup":"\u2A06","xuplus":"\u2A04","xutri":"\u25B3","xvee":"\u22C1","xwedge":"\u22C0","Yacute":"\u00DD","yacute":"\u00FD","YAcy":"\u042F","yacy":"\u044F","Ycirc":"\u0176","ycirc":"\u0177","Ycy":"\u042B","ycy":"\u044B","yen":"\u00A5","Yfr":"\uD835\uDD1C","yfr":"\uD835\uDD36","YIcy":"\u0407","yicy":"\u0457","Yopf":"\uD835\uDD50","yopf":"\uD835\uDD6A","Yscr":"\uD835\uDCB4","yscr":"\uD835\uDCCE","YUcy":"\u042E","yucy":"\u044E","yuml":"\u00FF","Yuml":"\u0178","Zacute":"\u0179","zacute":"\u017A","Zcaron":"\u017D","zcaron":"\u017E","Zcy":"\u0417","zcy":"\u0437","Zdot":"\u017B","zdot":"\u017C","zeetrf":"\u2128","ZeroWidthSpace":"\u200B","Zeta":"\u0396","zeta":"\u03B6","zfr":"\uD835\uDD37","Zfr":"\u2128","ZHcy":"\u0416","zhcy":"\u0436","zigrarr":"\u21DD","zopf":"\uD835\uDD6B","Zopf":"\u2124","Zscr":"\uD835\uDCB5","zscr":"\uD835\uDCCF","zwj":"\u200D","zwnj":"\u200C"}
 },{}],211:[function(require,module,exports){
-module.exports={"Aacute":"\u00C1","aacute":"\u00E1","Acirc":"\u00C2","acirc":"\u00E2","acute":"\u00B4","AElig":"\u00C6","aelig":"\u00E6","Agrave":"\u00C0","agrave":"\u00E0","amp":"&","AMP":"&","Aring":"\u00C5","aring":"\u00E5","Atilde":"\u00C3","atilde":"\u00E3","Auml":"\u00C4","auml":"\u00E4","brvbar":"\u00A6","Ccedil":"\u00C7","ccedil":"\u00E7","cedil":"\u00B8","cent":"\u00A2","copy":"\u00A9","COPY":"\u00A9","curren":"\u00A4","deg":"\u00B0","divide":"\u00F7","Eacute":"\u00C9","eacute":"\u00E9","Ecirc":"\u00CA","ecirc":"\u00EA","Egrave":"\u00C8","egrave":"\u00E8","ETH":"\u00D0","eth":"\u00F0","Euml":"\u00CB","euml":"\u00EB","frac12":"\u00BD","frac14":"\u00BC","frac34":"\u00BE","gt":">","GT":">","Iacute":"\u00CD","iacute":"\u00ED","Icirc":"\u00CE","icirc":"\u00EE","iexcl":"\u00A1","Igrave":"\u00CC","igrave":"\u00EC","iquest":"\u00BF","Iuml":"\u00CF","iuml":"\u00EF","laquo":"\u00AB","lt":"<","LT":"<","macr":"\u00AF","micro":"\u00B5","middot":"\u00B7","nbsp":"\u00A0","not":"\u00AC","Ntilde":"\u00D1","ntilde":"\u00F1","Oacute":"\u00D3","oacute":"\u00F3","Ocirc":"\u00D4","ocirc":"\u00F4","Ograve":"\u00D2","ograve":"\u00F2","ordf":"\u00AA","ordm":"\u00BA","Oslash":"\u00D8","oslash":"\u00F8","Otilde":"\u00D5","otilde":"\u00F5","Ouml":"\u00D6","ouml":"\u00F6","para":"\u00B6","plusmn":"\u00B1","pound":"\u00A3","quot":"\"","QUOT":"\"","raquo":"\u00BB","reg":"\u00AE","REG":"\u00AE","sect":"\u00A7","shy":"\u00AD","sup1":"\u00B9","sup2":"\u00B2","sup3":"\u00B3","szlig":"\u00DF","THORN":"\u00DE","thorn":"\u00FE","times":"\u00D7","Uacute":"\u00DA","uacute":"\u00FA","Ucirc":"\u00DB","ucirc":"\u00FB","Ugrave":"\u00D9","ugrave":"\u00F9","uml":"\u00A8","Uuml":"\u00DC","uuml":"\u00FC","Yacute":"\u00DD","yacute":"\u00FD","yen":"\u00A5","yuml":"\u00FF"}
+module.exports={"Aacute":"\u00C1","aacute":"\u00E1","Abreve":"\u0102","abreve":"\u0103","ac":"\u223E","acd":"\u223F","acE":"\u223E\u0333","Acirc":"\u00C2","acirc":"\u00E2","acute":"\u00B4","Acy":"\u0410","acy":"\u0430","AElig":"\u00C6","aelig":"\u00E6","af":"\u2061","Afr":"\uD835\uDD04","afr":"\uD835\uDD1E","Agrave":"\u00C0","agrave":"\u00E0","alefsym":"\u2135","aleph":"\u2135","Alpha":"\u0391","alpha":"\u03B1","Amacr":"\u0100","amacr":"\u0101","amalg":"\u2A3F","amp":"&","AMP":"&","andand":"\u2A55","And":"\u2A53","and":"\u2227","andd":"\u2A5C","andslope":"\u2A58","andv":"\u2A5A","ang":"\u2220","ange":"\u29A4","angle":"\u2220","angmsdaa":"\u29A8","angmsdab":"\u29A9","angmsdac":"\u29AA","angmsdad":"\u29AB","angmsdae":"\u29AC","angmsdaf":"\u29AD","angmsdag":"\u29AE","angmsdah":"\u29AF","angmsd":"\u2221","angrt":"\u221F","angrtvb":"\u22BE","angrtvbd":"\u299D","angsph":"\u2222","angst":"\u00C5","angzarr":"\u237C","Aogon":"\u0104","aogon":"\u0105","Aopf":"\uD835\uDD38","aopf":"\uD835\uDD52","apacir":"\u2A6F","ap":"\u2248","apE":"\u2A70","ape":"\u224A","apid":"\u224B","apos":"'","ApplyFunction":"\u2061","approx":"\u2248","approxeq":"\u224A","Aring":"\u00C5","aring":"\u00E5","Ascr":"\uD835\uDC9C","ascr":"\uD835\uDCB6","Assign":"\u2254","ast":"*","asymp":"\u2248","asympeq":"\u224D","Atilde":"\u00C3","atilde":"\u00E3","Auml":"\u00C4","auml":"\u00E4","awconint":"\u2233","awint":"\u2A11","backcong":"\u224C","backepsilon":"\u03F6","backprime":"\u2035","backsim":"\u223D","backsimeq":"\u22CD","Backslash":"\u2216","Barv":"\u2AE7","barvee":"\u22BD","barwed":"\u2305","Barwed":"\u2306","barwedge":"\u2305","bbrk":"\u23B5","bbrktbrk":"\u23B6","bcong":"\u224C","Bcy":"\u0411","bcy":"\u0431","bdquo":"\u201E","becaus":"\u2235","because":"\u2235","Because":"\u2235","bemptyv":"\u29B0","bepsi":"\u03F6","bernou":"\u212C","Bernoullis":"\u212C","Beta":"\u0392","beta":"\u03B2","beth":"\u2136","between":"\u226C","Bfr":"\uD835\uDD05","bfr":"\uD835\uDD1F","bigcap":"\u22C2","bigcirc":"\u25EF","bigcup":"\u22C3","bigodot":"\u2A00","bigoplus":"\u2A01","bigotimes":"\u2A02","bigsqcup":"\u2A06","bigstar":"\u2605","bigtriangledown":"\u25BD","bigtriangleup":"\u25B3","biguplus":"\u2A04","bigvee":"\u22C1","bigwedge":"\u22C0","bkarow":"\u290D","blacklozenge":"\u29EB","blacksquare":"\u25AA","blacktriangle":"\u25B4","blacktriangledown":"\u25BE","blacktriangleleft":"\u25C2","blacktriangleright":"\u25B8","blank":"\u2423","blk12":"\u2592","blk14":"\u2591","blk34":"\u2593","block":"\u2588","bne":"=\u20E5","bnequiv":"\u2261\u20E5","bNot":"\u2AED","bnot":"\u2310","Bopf":"\uD835\uDD39","bopf":"\uD835\uDD53","bot":"\u22A5","bottom":"\u22A5","bowtie":"\u22C8","boxbox":"\u29C9","boxdl":"\u2510","boxdL":"\u2555","boxDl":"\u2556","boxDL":"\u2557","boxdr":"\u250C","boxdR":"\u2552","boxDr":"\u2553","boxDR":"\u2554","boxh":"\u2500","boxH":"\u2550","boxhd":"\u252C","boxHd":"\u2564","boxhD":"\u2565","boxHD":"\u2566","boxhu":"\u2534","boxHu":"\u2567","boxhU":"\u2568","boxHU":"\u2569","boxminus":"\u229F","boxplus":"\u229E","boxtimes":"\u22A0","boxul":"\u2518","boxuL":"\u255B","boxUl":"\u255C","boxUL":"\u255D","boxur":"\u2514","boxuR":"\u2558","boxUr":"\u2559","boxUR":"\u255A","boxv":"\u2502","boxV":"\u2551","boxvh":"\u253C","boxvH":"\u256A","boxVh":"\u256B","boxVH":"\u256C","boxvl":"\u2524","boxvL":"\u2561","boxVl":"\u2562","boxVL":"\u2563","boxvr":"\u251C","boxvR":"\u255E","boxVr":"\u255F","boxVR":"\u2560","bprime":"\u2035","breve":"\u02D8","Breve":"\u02D8","brvbar":"\u00A6","bscr":"\uD835\uDCB7","Bscr":"\u212C","bsemi":"\u204F","bsim":"\u223D","bsime":"\u22CD","bsolb":"\u29C5","bsol":"\\","bsolhsub":"\u27C8","bull":"\u2022","bullet":"\u2022","bump":"\u224E","bumpE":"\u2AAE","bumpe":"\u224F","Bumpeq":"\u224E","bumpeq":"\u224F","Cacute":"\u0106","cacute":"\u0107","capand":"\u2A44","capbrcup":"\u2A49","capcap":"\u2A4B","cap":"\u2229","Cap":"\u22D2","capcup":"\u2A47","capdot":"\u2A40","CapitalDifferentialD":"\u2145","caps":"\u2229\uFE00","caret":"\u2041","caron":"\u02C7","Cayleys":"\u212D","ccaps":"\u2A4D","Ccaron":"\u010C","ccaron":"\u010D","Ccedil":"\u00C7","ccedil":"\u00E7","Ccirc":"\u0108","ccirc":"\u0109","Cconint":"\u2230","ccups":"\u2A4C","ccupssm":"\u2A50","Cdot":"\u010A","cdot":"\u010B","cedil":"\u00B8","Cedilla":"\u00B8","cemptyv":"\u29B2","cent":"\u00A2","centerdot":"\u00B7","CenterDot":"\u00B7","cfr":"\uD835\uDD20","Cfr":"\u212D","CHcy":"\u0427","chcy":"\u0447","check":"\u2713","checkmark":"\u2713","Chi":"\u03A7","chi":"\u03C7","circ":"\u02C6","circeq":"\u2257","circlearrowleft":"\u21BA","circlearrowright":"\u21BB","circledast":"\u229B","circledcirc":"\u229A","circleddash":"\u229D","CircleDot":"\u2299","circledR":"\u00AE","circledS":"\u24C8","CircleMinus":"\u2296","CirclePlus":"\u2295","CircleTimes":"\u2297","cir":"\u25CB","cirE":"\u29C3","cire":"\u2257","cirfnint":"\u2A10","cirmid":"\u2AEF","cirscir":"\u29C2","ClockwiseContourIntegral":"\u2232","CloseCurlyDoubleQuote":"\u201D","CloseCurlyQuote":"\u2019","clubs":"\u2663","clubsuit":"\u2663","colon":":","Colon":"\u2237","Colone":"\u2A74","colone":"\u2254","coloneq":"\u2254","comma":",","commat":"@","comp":"\u2201","compfn":"\u2218","complement":"\u2201","complexes":"\u2102","cong":"\u2245","congdot":"\u2A6D","Congruent":"\u2261","conint":"\u222E","Conint":"\u222F","ContourIntegral":"\u222E","copf":"\uD835\uDD54","Copf":"\u2102","coprod":"\u2210","Coproduct":"\u2210","copy":"\u00A9","COPY":"\u00A9","copysr":"\u2117","CounterClockwiseContourIntegral":"\u2233","crarr":"\u21B5","cross":"\u2717","Cross":"\u2A2F","Cscr":"\uD835\uDC9E","cscr":"\uD835\uDCB8","csub":"\u2ACF","csube":"\u2AD1","csup":"\u2AD0","csupe":"\u2AD2","ctdot":"\u22EF","cudarrl":"\u2938","cudarrr":"\u2935","cuepr":"\u22DE","cuesc":"\u22DF","cularr":"\u21B6","cularrp":"\u293D","cupbrcap":"\u2A48","cupcap":"\u2A46","CupCap":"\u224D","cup":"\u222A","Cup":"\u22D3","cupcup":"\u2A4A","cupdot":"\u228D","cupor":"\u2A45","cups":"\u222A\uFE00","curarr":"\u21B7","curarrm":"\u293C","curlyeqprec":"\u22DE","curlyeqsucc":"\u22DF","curlyvee":"\u22CE","curlywedge":"\u22CF","curren":"\u00A4","curvearrowleft":"\u21B6","curvearrowright":"\u21B7","cuvee":"\u22CE","cuwed":"\u22CF","cwconint":"\u2232","cwint":"\u2231","cylcty":"\u232D","dagger":"\u2020","Dagger":"\u2021","daleth":"\u2138","darr":"\u2193","Darr":"\u21A1","dArr":"\u21D3","dash":"\u2010","Dashv":"\u2AE4","dashv":"\u22A3","dbkarow":"\u290F","dblac":"\u02DD","Dcaron":"\u010E","dcaron":"\u010F","Dcy":"\u0414","dcy":"\u0434","ddagger":"\u2021","ddarr":"\u21CA","DD":"\u2145","dd":"\u2146","DDotrahd":"\u2911","ddotseq":"\u2A77","deg":"\u00B0","Del":"\u2207","Delta":"\u0394","delta":"\u03B4","demptyv":"\u29B1","dfisht":"\u297F","Dfr":"\uD835\uDD07","dfr":"\uD835\uDD21","dHar":"\u2965","dharl":"\u21C3","dharr":"\u21C2","DiacriticalAcute":"\u00B4","DiacriticalDot":"\u02D9","DiacriticalDoubleAcute":"\u02DD","DiacriticalGrave":"`","DiacriticalTilde":"\u02DC","diam":"\u22C4","diamond":"\u22C4","Diamond":"\u22C4","diamondsuit":"\u2666","diams":"\u2666","die":"\u00A8","DifferentialD":"\u2146","digamma":"\u03DD","disin":"\u22F2","div":"\u00F7","divide":"\u00F7","divideontimes":"\u22C7","divonx":"\u22C7","DJcy":"\u0402","djcy":"\u0452","dlcorn":"\u231E","dlcrop":"\u230D","dollar":"$","Dopf":"\uD835\uDD3B","dopf":"\uD835\uDD55","Dot":"\u00A8","dot":"\u02D9","DotDot":"\u20DC","doteq":"\u2250","doteqdot":"\u2251","DotEqual":"\u2250","dotminus":"\u2238","dotplus":"\u2214","dotsquare":"\u22A1","doublebarwedge":"\u2306","DoubleContourIntegral":"\u222F","DoubleDot":"\u00A8","DoubleDownArrow":"\u21D3","DoubleLeftArrow":"\u21D0","DoubleLeftRightArrow":"\u21D4","DoubleLeftTee":"\u2AE4","DoubleLongLeftArrow":"\u27F8","DoubleLongLeftRightArrow":"\u27FA","DoubleLongRightArrow":"\u27F9","DoubleRightArrow":"\u21D2","DoubleRightTee":"\u22A8","DoubleUpArrow":"\u21D1","DoubleUpDownArrow":"\u21D5","DoubleVerticalBar":"\u2225","DownArrowBar":"\u2913","downarrow":"\u2193","DownArrow":"\u2193","Downarrow":"\u21D3","DownArrowUpArrow":"\u21F5","DownBreve":"\u0311","downdownarrows":"\u21CA","downharpoonleft":"\u21C3","downharpoonright":"\u21C2","DownLeftRightVector":"\u2950","DownLeftTeeVector":"\u295E","DownLeftVectorBar":"\u2956","DownLeftVector":"\u21BD","DownRightTeeVector":"\u295F","DownRightVectorBar":"\u2957","DownRightVector":"\u21C1","DownTeeArrow":"\u21A7","DownTee":"\u22A4","drbkarow":"\u2910","drcorn":"\u231F","drcrop":"\u230C","Dscr":"\uD835\uDC9F","dscr":"\uD835\uDCB9","DScy":"\u0405","dscy":"\u0455","dsol":"\u29F6","Dstrok":"\u0110","dstrok":"\u0111","dtdot":"\u22F1","dtri":"\u25BF","dtrif":"\u25BE","duarr":"\u21F5","duhar":"\u296F","dwangle":"\u29A6","DZcy":"\u040F","dzcy":"\u045F","dzigrarr":"\u27FF","Eacute":"\u00C9","eacute":"\u00E9","easter":"\u2A6E","Ecaron":"\u011A","ecaron":"\u011B","Ecirc":"\u00CA","ecirc":"\u00EA","ecir":"\u2256","ecolon":"\u2255","Ecy":"\u042D","ecy":"\u044D","eDDot":"\u2A77","Edot":"\u0116","edot":"\u0117","eDot":"\u2251","ee":"\u2147","efDot":"\u2252","Efr":"\uD835\uDD08","efr":"\uD835\uDD22","eg":"\u2A9A","Egrave":"\u00C8","egrave":"\u00E8","egs":"\u2A96","egsdot":"\u2A98","el":"\u2A99","Element":"\u2208","elinters":"\u23E7","ell":"\u2113","els":"\u2A95","elsdot":"\u2A97","Emacr":"\u0112","emacr":"\u0113","empty":"\u2205","emptyset":"\u2205","EmptySmallSquare":"\u25FB","emptyv":"\u2205","EmptyVerySmallSquare":"\u25AB","emsp13":"\u2004","emsp14":"\u2005","emsp":"\u2003","ENG":"\u014A","eng":"\u014B","ensp":"\u2002","Eogon":"\u0118","eogon":"\u0119","Eopf":"\uD835\uDD3C","eopf":"\uD835\uDD56","epar":"\u22D5","eparsl":"\u29E3","eplus":"\u2A71","epsi":"\u03B5","Epsilon":"\u0395","epsilon":"\u03B5","epsiv":"\u03F5","eqcirc":"\u2256","eqcolon":"\u2255","eqsim":"\u2242","eqslantgtr":"\u2A96","eqslantless":"\u2A95","Equal":"\u2A75","equals":"=","EqualTilde":"\u2242","equest":"\u225F","Equilibrium":"\u21CC","equiv":"\u2261","equivDD":"\u2A78","eqvparsl":"\u29E5","erarr":"\u2971","erDot":"\u2253","escr":"\u212F","Escr":"\u2130","esdot":"\u2250","Esim":"\u2A73","esim":"\u2242","Eta":"\u0397","eta":"\u03B7","ETH":"\u00D0","eth":"\u00F0","Euml":"\u00CB","euml":"\u00EB","euro":"\u20AC","excl":"!","exist":"\u2203","Exists":"\u2203","expectation":"\u2130","exponentiale":"\u2147","ExponentialE":"\u2147","fallingdotseq":"\u2252","Fcy":"\u0424","fcy":"\u0444","female":"\u2640","ffilig":"\uFB03","fflig":"\uFB00","ffllig":"\uFB04","Ffr":"\uD835\uDD09","ffr":"\uD835\uDD23","filig":"\uFB01","FilledSmallSquare":"\u25FC","FilledVerySmallSquare":"\u25AA","fjlig":"fj","flat":"\u266D","fllig":"\uFB02","fltns":"\u25B1","fnof":"\u0192","Fopf":"\uD835\uDD3D","fopf":"\uD835\uDD57","forall":"\u2200","ForAll":"\u2200","fork":"\u22D4","forkv":"\u2AD9","Fouriertrf":"\u2131","fpartint":"\u2A0D","frac12":"\u00BD","frac13":"\u2153","frac14":"\u00BC","frac15":"\u2155","frac16":"\u2159","frac18":"\u215B","frac23":"\u2154","frac25":"\u2156","frac34":"\u00BE","frac35":"\u2157","frac38":"\u215C","frac45":"\u2158","frac56":"\u215A","frac58":"\u215D","frac78":"\u215E","frasl":"\u2044","frown":"\u2322","fscr":"\uD835\uDCBB","Fscr":"\u2131","gacute":"\u01F5","Gamma":"\u0393","gamma":"\u03B3","Gammad":"\u03DC","gammad":"\u03DD","gap":"\u2A86","Gbreve":"\u011E","gbreve":"\u011F","Gcedil":"\u0122","Gcirc":"\u011C","gcirc":"\u011D","Gcy":"\u0413","gcy":"\u0433","Gdot":"\u0120","gdot":"\u0121","ge":"\u2265","gE":"\u2267","gEl":"\u2A8C","gel":"\u22DB","geq":"\u2265","geqq":"\u2267","geqslant":"\u2A7E","gescc":"\u2AA9","ges":"\u2A7E","gesdot":"\u2A80","gesdoto":"\u2A82","gesdotol":"\u2A84","gesl":"\u22DB\uFE00","gesles":"\u2A94","Gfr":"\uD835\uDD0A","gfr":"\uD835\uDD24","gg":"\u226B","Gg":"\u22D9","ggg":"\u22D9","gimel":"\u2137","GJcy":"\u0403","gjcy":"\u0453","gla":"\u2AA5","gl":"\u2277","glE":"\u2A92","glj":"\u2AA4","gnap":"\u2A8A","gnapprox":"\u2A8A","gne":"\u2A88","gnE":"\u2269","gneq":"\u2A88","gneqq":"\u2269","gnsim":"\u22E7","Gopf":"\uD835\uDD3E","gopf":"\uD835\uDD58","grave":"`","GreaterEqual":"\u2265","GreaterEqualLess":"\u22DB","GreaterFullEqual":"\u2267","GreaterGreater":"\u2AA2","GreaterLess":"\u2277","GreaterSlantEqual":"\u2A7E","GreaterTilde":"\u2273","Gscr":"\uD835\uDCA2","gscr":"\u210A","gsim":"\u2273","gsime":"\u2A8E","gsiml":"\u2A90","gtcc":"\u2AA7","gtcir":"\u2A7A","gt":">","GT":">","Gt":"\u226B","gtdot":"\u22D7","gtlPar":"\u2995","gtquest":"\u2A7C","gtrapprox":"\u2A86","gtrarr":"\u2978","gtrdot":"\u22D7","gtreqless":"\u22DB","gtreqqless":"\u2A8C","gtrless":"\u2277","gtrsim":"\u2273","gvertneqq":"\u2269\uFE00","gvnE":"\u2269\uFE00","Hacek":"\u02C7","hairsp":"\u200A","half":"\u00BD","hamilt":"\u210B","HARDcy":"\u042A","hardcy":"\u044A","harrcir":"\u2948","harr":"\u2194","hArr":"\u21D4","harrw":"\u21AD","Hat":"^","hbar":"\u210F","Hcirc":"\u0124","hcirc":"\u0125","hearts":"\u2665","heartsuit":"\u2665","hellip":"\u2026","hercon":"\u22B9","hfr":"\uD835\uDD25","Hfr":"\u210C","HilbertSpace":"\u210B","hksearow":"\u2925","hkswarow":"\u2926","hoarr":"\u21FF","homtht":"\u223B","hookleftarrow":"\u21A9","hookrightarrow":"\u21AA","hopf":"\uD835\uDD59","Hopf":"\u210D","horbar":"\u2015","HorizontalLine":"\u2500","hscr":"\uD835\uDCBD","Hscr":"\u210B","hslash":"\u210F","Hstrok":"\u0126","hstrok":"\u0127","HumpDownHump":"\u224E","HumpEqual":"\u224F","hybull":"\u2043","hyphen":"\u2010","Iacute":"\u00CD","iacute":"\u00ED","ic":"\u2063","Icirc":"\u00CE","icirc":"\u00EE","Icy":"\u0418","icy":"\u0438","Idot":"\u0130","IEcy":"\u0415","iecy":"\u0435","iexcl":"\u00A1","iff":"\u21D4","ifr":"\uD835\uDD26","Ifr":"\u2111","Igrave":"\u00CC","igrave":"\u00EC","ii":"\u2148","iiiint":"\u2A0C","iiint":"\u222D","iinfin":"\u29DC","iiota":"\u2129","IJlig":"\u0132","ijlig":"\u0133","Imacr":"\u012A","imacr":"\u012B","image":"\u2111","ImaginaryI":"\u2148","imagline":"\u2110","imagpart":"\u2111","imath":"\u0131","Im":"\u2111","imof":"\u22B7","imped":"\u01B5","Implies":"\u21D2","incare":"\u2105","in":"\u2208","infin":"\u221E","infintie":"\u29DD","inodot":"\u0131","intcal":"\u22BA","int":"\u222B","Int":"\u222C","integers":"\u2124","Integral":"\u222B","intercal":"\u22BA","Intersection":"\u22C2","intlarhk":"\u2A17","intprod":"\u2A3C","InvisibleComma":"\u2063","InvisibleTimes":"\u2062","IOcy":"\u0401","iocy":"\u0451","Iogon":"\u012E","iogon":"\u012F","Iopf":"\uD835\uDD40","iopf":"\uD835\uDD5A","Iota":"\u0399","iota":"\u03B9","iprod":"\u2A3C","iquest":"\u00BF","iscr":"\uD835\uDCBE","Iscr":"\u2110","isin":"\u2208","isindot":"\u22F5","isinE":"\u22F9","isins":"\u22F4","isinsv":"\u22F3","isinv":"\u2208","it":"\u2062","Itilde":"\u0128","itilde":"\u0129","Iukcy":"\u0406","iukcy":"\u0456","Iuml":"\u00CF","iuml":"\u00EF","Jcirc":"\u0134","jcirc":"\u0135","Jcy":"\u0419","jcy":"\u0439","Jfr":"\uD835\uDD0D","jfr":"\uD835\uDD27","jmath":"\u0237","Jopf":"\uD835\uDD41","jopf":"\uD835\uDD5B","Jscr":"\uD835\uDCA5","jscr":"\uD835\uDCBF","Jsercy":"\u0408","jsercy":"\u0458","Jukcy":"\u0404","jukcy":"\u0454","Kappa":"\u039A","kappa":"\u03BA","kappav":"\u03F0","Kcedil":"\u0136","kcedil":"\u0137","Kcy":"\u041A","kcy":"\u043A","Kfr":"\uD835\uDD0E","kfr":"\uD835\uDD28","kgreen":"\u0138","KHcy":"\u0425","khcy":"\u0445","KJcy":"\u040C","kjcy":"\u045C","Kopf":"\uD835\uDD42","kopf":"\uD835\uDD5C","Kscr":"\uD835\uDCA6","kscr":"\uD835\uDCC0","lAarr":"\u21DA","Lacute":"\u0139","lacute":"\u013A","laemptyv":"\u29B4","lagran":"\u2112","Lambda":"\u039B","lambda":"\u03BB","lang":"\u27E8","Lang":"\u27EA","langd":"\u2991","langle":"\u27E8","lap":"\u2A85","Laplacetrf":"\u2112","laquo":"\u00AB","larrb":"\u21E4","larrbfs":"\u291F","larr":"\u2190","Larr":"\u219E","lArr":"\u21D0","larrfs":"\u291D","larrhk":"\u21A9","larrlp":"\u21AB","larrpl":"\u2939","larrsim":"\u2973","larrtl":"\u21A2","latail":"\u2919","lAtail":"\u291B","lat":"\u2AAB","late":"\u2AAD","lates":"\u2AAD\uFE00","lbarr":"\u290C","lBarr":"\u290E","lbbrk":"\u2772","lbrace":"{","lbrack":"[","lbrke":"\u298B","lbrksld":"\u298F","lbrkslu":"\u298D","Lcaron":"\u013D","lcaron":"\u013E","Lcedil":"\u013B","lcedil":"\u013C","lceil":"\u2308","lcub":"{","Lcy":"\u041B","lcy":"\u043B","ldca":"\u2936","ldquo":"\u201C","ldquor":"\u201E","ldrdhar":"\u2967","ldrushar":"\u294B","ldsh":"\u21B2","le":"\u2264","lE":"\u2266","LeftAngleBracket":"\u27E8","LeftArrowBar":"\u21E4","leftarrow":"\u2190","LeftArrow":"\u2190","Leftarrow":"\u21D0","LeftArrowRightArrow":"\u21C6","leftarrowtail":"\u21A2","LeftCeiling":"\u2308","LeftDoubleBracket":"\u27E6","LeftDownTeeVector":"\u2961","LeftDownVectorBar":"\u2959","LeftDownVector":"\u21C3","LeftFloor":"\u230A","leftharpoondown":"\u21BD","leftharpoonup":"\u21BC","leftleftarrows":"\u21C7","leftrightarrow":"\u2194","LeftRightArrow":"\u2194","Leftrightarrow":"\u21D4","leftrightarrows":"\u21C6","leftrightharpoons":"\u21CB","leftrightsquigarrow":"\u21AD","LeftRightVector":"\u294E","LeftTeeArrow":"\u21A4","LeftTee":"\u22A3","LeftTeeVector":"\u295A","leftthreetimes":"\u22CB","LeftTriangleBar":"\u29CF","LeftTriangle":"\u22B2","LeftTriangleEqual":"\u22B4","LeftUpDownVector":"\u2951","LeftUpTeeVector":"\u2960","LeftUpVectorBar":"\u2958","LeftUpVector":"\u21BF","LeftVectorBar":"\u2952","LeftVector":"\u21BC","lEg":"\u2A8B","leg":"\u22DA","leq":"\u2264","leqq":"\u2266","leqslant":"\u2A7D","lescc":"\u2AA8","les":"\u2A7D","lesdot":"\u2A7F","lesdoto":"\u2A81","lesdotor":"\u2A83","lesg":"\u22DA\uFE00","lesges":"\u2A93","lessapprox":"\u2A85","lessdot":"\u22D6","lesseqgtr":"\u22DA","lesseqqgtr":"\u2A8B","LessEqualGreater":"\u22DA","LessFullEqual":"\u2266","LessGreater":"\u2276","lessgtr":"\u2276","LessLess":"\u2AA1","lesssim":"\u2272","LessSlantEqual":"\u2A7D","LessTilde":"\u2272","lfisht":"\u297C","lfloor":"\u230A","Lfr":"\uD835\uDD0F","lfr":"\uD835\uDD29","lg":"\u2276","lgE":"\u2A91","lHar":"\u2962","lhard":"\u21BD","lharu":"\u21BC","lharul":"\u296A","lhblk":"\u2584","LJcy":"\u0409","ljcy":"\u0459","llarr":"\u21C7","ll":"\u226A","Ll":"\u22D8","llcorner":"\u231E","Lleftarrow":"\u21DA","llhard":"\u296B","lltri":"\u25FA","Lmidot":"\u013F","lmidot":"\u0140","lmoustache":"\u23B0","lmoust":"\u23B0","lnap":"\u2A89","lnapprox":"\u2A89","lne":"\u2A87","lnE":"\u2268","lneq":"\u2A87","lneqq":"\u2268","lnsim":"\u22E6","loang":"\u27EC","loarr":"\u21FD","lobrk":"\u27E6","longleftarrow":"\u27F5","LongLeftArrow":"\u27F5","Longleftarrow":"\u27F8","longleftrightarrow":"\u27F7","LongLeftRightArrow":"\u27F7","Longleftrightarrow":"\u27FA","longmapsto":"\u27FC","longrightarrow":"\u27F6","LongRightArrow":"\u27F6","Longrightarrow":"\u27F9","looparrowleft":"\u21AB","looparrowright":"\u21AC","lopar":"\u2985","Lopf":"\uD835\uDD43","lopf":"\uD835\uDD5D","loplus":"\u2A2D","lotimes":"\u2A34","lowast":"\u2217","lowbar":"_","LowerLeftArrow":"\u2199","LowerRightArrow":"\u2198","loz":"\u25CA","lozenge":"\u25CA","lozf":"\u29EB","lpar":"(","lparlt":"\u2993","lrarr":"\u21C6","lrcorner":"\u231F","lrhar":"\u21CB","lrhard":"\u296D","lrm":"\u200E","lrtri":"\u22BF","lsaquo":"\u2039","lscr":"\uD835\uDCC1","Lscr":"\u2112","lsh":"\u21B0","Lsh":"\u21B0","lsim":"\u2272","lsime":"\u2A8D","lsimg":"\u2A8F","lsqb":"[","lsquo":"\u2018","lsquor":"\u201A","Lstrok":"\u0141","lstrok":"\u0142","ltcc":"\u2AA6","ltcir":"\u2A79","lt":"<","LT":"<","Lt":"\u226A","ltdot":"\u22D6","lthree":"\u22CB","ltimes":"\u22C9","ltlarr":"\u2976","ltquest":"\u2A7B","ltri":"\u25C3","ltrie":"\u22B4","ltrif":"\u25C2","ltrPar":"\u2996","lurdshar":"\u294A","luruhar":"\u2966","lvertneqq":"\u2268\uFE00","lvnE":"\u2268\uFE00","macr":"\u00AF","male":"\u2642","malt":"\u2720","maltese":"\u2720","Map":"\u2905","map":"\u21A6","mapsto":"\u21A6","mapstodown":"\u21A7","mapstoleft":"\u21A4","mapstoup":"\u21A5","marker":"\u25AE","mcomma":"\u2A29","Mcy":"\u041C","mcy":"\u043C","mdash":"\u2014","mDDot":"\u223A","measuredangle":"\u2221","MediumSpace":"\u205F","Mellintrf":"\u2133","Mfr":"\uD835\uDD10","mfr":"\uD835\uDD2A","mho":"\u2127","micro":"\u00B5","midast":"*","midcir":"\u2AF0","mid":"\u2223","middot":"\u00B7","minusb":"\u229F","minus":"\u2212","minusd":"\u2238","minusdu":"\u2A2A","MinusPlus":"\u2213","mlcp":"\u2ADB","mldr":"\u2026","mnplus":"\u2213","models":"\u22A7","Mopf":"\uD835\uDD44","mopf":"\uD835\uDD5E","mp":"\u2213","mscr":"\uD835\uDCC2","Mscr":"\u2133","mstpos":"\u223E","Mu":"\u039C","mu":"\u03BC","multimap":"\u22B8","mumap":"\u22B8","nabla":"\u2207","Nacute":"\u0143","nacute":"\u0144","nang":"\u2220\u20D2","nap":"\u2249","napE":"\u2A70\u0338","napid":"\u224B\u0338","napos":"\u0149","napprox":"\u2249","natural":"\u266E","naturals":"\u2115","natur":"\u266E","nbsp":"\u00A0","nbump":"\u224E\u0338","nbumpe":"\u224F\u0338","ncap":"\u2A43","Ncaron":"\u0147","ncaron":"\u0148","Ncedil":"\u0145","ncedil":"\u0146","ncong":"\u2247","ncongdot":"\u2A6D\u0338","ncup":"\u2A42","Ncy":"\u041D","ncy":"\u043D","ndash":"\u2013","nearhk":"\u2924","nearr":"\u2197","neArr":"\u21D7","nearrow":"\u2197","ne":"\u2260","nedot":"\u2250\u0338","NegativeMediumSpace":"\u200B","NegativeThickSpace":"\u200B","NegativeThinSpace":"\u200B","NegativeVeryThinSpace":"\u200B","nequiv":"\u2262","nesear":"\u2928","nesim":"\u2242\u0338","NestedGreaterGreater":"\u226B","NestedLessLess":"\u226A","NewLine":"\n","nexist":"\u2204","nexists":"\u2204","Nfr":"\uD835\uDD11","nfr":"\uD835\uDD2B","ngE":"\u2267\u0338","nge":"\u2271","ngeq":"\u2271","ngeqq":"\u2267\u0338","ngeqslant":"\u2A7E\u0338","nges":"\u2A7E\u0338","nGg":"\u22D9\u0338","ngsim":"\u2275","nGt":"\u226B\u20D2","ngt":"\u226F","ngtr":"\u226F","nGtv":"\u226B\u0338","nharr":"\u21AE","nhArr":"\u21CE","nhpar":"\u2AF2","ni":"\u220B","nis":"\u22FC","nisd":"\u22FA","niv":"\u220B","NJcy":"\u040A","njcy":"\u045A","nlarr":"\u219A","nlArr":"\u21CD","nldr":"\u2025","nlE":"\u2266\u0338","nle":"\u2270","nleftarrow":"\u219A","nLeftarrow":"\u21CD","nleftrightarrow":"\u21AE","nLeftrightarrow":"\u21CE","nleq":"\u2270","nleqq":"\u2266\u0338","nleqslant":"\u2A7D\u0338","nles":"\u2A7D\u0338","nless":"\u226E","nLl":"\u22D8\u0338","nlsim":"\u2274","nLt":"\u226A\u20D2","nlt":"\u226E","nltri":"\u22EA","nltrie":"\u22EC","nLtv":"\u226A\u0338","nmid":"\u2224","NoBreak":"\u2060","NonBreakingSpace":"\u00A0","nopf":"\uD835\uDD5F","Nopf":"\u2115","Not":"\u2AEC","not":"\u00AC","NotCongruent":"\u2262","NotCupCap":"\u226D","NotDoubleVerticalBar":"\u2226","NotElement":"\u2209","NotEqual":"\u2260","NotEqualTilde":"\u2242\u0338","NotExists":"\u2204","NotGreater":"\u226F","NotGreaterEqual":"\u2271","NotGreaterFullEqual":"\u2267\u0338","NotGreaterGreater":"\u226B\u0338","NotGreaterLess":"\u2279","NotGreaterSlantEqual":"\u2A7E\u0338","NotGreaterTilde":"\u2275","NotHumpDownHump":"\u224E\u0338","NotHumpEqual":"\u224F\u0338","notin":"\u2209","notindot":"\u22F5\u0338","notinE":"\u22F9\u0338","notinva":"\u2209","notinvb":"\u22F7","notinvc":"\u22F6","NotLeftTriangleBar":"\u29CF\u0338","NotLeftTriangle":"\u22EA","NotLeftTriangleEqual":"\u22EC","NotLess":"\u226E","NotLessEqual":"\u2270","NotLessGreater":"\u2278","NotLessLess":"\u226A\u0338","NotLessSlantEqual":"\u2A7D\u0338","NotLessTilde":"\u2274","NotNestedGreaterGreater":"\u2AA2\u0338","NotNestedLessLess":"\u2AA1\u0338","notni":"\u220C","notniva":"\u220C","notnivb":"\u22FE","notnivc":"\u22FD","NotPrecedes":"\u2280","NotPrecedesEqual":"\u2AAF\u0338","NotPrecedesSlantEqual":"\u22E0","NotReverseElement":"\u220C","NotRightTriangleBar":"\u29D0\u0338","NotRightTriangle":"\u22EB","NotRightTriangleEqual":"\u22ED","NotSquareSubset":"\u228F\u0338","NotSquareSubsetEqual":"\u22E2","NotSquareSuperset":"\u2290\u0338","NotSquareSupersetEqual":"\u22E3","NotSubset":"\u2282\u20D2","NotSubsetEqual":"\u2288","NotSucceeds":"\u2281","NotSucceedsEqual":"\u2AB0\u0338","NotSucceedsSlantEqual":"\u22E1","NotSucceedsTilde":"\u227F\u0338","NotSuperset":"\u2283\u20D2","NotSupersetEqual":"\u2289","NotTilde":"\u2241","NotTildeEqual":"\u2244","NotTildeFullEqual":"\u2247","NotTildeTilde":"\u2249","NotVerticalBar":"\u2224","nparallel":"\u2226","npar":"\u2226","nparsl":"\u2AFD\u20E5","npart":"\u2202\u0338","npolint":"\u2A14","npr":"\u2280","nprcue":"\u22E0","nprec":"\u2280","npreceq":"\u2AAF\u0338","npre":"\u2AAF\u0338","nrarrc":"\u2933\u0338","nrarr":"\u219B","nrArr":"\u21CF","nrarrw":"\u219D\u0338","nrightarrow":"\u219B","nRightarrow":"\u21CF","nrtri":"\u22EB","nrtrie":"\u22ED","nsc":"\u2281","nsccue":"\u22E1","nsce":"\u2AB0\u0338","Nscr":"\uD835\uDCA9","nscr":"\uD835\uDCC3","nshortmid":"\u2224","nshortparallel":"\u2226","nsim":"\u2241","nsime":"\u2244","nsimeq":"\u2244","nsmid":"\u2224","nspar":"\u2226","nsqsube":"\u22E2","nsqsupe":"\u22E3","nsub":"\u2284","nsubE":"\u2AC5\u0338","nsube":"\u2288","nsubset":"\u2282\u20D2","nsubseteq":"\u2288","nsubseteqq":"\u2AC5\u0338","nsucc":"\u2281","nsucceq":"\u2AB0\u0338","nsup":"\u2285","nsupE":"\u2AC6\u0338","nsupe":"\u2289","nsupset":"\u2283\u20D2","nsupseteq":"\u2289","nsupseteqq":"\u2AC6\u0338","ntgl":"\u2279","Ntilde":"\u00D1","ntilde":"\u00F1","ntlg":"\u2278","ntriangleleft":"\u22EA","ntrianglelefteq":"\u22EC","ntriangleright":"\u22EB","ntrianglerighteq":"\u22ED","Nu":"\u039D","nu":"\u03BD","num":"#","numero":"\u2116","numsp":"\u2007","nvap":"\u224D\u20D2","nvdash":"\u22AC","nvDash":"\u22AD","nVdash":"\u22AE","nVDash":"\u22AF","nvge":"\u2265\u20D2","nvgt":">\u20D2","nvHarr":"\u2904","nvinfin":"\u29DE","nvlArr":"\u2902","nvle":"\u2264\u20D2","nvlt":"<\u20D2","nvltrie":"\u22B4\u20D2","nvrArr":"\u2903","nvrtrie":"\u22B5\u20D2","nvsim":"\u223C\u20D2","nwarhk":"\u2923","nwarr":"\u2196","nwArr":"\u21D6","nwarrow":"\u2196","nwnear":"\u2927","Oacute":"\u00D3","oacute":"\u00F3","oast":"\u229B","Ocirc":"\u00D4","ocirc":"\u00F4","ocir":"\u229A","Ocy":"\u041E","ocy":"\u043E","odash":"\u229D","Odblac":"\u0150","odblac":"\u0151","odiv":"\u2A38","odot":"\u2299","odsold":"\u29BC","OElig":"\u0152","oelig":"\u0153","ofcir":"\u29BF","Ofr":"\uD835\uDD12","ofr":"\uD835\uDD2C","ogon":"\u02DB","Ograve":"\u00D2","ograve":"\u00F2","ogt":"\u29C1","ohbar":"\u29B5","ohm":"\u03A9","oint":"\u222E","olarr":"\u21BA","olcir":"\u29BE","olcross":"\u29BB","oline":"\u203E","olt":"\u29C0","Omacr":"\u014C","omacr":"\u014D","Omega":"\u03A9","omega":"\u03C9","Omicron":"\u039F","omicron":"\u03BF","omid":"\u29B6","ominus":"\u2296","Oopf":"\uD835\uDD46","oopf":"\uD835\uDD60","opar":"\u29B7","OpenCurlyDoubleQuote":"\u201C","OpenCurlyQuote":"\u2018","operp":"\u29B9","oplus":"\u2295","orarr":"\u21BB","Or":"\u2A54","or":"\u2228","ord":"\u2A5D","order":"\u2134","orderof":"\u2134","ordf":"\u00AA","ordm":"\u00BA","origof":"\u22B6","oror":"\u2A56","orslope":"\u2A57","orv":"\u2A5B","oS":"\u24C8","Oscr":"\uD835\uDCAA","oscr":"\u2134","Oslash":"\u00D8","oslash":"\u00F8","osol":"\u2298","Otilde":"\u00D5","otilde":"\u00F5","otimesas":"\u2A36","Otimes":"\u2A37","otimes":"\u2297","Ouml":"\u00D6","ouml":"\u00F6","ovbar":"\u233D","OverBar":"\u203E","OverBrace":"\u23DE","OverBracket":"\u23B4","OverParenthesis":"\u23DC","para":"\u00B6","parallel":"\u2225","par":"\u2225","parsim":"\u2AF3","parsl":"\u2AFD","part":"\u2202","PartialD":"\u2202","Pcy":"\u041F","pcy":"\u043F","percnt":"%","period":".","permil":"\u2030","perp":"\u22A5","pertenk":"\u2031","Pfr":"\uD835\uDD13","pfr":"\uD835\uDD2D","Phi":"\u03A6","phi":"\u03C6","phiv":"\u03D5","phmmat":"\u2133","phone":"\u260E","Pi":"\u03A0","pi":"\u03C0","pitchfork":"\u22D4","piv":"\u03D6","planck":"\u210F","planckh":"\u210E","plankv":"\u210F","plusacir":"\u2A23","plusb":"\u229E","pluscir":"\u2A22","plus":"+","plusdo":"\u2214","plusdu":"\u2A25","pluse":"\u2A72","PlusMinus":"\u00B1","plusmn":"\u00B1","plussim":"\u2A26","plustwo":"\u2A27","pm":"\u00B1","Poincareplane":"\u210C","pointint":"\u2A15","popf":"\uD835\uDD61","Popf":"\u2119","pound":"\u00A3","prap":"\u2AB7","Pr":"\u2ABB","pr":"\u227A","prcue":"\u227C","precapprox":"\u2AB7","prec":"\u227A","preccurlyeq":"\u227C","Precedes":"\u227A","PrecedesEqual":"\u2AAF","PrecedesSlantEqual":"\u227C","PrecedesTilde":"\u227E","preceq":"\u2AAF","precnapprox":"\u2AB9","precneqq":"\u2AB5","precnsim":"\u22E8","pre":"\u2AAF","prE":"\u2AB3","precsim":"\u227E","prime":"\u2032","Prime":"\u2033","primes":"\u2119","prnap":"\u2AB9","prnE":"\u2AB5","prnsim":"\u22E8","prod":"\u220F","Product":"\u220F","profalar":"\u232E","profline":"\u2312","profsurf":"\u2313","prop":"\u221D","Proportional":"\u221D","Proportion":"\u2237","propto":"\u221D","prsim":"\u227E","prurel":"\u22B0","Pscr":"\uD835\uDCAB","pscr":"\uD835\uDCC5","Psi":"\u03A8","psi":"\u03C8","puncsp":"\u2008","Qfr":"\uD835\uDD14","qfr":"\uD835\uDD2E","qint":"\u2A0C","qopf":"\uD835\uDD62","Qopf":"\u211A","qprime":"\u2057","Qscr":"\uD835\uDCAC","qscr":"\uD835\uDCC6","quaternions":"\u210D","quatint":"\u2A16","quest":"?","questeq":"\u225F","quot":"\"","QUOT":"\"","rAarr":"\u21DB","race":"\u223D\u0331","Racute":"\u0154","racute":"\u0155","radic":"\u221A","raemptyv":"\u29B3","rang":"\u27E9","Rang":"\u27EB","rangd":"\u2992","range":"\u29A5","rangle":"\u27E9","raquo":"\u00BB","rarrap":"\u2975","rarrb":"\u21E5","rarrbfs":"\u2920","rarrc":"\u2933","rarr":"\u2192","Rarr":"\u21A0","rArr":"\u21D2","rarrfs":"\u291E","rarrhk":"\u21AA","rarrlp":"\u21AC","rarrpl":"\u2945","rarrsim":"\u2974","Rarrtl":"\u2916","rarrtl":"\u21A3","rarrw":"\u219D","ratail":"\u291A","rAtail":"\u291C","ratio":"\u2236","rationals":"\u211A","rbarr":"\u290D","rBarr":"\u290F","RBarr":"\u2910","rbbrk":"\u2773","rbrace":"}","rbrack":"]","rbrke":"\u298C","rbrksld":"\u298E","rbrkslu":"\u2990","Rcaron":"\u0158","rcaron":"\u0159","Rcedil":"\u0156","rcedil":"\u0157","rceil":"\u2309","rcub":"}","Rcy":"\u0420","rcy":"\u0440","rdca":"\u2937","rdldhar":"\u2969","rdquo":"\u201D","rdquor":"\u201D","rdsh":"\u21B3","real":"\u211C","realine":"\u211B","realpart":"\u211C","reals":"\u211D","Re":"\u211C","rect":"\u25AD","reg":"\u00AE","REG":"\u00AE","ReverseElement":"\u220B","ReverseEquilibrium":"\u21CB","ReverseUpEquilibrium":"\u296F","rfisht":"\u297D","rfloor":"\u230B","rfr":"\uD835\uDD2F","Rfr":"\u211C","rHar":"\u2964","rhard":"\u21C1","rharu":"\u21C0","rharul":"\u296C","Rho":"\u03A1","rho":"\u03C1","rhov":"\u03F1","RightAngleBracket":"\u27E9","RightArrowBar":"\u21E5","rightarrow":"\u2192","RightArrow":"\u2192","Rightarrow":"\u21D2","RightArrowLeftArrow":"\u21C4","rightarrowtail":"\u21A3","RightCeiling":"\u2309","RightDoubleBracket":"\u27E7","RightDownTeeVector":"\u295D","RightDownVectorBar":"\u2955","RightDownVector":"\u21C2","RightFloor":"\u230B","rightharpoondown":"\u21C1","rightharpoonup":"\u21C0","rightleftarrows":"\u21C4","rightleftharpoons":"\u21CC","rightrightarrows":"\u21C9","rightsquigarrow":"\u219D","RightTeeArrow":"\u21A6","RightTee":"\u22A2","RightTeeVector":"\u295B","rightthreetimes":"\u22CC","RightTriangleBar":"\u29D0","RightTriangle":"\u22B3","RightTriangleEqual":"\u22B5","RightUpDownVector":"\u294F","RightUpTeeVector":"\u295C","RightUpVectorBar":"\u2954","RightUpVector":"\u21BE","RightVectorBar":"\u2953","RightVector":"\u21C0","ring":"\u02DA","risingdotseq":"\u2253","rlarr":"\u21C4","rlhar":"\u21CC","rlm":"\u200F","rmoustache":"\u23B1","rmoust":"\u23B1","rnmid":"\u2AEE","roang":"\u27ED","roarr":"\u21FE","robrk":"\u27E7","ropar":"\u2986","ropf":"\uD835\uDD63","Ropf":"\u211D","roplus":"\u2A2E","rotimes":"\u2A35","RoundImplies":"\u2970","rpar":")","rpargt":"\u2994","rppolint":"\u2A12","rrarr":"\u21C9","Rrightarrow":"\u21DB","rsaquo":"\u203A","rscr":"\uD835\uDCC7","Rscr":"\u211B","rsh":"\u21B1","Rsh":"\u21B1","rsqb":"]","rsquo":"\u2019","rsquor":"\u2019","rthree":"\u22CC","rtimes":"\u22CA","rtri":"\u25B9","rtrie":"\u22B5","rtrif":"\u25B8","rtriltri":"\u29CE","RuleDelayed":"\u29F4","ruluhar":"\u2968","rx":"\u211E","Sacute":"\u015A","sacute":"\u015B","sbquo":"\u201A","scap":"\u2AB8","Scaron":"\u0160","scaron":"\u0161","Sc":"\u2ABC","sc":"\u227B","sccue":"\u227D","sce":"\u2AB0","scE":"\u2AB4","Scedil":"\u015E","scedil":"\u015F","Scirc":"\u015C","scirc":"\u015D","scnap":"\u2ABA","scnE":"\u2AB6","scnsim":"\u22E9","scpolint":"\u2A13","scsim":"\u227F","Scy":"\u0421","scy":"\u0441","sdotb":"\u22A1","sdot":"\u22C5","sdote":"\u2A66","searhk":"\u2925","searr":"\u2198","seArr":"\u21D8","searrow":"\u2198","sect":"\u00A7","semi":";","seswar":"\u2929","setminus":"\u2216","setmn":"\u2216","sext":"\u2736","Sfr":"\uD835\uDD16","sfr":"\uD835\uDD30","sfrown":"\u2322","sharp":"\u266F","SHCHcy":"\u0429","shchcy":"\u0449","SHcy":"\u0428","shcy":"\u0448","ShortDownArrow":"\u2193","ShortLeftArrow":"\u2190","shortmid":"\u2223","shortparallel":"\u2225","ShortRightArrow":"\u2192","ShortUpArrow":"\u2191","shy":"\u00AD","Sigma":"\u03A3","sigma":"\u03C3","sigmaf":"\u03C2","sigmav":"\u03C2","sim":"\u223C","simdot":"\u2A6A","sime":"\u2243","simeq":"\u2243","simg":"\u2A9E","simgE":"\u2AA0","siml":"\u2A9D","simlE":"\u2A9F","simne":"\u2246","simplus":"\u2A24","simrarr":"\u2972","slarr":"\u2190","SmallCircle":"\u2218","smallsetminus":"\u2216","smashp":"\u2A33","smeparsl":"\u29E4","smid":"\u2223","smile":"\u2323","smt":"\u2AAA","smte":"\u2AAC","smtes":"\u2AAC\uFE00","SOFTcy":"\u042C","softcy":"\u044C","solbar":"\u233F","solb":"\u29C4","sol":"/","Sopf":"\uD835\uDD4A","sopf":"\uD835\uDD64","spades":"\u2660","spadesuit":"\u2660","spar":"\u2225","sqcap":"\u2293","sqcaps":"\u2293\uFE00","sqcup":"\u2294","sqcups":"\u2294\uFE00","Sqrt":"\u221A","sqsub":"\u228F","sqsube":"\u2291","sqsubset":"\u228F","sqsubseteq":"\u2291","sqsup":"\u2290","sqsupe":"\u2292","sqsupset":"\u2290","sqsupseteq":"\u2292","square":"\u25A1","Square":"\u25A1","SquareIntersection":"\u2293","SquareSubset":"\u228F","SquareSubsetEqual":"\u2291","SquareSuperset":"\u2290","SquareSupersetEqual":"\u2292","SquareUnion":"\u2294","squarf":"\u25AA","squ":"\u25A1","squf":"\u25AA","srarr":"\u2192","Sscr":"\uD835\uDCAE","sscr":"\uD835\uDCC8","ssetmn":"\u2216","ssmile":"\u2323","sstarf":"\u22C6","Star":"\u22C6","star":"\u2606","starf":"\u2605","straightepsilon":"\u03F5","straightphi":"\u03D5","strns":"\u00AF","sub":"\u2282","Sub":"\u22D0","subdot":"\u2ABD","subE":"\u2AC5","sube":"\u2286","subedot":"\u2AC3","submult":"\u2AC1","subnE":"\u2ACB","subne":"\u228A","subplus":"\u2ABF","subrarr":"\u2979","subset":"\u2282","Subset":"\u22D0","subseteq":"\u2286","subseteqq":"\u2AC5","SubsetEqual":"\u2286","subsetneq":"\u228A","subsetneqq":"\u2ACB","subsim":"\u2AC7","subsub":"\u2AD5","subsup":"\u2AD3","succapprox":"\u2AB8","succ":"\u227B","succcurlyeq":"\u227D","Succeeds":"\u227B","SucceedsEqual":"\u2AB0","SucceedsSlantEqual":"\u227D","SucceedsTilde":"\u227F","succeq":"\u2AB0","succnapprox":"\u2ABA","succneqq":"\u2AB6","succnsim":"\u22E9","succsim":"\u227F","SuchThat":"\u220B","sum":"\u2211","Sum":"\u2211","sung":"\u266A","sup1":"\u00B9","sup2":"\u00B2","sup3":"\u00B3","sup":"\u2283","Sup":"\u22D1","supdot":"\u2ABE","supdsub":"\u2AD8","supE":"\u2AC6","supe":"\u2287","supedot":"\u2AC4","Superset":"\u2283","SupersetEqual":"\u2287","suphsol":"\u27C9","suphsub":"\u2AD7","suplarr":"\u297B","supmult":"\u2AC2","supnE":"\u2ACC","supne":"\u228B","supplus":"\u2AC0","supset":"\u2283","Supset":"\u22D1","supseteq":"\u2287","supseteqq":"\u2AC6","supsetneq":"\u228B","supsetneqq":"\u2ACC","supsim":"\u2AC8","supsub":"\u2AD4","supsup":"\u2AD6","swarhk":"\u2926","swarr":"\u2199","swArr":"\u21D9","swarrow":"\u2199","swnwar":"\u292A","szlig":"\u00DF","Tab":"\t","target":"\u2316","Tau":"\u03A4","tau":"\u03C4","tbrk":"\u23B4","Tcaron":"\u0164","tcaron":"\u0165","Tcedil":"\u0162","tcedil":"\u0163","Tcy":"\u0422","tcy":"\u0442","tdot":"\u20DB","telrec":"\u2315","Tfr":"\uD835\uDD17","tfr":"\uD835\uDD31","there4":"\u2234","therefore":"\u2234","Therefore":"\u2234","Theta":"\u0398","theta":"\u03B8","thetasym":"\u03D1","thetav":"\u03D1","thickapprox":"\u2248","thicksim":"\u223C","ThickSpace":"\u205F\u200A","ThinSpace":"\u2009","thinsp":"\u2009","thkap":"\u2248","thksim":"\u223C","THORN":"\u00DE","thorn":"\u00FE","tilde":"\u02DC","Tilde":"\u223C","TildeEqual":"\u2243","TildeFullEqual":"\u2245","TildeTilde":"\u2248","timesbar":"\u2A31","timesb":"\u22A0","times":"\u00D7","timesd":"\u2A30","tint":"\u222D","toea":"\u2928","topbot":"\u2336","topcir":"\u2AF1","top":"\u22A4","Topf":"\uD835\uDD4B","topf":"\uD835\uDD65","topfork":"\u2ADA","tosa":"\u2929","tprime":"\u2034","trade":"\u2122","TRADE":"\u2122","triangle":"\u25B5","triangledown":"\u25BF","triangleleft":"\u25C3","trianglelefteq":"\u22B4","triangleq":"\u225C","triangleright":"\u25B9","trianglerighteq":"\u22B5","tridot":"\u25EC","trie":"\u225C","triminus":"\u2A3A","TripleDot":"\u20DB","triplus":"\u2A39","trisb":"\u29CD","tritime":"\u2A3B","trpezium":"\u23E2","Tscr":"\uD835\uDCAF","tscr":"\uD835\uDCC9","TScy":"\u0426","tscy":"\u0446","TSHcy":"\u040B","tshcy":"\u045B","Tstrok":"\u0166","tstrok":"\u0167","twixt":"\u226C","twoheadleftarrow":"\u219E","twoheadrightarrow":"\u21A0","Uacute":"\u00DA","uacute":"\u00FA","uarr":"\u2191","Uarr":"\u219F","uArr":"\u21D1","Uarrocir":"\u2949","Ubrcy":"\u040E","ubrcy":"\u045E","Ubreve":"\u016C","ubreve":"\u016D","Ucirc":"\u00DB","ucirc":"\u00FB","Ucy":"\u0423","ucy":"\u0443","udarr":"\u21C5","Udblac":"\u0170","udblac":"\u0171","udhar":"\u296E","ufisht":"\u297E","Ufr":"\uD835\uDD18","ufr":"\uD835\uDD32","Ugrave":"\u00D9","ugrave":"\u00F9","uHar":"\u2963","uharl":"\u21BF","uharr":"\u21BE","uhblk":"\u2580","ulcorn":"\u231C","ulcorner":"\u231C","ulcrop":"\u230F","ultri":"\u25F8","Umacr":"\u016A","umacr":"\u016B","uml":"\u00A8","UnderBar":"_","UnderBrace":"\u23DF","UnderBracket":"\u23B5","UnderParenthesis":"\u23DD","Union":"\u22C3","UnionPlus":"\u228E","Uogon":"\u0172","uogon":"\u0173","Uopf":"\uD835\uDD4C","uopf":"\uD835\uDD66","UpArrowBar":"\u2912","uparrow":"\u2191","UpArrow":"\u2191","Uparrow":"\u21D1","UpArrowDownArrow":"\u21C5","updownarrow":"\u2195","UpDownArrow":"\u2195","Updownarrow":"\u21D5","UpEquilibrium":"\u296E","upharpoonleft":"\u21BF","upharpoonright":"\u21BE","uplus":"\u228E","UpperLeftArrow":"\u2196","UpperRightArrow":"\u2197","upsi":"\u03C5","Upsi":"\u03D2","upsih":"\u03D2","Upsilon":"\u03A5","upsilon":"\u03C5","UpTeeArrow":"\u21A5","UpTee":"\u22A5","upuparrows":"\u21C8","urcorn":"\u231D","urcorner":"\u231D","urcrop":"\u230E","Uring":"\u016E","uring":"\u016F","urtri":"\u25F9","Uscr":"\uD835\uDCB0","uscr":"\uD835\uDCCA","utdot":"\u22F0","Utilde":"\u0168","utilde":"\u0169","utri":"\u25B5","utrif":"\u25B4","uuarr":"\u21C8","Uuml":"\u00DC","uuml":"\u00FC","uwangle":"\u29A7","vangrt":"\u299C","varepsilon":"\u03F5","varkappa":"\u03F0","varnothing":"\u2205","varphi":"\u03D5","varpi":"\u03D6","varpropto":"\u221D","varr":"\u2195","vArr":"\u21D5","varrho":"\u03F1","varsigma":"\u03C2","varsubsetneq":"\u228A\uFE00","varsubsetneqq":"\u2ACB\uFE00","varsupsetneq":"\u228B\uFE00","varsupsetneqq":"\u2ACC\uFE00","vartheta":"\u03D1","vartriangleleft":"\u22B2","vartriangleright":"\u22B3","vBar":"\u2AE8","Vbar":"\u2AEB","vBarv":"\u2AE9","Vcy":"\u0412","vcy":"\u0432","vdash":"\u22A2","vDash":"\u22A8","Vdash":"\u22A9","VDash":"\u22AB","Vdashl":"\u2AE6","veebar":"\u22BB","vee":"\u2228","Vee":"\u22C1","veeeq":"\u225A","vellip":"\u22EE","verbar":"|","Verbar":"\u2016","vert":"|","Vert":"\u2016","VerticalBar":"\u2223","VerticalLine":"|","VerticalSeparator":"\u2758","VerticalTilde":"\u2240","VeryThinSpace":"\u200A","Vfr":"\uD835\uDD19","vfr":"\uD835\uDD33","vltri":"\u22B2","vnsub":"\u2282\u20D2","vnsup":"\u2283\u20D2","Vopf":"\uD835\uDD4D","vopf":"\uD835\uDD67","vprop":"\u221D","vrtri":"\u22B3","Vscr":"\uD835\uDCB1","vscr":"\uD835\uDCCB","vsubnE":"\u2ACB\uFE00","vsubne":"\u228A\uFE00","vsupnE":"\u2ACC\uFE00","vsupne":"\u228B\uFE00","Vvdash":"\u22AA","vzigzag":"\u299A","Wcirc":"\u0174","wcirc":"\u0175","wedbar":"\u2A5F","wedge":"\u2227","Wedge":"\u22C0","wedgeq":"\u2259","weierp":"\u2118","Wfr":"\uD835\uDD1A","wfr":"\uD835\uDD34","Wopf":"\uD835\uDD4E","wopf":"\uD835\uDD68","wp":"\u2118","wr":"\u2240","wreath":"\u2240","Wscr":"\uD835\uDCB2","wscr":"\uD835\uDCCC","xcap":"\u22C2","xcirc":"\u25EF","xcup":"\u22C3","xdtri":"\u25BD","Xfr":"\uD835\uDD1B","xfr":"\uD835\uDD35","xharr":"\u27F7","xhArr":"\u27FA","Xi":"\u039E","xi":"\u03BE","xlarr":"\u27F5","xlArr":"\u27F8","xmap":"\u27FC","xnis":"\u22FB","xodot":"\u2A00","Xopf":"\uD835\uDD4F","xopf":"\uD835\uDD69","xoplus":"\u2A01","xotime":"\u2A02","xrarr":"\u27F6","xrArr":"\u27F9","Xscr":"\uD835\uDCB3","xscr":"\uD835\uDCCD","xsqcup":"\u2A06","xuplus":"\u2A04","xutri":"\u25B3","xvee":"\u22C1","xwedge":"\u22C0","Yacute":"\u00DD","yacute":"\u00FD","YAcy":"\u042F","yacy":"\u044F","Ycirc":"\u0176","ycirc":"\u0177","Ycy":"\u042B","ycy":"\u044B","yen":"\u00A5","Yfr":"\uD835\uDD1C","yfr":"\uD835\uDD36","YIcy":"\u0407","yicy":"\u0457","Yopf":"\uD835\uDD50","yopf":"\uD835\uDD6A","Yscr":"\uD835\uDCB4","yscr":"\uD835\uDCCE","YUcy":"\u042E","yucy":"\u044E","yuml":"\u00FF","Yuml":"\u0178","Zacute":"\u0179","zacute":"\u017A","Zcaron":"\u017D","zcaron":"\u017E","Zcy":"\u0417","zcy":"\u0437","Zdot":"\u017B","zdot":"\u017C","zeetrf":"\u2128","ZeroWidthSpace":"\u200B","Zeta":"\u0396","zeta":"\u03B6","zfr":"\uD835\uDD37","Zfr":"\u2128","ZHcy":"\u0416","zhcy":"\u0436","zigrarr":"\u21DD","zopf":"\uD835\uDD6B","Zopf":"\u2124","Zscr":"\uD835\uDCB5","zscr":"\uD835\uDCCF","zwj":"\u200D","zwnj":"\u200C"}
 },{}],212:[function(require,module,exports){
+module.exports={"Aacute":"\u00C1","aacute":"\u00E1","Acirc":"\u00C2","acirc":"\u00E2","acute":"\u00B4","AElig":"\u00C6","aelig":"\u00E6","Agrave":"\u00C0","agrave":"\u00E0","amp":"&","AMP":"&","Aring":"\u00C5","aring":"\u00E5","Atilde":"\u00C3","atilde":"\u00E3","Auml":"\u00C4","auml":"\u00E4","brvbar":"\u00A6","Ccedil":"\u00C7","ccedil":"\u00E7","cedil":"\u00B8","cent":"\u00A2","copy":"\u00A9","COPY":"\u00A9","curren":"\u00A4","deg":"\u00B0","divide":"\u00F7","Eacute":"\u00C9","eacute":"\u00E9","Ecirc":"\u00CA","ecirc":"\u00EA","Egrave":"\u00C8","egrave":"\u00E8","ETH":"\u00D0","eth":"\u00F0","Euml":"\u00CB","euml":"\u00EB","frac12":"\u00BD","frac14":"\u00BC","frac34":"\u00BE","gt":">","GT":">","Iacute":"\u00CD","iacute":"\u00ED","Icirc":"\u00CE","icirc":"\u00EE","iexcl":"\u00A1","Igrave":"\u00CC","igrave":"\u00EC","iquest":"\u00BF","Iuml":"\u00CF","iuml":"\u00EF","laquo":"\u00AB","lt":"<","LT":"<","macr":"\u00AF","micro":"\u00B5","middot":"\u00B7","nbsp":"\u00A0","not":"\u00AC","Ntilde":"\u00D1","ntilde":"\u00F1","Oacute":"\u00D3","oacute":"\u00F3","Ocirc":"\u00D4","ocirc":"\u00F4","Ograve":"\u00D2","ograve":"\u00F2","ordf":"\u00AA","ordm":"\u00BA","Oslash":"\u00D8","oslash":"\u00F8","Otilde":"\u00D5","otilde":"\u00F5","Ouml":"\u00D6","ouml":"\u00F6","para":"\u00B6","plusmn":"\u00B1","pound":"\u00A3","quot":"\"","QUOT":"\"","raquo":"\u00BB","reg":"\u00AE","REG":"\u00AE","sect":"\u00A7","shy":"\u00AD","sup1":"\u00B9","sup2":"\u00B2","sup3":"\u00B3","szlig":"\u00DF","THORN":"\u00DE","thorn":"\u00FE","times":"\u00D7","Uacute":"\u00DA","uacute":"\u00FA","Ucirc":"\u00DB","ucirc":"\u00FB","Ugrave":"\u00D9","ugrave":"\u00F9","uml":"\u00A8","Uuml":"\u00DC","uuml":"\u00FC","Yacute":"\u00DD","yacute":"\u00FD","yen":"\u00A5","yuml":"\u00FF"}
+},{}],213:[function(require,module,exports){
 module.exports={"amp":"&","apos":"'","gt":">","lt":"<","quot":"\""}
 
-},{}],213:[function(require,module,exports){
+},{}],214:[function(require,module,exports){
 module.exports = ForeverAgent
 ForeverAgent.SSL = ForeverAgentSSL
 
@@ -37976,7 +40908,7 @@ function createConnectionSSL (port, host, options) {
   return tls.connect(options);
 }
 
-},{"http":174,"https":106,"net":1,"tls":1,"util":185}],214:[function(require,module,exports){
+},{"http":174,"https":106,"net":1,"tls":1,"util":185}],215:[function(require,module,exports){
 var util = require('util')
 
 var INDENT_START = /[\{\[]/
@@ -38039,7 +40971,7 @@ module.exports = function() {
   return line
 }
 
-},{"util":185}],215:[function(require,module,exports){
+},{"util":185}],216:[function(require,module,exports){
 var isProperty = require('is-property')
 
 var gen = function(obj, prop) {
@@ -38053,7 +40985,7 @@ gen.property = function (prop) {
 
 module.exports = gen
 
-},{"is-property":221}],216:[function(require,module,exports){
+},{"is-property":222}],217:[function(require,module,exports){
 /*
     HTTP Hawk Authentication Scheme
     Copyright (c) 2012-2014, Eran Hammer <eran@hammer.io>
@@ -38696,9 +41628,9 @@ if (typeof module !== 'undefined' && module.exports) {
 
 // $lab:coverage:on$
 
-},{}],217:[function(require,module,exports){
+},{}],218:[function(require,module,exports){
 arguments[4][17][0].apply(exports,arguments)
-},{"dup":17}],218:[function(require,module,exports){
+},{"dup":17}],219:[function(require,module,exports){
 var reIpv4FirstPass = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/
 
 var reSubnetString = /\/\d{1,3}(?=%|$)/
@@ -38790,7 +41722,7 @@ module.exports['__all_regexes__'] = [
   reBadAddress
 ]
 
-},{}],219:[function(require,module,exports){
+},{}],220:[function(require,module,exports){
 var createIpValidator = require('is-my-ip-valid')
 
 var reEmailWhitespace = /\s/
@@ -38832,7 +41764,7 @@ exports['phone'] = function (input) {
 }
 exports['utc-millisec'] = /^[0-9]{1,15}\.?[0-9]{0,15}$/
 
-},{"is-my-ip-valid":218}],220:[function(require,module,exports){
+},{"is-my-ip-valid":219}],221:[function(require,module,exports){
 var genobj = require('generate-object-property')
 var genfun = require('generate-function')
 var jsonpointer = require('jsonpointer')
@@ -39437,18 +42369,18 @@ module.exports.filter = function(schema, opts) {
   }
 }
 
-},{"./formats":219,"generate-function":214,"generate-object-property":215,"jsonpointer":225,"xtend":354}],221:[function(require,module,exports){
+},{"./formats":220,"generate-function":215,"generate-object-property":216,"jsonpointer":226,"xtend":426}],222:[function(require,module,exports){
 "use strict"
 function isProperty(str) {
   return /^[$A-Z\_a-z\xaa\xb5\xba\xc0-\xd6\xd8-\xf6\xf8-\u02c1\u02c6-\u02d1\u02e0-\u02e4\u02ec\u02ee\u0370-\u0374\u0376\u0377\u037a-\u037d\u0386\u0388-\u038a\u038c\u038e-\u03a1\u03a3-\u03f5\u03f7-\u0481\u048a-\u0527\u0531-\u0556\u0559\u0561-\u0587\u05d0-\u05ea\u05f0-\u05f2\u0620-\u064a\u066e\u066f\u0671-\u06d3\u06d5\u06e5\u06e6\u06ee\u06ef\u06fa-\u06fc\u06ff\u0710\u0712-\u072f\u074d-\u07a5\u07b1\u07ca-\u07ea\u07f4\u07f5\u07fa\u0800-\u0815\u081a\u0824\u0828\u0840-\u0858\u08a0\u08a2-\u08ac\u0904-\u0939\u093d\u0950\u0958-\u0961\u0971-\u0977\u0979-\u097f\u0985-\u098c\u098f\u0990\u0993-\u09a8\u09aa-\u09b0\u09b2\u09b6-\u09b9\u09bd\u09ce\u09dc\u09dd\u09df-\u09e1\u09f0\u09f1\u0a05-\u0a0a\u0a0f\u0a10\u0a13-\u0a28\u0a2a-\u0a30\u0a32\u0a33\u0a35\u0a36\u0a38\u0a39\u0a59-\u0a5c\u0a5e\u0a72-\u0a74\u0a85-\u0a8d\u0a8f-\u0a91\u0a93-\u0aa8\u0aaa-\u0ab0\u0ab2\u0ab3\u0ab5-\u0ab9\u0abd\u0ad0\u0ae0\u0ae1\u0b05-\u0b0c\u0b0f\u0b10\u0b13-\u0b28\u0b2a-\u0b30\u0b32\u0b33\u0b35-\u0b39\u0b3d\u0b5c\u0b5d\u0b5f-\u0b61\u0b71\u0b83\u0b85-\u0b8a\u0b8e-\u0b90\u0b92-\u0b95\u0b99\u0b9a\u0b9c\u0b9e\u0b9f\u0ba3\u0ba4\u0ba8-\u0baa\u0bae-\u0bb9\u0bd0\u0c05-\u0c0c\u0c0e-\u0c10\u0c12-\u0c28\u0c2a-\u0c33\u0c35-\u0c39\u0c3d\u0c58\u0c59\u0c60\u0c61\u0c85-\u0c8c\u0c8e-\u0c90\u0c92-\u0ca8\u0caa-\u0cb3\u0cb5-\u0cb9\u0cbd\u0cde\u0ce0\u0ce1\u0cf1\u0cf2\u0d05-\u0d0c\u0d0e-\u0d10\u0d12-\u0d3a\u0d3d\u0d4e\u0d60\u0d61\u0d7a-\u0d7f\u0d85-\u0d96\u0d9a-\u0db1\u0db3-\u0dbb\u0dbd\u0dc0-\u0dc6\u0e01-\u0e30\u0e32\u0e33\u0e40-\u0e46\u0e81\u0e82\u0e84\u0e87\u0e88\u0e8a\u0e8d\u0e94-\u0e97\u0e99-\u0e9f\u0ea1-\u0ea3\u0ea5\u0ea7\u0eaa\u0eab\u0ead-\u0eb0\u0eb2\u0eb3\u0ebd\u0ec0-\u0ec4\u0ec6\u0edc-\u0edf\u0f00\u0f40-\u0f47\u0f49-\u0f6c\u0f88-\u0f8c\u1000-\u102a\u103f\u1050-\u1055\u105a-\u105d\u1061\u1065\u1066\u106e-\u1070\u1075-\u1081\u108e\u10a0-\u10c5\u10c7\u10cd\u10d0-\u10fa\u10fc-\u1248\u124a-\u124d\u1250-\u1256\u1258\u125a-\u125d\u1260-\u1288\u128a-\u128d\u1290-\u12b0\u12b2-\u12b5\u12b8-\u12be\u12c0\u12c2-\u12c5\u12c8-\u12d6\u12d8-\u1310\u1312-\u1315\u1318-\u135a\u1380-\u138f\u13a0-\u13f4\u1401-\u166c\u166f-\u167f\u1681-\u169a\u16a0-\u16ea\u16ee-\u16f0\u1700-\u170c\u170e-\u1711\u1720-\u1731\u1740-\u1751\u1760-\u176c\u176e-\u1770\u1780-\u17b3\u17d7\u17dc\u1820-\u1877\u1880-\u18a8\u18aa\u18b0-\u18f5\u1900-\u191c\u1950-\u196d\u1970-\u1974\u1980-\u19ab\u19c1-\u19c7\u1a00-\u1a16\u1a20-\u1a54\u1aa7\u1b05-\u1b33\u1b45-\u1b4b\u1b83-\u1ba0\u1bae\u1baf\u1bba-\u1be5\u1c00-\u1c23\u1c4d-\u1c4f\u1c5a-\u1c7d\u1ce9-\u1cec\u1cee-\u1cf1\u1cf5\u1cf6\u1d00-\u1dbf\u1e00-\u1f15\u1f18-\u1f1d\u1f20-\u1f45\u1f48-\u1f4d\u1f50-\u1f57\u1f59\u1f5b\u1f5d\u1f5f-\u1f7d\u1f80-\u1fb4\u1fb6-\u1fbc\u1fbe\u1fc2-\u1fc4\u1fc6-\u1fcc\u1fd0-\u1fd3\u1fd6-\u1fdb\u1fe0-\u1fec\u1ff2-\u1ff4\u1ff6-\u1ffc\u2071\u207f\u2090-\u209c\u2102\u2107\u210a-\u2113\u2115\u2119-\u211d\u2124\u2126\u2128\u212a-\u212d\u212f-\u2139\u213c-\u213f\u2145-\u2149\u214e\u2160-\u2188\u2c00-\u2c2e\u2c30-\u2c5e\u2c60-\u2ce4\u2ceb-\u2cee\u2cf2\u2cf3\u2d00-\u2d25\u2d27\u2d2d\u2d30-\u2d67\u2d6f\u2d80-\u2d96\u2da0-\u2da6\u2da8-\u2dae\u2db0-\u2db6\u2db8-\u2dbe\u2dc0-\u2dc6\u2dc8-\u2dce\u2dd0-\u2dd6\u2dd8-\u2dde\u2e2f\u3005-\u3007\u3021-\u3029\u3031-\u3035\u3038-\u303c\u3041-\u3096\u309d-\u309f\u30a1-\u30fa\u30fc-\u30ff\u3105-\u312d\u3131-\u318e\u31a0-\u31ba\u31f0-\u31ff\u3400-\u4db5\u4e00-\u9fcc\ua000-\ua48c\ua4d0-\ua4fd\ua500-\ua60c\ua610-\ua61f\ua62a\ua62b\ua640-\ua66e\ua67f-\ua697\ua6a0-\ua6ef\ua717-\ua71f\ua722-\ua788\ua78b-\ua78e\ua790-\ua793\ua7a0-\ua7aa\ua7f8-\ua801\ua803-\ua805\ua807-\ua80a\ua80c-\ua822\ua840-\ua873\ua882-\ua8b3\ua8f2-\ua8f7\ua8fb\ua90a-\ua925\ua930-\ua946\ua960-\ua97c\ua984-\ua9b2\ua9cf\uaa00-\uaa28\uaa40-\uaa42\uaa44-\uaa4b\uaa60-\uaa76\uaa7a\uaa80-\uaaaf\uaab1\uaab5\uaab6\uaab9-\uaabd\uaac0\uaac2\uaadb-\uaadd\uaae0-\uaaea\uaaf2-\uaaf4\uab01-\uab06\uab09-\uab0e\uab11-\uab16\uab20-\uab26\uab28-\uab2e\uabc0-\uabe2\uac00-\ud7a3\ud7b0-\ud7c6\ud7cb-\ud7fb\uf900-\ufa6d\ufa70-\ufad9\ufb00-\ufb06\ufb13-\ufb17\ufb1d\ufb1f-\ufb28\ufb2a-\ufb36\ufb38-\ufb3c\ufb3e\ufb40\ufb41\ufb43\ufb44\ufb46-\ufbb1\ufbd3-\ufd3d\ufd50-\ufd8f\ufd92-\ufdc7\ufdf0-\ufdfb\ufe70-\ufe74\ufe76-\ufefc\uff21-\uff3a\uff41-\uff5a\uff66-\uffbe\uffc2-\uffc7\uffca-\uffcf\uffd2-\uffd7\uffda-\uffdc][$A-Z\_a-z\xaa\xb5\xba\xc0-\xd6\xd8-\xf6\xf8-\u02c1\u02c6-\u02d1\u02e0-\u02e4\u02ec\u02ee\u0370-\u0374\u0376\u0377\u037a-\u037d\u0386\u0388-\u038a\u038c\u038e-\u03a1\u03a3-\u03f5\u03f7-\u0481\u048a-\u0527\u0531-\u0556\u0559\u0561-\u0587\u05d0-\u05ea\u05f0-\u05f2\u0620-\u064a\u066e\u066f\u0671-\u06d3\u06d5\u06e5\u06e6\u06ee\u06ef\u06fa-\u06fc\u06ff\u0710\u0712-\u072f\u074d-\u07a5\u07b1\u07ca-\u07ea\u07f4\u07f5\u07fa\u0800-\u0815\u081a\u0824\u0828\u0840-\u0858\u08a0\u08a2-\u08ac\u0904-\u0939\u093d\u0950\u0958-\u0961\u0971-\u0977\u0979-\u097f\u0985-\u098c\u098f\u0990\u0993-\u09a8\u09aa-\u09b0\u09b2\u09b6-\u09b9\u09bd\u09ce\u09dc\u09dd\u09df-\u09e1\u09f0\u09f1\u0a05-\u0a0a\u0a0f\u0a10\u0a13-\u0a28\u0a2a-\u0a30\u0a32\u0a33\u0a35\u0a36\u0a38\u0a39\u0a59-\u0a5c\u0a5e\u0a72-\u0a74\u0a85-\u0a8d\u0a8f-\u0a91\u0a93-\u0aa8\u0aaa-\u0ab0\u0ab2\u0ab3\u0ab5-\u0ab9\u0abd\u0ad0\u0ae0\u0ae1\u0b05-\u0b0c\u0b0f\u0b10\u0b13-\u0b28\u0b2a-\u0b30\u0b32\u0b33\u0b35-\u0b39\u0b3d\u0b5c\u0b5d\u0b5f-\u0b61\u0b71\u0b83\u0b85-\u0b8a\u0b8e-\u0b90\u0b92-\u0b95\u0b99\u0b9a\u0b9c\u0b9e\u0b9f\u0ba3\u0ba4\u0ba8-\u0baa\u0bae-\u0bb9\u0bd0\u0c05-\u0c0c\u0c0e-\u0c10\u0c12-\u0c28\u0c2a-\u0c33\u0c35-\u0c39\u0c3d\u0c58\u0c59\u0c60\u0c61\u0c85-\u0c8c\u0c8e-\u0c90\u0c92-\u0ca8\u0caa-\u0cb3\u0cb5-\u0cb9\u0cbd\u0cde\u0ce0\u0ce1\u0cf1\u0cf2\u0d05-\u0d0c\u0d0e-\u0d10\u0d12-\u0d3a\u0d3d\u0d4e\u0d60\u0d61\u0d7a-\u0d7f\u0d85-\u0d96\u0d9a-\u0db1\u0db3-\u0dbb\u0dbd\u0dc0-\u0dc6\u0e01-\u0e30\u0e32\u0e33\u0e40-\u0e46\u0e81\u0e82\u0e84\u0e87\u0e88\u0e8a\u0e8d\u0e94-\u0e97\u0e99-\u0e9f\u0ea1-\u0ea3\u0ea5\u0ea7\u0eaa\u0eab\u0ead-\u0eb0\u0eb2\u0eb3\u0ebd\u0ec0-\u0ec4\u0ec6\u0edc-\u0edf\u0f00\u0f40-\u0f47\u0f49-\u0f6c\u0f88-\u0f8c\u1000-\u102a\u103f\u1050-\u1055\u105a-\u105d\u1061\u1065\u1066\u106e-\u1070\u1075-\u1081\u108e\u10a0-\u10c5\u10c7\u10cd\u10d0-\u10fa\u10fc-\u1248\u124a-\u124d\u1250-\u1256\u1258\u125a-\u125d\u1260-\u1288\u128a-\u128d\u1290-\u12b0\u12b2-\u12b5\u12b8-\u12be\u12c0\u12c2-\u12c5\u12c8-\u12d6\u12d8-\u1310\u1312-\u1315\u1318-\u135a\u1380-\u138f\u13a0-\u13f4\u1401-\u166c\u166f-\u167f\u1681-\u169a\u16a0-\u16ea\u16ee-\u16f0\u1700-\u170c\u170e-\u1711\u1720-\u1731\u1740-\u1751\u1760-\u176c\u176e-\u1770\u1780-\u17b3\u17d7\u17dc\u1820-\u1877\u1880-\u18a8\u18aa\u18b0-\u18f5\u1900-\u191c\u1950-\u196d\u1970-\u1974\u1980-\u19ab\u19c1-\u19c7\u1a00-\u1a16\u1a20-\u1a54\u1aa7\u1b05-\u1b33\u1b45-\u1b4b\u1b83-\u1ba0\u1bae\u1baf\u1bba-\u1be5\u1c00-\u1c23\u1c4d-\u1c4f\u1c5a-\u1c7d\u1ce9-\u1cec\u1cee-\u1cf1\u1cf5\u1cf6\u1d00-\u1dbf\u1e00-\u1f15\u1f18-\u1f1d\u1f20-\u1f45\u1f48-\u1f4d\u1f50-\u1f57\u1f59\u1f5b\u1f5d\u1f5f-\u1f7d\u1f80-\u1fb4\u1fb6-\u1fbc\u1fbe\u1fc2-\u1fc4\u1fc6-\u1fcc\u1fd0-\u1fd3\u1fd6-\u1fdb\u1fe0-\u1fec\u1ff2-\u1ff4\u1ff6-\u1ffc\u2071\u207f\u2090-\u209c\u2102\u2107\u210a-\u2113\u2115\u2119-\u211d\u2124\u2126\u2128\u212a-\u212d\u212f-\u2139\u213c-\u213f\u2145-\u2149\u214e\u2160-\u2188\u2c00-\u2c2e\u2c30-\u2c5e\u2c60-\u2ce4\u2ceb-\u2cee\u2cf2\u2cf3\u2d00-\u2d25\u2d27\u2d2d\u2d30-\u2d67\u2d6f\u2d80-\u2d96\u2da0-\u2da6\u2da8-\u2dae\u2db0-\u2db6\u2db8-\u2dbe\u2dc0-\u2dc6\u2dc8-\u2dce\u2dd0-\u2dd6\u2dd8-\u2dde\u2e2f\u3005-\u3007\u3021-\u3029\u3031-\u3035\u3038-\u303c\u3041-\u3096\u309d-\u309f\u30a1-\u30fa\u30fc-\u30ff\u3105-\u312d\u3131-\u318e\u31a0-\u31ba\u31f0-\u31ff\u3400-\u4db5\u4e00-\u9fcc\ua000-\ua48c\ua4d0-\ua4fd\ua500-\ua60c\ua610-\ua61f\ua62a\ua62b\ua640-\ua66e\ua67f-\ua697\ua6a0-\ua6ef\ua717-\ua71f\ua722-\ua788\ua78b-\ua78e\ua790-\ua793\ua7a0-\ua7aa\ua7f8-\ua801\ua803-\ua805\ua807-\ua80a\ua80c-\ua822\ua840-\ua873\ua882-\ua8b3\ua8f2-\ua8f7\ua8fb\ua90a-\ua925\ua930-\ua946\ua960-\ua97c\ua984-\ua9b2\ua9cf\uaa00-\uaa28\uaa40-\uaa42\uaa44-\uaa4b\uaa60-\uaa76\uaa7a\uaa80-\uaaaf\uaab1\uaab5\uaab6\uaab9-\uaabd\uaac0\uaac2\uaadb-\uaadd\uaae0-\uaaea\uaaf2-\uaaf4\uab01-\uab06\uab09-\uab0e\uab11-\uab16\uab20-\uab26\uab28-\uab2e\uabc0-\uabe2\uac00-\ud7a3\ud7b0-\ud7c6\ud7cb-\ud7fb\uf900-\ufa6d\ufa70-\ufad9\ufb00-\ufb06\ufb13-\ufb17\ufb1d\ufb1f-\ufb28\ufb2a-\ufb36\ufb38-\ufb3c\ufb3e\ufb40\ufb41\ufb43\ufb44\ufb46-\ufbb1\ufbd3-\ufd3d\ufd50-\ufd8f\ufd92-\ufdc7\ufdf0-\ufdfb\ufe70-\ufe74\ufe76-\ufefc\uff21-\uff3a\uff41-\uff5a\uff66-\uffbe\uffc2-\uffc7\uffca-\uffcf\uffd2-\uffd7\uffda-\uffdc0-9\u0300-\u036f\u0483-\u0487\u0591-\u05bd\u05bf\u05c1\u05c2\u05c4\u05c5\u05c7\u0610-\u061a\u064b-\u0669\u0670\u06d6-\u06dc\u06df-\u06e4\u06e7\u06e8\u06ea-\u06ed\u06f0-\u06f9\u0711\u0730-\u074a\u07a6-\u07b0\u07c0-\u07c9\u07eb-\u07f3\u0816-\u0819\u081b-\u0823\u0825-\u0827\u0829-\u082d\u0859-\u085b\u08e4-\u08fe\u0900-\u0903\u093a-\u093c\u093e-\u094f\u0951-\u0957\u0962\u0963\u0966-\u096f\u0981-\u0983\u09bc\u09be-\u09c4\u09c7\u09c8\u09cb-\u09cd\u09d7\u09e2\u09e3\u09e6-\u09ef\u0a01-\u0a03\u0a3c\u0a3e-\u0a42\u0a47\u0a48\u0a4b-\u0a4d\u0a51\u0a66-\u0a71\u0a75\u0a81-\u0a83\u0abc\u0abe-\u0ac5\u0ac7-\u0ac9\u0acb-\u0acd\u0ae2\u0ae3\u0ae6-\u0aef\u0b01-\u0b03\u0b3c\u0b3e-\u0b44\u0b47\u0b48\u0b4b-\u0b4d\u0b56\u0b57\u0b62\u0b63\u0b66-\u0b6f\u0b82\u0bbe-\u0bc2\u0bc6-\u0bc8\u0bca-\u0bcd\u0bd7\u0be6-\u0bef\u0c01-\u0c03\u0c3e-\u0c44\u0c46-\u0c48\u0c4a-\u0c4d\u0c55\u0c56\u0c62\u0c63\u0c66-\u0c6f\u0c82\u0c83\u0cbc\u0cbe-\u0cc4\u0cc6-\u0cc8\u0cca-\u0ccd\u0cd5\u0cd6\u0ce2\u0ce3\u0ce6-\u0cef\u0d02\u0d03\u0d3e-\u0d44\u0d46-\u0d48\u0d4a-\u0d4d\u0d57\u0d62\u0d63\u0d66-\u0d6f\u0d82\u0d83\u0dca\u0dcf-\u0dd4\u0dd6\u0dd8-\u0ddf\u0df2\u0df3\u0e31\u0e34-\u0e3a\u0e47-\u0e4e\u0e50-\u0e59\u0eb1\u0eb4-\u0eb9\u0ebb\u0ebc\u0ec8-\u0ecd\u0ed0-\u0ed9\u0f18\u0f19\u0f20-\u0f29\u0f35\u0f37\u0f39\u0f3e\u0f3f\u0f71-\u0f84\u0f86\u0f87\u0f8d-\u0f97\u0f99-\u0fbc\u0fc6\u102b-\u103e\u1040-\u1049\u1056-\u1059\u105e-\u1060\u1062-\u1064\u1067-\u106d\u1071-\u1074\u1082-\u108d\u108f-\u109d\u135d-\u135f\u1712-\u1714\u1732-\u1734\u1752\u1753\u1772\u1773\u17b4-\u17d3\u17dd\u17e0-\u17e9\u180b-\u180d\u1810-\u1819\u18a9\u1920-\u192b\u1930-\u193b\u1946-\u194f\u19b0-\u19c0\u19c8\u19c9\u19d0-\u19d9\u1a17-\u1a1b\u1a55-\u1a5e\u1a60-\u1a7c\u1a7f-\u1a89\u1a90-\u1a99\u1b00-\u1b04\u1b34-\u1b44\u1b50-\u1b59\u1b6b-\u1b73\u1b80-\u1b82\u1ba1-\u1bad\u1bb0-\u1bb9\u1be6-\u1bf3\u1c24-\u1c37\u1c40-\u1c49\u1c50-\u1c59\u1cd0-\u1cd2\u1cd4-\u1ce8\u1ced\u1cf2-\u1cf4\u1dc0-\u1de6\u1dfc-\u1dff\u200c\u200d\u203f\u2040\u2054\u20d0-\u20dc\u20e1\u20e5-\u20f0\u2cef-\u2cf1\u2d7f\u2de0-\u2dff\u302a-\u302f\u3099\u309a\ua620-\ua629\ua66f\ua674-\ua67d\ua69f\ua6f0\ua6f1\ua802\ua806\ua80b\ua823-\ua827\ua880\ua881\ua8b4-\ua8c4\ua8d0-\ua8d9\ua8e0-\ua8f1\ua900-\ua909\ua926-\ua92d\ua947-\ua953\ua980-\ua983\ua9b3-\ua9c0\ua9d0-\ua9d9\uaa29-\uaa36\uaa43\uaa4c\uaa4d\uaa50-\uaa59\uaa7b\uaab0\uaab2-\uaab4\uaab7\uaab8\uaabe\uaabf\uaac1\uaaeb-\uaaef\uaaf5\uaaf6\uabe3-\uabea\uabec\uabed\uabf0-\uabf9\ufb1e\ufe00-\ufe0f\ufe20-\ufe26\ufe33\ufe34\ufe4d-\ufe4f\uff10-\uff19\uff3f]*$/.test(str)
 }
 module.exports = isProperty
-},{}],222:[function(require,module,exports){
+},{}],223:[function(require,module,exports){
 module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
 
-},{}],223:[function(require,module,exports){
+},{}],224:[function(require,module,exports){
 var stream = require('stream')
 
 
@@ -39477,7 +42409,7 @@ module.exports.isReadable = isReadable
 module.exports.isWritable = isWritable
 module.exports.isDuplex   = isDuplex
 
-},{"stream":173}],224:[function(require,module,exports){
+},{"stream":173}],225:[function(require,module,exports){
 exports = module.exports = stringify
 exports.getSerialize = serializer
 
@@ -39506,7 +42438,7 @@ function serializer(replacer, cycleReplacer) {
   }
 }
 
-},{}],225:[function(require,module,exports){
+},{}],226:[function(require,module,exports){
 var hasExcape = /~/
 var escapeMatcher = /~[01]/g
 function escapeReplacer (m) {
@@ -39601,7 +42533,7 @@ exports.get = get
 exports.set = set
 exports.compile = compile
 
-},{}],226:[function(require,module,exports){
+},{}],227:[function(require,module,exports){
 // index.js
 /* Exports the kijiji-scraper modules */
 
@@ -39623,7 +42555,7 @@ module.exports.parse = function(ad) {
 	throw new apierr("parse()", "Ad.toString()");
 }
 
-},{"./lib/ad.js":227,"./lib/categories":228,"./lib/deprecation":229,"./lib/locations":230,"./lib/search.js":232}],227:[function(require,module,exports){
+},{"./lib/ad.js":228,"./lib/categories":229,"./lib/deprecation":230,"./lib/locations":231,"./lib/search.js":233}],228:[function(require,module,exports){
 // ad.js
 /* Kijiji ad object definition */
 
@@ -39731,7 +42663,7 @@ class KijijiAd {
 
 module.exports = KijijiAd;
 
-},{"./deprecation":229,"./scraper":231}],228:[function(require,module,exports){
+},{"./deprecation":230,"./scraper":232}],229:[function(require,module,exports){
 // categories.js
 /* Ad categories and their corresponding Kijiji categoryId values */
 
@@ -40282,7 +43214,7 @@ module.exports = {
     }
 };
 
-},{}],229:[function(require,module,exports){
+},{}],230:[function(require,module,exports){
 // deprecation.js
 /* Helper functions for notifying users about the recent changes in this
    module instead of just failing with no explanation */
@@ -40300,7 +43232,7 @@ class APIChangeNotice extends Error {
 
 module.exports = APIChangeNotice;
 
-},{}],230:[function(require,module,exports){
+},{}],231:[function(require,module,exports){
 // locations.js
 /* Geographical locations and their corresponding Kijiji locationId values */
 
@@ -40595,7 +43527,7 @@ module.exports = {
     }
 };
 
-},{}],231:[function(require,module,exports){
+},{}],232:[function(require,module,exports){
 // ad-scraper.js
 /* Scrapes a Kijiji ad and returns its information */
 
@@ -40705,7 +43637,7 @@ function scrape(url) {
 
 module.exports = scrape;
 
-},{"cheerio":242,"request":327}],232:[function(require,module,exports){
+},{"cheerio":243,"request":328}],233:[function(require,module,exports){
 // search.js
 /* Searches Kijiji for recent ads matching given criteria */
 
@@ -40950,7 +43882,7 @@ function search(params, options={}, callback=null) {
 
 module.exports = search;
 
-},{"./ad":227,"./scraper":231,"cheerio":242,"request":327}],233:[function(require,module,exports){
+},{"./ad":228,"./scraper":232,"cheerio":243,"request":328}],234:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 
@@ -40965,7 +43897,7 @@ module.exports = {
 
 };
 
-},{}],234:[function(require,module,exports){
+},{}],235:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 var errors = require('./errors');
@@ -40994,7 +43926,7 @@ for (var e in errors) {
     module.exports[e] = errors[e];
 }
 
-},{"./errors":233,"./reader":235,"./types":236,"./writer":237}],235:[function(require,module,exports){
+},{"./errors":234,"./reader":236,"./types":237,"./writer":238}],236:[function(require,module,exports){
 (function (Buffer){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
@@ -41265,7 +44197,7 @@ Reader.prototype._readTag = function(tag) {
 module.exports = Reader;
 
 }).call(this,{"isBuffer":require("../../../../../../../../../../../../Users/rbouamira/AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js")})
-},{"../../../../../../../../../../../../Users/rbouamira/AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js":109,"./errors":233,"./types":236,"assert":16}],236:[function(require,module,exports){
+},{"../../../../../../../../../../../../Users/rbouamira/AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js":109,"./errors":234,"./types":237,"assert":16}],237:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 
@@ -41303,7 +44235,7 @@ module.exports = {
   Context: 128
 };
 
-},{}],237:[function(require,module,exports){
+},{}],238:[function(require,module,exports){
 (function (Buffer){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
@@ -41624,7 +44556,7 @@ Writer.prototype._ensure = function(len) {
 module.exports = Writer;
 
 }).call(this,require("buffer").Buffer)
-},{"./errors":233,"./types":236,"assert":16,"buffer":54}],238:[function(require,module,exports){
+},{"./errors":234,"./types":237,"assert":16,"buffer":54}],239:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 // If you have no idea what ASN.1 or BER is, see this:
@@ -41646,7 +44578,7 @@ module.exports = {
 
 };
 
-},{"./ber/index":234}],239:[function(require,module,exports){
+},{"./ber/index":235}],240:[function(require,module,exports){
 (function (Buffer,process){
 // Copyright (c) 2012, Mark Cavage. All rights reserved.
 
@@ -41895,7 +44827,7 @@ Object.keys(assert).forEach(function (k) {
 });
 
 }).call(this,{"isBuffer":require("../../../../../../../../../../Users/rbouamira/AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js")},require('_process'))
-},{"../../../../../../../../../../Users/rbouamira/AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js":109,"_process":137,"assert":16,"stream":173,"util":185}],240:[function(require,module,exports){
+},{"../../../../../../../../../../Users/rbouamira/AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js":109,"_process":137,"assert":16,"stream":173,"util":185}],241:[function(require,module,exports){
 
 /*!
  * knox - auth
@@ -42099,7 +45031,7 @@ function canonicalizeResource (resource) {
 }
 module.exports.canonicalizeResource = canonicalizeResource
 
-},{"crypto":63,"url":181}],241:[function(require,module,exports){
+},{"crypto":63,"url":181}],242:[function(require,module,exports){
 function Caseless (dict) {
   this.dict = dict || {}
 }
@@ -42166,7 +45098,7 @@ module.exports.httpify = function (resp, headers) {
   return c
 }
 
-},{}],242:[function(require,module,exports){
+},{}],243:[function(require,module,exports){
 /**
  * Export cheerio (with )
  */
@@ -42179,7 +45111,7 @@ exports = module.exports = require('./lib/cheerio');
 
 exports.version = require('./package').version;
 
-},{"./lib/cheerio":248,"./package":252}],243:[function(require,module,exports){
+},{"./lib/cheerio":249,"./package":253}],244:[function(require,module,exports){
 var _ = require('lodash'),
   utils = require('../utils'),
   isTag = utils.isTag,
@@ -42588,7 +45520,7 @@ exports.is = function (selector) {
 };
 
 
-},{"../utils":251,"lodash":316}],244:[function(require,module,exports){
+},{"../utils":252,"lodash":317}],245:[function(require,module,exports){
 var _ = require('lodash'),
     domEach = require('../utils').domEach;
 var toString = Object.prototype.toString;
@@ -42708,7 +45640,7 @@ function parse(styles) {
     }, {});
 }
 
-},{"../utils":251,"lodash":316}],245:[function(require,module,exports){
+},{"../utils":252,"lodash":317}],246:[function(require,module,exports){
 // https://github.com/jquery/jquery/blob/2.1.3/src/manipulation/var/rcheckableType.js
 // https://github.com/jquery/jquery/blob/2.1.3/src/serialize.js
 var _ = require('lodash'),
@@ -42764,7 +45696,7 @@ exports.serializeArray = function() {
     }).get();
 };
 
-},{"lodash":316}],246:[function(require,module,exports){
+},{"lodash":317}],247:[function(require,module,exports){
 var _ = require('lodash'),
     parse = require('../parse'),
     $ = require('../static'),
@@ -43132,7 +46064,7 @@ exports.clone = function() {
   return this._make(cloneDom(this.get(), this.options));
 };
 
-},{"../parse":249,"../static":250,"../utils":251,"lodash":316}],247:[function(require,module,exports){
+},{"../parse":250,"../static":251,"../utils":252,"lodash":317}],248:[function(require,module,exports){
 var _ = require('lodash'),
     select = require('css-select'),
     utils = require('../utils'),
@@ -43556,7 +46488,7 @@ exports.addBack = function(selector) {
   );
 };
 
-},{"../utils":251,"css-select":253,"htmlparser2":298,"lodash":316}],248:[function(require,module,exports){
+},{"../utils":252,"css-select":254,"htmlparser2":299,"lodash":317}],249:[function(require,module,exports){
 /*
   Module dependencies
 */
@@ -43720,7 +46652,7 @@ var isNode = function(obj) {
   return obj.name || obj.type === 'text' || obj.type === 'comment';
 };
 
-},{"./api/attributes":243,"./api/css":244,"./api/forms":245,"./api/manipulation":246,"./api/traversing":247,"./parse":249,"./static":250,"lodash":316}],249:[function(require,module,exports){
+},{"./api/attributes":244,"./api/css":245,"./api/forms":246,"./api/manipulation":247,"./api/traversing":248,"./parse":250,"./static":251,"lodash":317}],250:[function(require,module,exports){
 (function (Buffer){
 /*
   Module Dependencies
@@ -43810,7 +46742,7 @@ exports.update = function(arr, parent) {
 // module.exports = $.extend(exports);
 
 }).call(this,{"isBuffer":require("../../../../../../../../../../../Users/rbouamira/AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js")})
-},{"../../../../../../../../../../../Users/rbouamira/AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js":109,"htmlparser2":298}],250:[function(require,module,exports){
+},{"../../../../../../../../../../../Users/rbouamira/AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js":109,"htmlparser2":299}],251:[function(require,module,exports){
 /**
  * Module dependencies
  */
@@ -43994,7 +46926,7 @@ exports.contains = function(container, contained) {
   return false;
 };
 
-},{"./cheerio":248,"./parse":249,"css-select":253,"dom-serializer":202,"lodash":316}],251:[function(require,module,exports){
+},{"./cheerio":249,"./parse":250,"css-select":254,"dom-serializer":203,"lodash":317}],252:[function(require,module,exports){
 var parse = require('./parse'),
     render = require('dom-serializer');
 
@@ -44061,7 +46993,7 @@ exports.cloneDom = function(dom, options) {
   return parse(render(dom, options), options).children;
 };
 
-},{"./parse":249,"dom-serializer":202}],252:[function(require,module,exports){
+},{"./parse":250,"dom-serializer":203}],253:[function(require,module,exports){
 module.exports={
   "_from": "cheerio@~0.19.0",
   "_id": "cheerio@0.19.0",
@@ -44139,7 +47071,7 @@ module.exports={
   "version": "0.19.0"
 }
 
-},{}],253:[function(require,module,exports){
+},{}],254:[function(require,module,exports){
 "use strict";
 
 module.exports = CSSselect;
@@ -44198,7 +47130,7 @@ CSSselect.iterate = selectAll;
 //useful for debugging
 CSSselect._compileUnsafe = compileUnsafe;
 
-},{"./lib/compile.js":255,"./lib/pseudos.js":258,"boolbase":194,"domutils":264}],254:[function(require,module,exports){
+},{"./lib/compile.js":256,"./lib/pseudos.js":259,"boolbase":195,"domutils":265}],255:[function(require,module,exports){
 var DomUtils  = require("domutils"),
     hasAttrib = DomUtils.hasAttrib,
     getAttributeValue = DomUtils.getAttributeValue,
@@ -44381,7 +47313,7 @@ module.exports = {
 	rules: attributeRules
 };
 
-},{"boolbase":194,"domutils":264}],255:[function(require,module,exports){
+},{"boolbase":195,"domutils":265}],256:[function(require,module,exports){
 /*
 	compiles a selector to an executable function
 */
@@ -44564,7 +47496,7 @@ filters.matches = function(next, selector, options){
 	return compileUnsafe(selector, opts);
 };
 
-},{"./general.js":256,"./procedure.json":257,"./pseudos.js":258,"./sort.js":259,"boolbase":194,"css-what":260,"domutils":264}],256:[function(require,module,exports){
+},{"./general.js":257,"./procedure.json":258,"./pseudos.js":259,"./sort.js":260,"boolbase":195,"css-what":261,"domutils":265}],257:[function(require,module,exports){
 var DomUtils    = require("domutils"),
     isTag       = DomUtils.isTag,
     getParent   = DomUtils.getParent,
@@ -44651,7 +47583,7 @@ module.exports = {
 		return next;
 	}
 };
-},{"./attributes.js":254,"./pseudos.js":258,"domutils":264}],257:[function(require,module,exports){
+},{"./attributes.js":255,"./pseudos.js":259,"domutils":265}],258:[function(require,module,exports){
 module.exports={
   "universal": 5,
   "tag": 3,
@@ -44664,7 +47596,7 @@ module.exports={
   "adjacent": -1
 }
 
-},{}],258:[function(require,module,exports){
+},{}],259:[function(require,module,exports){
 /*
 	pseudo selectors
 	
@@ -45008,7 +47940,7 @@ module.exports = {
 	pseudos: pseudos
 };
 
-},{"./attributes.js":254,"boolbase":194,"domutils":264,"nth-check":341}],259:[function(require,module,exports){
+},{"./attributes.js":255,"boolbase":195,"domutils":265,"nth-check":397}],260:[function(require,module,exports){
 module.exports = sortByProcedure;
 
 /*
@@ -45054,7 +47986,7 @@ function sortByProcedure(arr){
 		}
 	}
 }
-},{"./procedure.json":257}],260:[function(require,module,exports){
+},{"./procedure.json":258}],261:[function(require,module,exports){
 "use strict";
 
 module.exports = parse;
@@ -45237,7 +48169,7 @@ function parse(selector, options){
 	subselects.push(tokens);
 	return subselects;
 }
-},{}],261:[function(require,module,exports){
+},{}],262:[function(require,module,exports){
 var ElementType = require("domelementtype");
 
 var re_whitespace = /\s+/g;
@@ -45421,7 +48353,7 @@ DomHandler.prototype.onprocessinginstruction = function(name, data){
 
 module.exports = DomHandler;
 
-},{"./lib/element":262,"./lib/node":263,"domelementtype":204}],262:[function(require,module,exports){
+},{"./lib/element":263,"./lib/node":264,"domelementtype":205}],263:[function(require,module,exports){
 // DOM-Level-1-compliant structure
 var NodePrototype = require('./node');
 var ElementPrototype = module.exports = Object.create(NodePrototype);
@@ -45443,7 +48375,7 @@ Object.keys(domLvl1).forEach(function(key) {
 	});
 });
 
-},{"./node":263}],263:[function(require,module,exports){
+},{"./node":264}],264:[function(require,module,exports){
 // This object will be used as the prototype for Nodes when creating a
 // DOM-Level-1-compliant structure.
 var NodePrototype = module.exports = {
@@ -45489,7 +48421,7 @@ Object.keys(domLvl1).forEach(function(key) {
 	});
 });
 
-},{}],264:[function(require,module,exports){
+},{}],265:[function(require,module,exports){
 var DomUtils = module.exports;
 
 [
@@ -45505,7 +48437,7 @@ var DomUtils = module.exports;
 	});
 });
 
-},{"./lib/helpers":265,"./lib/legacy":266,"./lib/manipulation":267,"./lib/querying":268,"./lib/stringify":269,"./lib/traversal":270}],265:[function(require,module,exports){
+},{"./lib/helpers":266,"./lib/legacy":267,"./lib/manipulation":268,"./lib/querying":269,"./lib/stringify":270,"./lib/traversal":271}],266:[function(require,module,exports){
 // removeSubsets
 // Given an array of nodes, remove any member that is contained by another.
 exports.removeSubsets = function(nodes) {
@@ -45538,7 +48470,7 @@ exports.removeSubsets = function(nodes) {
 	return nodes;
 };
 
-},{}],266:[function(require,module,exports){
+},{}],267:[function(require,module,exports){
 var ElementType = require("domelementtype");
 var isTag = exports.isTag = ElementType.isTag;
 
@@ -45627,7 +48559,7 @@ exports.getElementsByTagType = function(type, element, recurse, limit){
 	return this.filter(Checks.tag_type(type), element, recurse, limit);
 };
 
-},{"domelementtype":204}],267:[function(require,module,exports){
+},{"domelementtype":205}],268:[function(require,module,exports){
 exports.removeElement = function(elem){
 	if(elem.prev) elem.prev.next = elem.next;
 	if(elem.next) elem.next.prev = elem.prev;
@@ -45706,7 +48638,7 @@ exports.prepend = function(elem, prev){
 
 
 
-},{}],268:[function(require,module,exports){
+},{}],269:[function(require,module,exports){
 var isTag = require("domelementtype").isTag;
 
 module.exports = {
@@ -45802,7 +48734,7 @@ function findAll(test, elems){
 	return result;
 }
 
-},{"domelementtype":204}],269:[function(require,module,exports){
+},{"domelementtype":205}],270:[function(require,module,exports){
 var ElementType = require("domelementtype"),
     isTag = ElementType.isTag;
 
@@ -45896,7 +48828,7 @@ function getText(elem){
 	if(elem.type === ElementType.Text) return elem.data;
 	return "";
 }
-},{"domelementtype":204}],270:[function(require,module,exports){
+},{"domelementtype":205}],271:[function(require,module,exports){
 var getChildren = exports.getChildren = function(elem){
 	return elem.children;
 };
@@ -45922,7 +48854,7 @@ exports.getName = function(elem){
 	return elem.name;
 };
 
-},{}],271:[function(require,module,exports){
+},{}],272:[function(require,module,exports){
 var hasOwn = Object.prototype.hasOwnProperty;
 var toStr = Object.prototype.toString;
 var defineProperty = Object.defineProperty;
@@ -46043,11 +48975,11 @@ module.exports = function extend() {
 	return target;
 };
 
-},{}],272:[function(require,module,exports){
+},{}],273:[function(require,module,exports){
 /* eslint-env browser */
 module.exports = window.FormData;
 
-},{}],273:[function(require,module,exports){
+},{}],274:[function(require,module,exports){
 'use strict'
 
 function ValidationError (errors) {
@@ -46059,7 +48991,7 @@ ValidationError.prototype = Error.prototype
 
 module.exports = ValidationError
 
-},{}],274:[function(require,module,exports){
+},{}],275:[function(require,module,exports){
 'use strict'
 
 var schemas = require('./schemas')
@@ -46100,7 +49032,7 @@ Object.keys(schemas).map(function (name) {
   }
 })
 
-},{"./error":273,"./schemas":282,"is-my-json-valid":220}],275:[function(require,module,exports){
+},{"./error":274,"./schemas":283,"is-my-json-valid":221}],276:[function(require,module,exports){
 module.exports={
   "properties": {
     "beforeRequest": {
@@ -46115,7 +49047,7 @@ module.exports={
   }
 }
 
-},{}],276:[function(require,module,exports){
+},{}],277:[function(require,module,exports){
 module.exports={
   "oneOf": [{
     "type": "object",
@@ -46148,7 +49080,7 @@ module.exports={
   }]
 }
 
-},{}],277:[function(require,module,exports){
+},{}],278:[function(require,module,exports){
 module.exports={
   "type": "object",
   "required": [
@@ -46177,7 +49109,7 @@ module.exports={
   }
 }
 
-},{}],278:[function(require,module,exports){
+},{}],279:[function(require,module,exports){
 module.exports={
   "type": "object",
   "required": [
@@ -46213,7 +49145,7 @@ module.exports={
   }
 }
 
-},{}],279:[function(require,module,exports){
+},{}],280:[function(require,module,exports){
 module.exports={
   "type": "object",
   "required": [
@@ -46233,7 +49165,7 @@ module.exports={
   }
 }
 
-},{}],280:[function(require,module,exports){
+},{}],281:[function(require,module,exports){
 module.exports={
   "type": "object",
   "optional": true,
@@ -46286,7 +49218,7 @@ module.exports={
   }
 }
 
-},{}],281:[function(require,module,exports){
+},{}],282:[function(require,module,exports){
 module.exports={
   "type": "object",
   "required": [
@@ -46299,7 +49231,7 @@ module.exports={
   }
 }
 
-},{}],282:[function(require,module,exports){
+},{}],283:[function(require,module,exports){
 'use strict'
 
 var schemas = {
@@ -46350,7 +49282,7 @@ schemas.har.properties.log = schemas.log
 
 module.exports = schemas
 
-},{"./cache.json":275,"./cacheEntry.json":276,"./content.json":277,"./cookie.json":278,"./creator.json":279,"./entry.json":280,"./har.json":281,"./log.json":283,"./page.json":284,"./pageTimings.json":285,"./postData.json":286,"./record.json":287,"./request.json":288,"./response.json":289,"./timings.json":290}],283:[function(require,module,exports){
+},{"./cache.json":276,"./cacheEntry.json":277,"./content.json":278,"./cookie.json":279,"./creator.json":280,"./entry.json":281,"./har.json":282,"./log.json":284,"./page.json":285,"./pageTimings.json":286,"./postData.json":287,"./record.json":288,"./request.json":289,"./response.json":290,"./timings.json":291}],284:[function(require,module,exports){
 module.exports={
   "type": "object",
   "required": [
@@ -46386,7 +49318,7 @@ module.exports={
   }
 }
 
-},{}],284:[function(require,module,exports){
+},{}],285:[function(require,module,exports){
 module.exports={
   "type": "object",
   "optional": true,
@@ -46418,7 +49350,7 @@ module.exports={
   }
 }
 
-},{}],285:[function(require,module,exports){
+},{}],286:[function(require,module,exports){
 module.exports={
   "type": "object",
   "properties": {
@@ -46436,7 +49368,7 @@ module.exports={
   }
 }
 
-},{}],286:[function(require,module,exports){
+},{}],287:[function(require,module,exports){
 module.exports={
   "type": "object",
   "optional": true,
@@ -46479,7 +49411,7 @@ module.exports={
   }
 }
 
-},{}],287:[function(require,module,exports){
+},{}],288:[function(require,module,exports){
 module.exports={
   "type": "object",
   "required": [
@@ -46499,7 +49431,7 @@ module.exports={
   }
 }
 
-},{}],288:[function(require,module,exports){
+},{}],289:[function(require,module,exports){
 module.exports={
   "type": "object",
   "required": [
@@ -46556,7 +49488,7 @@ module.exports={
   }
 }
 
-},{}],289:[function(require,module,exports){
+},{}],290:[function(require,module,exports){
 module.exports={
   "type": "object",
   "required": [
@@ -46610,7 +49542,7 @@ module.exports={
   }
 }
 
-},{}],290:[function(require,module,exports){
+},{}],291:[function(require,module,exports){
 module.exports={
   "required": [
     "send",
@@ -46652,7 +49584,7 @@ module.exports={
   }
 }
 
-},{}],291:[function(require,module,exports){
+},{}],292:[function(require,module,exports){
 module.exports = CollectingHandler;
 
 function CollectingHandler(cbs){
@@ -46709,7 +49641,7 @@ CollectingHandler.prototype.restart = function(){
 	}
 };
 
-},{"./":298}],292:[function(require,module,exports){
+},{"./":299}],293:[function(require,module,exports){
 var index = require("./index.js"),
     DomHandler = index.DomHandler,
 	DomUtils = index.DomUtils;
@@ -46806,7 +49738,7 @@ FeedHandler.prototype.onend = function(){
 
 module.exports = FeedHandler;
 
-},{"./index.js":298,"util":185}],293:[function(require,module,exports){
+},{"./index.js":299,"util":185}],294:[function(require,module,exports){
 var Tokenizer = require("./Tokenizer.js");
 
 /*
@@ -47158,7 +50090,7 @@ Parser.prototype.done = Parser.prototype.end;
 
 module.exports = Parser;
 
-},{"./Tokenizer.js":296,"events":90,"util":185}],294:[function(require,module,exports){
+},{"./Tokenizer.js":297,"events":90,"util":185}],295:[function(require,module,exports){
 module.exports = ProxyHandler;
 
 function ProxyHandler(cbs){
@@ -47186,7 +50118,7 @@ Object.keys(EVENTS).forEach(function(name){
 		throw Error("wrong number of arguments");
 	}
 });
-},{"./":298}],295:[function(require,module,exports){
+},{"./":299}],296:[function(require,module,exports){
 module.exports = Stream;
 
 var Parser = require("./WritableStream.js");
@@ -47222,7 +50154,7 @@ Object.keys(EVENTS).forEach(function(name){
 		throw Error("wrong number of arguments!");
 	}
 });
-},{"../":298,"./WritableStream.js":297,"util":185}],296:[function(require,module,exports){
+},{"../":299,"./WritableStream.js":298,"util":185}],297:[function(require,module,exports){
 module.exports = Tokenizer;
 
 var decodeCodePoint = require("entities/lib/decode_codepoint.js"),
@@ -48130,7 +51062,7 @@ Tokenizer.prototype._emitPartial = function(value){
 	}
 };
 
-},{"entities/lib/decode_codepoint.js":306,"entities/maps/entities.json":308,"entities/maps/legacy.json":309,"entities/maps/xml.json":310}],297:[function(require,module,exports){
+},{"entities/lib/decode_codepoint.js":307,"entities/maps/entities.json":309,"entities/maps/legacy.json":310,"entities/maps/xml.json":311}],298:[function(require,module,exports){
 module.exports = Stream;
 
 var Parser = require("./Parser.js"),
@@ -48152,7 +51084,7 @@ WritableStream.prototype._write = function(chunk, encoding, cb){
 	this._parser.write(chunk);
 	cb();
 };
-},{"./Parser.js":293,"readable-stream":23,"stream":173,"util":185}],298:[function(require,module,exports){
+},{"./Parser.js":294,"readable-stream":23,"stream":173,"util":185}],299:[function(require,module,exports){
 var Parser = require("./Parser.js"),
     DomHandler = require("domhandler");
 
@@ -48222,9 +51154,9 @@ module.exports = {
 	}
 };
 
-},{"./CollectingHandler.js":291,"./FeedHandler.js":292,"./Parser.js":293,"./ProxyHandler.js":294,"./Stream.js":295,"./Tokenizer.js":296,"./WritableStream.js":297,"domelementtype":204,"domhandler":261,"domutils":299}],299:[function(require,module,exports){
-arguments[4][264][0].apply(exports,arguments)
-},{"./lib/helpers":300,"./lib/legacy":301,"./lib/manipulation":302,"./lib/querying":303,"./lib/stringify":304,"./lib/traversal":305,"dup":264}],300:[function(require,module,exports){
+},{"./CollectingHandler.js":292,"./FeedHandler.js":293,"./Parser.js":294,"./ProxyHandler.js":295,"./Stream.js":296,"./Tokenizer.js":297,"./WritableStream.js":298,"domelementtype":205,"domhandler":262,"domutils":300}],300:[function(require,module,exports){
+arguments[4][265][0].apply(exports,arguments)
+},{"./lib/helpers":301,"./lib/legacy":302,"./lib/manipulation":303,"./lib/querying":304,"./lib/stringify":305,"./lib/traversal":306,"dup":265}],301:[function(require,module,exports){
 // removeSubsets
 // Given an array of nodes, remove any member that is contained by another.
 exports.removeSubsets = function(nodes) {
@@ -48367,13 +51299,13 @@ exports.uniqueSort = function(nodes) {
 	return nodes;
 };
 
-},{}],301:[function(require,module,exports){
-arguments[4][266][0].apply(exports,arguments)
-},{"domelementtype":204,"dup":266}],302:[function(require,module,exports){
+},{}],302:[function(require,module,exports){
 arguments[4][267][0].apply(exports,arguments)
-},{"dup":267}],303:[function(require,module,exports){
+},{"domelementtype":205,"dup":267}],303:[function(require,module,exports){
 arguments[4][268][0].apply(exports,arguments)
-},{"domelementtype":204,"dup":268}],304:[function(require,module,exports){
+},{"dup":268}],304:[function(require,module,exports){
+arguments[4][269][0].apply(exports,arguments)
+},{"domelementtype":205,"dup":269}],305:[function(require,module,exports){
 var ElementType = require("domelementtype"),
     getOuterHTML = require("dom-serializer"),
     isTag = ElementType.isTag;
@@ -48397,7 +51329,7 @@ function getText(elem){
 	return "";
 }
 
-},{"dom-serializer":202,"domelementtype":204}],305:[function(require,module,exports){
+},{"dom-serializer":203,"domelementtype":205}],306:[function(require,module,exports){
 var getChildren = exports.getChildren = function(elem){
 	return elem.children;
 };
@@ -48423,17 +51355,17 @@ exports.getName = function(elem){
 	return elem.name;
 };
 
-},{}],306:[function(require,module,exports){
-arguments[4][207][0].apply(exports,arguments)
-},{"../maps/decode.json":307,"dup":207}],307:[function(require,module,exports){
-arguments[4][209][0].apply(exports,arguments)
-},{"dup":209}],308:[function(require,module,exports){
+},{}],307:[function(require,module,exports){
+arguments[4][208][0].apply(exports,arguments)
+},{"../maps/decode.json":308,"dup":208}],308:[function(require,module,exports){
 arguments[4][210][0].apply(exports,arguments)
 },{"dup":210}],309:[function(require,module,exports){
 arguments[4][211][0].apply(exports,arguments)
 },{"dup":211}],310:[function(require,module,exports){
 arguments[4][212][0].apply(exports,arguments)
 },{"dup":212}],311:[function(require,module,exports){
+arguments[4][213][0].apply(exports,arguments)
+},{"dup":213}],312:[function(require,module,exports){
 // Copyright 2015 Joyent, Inc.
 
 var parser = require('./parser');
@@ -48462,7 +51394,7 @@ module.exports = {
   verifyHMAC: verify.verifyHMAC
 };
 
-},{"./parser":312,"./signer":313,"./util":314,"./verify":315}],312:[function(require,module,exports){
+},{"./parser":313,"./signer":314,"./util":315,"./verify":316}],313:[function(require,module,exports){
 // Copyright 2012 Joyent, Inc.  All rights reserved.
 
 var assert = require('assert-plus');
@@ -48768,7 +51700,7 @@ module.exports = {
 
 };
 
-},{"assert-plus":239,"util":185}],313:[function(require,module,exports){
+},{"assert-plus":240,"util":185}],314:[function(require,module,exports){
 // Copyright 2012 Joyent, Inc.  All rights reserved.
 
 var assert = require('assert-plus');
@@ -48948,7 +51880,7 @@ module.exports = {
 
 };
 
-},{"assert-plus":239,"crypto":63,"http":174,"util":185}],314:[function(require,module,exports){
+},{"assert-plus":240,"crypto":63,"http":174,"util":185}],315:[function(require,module,exports){
 (function (Buffer){
 // Copyright 2012 Joyent, Inc.  All rights reserved.
 
@@ -49258,7 +52190,7 @@ module.exports = {
 };
 
 }).call(this,require("buffer").Buffer)
-},{"asn1":238,"assert-plus":239,"buffer":54,"crypto":63,"ctype":200}],315:[function(require,module,exports){
+},{"asn1":239,"assert-plus":240,"buffer":54,"crypto":63,"ctype":201}],316:[function(require,module,exports){
 // Copyright 2015 Joyent, Inc.
 
 var assert = require('assert-plus');
@@ -49316,7 +52248,7 @@ module.exports = {
   }
 };
 
-},{"assert-plus":239,"crypto":63}],316:[function(require,module,exports){
+},{"assert-plus":240,"crypto":63}],317:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -61671,7 +64603,7 @@ module.exports = {
 }.call(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],317:[function(require,module,exports){
+},{}],318:[function(require,module,exports){
 
 var db = require('mime-db')
 
@@ -61736,7 +64668,7 @@ exports.contentType = function (type) {
   return type
 }
 
-},{"mime-db":319}],318:[function(require,module,exports){
+},{"mime-db":320}],319:[function(require,module,exports){
 module.exports={
   "application/1d-interleaved-parityfec": {
     "source": "iana"
@@ -68097,7 +71029,7 @@ module.exports={
   }
 }
 
-},{}],319:[function(require,module,exports){
+},{}],320:[function(require,module,exports){
 /*!
  * mime-db
  * Copyright(c) 2014 Jonathan Ong
@@ -68110,7 +71042,7 @@ module.exports={
 
 module.exports = require('./db.json')
 
-},{"./db.json":318}],320:[function(require,module,exports){
+},{"./db.json":319}],321:[function(require,module,exports){
 (function (Buffer){
 //     uuid.js
 //
@@ -68386,7 +71318,7 @@ module.exports = require('./db.json')
 })('undefined' !== typeof window ? window : null);
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":54,"crypto":63}],321:[function(require,module,exports){
+},{"buffer":54,"crypto":63}],322:[function(require,module,exports){
 var crypto = require('crypto')
   , qs = require('querystring')
   ;
@@ -68524,10 +71456,10 @@ exports.rfc3986 = rfc3986
 exports.generateBase = generateBase
 
 
-},{"crypto":63,"querystring":147}],322:[function(require,module,exports){
+},{"crypto":63,"querystring":147}],323:[function(require,module,exports){
 module.exports = require('./lib/');
 
-},{"./lib/":323}],323:[function(require,module,exports){
+},{"./lib/":324}],324:[function(require,module,exports){
 // Load modules
 
 var Stringify = require('./stringify');
@@ -68544,7 +71476,7 @@ module.exports = {
     parse: Parse
 };
 
-},{"./parse":324,"./stringify":325}],324:[function(require,module,exports){
+},{"./parse":325,"./stringify":326}],325:[function(require,module,exports){
 // Load modules
 
 var Utils = require('./utils');
@@ -68712,7 +71644,7 @@ module.exports = function (str, options) {
     return Utils.compact(obj);
 };
 
-},{"./utils":326}],325:[function(require,module,exports){
+},{"./utils":327}],326:[function(require,module,exports){
 // Load modules
 
 var Utils = require('./utils');
@@ -68835,7 +71767,7 @@ module.exports = function (obj, options) {
     return keys.join(delimiter);
 };
 
-},{"./utils":326}],326:[function(require,module,exports){
+},{"./utils":327}],327:[function(require,module,exports){
 // Load modules
 
 
@@ -69027,7 +71959,7 @@ exports.isBuffer = function (obj) {
               obj.constructor.isBuffer(obj));
 };
 
-},{}],327:[function(require,module,exports){
+},{}],328:[function(require,module,exports){
 // Copyright 2010-2012 Mikeal Rogers
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
@@ -69181,7 +72113,7 @@ Object.defineProperty(request, 'debug', {
   }
 })
 
-},{"./lib/cookies":329,"./lib/helpers":332,"./request":338,"extend":271}],328:[function(require,module,exports){
+},{"./lib/cookies":330,"./lib/helpers":333,"./request":339,"extend":272}],329:[function(require,module,exports){
 'use strict'
 
 var caseless = require('caseless')
@@ -69336,7 +72268,7 @@ Auth.prototype.onResponse = function (response) {
 
 exports.Auth = Auth
 
-},{"./helpers":332,"caseless":241,"node-uuid":320}],329:[function(require,module,exports){
+},{"./helpers":333,"caseless":242,"node-uuid":321}],330:[function(require,module,exports){
 'use strict'
 
 var tough = require('tough-cookie')
@@ -69377,7 +72309,7 @@ exports.jar = function(store) {
   return new RequestJar(store)
 }
 
-},{"tough-cookie":347}],330:[function(require,module,exports){
+},{"tough-cookie":418}],331:[function(require,module,exports){
 (function (process){
 'use strict'
 
@@ -69460,7 +72392,7 @@ function getProxyFromURI(uri) {
 module.exports = getProxyFromURI
 
 }).call(this,require('_process'))
-},{"_process":137}],331:[function(require,module,exports){
+},{"_process":137}],332:[function(require,module,exports){
 'use strict'
 
 var fs = require('fs')
@@ -69667,7 +72599,7 @@ Har.prototype.options = function (options) {
 
 exports.Har = Har
 
-},{"fs":1,"har-validator":274,"querystring":147,"util":185}],332:[function(require,module,exports){
+},{"fs":1,"har-validator":275,"querystring":147,"util":185}],333:[function(require,module,exports){
 (function (process,Buffer,setImmediate){
 'use strict'
 
@@ -69735,7 +72667,7 @@ exports.copy                  = copy
 exports.defer                 = deferMethod()
 
 }).call(this,require('_process'),require("buffer").Buffer,require("timers").setImmediate)
-},{"_process":137,"buffer":54,"crypto":63,"json-stringify-safe":224,"timers":179}],333:[function(require,module,exports){
+},{"_process":137,"buffer":54,"crypto":63,"json-stringify-safe":225,"timers":179}],334:[function(require,module,exports){
 (function (Buffer){
 'use strict'
 
@@ -69848,7 +72780,7 @@ Multipart.prototype.onRequest = function (options) {
 exports.Multipart = Multipart
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":54,"combined-stream":195,"isstream":223,"node-uuid":320}],334:[function(require,module,exports){
+},{"buffer":54,"combined-stream":196,"isstream":224,"node-uuid":321}],335:[function(require,module,exports){
 (function (Buffer){
 'use strict'
 
@@ -69999,7 +72931,7 @@ OAuth.prototype.onRequest = function (_oauth) {
 exports.OAuth = OAuth
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":54,"caseless":241,"crypto":63,"node-uuid":320,"oauth-sign":321,"qs":322,"url":181}],335:[function(require,module,exports){
+},{"buffer":54,"caseless":242,"crypto":63,"node-uuid":321,"oauth-sign":322,"qs":323,"url":181}],336:[function(require,module,exports){
 'use strict'
 
 var qs = require('qs')
@@ -70052,7 +72984,7 @@ Querystring.prototype.unescape = querystring.unescape
 
 exports.Querystring = Querystring
 
-},{"qs":322,"querystring":147}],336:[function(require,module,exports){
+},{"qs":323,"querystring":147}],337:[function(require,module,exports){
 'use strict'
 
 var url = require('url')
@@ -70207,7 +73139,7 @@ Redirect.prototype.onResponse = function (response) {
 
 exports.Redirect = Redirect
 
-},{"url":181}],337:[function(require,module,exports){
+},{"url":181}],338:[function(require,module,exports){
 'use strict'
 
 var url = require('url')
@@ -70392,7 +73324,7 @@ Tunnel.defaultProxyHeaderWhiteList = defaultProxyHeaderWhiteList
 Tunnel.defaultProxyHeaderExclusiveList = defaultProxyHeaderExclusiveList
 exports.Tunnel = Tunnel
 
-},{"tunnel-agent":339,"url":181}],338:[function(require,module,exports){
+},{"tunnel-agent":340,"url":181}],339:[function(require,module,exports){
 (function (process,Buffer){
 'use strict'
 
@@ -71795,7 +74727,7 @@ Request.prototype.toJSON = requestToJSON
 module.exports = Request
 
 }).call(this,require('_process'),require("buffer").Buffer)
-},{"./lib/auth":328,"./lib/cookies":329,"./lib/getProxyFromURI":330,"./lib/har":331,"./lib/helpers":332,"./lib/multipart":333,"./lib/oauth":334,"./lib/querystring":335,"./lib/redirect":336,"./lib/tunnel":337,"_process":137,"aws-sign2":240,"bl":189,"buffer":54,"caseless":241,"forever-agent":213,"form-data":272,"hawk":216,"http":174,"http-signature":311,"https":106,"mime-types":317,"stream":173,"stringstream":346,"url":181,"util":185,"zlib":52}],339:[function(require,module,exports){
+},{"./lib/auth":329,"./lib/cookies":330,"./lib/getProxyFromURI":331,"./lib/har":332,"./lib/helpers":333,"./lib/multipart":334,"./lib/oauth":335,"./lib/querystring":336,"./lib/redirect":337,"./lib/tunnel":338,"_process":137,"aws-sign2":241,"bl":190,"buffer":54,"caseless":242,"forever-agent":214,"form-data":273,"hawk":217,"http":174,"http-signature":312,"https":106,"mime-types":318,"stream":173,"stringstream":417,"url":181,"util":185,"zlib":52}],340:[function(require,module,exports){
 (function (process,Buffer){
 'use strict'
 
@@ -72042,7 +74974,8110 @@ if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) {
 exports.debug = debug // for test
 
 }).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":137,"assert":16,"buffer":54,"events":90,"http":174,"https":106,"net":1,"tls":1,"util":185}],340:[function(require,module,exports){
+},{"_process":137,"assert":16,"buffer":54,"events":90,"http":174,"https":106,"net":1,"tls":1,"util":185}],341:[function(require,module,exports){
+var Classes = Object.create(null);
+
+/**
+ * Create a new Connection instance.
+ * @param {object|string} config Configuration or connection string for new MySQL connection
+ * @return {Connection} A new MySQL connection
+ * @public
+ */
+exports.createConnection = function createConnection(config) {
+  var Connection       = loadClass('Connection');
+  var ConnectionConfig = loadClass('ConnectionConfig');
+
+  return new Connection({config: new ConnectionConfig(config)});
+};
+
+/**
+ * Create a new Pool instance.
+ * @param {object|string} config Configuration or connection string for new MySQL connections
+ * @return {Pool} A new MySQL pool
+ * @public
+ */
+exports.createPool = function createPool(config) {
+  var Pool       = loadClass('Pool');
+  var PoolConfig = loadClass('PoolConfig');
+
+  return new Pool({config: new PoolConfig(config)});
+};
+
+/**
+ * Create a new PoolCluster instance.
+ * @param {object} [config] Configuration for pool cluster
+ * @return {PoolCluster} New MySQL pool cluster
+ * @public
+ */
+exports.createPoolCluster = function createPoolCluster(config) {
+  var PoolCluster = loadClass('PoolCluster');
+
+  return new PoolCluster(config);
+};
+
+/**
+ * Create a new Query instance.
+ * @param {string} sql The SQL for the query
+ * @param {array} [values] Any values to insert into placeholders in sql
+ * @param {function} [callback] The callback to use when query is complete
+ * @return {Query} New query object
+ * @public
+ */
+exports.createQuery = function createQuery(sql, values, callback) {
+  var Connection = loadClass('Connection');
+
+  return Connection.createQuery(sql, values, callback);
+};
+
+/**
+ * Escape a value for SQL.
+ * @param {*} value The value to escape
+ * @param {boolean} [stringifyObjects=false] Setting if objects should be stringified
+ * @param {string} [timeZone=local] Setting for time zone to use for Date conversion
+ * @return {string} Escaped string value
+ * @public
+ */
+exports.escape = function escape(value, stringifyObjects, timeZone) {
+  var SqlString = loadClass('SqlString');
+
+  return SqlString.escape(value, stringifyObjects, timeZone);
+};
+
+/**
+ * Escape an identifier for SQL.
+ * @param {*} value The value to escape
+ * @param {boolean} [forbidQualified=false] Setting to treat '.' as part of identifier
+ * @return {string} Escaped string value
+ * @public
+ */
+exports.escapeId = function escapeId(value, forbidQualified) {
+  var SqlString = loadClass('SqlString');
+
+  return SqlString.escapeId(value, forbidQualified);
+};
+
+/**
+ * Format SQL and replacement values into a SQL string.
+ * @param {string} sql The SQL for the query
+ * @param {array} [values] Any values to insert into placeholders in sql
+ * @param {boolean} [stringifyObjects=false] Setting if objects should be stringified
+ * @param {string} [timeZone=local] Setting for time zone to use for Date conversion
+ * @return {string} Formatted SQL string
+ * @public
+ */
+exports.format = function format(sql, values, stringifyObjects, timeZone) {
+  var SqlString = loadClass('SqlString');
+
+  return SqlString.format(sql, values, stringifyObjects, timeZone);
+};
+
+/**
+ * Wrap raw SQL strings from escape overriding.
+ * @param {string} sql The raw SQL
+ * @return {object} Wrapped object
+ * @public
+ */
+exports.raw = function raw(sql) {
+  var SqlString = loadClass('SqlString');
+
+  return SqlString.raw(sql);
+};
+
+/**
+ * The type constants.
+ * @public
+ */
+Object.defineProperty(exports, 'Types', {
+  get: loadClass.bind(null, 'Types')
+});
+
+/**
+ * Load the given class.
+ * @param {string} className Name of class to default
+ * @return {function|object} Class constructor or exports
+ * @private
+ */
+function loadClass(className) {
+  var Class = Classes[className];
+
+  if (Class !== undefined) {
+    return Class;
+  }
+
+  // This uses a switch for static require analysis
+  switch (className) {
+    case 'Connection':
+      Class = require('./lib/Connection');
+      break;
+    case 'ConnectionConfig':
+      Class = require('./lib/ConnectionConfig');
+      break;
+    case 'Pool':
+      Class = require('./lib/Pool');
+      break;
+    case 'PoolCluster':
+      Class = require('./lib/PoolCluster');
+      break;
+    case 'PoolConfig':
+      Class = require('./lib/PoolConfig');
+      break;
+    case 'SqlString':
+      Class = require('./lib/protocol/SqlString');
+      break;
+    case 'Types':
+      Class = require('./lib/protocol/constants/types');
+      break;
+    default:
+      throw new Error('Cannot find class \'' + className + '\'');
+  }
+
+  // Store to prevent invoking require()
+  Classes[className] = Class;
+
+  return Class;
+}
+
+},{"./lib/Connection":342,"./lib/ConnectionConfig":343,"./lib/Pool":344,"./lib/PoolCluster":345,"./lib/PoolConfig":346,"./lib/protocol/SqlString":357,"./lib/protocol/constants/types":364}],342:[function(require,module,exports){
+(function (process){
+var Crypto           = require('crypto');
+var Events           = require('events');
+var Net              = require('net');
+var tls              = require('tls');
+var ConnectionConfig = require('./ConnectionConfig');
+var Protocol         = require('./protocol/Protocol');
+var SqlString        = require('./protocol/SqlString');
+var Query            = require('./protocol/sequences/Query');
+var Util             = require('util');
+
+module.exports = Connection;
+Util.inherits(Connection, Events.EventEmitter);
+function Connection(options) {
+  Events.EventEmitter.call(this);
+
+  this.config = options.config;
+
+  this._socket        = options.socket;
+  this._protocol      = new Protocol({config: this.config, connection: this});
+  this._connectCalled = false;
+  this.state          = 'disconnected';
+  this.threadId       = null;
+}
+
+Connection.createQuery = function createQuery(sql, values, callback) {
+  if (sql instanceof Query) {
+    return sql;
+  }
+
+  var cb      = wrapCallbackInDomain(null, callback);
+  var options = {};
+
+  if (typeof sql === 'function') {
+    cb = wrapCallbackInDomain(null, sql);
+    return new Query(options, cb);
+  }
+
+  if (typeof sql === 'object') {
+    for (var prop in sql) {
+      options[prop] = sql[prop];
+    }
+
+    if (typeof values === 'function') {
+      cb = wrapCallbackInDomain(null, values);
+    } else if (values !== undefined) {
+      options.values = values;
+    }
+
+    return new Query(options, cb);
+  }
+
+  options.sql    = sql;
+  options.values = values;
+
+  if (typeof values === 'function') {
+    cb = wrapCallbackInDomain(null, values);
+    options.values = undefined;
+  }
+
+  if (cb === undefined && callback !== undefined) {
+    throw new TypeError('argument callback must be a function when provided');
+  }
+
+  return new Query(options, cb);
+};
+
+Connection.prototype.connect = function connect(options, callback) {
+  if (!callback && typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  if (!this._connectCalled) {
+    this._connectCalled = true;
+
+    // Connect either via a UNIX domain socket or a TCP socket.
+    this._socket = (this.config.socketPath)
+      ? Net.createConnection(this.config.socketPath)
+      : Net.createConnection(this.config.port, this.config.host);
+
+    // Connect socket to connection domain
+    if (Events.usingDomains) {
+      this._socket.domain = this.domain;
+    }
+
+    var connection = this;
+    this._protocol.on('data', function(data) {
+      connection._socket.write(data);
+    });
+    this._socket.on('data', wrapToDomain(connection, function (data) {
+      connection._protocol.write(data);
+    }));
+    this._protocol.on('end', function() {
+      connection._socket.end();
+    });
+    this._socket.on('end', wrapToDomain(connection, function () {
+      connection._protocol.end();
+    }));
+
+    this._socket.on('error', this._handleNetworkError.bind(this));
+    this._socket.on('connect', this._handleProtocolConnect.bind(this));
+    this._protocol.on('handshake', this._handleProtocolHandshake.bind(this));
+    this._protocol.on('unhandledError', this._handleProtocolError.bind(this));
+    this._protocol.on('drain', this._handleProtocolDrain.bind(this));
+    this._protocol.on('end', this._handleProtocolEnd.bind(this));
+    this._protocol.on('enqueue', this._handleProtocolEnqueue.bind(this));
+
+    if (this.config.connectTimeout) {
+      var handleConnectTimeout = this._handleConnectTimeout.bind(this);
+
+      this._socket.setTimeout(this.config.connectTimeout, handleConnectTimeout);
+      this._socket.once('connect', function() {
+        this.setTimeout(0, handleConnectTimeout);
+      });
+    }
+  }
+
+  this._protocol.handshake(options, wrapCallbackInDomain(this, callback));
+};
+
+Connection.prototype.changeUser = function changeUser(options, callback) {
+  if (!callback && typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  this._implyConnect();
+
+  var charsetNumber = (options.charset)
+    ? ConnectionConfig.getCharsetNumber(options.charset)
+    : this.config.charsetNumber;
+
+  return this._protocol.changeUser({
+    user          : options.user || this.config.user,
+    password      : options.password || this.config.password,
+    database      : options.database || this.config.database,
+    timeout       : options.timeout,
+    charsetNumber : charsetNumber,
+    currentConfig : this.config
+  }, wrapCallbackInDomain(this, callback));
+};
+
+Connection.prototype.beginTransaction = function beginTransaction(options, callback) {
+  if (!callback && typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  options = options || {};
+  options.sql = 'START TRANSACTION';
+  options.values = null;
+
+  return this.query(options, callback);
+};
+
+Connection.prototype.commit = function commit(options, callback) {
+  if (!callback && typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  options = options || {};
+  options.sql = 'COMMIT';
+  options.values = null;
+
+  return this.query(options, callback);
+};
+
+Connection.prototype.rollback = function rollback(options, callback) {
+  if (!callback && typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  options = options || {};
+  options.sql = 'ROLLBACK';
+  options.values = null;
+
+  return this.query(options, callback);
+};
+
+Connection.prototype.query = function query(sql, values, cb) {
+  var query = Connection.createQuery(sql, values, cb);
+  query._connection = this;
+
+  if (!(typeof sql === 'object' && 'typeCast' in sql)) {
+    query.typeCast = this.config.typeCast;
+  }
+
+  if (query.sql) {
+    query.sql = this.format(query.sql, query.values);
+  }
+
+  if (query._callback) {
+    query._callback = wrapCallbackInDomain(this, query._callback);
+  }
+
+  this._implyConnect();
+
+  return this._protocol._enqueue(query);
+};
+
+Connection.prototype.ping = function ping(options, callback) {
+  if (!callback && typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  this._implyConnect();
+  this._protocol.ping(options, wrapCallbackInDomain(this, callback));
+};
+
+Connection.prototype.statistics = function statistics(options, callback) {
+  if (!callback && typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  this._implyConnect();
+  this._protocol.stats(options, wrapCallbackInDomain(this, callback));
+};
+
+Connection.prototype.end = function end(options, callback) {
+  var cb   = callback;
+  var opts = options;
+
+  if (!callback && typeof options === 'function') {
+    cb   = options;
+    opts = null;
+  }
+
+  // create custom options reference
+  opts = Object.create(opts || null);
+
+  if (opts.timeout === undefined) {
+    // default timeout of 30 seconds
+    opts.timeout = 30000;
+  }
+
+  this._implyConnect();
+  this._protocol.quit(opts, wrapCallbackInDomain(this, cb));
+};
+
+Connection.prototype.destroy = function() {
+  this.state = 'disconnected';
+  this._implyConnect();
+  this._socket.destroy();
+  this._protocol.destroy();
+};
+
+Connection.prototype.pause = function() {
+  this._socket.pause();
+  this._protocol.pause();
+};
+
+Connection.prototype.resume = function() {
+  this._socket.resume();
+  this._protocol.resume();
+};
+
+Connection.prototype.escape = function(value) {
+  return SqlString.escape(value, false, this.config.timezone);
+};
+
+Connection.prototype.escapeId = function escapeId(value) {
+  return SqlString.escapeId(value, false);
+};
+
+Connection.prototype.format = function(sql, values) {
+  if (typeof this.config.queryFormat === 'function') {
+    return this.config.queryFormat.call(this, sql, values, this.config.timezone);
+  }
+  return SqlString.format(sql, values, this.config.stringifyObjects, this.config.timezone);
+};
+
+if (tls.TLSSocket) {
+  // 0.11+ environment
+  Connection.prototype._startTLS = function _startTLS(onSecure) {
+    var connection    = this;
+    var secureContext = tls.createSecureContext({
+      ca         : this.config.ssl.ca,
+      cert       : this.config.ssl.cert,
+      ciphers    : this.config.ssl.ciphers,
+      key        : this.config.ssl.key,
+      passphrase : this.config.ssl.passphrase
+    });
+
+    // "unpipe"
+    this._socket.removeAllListeners('data');
+    this._protocol.removeAllListeners('data');
+
+    // socket <-> encrypted
+    var rejectUnauthorized = this.config.ssl.rejectUnauthorized;
+    var secureEstablished  = false;
+    var secureSocket       = new tls.TLSSocket(this._socket, {
+      rejectUnauthorized : rejectUnauthorized,
+      requestCert        : true,
+      secureContext      : secureContext,
+      isServer           : false
+    });
+
+    // error handler for secure socket
+    secureSocket.on('_tlsError', function(err) {
+      if (secureEstablished) {
+        connection._handleNetworkError(err);
+      } else {
+        onSecure(err);
+      }
+    });
+
+    // cleartext <-> protocol
+    secureSocket.pipe(this._protocol);
+    this._protocol.on('data', function(data) {
+      secureSocket.write(data);
+    });
+
+    secureSocket.on('secure', function() {
+      secureEstablished = true;
+
+      onSecure(rejectUnauthorized ? this.ssl.verifyError() : null);
+    });
+
+    // start TLS communications
+    secureSocket._start();
+  };
+} else {
+  // pre-0.11 environment
+  Connection.prototype._startTLS = function _startTLS(onSecure) {
+    // before TLS:
+    //  _socket <-> _protocol
+    // after:
+    //  _socket <-> securePair.encrypted <-> securePair.cleartext <-> _protocol
+
+    var connection  = this;
+    var credentials = Crypto.createCredentials({
+      ca         : this.config.ssl.ca,
+      cert       : this.config.ssl.cert,
+      ciphers    : this.config.ssl.ciphers,
+      key        : this.config.ssl.key,
+      passphrase : this.config.ssl.passphrase
+    });
+
+    var rejectUnauthorized = this.config.ssl.rejectUnauthorized;
+    var secureEstablished  = false;
+    var securePair         = tls.createSecurePair(credentials, false, true, rejectUnauthorized);
+
+    // error handler for secure pair
+    securePair.on('error', function(err) {
+      if (secureEstablished) {
+        connection._handleNetworkError(err);
+      } else {
+        onSecure(err);
+      }
+    });
+
+    // "unpipe"
+    this._socket.removeAllListeners('data');
+    this._protocol.removeAllListeners('data');
+
+    // socket <-> encrypted
+    securePair.encrypted.pipe(this._socket);
+    this._socket.on('data', function(data) {
+      securePair.encrypted.write(data);
+    });
+
+    // cleartext <-> protocol
+    securePair.cleartext.pipe(this._protocol);
+    this._protocol.on('data', function(data) {
+      securePair.cleartext.write(data);
+    });
+
+    // secure established
+    securePair.on('secure', function() {
+      secureEstablished = true;
+
+      if (!rejectUnauthorized) {
+        onSecure();
+        return;
+      }
+
+      var verifyError = this.ssl.verifyError();
+      var err = verifyError;
+
+      // node.js 0.6 support
+      if (typeof err === 'string') {
+        err = new Error(verifyError);
+        err.code = verifyError;
+      }
+
+      onSecure(err);
+    });
+
+    // node.js 0.8 bug
+    securePair._cycle = securePair.cycle;
+    securePair.cycle  = function cycle() {
+      if (this.ssl && this.ssl.error) {
+        this.error();
+      }
+
+      return this._cycle.apply(this, arguments);
+    };
+  };
+}
+
+Connection.prototype._handleConnectTimeout = function() {
+  if (this._socket) {
+    this._socket.setTimeout(0);
+    this._socket.destroy();
+  }
+
+  var err = new Error('connect ETIMEDOUT');
+  err.errorno = 'ETIMEDOUT';
+  err.code = 'ETIMEDOUT';
+  err.syscall = 'connect';
+
+  this._handleNetworkError(err);
+};
+
+Connection.prototype._handleNetworkError = function(err) {
+  this._protocol.handleNetworkError(err);
+};
+
+Connection.prototype._handleProtocolError = function(err) {
+  this.state = 'protocol_error';
+  this.emit('error', err);
+};
+
+Connection.prototype._handleProtocolDrain = function() {
+  this.emit('drain');
+};
+
+Connection.prototype._handleProtocolConnect = function() {
+  this.state = 'connected';
+  this.emit('connect');
+};
+
+Connection.prototype._handleProtocolHandshake = function _handleProtocolHandshake(packet) {
+  this.state    = 'authenticated';
+  this.threadId = packet.threadId;
+};
+
+Connection.prototype._handleProtocolEnd = function(err) {
+  this.state = 'disconnected';
+  this.emit('end', err);
+};
+
+Connection.prototype._handleProtocolEnqueue = function _handleProtocolEnqueue(sequence) {
+  this.emit('enqueue', sequence);
+};
+
+Connection.prototype._implyConnect = function() {
+  if (!this._connectCalled) {
+    this.connect();
+  }
+};
+
+function unwrapFromDomain(fn) {
+  return function () {
+    var domains = [];
+    var ret;
+
+    while (process.domain) {
+      domains.shift(process.domain);
+      process.domain.exit();
+    }
+
+    try {
+      ret = fn.apply(this, arguments);
+    } finally {
+      for (var i = 0; i < domains.length; i++) {
+        domains[i].enter();
+      }
+    }
+
+    return ret;
+  };
+}
+
+function wrapCallbackInDomain(ee, fn) {
+  if (typeof fn !== 'function' || fn.domain) {
+    return fn;
+  }
+
+  var domain = process.domain;
+
+  if (domain) {
+    return domain.bind(fn);
+  } else if (ee) {
+    return unwrapFromDomain(wrapToDomain(ee, fn));
+  } else {
+    return fn;
+  }
+}
+
+function wrapToDomain(ee, fn) {
+  return function () {
+    if (Events.usingDomains && ee.domain) {
+      ee.domain.enter();
+      fn.apply(this, arguments);
+      ee.domain.exit();
+    } else {
+      fn.apply(this, arguments);
+    }
+  };
+}
+
+}).call(this,require('_process'))
+},{"./ConnectionConfig":343,"./protocol/Protocol":355,"./protocol/SqlString":357,"./protocol/sequences/Query":391,"_process":137,"crypto":63,"events":90,"net":1,"tls":1,"util":185}],343:[function(require,module,exports){
+var urlParse        = require('url').parse;
+var ClientConstants = require('./protocol/constants/client');
+var Charsets        = require('./protocol/constants/charsets');
+var SSLProfiles     = null;
+
+module.exports = ConnectionConfig;
+function ConnectionConfig(options) {
+  if (typeof options === 'string') {
+    options = ConnectionConfig.parseUrl(options);
+  }
+
+  this.host               = options.host || 'localhost';
+  this.port               = options.port || 3306;
+  this.localAddress       = options.localAddress;
+  this.socketPath         = options.socketPath;
+  this.user               = options.user || undefined;
+  this.password           = options.password || undefined;
+  this.database           = options.database;
+  this.connectTimeout     = (options.connectTimeout === undefined)
+    ? (10 * 1000)
+    : options.connectTimeout;
+  this.insecureAuth       = options.insecureAuth || false;
+  this.supportBigNumbers  = options.supportBigNumbers || false;
+  this.bigNumberStrings   = options.bigNumberStrings || false;
+  this.dateStrings        = options.dateStrings || false;
+  this.debug              = options.debug;
+  this.trace              = options.trace !== false;
+  this.stringifyObjects   = options.stringifyObjects || false;
+  this.timezone           = options.timezone || 'local';
+  this.flags              = options.flags || '';
+  this.queryFormat        = options.queryFormat;
+  this.pool               = options.pool || undefined;
+  this.ssl                = (typeof options.ssl === 'string')
+    ? ConnectionConfig.getSSLProfile(options.ssl)
+    : (options.ssl || false);
+  this.multipleStatements = options.multipleStatements || false;
+  this.typeCast           = (options.typeCast === undefined)
+    ? true
+    : options.typeCast;
+
+  if (this.timezone[0] === ' ') {
+    // "+" is a url encoded char for space so it
+    // gets translated to space when giving a
+    // connection string..
+    this.timezone = '+' + this.timezone.substr(1);
+  }
+
+  if (this.ssl) {
+    // Default rejectUnauthorized to true
+    this.ssl.rejectUnauthorized = this.ssl.rejectUnauthorized !== false;
+  }
+
+  this.maxPacketSize = 0;
+  this.charsetNumber = (options.charset)
+    ? ConnectionConfig.getCharsetNumber(options.charset)
+    : options.charsetNumber || Charsets.UTF8_GENERAL_CI;
+
+  // Set the client flags
+  var defaultFlags = ConnectionConfig.getDefaultFlags(options);
+  this.clientFlags = ConnectionConfig.mergeFlags(defaultFlags, options.flags);
+}
+
+ConnectionConfig.mergeFlags = function mergeFlags(defaultFlags, userFlags) {
+  var allFlags = ConnectionConfig.parseFlagList(defaultFlags);
+  var newFlags = ConnectionConfig.parseFlagList(userFlags);
+
+  // Merge the new flags
+  for (var flag in newFlags) {
+    if (allFlags[flag] !== false) {
+      allFlags[flag] = newFlags[flag];
+    }
+  }
+
+  // Build flags
+  var flags = 0x0;
+  for (var flag in allFlags) {
+    if (allFlags[flag]) {
+      // TODO: Throw here on some future release
+      flags |= ClientConstants['CLIENT_' + flag] || 0x0;
+    }
+  }
+
+  return flags;
+};
+
+ConnectionConfig.getCharsetNumber = function getCharsetNumber(charset) {
+  var num = Charsets[charset.toUpperCase()];
+
+  if (num === undefined) {
+    throw new TypeError('Unknown charset \'' + charset + '\'');
+  }
+
+  return num;
+};
+
+ConnectionConfig.getDefaultFlags = function getDefaultFlags(options) {
+  var defaultFlags = [
+    '-COMPRESS',          // Compression protocol *NOT* supported
+    '-CONNECT_ATTRS',     // Does *NOT* send connection attributes in Protocol::HandshakeResponse41
+    '+CONNECT_WITH_DB',   // One can specify db on connect in Handshake Response Packet
+    '+FOUND_ROWS',        // Send found rows instead of affected rows
+    '+IGNORE_SIGPIPE',    // Don't issue SIGPIPE if network failures
+    '+IGNORE_SPACE',      // Let the parser ignore spaces before '('
+    '+LOCAL_FILES',       // Can use LOAD DATA LOCAL
+    '+LONG_FLAG',         // Longer flags in Protocol::ColumnDefinition320
+    '+LONG_PASSWORD',     // Use the improved version of Old Password Authentication
+    '+MULTI_RESULTS',     // Can handle multiple resultsets for COM_QUERY
+    '+ODBC',              // Special handling of ODBC behaviour
+    '-PLUGIN_AUTH',       // Does *NOT* support auth plugins
+    '+PROTOCOL_41',       // Uses the 4.1 protocol
+    '+PS_MULTI_RESULTS',  // Can handle multiple resultsets for COM_STMT_EXECUTE
+    '+RESERVED',          // Unused
+    '+SECURE_CONNECTION', // Supports Authentication::Native41
+    '+TRANSACTIONS'       // Expects status flags
+  ];
+
+  if (options && options.multipleStatements) {
+    // May send multiple statements per COM_QUERY and COM_STMT_PREPARE
+    defaultFlags.push('+MULTI_STATEMENTS');
+  }
+
+  return defaultFlags;
+};
+
+ConnectionConfig.getSSLProfile = function getSSLProfile(name) {
+  if (!SSLProfiles) {
+    SSLProfiles = require('./protocol/constants/ssl_profiles');
+  }
+
+  var ssl = SSLProfiles[name];
+
+  if (ssl === undefined) {
+    throw new TypeError('Unknown SSL profile \'' + name + '\'');
+  }
+
+  return ssl;
+};
+
+ConnectionConfig.parseFlagList = function parseFlagList(flagList) {
+  var allFlags = Object.create(null);
+
+  if (!flagList) {
+    return allFlags;
+  }
+
+  var flags = !Array.isArray(flagList)
+    ? String(flagList || '').toUpperCase().split(/\s*,+\s*/)
+    : flagList;
+
+  for (var i = 0; i < flags.length; i++) {
+    var flag   = flags[i];
+    var offset = 1;
+    var state  = flag[0];
+
+    if (state === undefined) {
+      // TODO: throw here on some future release
+      continue;
+    }
+
+    if (state !== '-' && state !== '+') {
+      offset = 0;
+      state  = '+';
+    }
+
+    allFlags[flag.substr(offset)] = state === '+';
+  }
+
+  return allFlags;
+};
+
+ConnectionConfig.parseUrl = function(url) {
+  url = urlParse(url, true);
+
+  var options = {
+    host     : url.hostname,
+    port     : url.port,
+    database : url.pathname.substr(1)
+  };
+
+  if (url.auth) {
+    var auth = url.auth.split(':');
+    options.user     = auth.shift();
+    options.password = auth.join(':');
+  }
+
+  if (url.query) {
+    for (var key in url.query) {
+      var value = url.query[key];
+
+      try {
+        // Try to parse this as a JSON expression first
+        options[key] = JSON.parse(value);
+      } catch (err) {
+        // Otherwise assume it is a plain string
+        options[key] = value;
+      }
+    }
+  }
+
+  return options;
+};
+
+},{"./protocol/constants/charsets":359,"./protocol/constants/client":360,"./protocol/constants/ssl_profiles":363,"url":181}],344:[function(require,module,exports){
+(function (process){
+var mysql          = require('../');
+var Connection     = require('./Connection');
+var EventEmitter   = require('events').EventEmitter;
+var Util           = require('util');
+var PoolConnection = require('./PoolConnection');
+
+module.exports = Pool;
+
+Util.inherits(Pool, EventEmitter);
+function Pool(options) {
+  EventEmitter.call(this);
+  this.config = options.config;
+  this.config.connectionConfig.pool = this;
+
+  this._acquiringConnections = [];
+  this._allConnections       = [];
+  this._freeConnections      = [];
+  this._connectionQueue      = [];
+  this._closed               = false;
+}
+
+Pool.prototype.getConnection = function (cb) {
+
+  if (this._closed) {
+    var err = new Error('Pool is closed.');
+    err.code = 'POOL_CLOSED';
+    process.nextTick(function () {
+      cb(err);
+    });
+    return;
+  }
+
+  var connection;
+  var pool = this;
+
+  if (this._freeConnections.length > 0) {
+    connection = this._freeConnections.shift();
+    this.acquireConnection(connection, cb);
+    return;
+  }
+
+  if (this.config.connectionLimit === 0 || this._allConnections.length < this.config.connectionLimit) {
+    connection = new PoolConnection(this, { config: this.config.newConnectionConfig() });
+
+    this._acquiringConnections.push(connection);
+    this._allConnections.push(connection);
+
+    connection.connect({timeout: this.config.acquireTimeout}, function onConnect(err) {
+      spliceConnection(pool._acquiringConnections, connection);
+
+      if (pool._closed) {
+        err = new Error('Pool is closed.');
+        err.code = 'POOL_CLOSED';
+      }
+
+      if (err) {
+        pool._purgeConnection(connection);
+        cb(err);
+        return;
+      }
+
+      pool.emit('connection', connection);
+      pool.emit('acquire', connection);
+      cb(null, connection);
+    });
+    return;
+  }
+
+  if (!this.config.waitForConnections) {
+    process.nextTick(function(){
+      var err = new Error('No connections available.');
+      err.code = 'POOL_CONNLIMIT';
+      cb(err);
+    });
+    return;
+  }
+
+  this._enqueueCallback(cb);
+};
+
+Pool.prototype.acquireConnection = function acquireConnection(connection, cb) {
+  if (connection._pool !== this) {
+    throw new Error('Connection acquired from wrong pool.');
+  }
+
+  var changeUser = this._needsChangeUser(connection);
+  var pool       = this;
+
+  this._acquiringConnections.push(connection);
+
+  function onOperationComplete(err) {
+    spliceConnection(pool._acquiringConnections, connection);
+
+    if (pool._closed) {
+      err = new Error('Pool is closed.');
+      err.code = 'POOL_CLOSED';
+    }
+
+    if (err) {
+      pool._connectionQueue.unshift(cb);
+      pool._purgeConnection(connection);
+      return;
+    }
+
+    if (changeUser) {
+      pool.emit('connection', connection);
+    }
+
+    pool.emit('acquire', connection);
+    cb(null, connection);
+  }
+
+  if (changeUser) {
+    // restore user back to pool configuration
+    connection.config = this.config.newConnectionConfig();
+    connection.changeUser({timeout: this.config.acquireTimeout}, onOperationComplete);
+  } else {
+    // ping connection
+    connection.ping({timeout: this.config.acquireTimeout}, onOperationComplete);
+  }
+};
+
+Pool.prototype.releaseConnection = function releaseConnection(connection) {
+
+  if (this._acquiringConnections.indexOf(connection) !== -1) {
+    // connection is being acquired
+    return;
+  }
+
+  if (connection._pool) {
+    if (connection._pool !== this) {
+      throw new Error('Connection released to wrong pool');
+    }
+
+    if (this._freeConnections.indexOf(connection) !== -1) {
+      // connection already in free connection pool
+      // this won't catch all double-release cases
+      throw new Error('Connection already released');
+    } else {
+      // add connection to end of free queue
+      this._freeConnections.push(connection);
+      this.emit('release', connection);
+    }
+  }
+
+  if (this._closed) {
+    // empty the connection queue
+    this._connectionQueue.splice(0).forEach(function (cb) {
+      var err = new Error('Pool is closed.');
+      err.code = 'POOL_CLOSED';
+      process.nextTick(function () {
+        cb(err);
+      });
+    });
+  } else if (this._connectionQueue.length) {
+    // get connection with next waiting callback
+    this.getConnection(this._connectionQueue.shift());
+  }
+};
+
+Pool.prototype.end = function (cb) {
+  this._closed = true;
+
+  if (typeof cb !== 'function') {
+    cb = function (err) {
+      if (err) throw err;
+    };
+  }
+
+  var calledBack   = false;
+  var waitingClose = 0;
+
+  function onEnd(err) {
+    if (!calledBack && (err || --waitingClose <= 0)) {
+      calledBack = true;
+      cb(err);
+    }
+  }
+
+  while (this._allConnections.length !== 0) {
+    waitingClose++;
+    this._purgeConnection(this._allConnections[0], onEnd);
+  }
+
+  if (waitingClose === 0) {
+    process.nextTick(onEnd);
+  }
+};
+
+Pool.prototype.query = function (sql, values, cb) {
+  var query = Connection.createQuery(sql, values, cb);
+
+  if (!(typeof sql === 'object' && 'typeCast' in sql)) {
+    query.typeCast = this.config.connectionConfig.typeCast;
+  }
+
+  if (this.config.connectionConfig.trace) {
+    // Long stack trace support
+    query._callSite = new Error();
+  }
+
+  this.getConnection(function (err, conn) {
+    if (err) {
+      query.on('error', function () {});
+      query.end(err);
+      return;
+    }
+
+    // Release connection based off event
+    query.once('end', function() {
+      conn.release();
+    });
+
+    conn.query(query);
+  });
+
+  return query;
+};
+
+Pool.prototype._enqueueCallback = function _enqueueCallback(callback) {
+
+  if (this.config.queueLimit && this._connectionQueue.length >= this.config.queueLimit) {
+    process.nextTick(function () {
+      var err = new Error('Queue limit reached.');
+      err.code = 'POOL_ENQUEUELIMIT';
+      callback(err);
+    });
+    return;
+  }
+
+  // Bind to domain, as dequeue will likely occur in a different domain
+  var cb = process.domain
+    ? process.domain.bind(callback)
+    : callback;
+
+  this._connectionQueue.push(cb);
+  this.emit('enqueue');
+};
+
+Pool.prototype._needsChangeUser = function _needsChangeUser(connection) {
+  var connConfig = connection.config;
+  var poolConfig = this.config.connectionConfig;
+
+  // check if changeUser values are different
+  return connConfig.user !== poolConfig.user
+    || connConfig.database !== poolConfig.database
+    || connConfig.password !== poolConfig.password
+    || connConfig.charsetNumber !== poolConfig.charsetNumber;
+};
+
+Pool.prototype._purgeConnection = function _purgeConnection(connection, callback) {
+  var cb = callback || function () {};
+
+  if (connection.state === 'disconnected') {
+    connection.destroy();
+  }
+
+  this._removeConnection(connection);
+
+  if (connection.state !== 'disconnected' && !connection._protocol._quitSequence) {
+    connection._realEnd(cb);
+    return;
+  }
+
+  process.nextTick(cb);
+};
+
+Pool.prototype._removeConnection = function(connection) {
+  connection._pool = null;
+
+  // Remove connection from all connections
+  spliceConnection(this._allConnections, connection);
+
+  // Remove connection from free connections
+  spliceConnection(this._freeConnections, connection);
+
+  this.releaseConnection(connection);
+};
+
+Pool.prototype.escape = function(value) {
+  return mysql.escape(value, this.config.connectionConfig.stringifyObjects, this.config.connectionConfig.timezone);
+};
+
+Pool.prototype.escapeId = function escapeId(value) {
+  return mysql.escapeId(value, false);
+};
+
+function spliceConnection(array, connection) {
+  var index;
+  if ((index = array.indexOf(connection)) !== -1) {
+    // Remove connection from all connections
+    array.splice(index, 1);
+  }
+}
+
+}).call(this,require('_process'))
+},{"../":341,"./Connection":342,"./PoolConnection":347,"_process":137,"events":90,"util":185}],345:[function(require,module,exports){
+(function (process){
+var Pool          = require('./Pool');
+var PoolConfig    = require('./PoolConfig');
+var PoolNamespace = require('./PoolNamespace');
+var PoolSelector  = require('./PoolSelector');
+var Util          = require('util');
+var EventEmitter  = require('events').EventEmitter;
+
+module.exports = PoolCluster;
+
+/**
+ * PoolCluster
+ * @constructor
+ * @param {object} [config] The pool cluster configuration
+ * @public
+ */
+function PoolCluster(config) {
+  EventEmitter.call(this);
+
+  config = config || {};
+  this._canRetry = typeof config.canRetry === 'undefined' ? true : config.canRetry;
+  this._defaultSelector = config.defaultSelector || 'RR';
+  this._removeNodeErrorCount = config.removeNodeErrorCount || 5;
+  this._restoreNodeTimeout = config.restoreNodeTimeout || 0;
+
+  this._closed = false;
+  this._findCaches = Object.create(null);
+  this._lastId = 0;
+  this._namespaces = Object.create(null);
+  this._nodes = Object.create(null);
+}
+
+Util.inherits(PoolCluster, EventEmitter);
+
+PoolCluster.prototype.add = function add(id, config) {
+  if (this._closed) {
+    throw new Error('PoolCluster is closed.');
+  }
+
+  var nodeId = typeof id === 'object'
+    ? 'CLUSTER::' + (++this._lastId)
+    : String(id);
+
+  if (this._nodes[nodeId] !== undefined) {
+    throw new Error('Node ID "' + nodeId + '" is already defined in PoolCluster.');
+  }
+
+  var poolConfig = typeof id !== 'object'
+    ? new PoolConfig(config)
+    : new PoolConfig(id);
+
+  this._nodes[nodeId] = {
+    id            : nodeId,
+    errorCount    : 0,
+    pool          : new Pool({config: poolConfig}),
+    _offlineUntil : 0
+  };
+
+  this._clearFindCaches();
+};
+
+PoolCluster.prototype.end = function end(callback) {
+  var cb = callback !== undefined
+    ? callback
+    : _cb;
+
+  if (typeof cb !== 'function') {
+    throw TypeError('callback argument must be a function');
+  }
+
+  if (this._closed) {
+    process.nextTick(cb);
+    return;
+  }
+
+  this._closed = true;
+
+  var calledBack   = false;
+  var nodeIds      = Object.keys(this._nodes);
+  var waitingClose = 0;
+
+  function onEnd(err) {
+    if (!calledBack && (err || --waitingClose <= 0)) {
+      calledBack = true;
+      cb(err);
+    }
+  }
+
+  for (var i = 0; i < nodeIds.length; i++) {
+    var nodeId = nodeIds[i];
+    var node = this._nodes[nodeId];
+
+    waitingClose++;
+    node.pool.end(onEnd);
+  }
+
+  if (waitingClose === 0) {
+    process.nextTick(onEnd);
+  }
+};
+
+PoolCluster.prototype.of = function(pattern, selector) {
+  pattern = pattern || '*';
+
+  selector = selector || this._defaultSelector;
+  selector = selector.toUpperCase();
+  if (typeof PoolSelector[selector] === 'undefined') {
+    selector = this._defaultSelector;
+  }
+
+  var key = pattern + selector;
+
+  if (typeof this._namespaces[key] === 'undefined') {
+    this._namespaces[key] = new PoolNamespace(this, pattern, selector);
+  }
+
+  return this._namespaces[key];
+};
+
+PoolCluster.prototype.remove = function remove(pattern) {
+  var foundNodeIds = this._findNodeIds(pattern, true);
+
+  for (var i = 0; i < foundNodeIds.length; i++) {
+    var node = this._getNode(foundNodeIds[i]);
+
+    if (node) {
+      this._removeNode(node);
+    }
+  }
+};
+
+PoolCluster.prototype.getConnection = function(pattern, selector, cb) {
+  var namespace;
+  if (typeof pattern === 'function') {
+    cb = pattern;
+    namespace = this.of();
+  } else {
+    if (typeof selector === 'function') {
+      cb = selector;
+      selector = this._defaultSelector;
+    }
+
+    namespace = this.of(pattern, selector);
+  }
+
+  namespace.getConnection(cb);
+};
+
+PoolCluster.prototype._clearFindCaches = function _clearFindCaches() {
+  this._findCaches = Object.create(null);
+};
+
+PoolCluster.prototype._decreaseErrorCount = function _decreaseErrorCount(node) {
+  var errorCount = node.errorCount;
+
+  if (errorCount > this._removeNodeErrorCount) {
+    errorCount = this._removeNodeErrorCount;
+  }
+
+  if (errorCount < 1) {
+    errorCount = 1;
+  }
+
+  node.errorCount = errorCount - 1;
+
+  if (node._offlineUntil) {
+    node._offlineUntil = 0;
+    this.emit('online', node.id);
+  }
+};
+
+PoolCluster.prototype._findNodeIds = function _findNodeIds(pattern, includeOffline) {
+  var currentTime  = 0;
+  var foundNodeIds = this._findCaches[pattern];
+
+  if (foundNodeIds === undefined) {
+    var expression = patternRegExp(pattern);
+    var nodeIds    = Object.keys(this._nodes);
+
+    foundNodeIds = nodeIds.filter(function (id) {
+      return id.match(expression);
+    });
+
+    this._findCaches[pattern] = foundNodeIds;
+  }
+
+  if (includeOffline) {
+    return foundNodeIds;
+  }
+
+  return foundNodeIds.filter(function (nodeId) {
+    var node = this._getNode(nodeId);
+
+    if (!node._offlineUntil) {
+      return true;
+    }
+
+    if (!currentTime) {
+      currentTime = getMonotonicMilliseconds();
+    }
+
+    return node._offlineUntil <= currentTime;
+  }, this);
+};
+
+PoolCluster.prototype._getNode = function _getNode(id) {
+  return this._nodes[id] || null;
+};
+
+PoolCluster.prototype._increaseErrorCount = function _increaseErrorCount(node) {
+  var errorCount = ++node.errorCount;
+
+  if (this._removeNodeErrorCount > errorCount) {
+    return;
+  }
+
+  if (this._restoreNodeTimeout > 0) {
+    node._offlineUntil = getMonotonicMilliseconds() + this._restoreNodeTimeout;
+    this.emit('offline', node.id);
+    return;
+  }
+
+  this._removeNode(node);
+  this.emit('remove', node.id);
+};
+
+PoolCluster.prototype._getConnection = function(node, cb) {
+  var self = this;
+
+  node.pool.getConnection(function (err, connection) {
+    if (err) {
+      self._increaseErrorCount(node);
+      cb(err);
+      return;
+    } else {
+      self._decreaseErrorCount(node);
+    }
+
+    connection._clusterId = node.id;
+
+    cb(null, connection);
+  });
+};
+
+PoolCluster.prototype._removeNode = function _removeNode(node) {
+  delete this._nodes[node.id];
+
+  this._clearFindCaches();
+
+  node.pool.end(_noop);
+};
+
+function getMonotonicMilliseconds() {
+  var ms;
+
+  if (typeof process.hrtime === 'function') {
+    ms = process.hrtime();
+    ms = ms[0] * 1e3 + ms[1] * 1e-6;
+  } else {
+    ms = process.uptime() * 1000;
+  }
+
+  return Math.floor(ms);
+}
+
+function isRegExp(val) {
+  return typeof val === 'object'
+    && Object.prototype.toString.call(val) === '[object RegExp]';
+}
+
+function patternRegExp(pattern) {
+  if (isRegExp(pattern)) {
+    return pattern;
+  }
+
+  var source = pattern
+    .replace(/([.+?^=!:${}()|\[\]\/\\])/g, '\\$1')
+    .replace(/\*/g, '.*');
+
+  return new RegExp('^' + source + '$');
+}
+
+function _cb(err) {
+  if (err) {
+    throw err;
+  }
+}
+
+function _noop() {}
+
+}).call(this,require('_process'))
+},{"./Pool":344,"./PoolConfig":346,"./PoolNamespace":348,"./PoolSelector":349,"_process":137,"events":90,"util":185}],346:[function(require,module,exports){
+
+var ConnectionConfig = require('./ConnectionConfig');
+
+module.exports = PoolConfig;
+function PoolConfig(options) {
+  if (typeof options === 'string') {
+    options = ConnectionConfig.parseUrl(options);
+  }
+
+  this.acquireTimeout     = (options.acquireTimeout === undefined)
+    ? 10 * 1000
+    : Number(options.acquireTimeout);
+  this.connectionConfig   = new ConnectionConfig(options);
+  this.waitForConnections = (options.waitForConnections === undefined)
+    ? true
+    : Boolean(options.waitForConnections);
+  this.connectionLimit    = (options.connectionLimit === undefined)
+    ? 10
+    : Number(options.connectionLimit);
+  this.queueLimit         = (options.queueLimit === undefined)
+    ? 0
+    : Number(options.queueLimit);
+}
+
+PoolConfig.prototype.newConnectionConfig = function newConnectionConfig() {
+  var connectionConfig = new ConnectionConfig(this.connectionConfig);
+
+  connectionConfig.clientFlags   = this.connectionConfig.clientFlags;
+  connectionConfig.maxPacketSize = this.connectionConfig.maxPacketSize;
+
+  return connectionConfig;
+};
+
+},{"./ConnectionConfig":343}],347:[function(require,module,exports){
+var inherits   = require('util').inherits;
+var Connection = require('./Connection');
+var Events     = require('events');
+
+module.exports = PoolConnection;
+inherits(PoolConnection, Connection);
+
+function PoolConnection(pool, options) {
+  Connection.call(this, options);
+  this._pool  = pool;
+
+  // Bind connection to pool domain
+  if (Events.usingDomains) {
+    this.domain = pool.domain;
+  }
+
+  // When a fatal error occurs the connection's protocol ends, which will cause
+  // the connection to end as well, thus we only need to watch for the end event
+  // and we will be notified of disconnects.
+  this.on('end', this._removeFromPool);
+  this.on('error', function (err) {
+    if (err.fatal) {
+      this._removeFromPool();
+    }
+  });
+}
+
+PoolConnection.prototype.release = function release() {
+  var pool = this._pool;
+
+  if (!pool || pool._closed) {
+    return undefined;
+  }
+
+  return pool.releaseConnection(this);
+};
+
+// TODO: Remove this when we are removing PoolConnection#end
+PoolConnection.prototype._realEnd = Connection.prototype.end;
+
+PoolConnection.prototype.end = function () {
+  console.warn(
+    'Calling conn.end() to release a pooled connection is ' +
+    'deprecated. In next version calling conn.end() will be ' +
+    'restored to default conn.end() behavior. Use ' +
+    'conn.release() instead.'
+  );
+  this.release();
+};
+
+PoolConnection.prototype.destroy = function () {
+  Connection.prototype.destroy.apply(this, arguments);
+  this._removeFromPool(this);
+};
+
+PoolConnection.prototype._removeFromPool = function _removeFromPool() {
+  if (!this._pool || this._pool._closed) {
+    return;
+  }
+
+  var pool = this._pool;
+  this._pool = null;
+
+  pool._purgeConnection(this);
+};
+
+},{"./Connection":342,"events":90,"util":185}],348:[function(require,module,exports){
+(function (process){
+var Connection   = require('./Connection');
+var PoolSelector = require('./PoolSelector');
+
+module.exports = PoolNamespace;
+
+/**
+ * PoolNamespace
+ * @constructor
+ * @param {PoolCluster} cluster The parent cluster for the namespace
+ * @param {string} pattern The selection pattern to use
+ * @param {string} selector The selector name to use
+ * @public
+ */
+function PoolNamespace(cluster, pattern, selector) {
+  this._cluster = cluster;
+  this._pattern = pattern;
+  this._selector = new PoolSelector[selector]();
+}
+
+PoolNamespace.prototype.getConnection = function(cb) {
+  var clusterNode = this._getClusterNode();
+  var cluster     = this._cluster;
+  var namespace   = this;
+
+  if (clusterNode === null) {
+    var err = null;
+
+    if (this._cluster._findNodeIds(this._pattern, true).length !== 0) {
+      err = new Error('Pool does not have online node.');
+      err.code = 'POOL_NONEONLINE';
+    } else {
+      err = new Error('Pool does not exist.');
+      err.code = 'POOL_NOEXIST';
+    }
+
+    cb(err);
+    return;
+  }
+
+  cluster._getConnection(clusterNode, function(err, connection) {
+    var retry = err && cluster._canRetry
+      && cluster._findNodeIds(namespace._pattern).length !== 0;
+
+    if (retry) {
+      namespace.getConnection(cb);
+      return;
+    }
+
+    if (err) {
+      cb(err);
+      return;
+    }
+
+    cb(null, connection);
+  });
+};
+
+PoolNamespace.prototype.query = function (sql, values, cb) {
+  var cluster     = this._cluster;
+  var clusterNode = this._getClusterNode();
+  var query       = Connection.createQuery(sql, values, cb);
+  var namespace   = this;
+
+  if (clusterNode === null) {
+    var err = null;
+
+    if (this._cluster._findNodeIds(this._pattern, true).length !== 0) {
+      err = new Error('Pool does not have online node.');
+      err.code = 'POOL_NONEONLINE';
+    } else {
+      err = new Error('Pool does not exist.');
+      err.code = 'POOL_NOEXIST';
+    }
+
+    process.nextTick(function () {
+      query.on('error', function () {});
+      query.end(err);
+    });
+    return query;
+  }
+
+  if (!(typeof sql === 'object' && 'typeCast' in sql)) {
+    query.typeCast = clusterNode.pool.config.connectionConfig.typeCast;
+  }
+
+  if (clusterNode.pool.config.connectionConfig.trace) {
+    // Long stack trace support
+    query._callSite = new Error();
+  }
+
+  cluster._getConnection(clusterNode, function (err, conn) {
+    var retry = err && cluster._canRetry
+      && cluster._findNodeIds(namespace._pattern).length !== 0;
+
+    if (retry) {
+      namespace.query(query);
+      return;
+    }
+
+    if (err) {
+      query.on('error', function () {});
+      query.end(err);
+      return;
+    }
+
+    // Release connection based off event
+    query.once('end', function() {
+      conn.release();
+    });
+
+    conn.query(query);
+  });
+
+  return query;
+};
+
+PoolNamespace.prototype._getClusterNode = function _getClusterNode() {
+  var foundNodeIds = this._cluster._findNodeIds(this._pattern);
+  var nodeId;
+
+  switch (foundNodeIds.length) {
+    case 0:
+      nodeId = null;
+      break;
+    case 1:
+      nodeId = foundNodeIds[0];
+      break;
+    default:
+      nodeId = this._selector(foundNodeIds);
+      break;
+  }
+
+  return nodeId !== null
+    ? this._cluster._getNode(nodeId)
+    : null;
+};
+
+}).call(this,require('_process'))
+},{"./Connection":342,"./PoolSelector":349,"_process":137}],349:[function(require,module,exports){
+
+/**
+ * PoolSelector
+ */
+var PoolSelector = module.exports = {};
+
+PoolSelector.RR = function PoolSelectorRoundRobin() {
+  var index = 0;
+
+  return function(clusterIds) {
+    if (index >= clusterIds.length) {
+      index = 0;
+    }
+
+    var clusterId = clusterIds[index++];
+
+    return clusterId;
+  };
+};
+
+PoolSelector.RANDOM = function PoolSelectorRandom() {
+  return function(clusterIds) {
+    return clusterIds[Math.floor(Math.random() * clusterIds.length)];
+  };
+};
+
+PoolSelector.ORDER = function PoolSelectorOrder() {
+  return function(clusterIds) {
+    return clusterIds[0];
+  };
+};
+
+},{}],350:[function(require,module,exports){
+var Buffer = require('safe-buffer').Buffer;
+var Crypto = require('crypto');
+var Auth   = exports;
+
+function sha1(msg) {
+  var hash = Crypto.createHash('sha1');
+  hash.update(msg, 'binary');
+  return hash.digest('binary');
+}
+Auth.sha1 = sha1;
+
+function xor(a, b) {
+  a = Buffer.from(a, 'binary');
+  b = Buffer.from(b, 'binary');
+  var result = Buffer.allocUnsafe(a.length);
+  for (var i = 0; i < a.length; i++) {
+    result[i] = (a[i] ^ b[i]);
+  }
+  return result;
+}
+Auth.xor = xor;
+
+Auth.token = function(password, scramble) {
+  if (!password) {
+    return Buffer.alloc(0);
+  }
+
+  // password must be in binary format, not utf8
+  var stage1 = sha1((Buffer.from(password, 'utf8')).toString('binary'));
+  var stage2 = sha1(stage1);
+  var stage3 = sha1(scramble.toString('binary') + stage2);
+  return xor(stage3, stage1);
+};
+
+// This is a port of sql/password.c:hash_password which needs to be used for
+// pre-4.1 passwords.
+Auth.hashPassword = function(password) {
+  var nr     = [0x5030, 0x5735];
+  var add    = 7;
+  var nr2    = [0x1234, 0x5671];
+  var result = Buffer.alloc(8);
+
+  if (typeof password === 'string'){
+    password = Buffer.from(password);
+  }
+
+  for (var i = 0; i < password.length; i++) {
+    var c = password[i];
+    if (c === 32 || c === 9) {
+      // skip space in password
+      continue;
+    }
+
+    // nr^= (((nr & 63)+add)*c)+ (nr << 8);
+    // nr = xor(nr, add(mul(add(and(nr, 63), add), c), shl(nr, 8)))
+    nr = this.xor32(nr, this.add32(this.mul32(this.add32(this.and32(nr, [0, 63]), [0, add]), [0, c]), this.shl32(nr, 8)));
+
+    // nr2+=(nr2 << 8) ^ nr;
+    // nr2 = add(nr2, xor(shl(nr2, 8), nr))
+    nr2 = this.add32(nr2, this.xor32(this.shl32(nr2, 8), nr));
+
+    // add+=tmp;
+    add += c;
+  }
+
+  this.int31Write(result, nr, 0);
+  this.int31Write(result, nr2, 4);
+
+  return result;
+};
+
+Auth.randomInit = function(seed1, seed2) {
+  return {
+    max_value     : 0x3FFFFFFF,
+    max_value_dbl : 0x3FFFFFFF,
+    seed1         : seed1 % 0x3FFFFFFF,
+    seed2         : seed2 % 0x3FFFFFFF
+  };
+};
+
+Auth.myRnd = function(r){
+  r.seed1 = (r.seed1 * 3 + r.seed2) % r.max_value;
+  r.seed2 = (r.seed1 + r.seed2 + 33) % r.max_value;
+
+  return r.seed1 / r.max_value_dbl;
+};
+
+Auth.scramble323 = function(message, password) {
+  var to          = Buffer.allocUnsafe(8);
+  var hashPass    = this.hashPassword(password);
+  var hashMessage = this.hashPassword(message.slice(0, 8));
+  var seed1       = this.int32Read(hashPass, 0) ^ this.int32Read(hashMessage, 0);
+  var seed2       = this.int32Read(hashPass, 4) ^ this.int32Read(hashMessage, 4);
+  var r           = this.randomInit(seed1, seed2);
+
+  for (var i = 0; i < 8; i++){
+    to[i] = Math.floor(this.myRnd(r) * 31) + 64;
+  }
+  var extra = (Math.floor(this.myRnd(r) * 31));
+
+  for (var i = 0; i < 8; i++){
+    to[i] ^= extra;
+  }
+
+  return to;
+};
+
+Auth.xor32 = function(a, b){
+  return [a[0] ^ b[0], a[1] ^ b[1]];
+};
+
+Auth.add32 = function(a, b){
+  var w1 = a[1] + b[1];
+  var w2 = a[0] + b[0] + ((w1 & 0xFFFF0000) >> 16);
+
+  return [w2 & 0xFFFF, w1 & 0xFFFF];
+};
+
+Auth.mul32 = function(a, b){
+  // based on this example of multiplying 32b ints using 16b
+  // http://www.dsprelated.com/showmessage/89790/1.php
+  var w1 = a[1] * b[1];
+  var w2 = (((a[1] * b[1]) >> 16) & 0xFFFF) + ((a[0] * b[1]) & 0xFFFF) + (a[1] * b[0] & 0xFFFF);
+
+  return [w2 & 0xFFFF, w1 & 0xFFFF];
+};
+
+Auth.and32 = function(a, b){
+  return [a[0] & b[0], a[1] & b[1]];
+};
+
+Auth.shl32 = function(a, b){
+  // assume b is 16 or less
+  var w1 = a[1] << b;
+  var w2 = (a[0] << b) | ((w1 & 0xFFFF0000) >> 16);
+
+  return [w2 & 0xFFFF, w1 & 0xFFFF];
+};
+
+Auth.int31Write = function(buffer, number, offset) {
+  buffer[offset] = (number[0] >> 8) & 0x7F;
+  buffer[offset + 1] = (number[0]) & 0xFF;
+  buffer[offset + 2] = (number[1] >> 8) & 0xFF;
+  buffer[offset + 3] = (number[1]) & 0xFF;
+};
+
+Auth.int32Read = function(buffer, offset){
+  return (buffer[offset] << 24)
+       + (buffer[offset + 1] << 16)
+       + (buffer[offset + 2] << 8)
+       + (buffer[offset + 3]);
+};
+
+},{"crypto":63,"safe-buffer":413}],351:[function(require,module,exports){
+
+module.exports = BufferList;
+function BufferList() {
+  this.bufs = [];
+  this.size = 0;
+}
+
+BufferList.prototype.shift = function shift() {
+  var buf = this.bufs.shift();
+
+  if (buf) {
+    this.size -= buf.length;
+  }
+
+  return buf;
+};
+
+BufferList.prototype.push = function push(buf) {
+  if (!buf || !buf.length) {
+    return;
+  }
+
+  this.bufs.push(buf);
+  this.size += buf.length;
+};
+
+},{}],352:[function(require,module,exports){
+module.exports = PacketHeader;
+function PacketHeader(length, number) {
+  this.length = length;
+  this.number = number;
+}
+
+},{}],353:[function(require,module,exports){
+var BIT_16            = Math.pow(2, 16);
+var BIT_24            = Math.pow(2, 24);
+var BUFFER_ALLOC_SIZE = Math.pow(2, 8);
+// The maximum precision JS Numbers can hold precisely
+// Don't panic: Good enough to represent byte values up to 8192 TB
+var IEEE_754_BINARY_64_PRECISION = Math.pow(2, 53);
+var MAX_PACKET_LENGTH            = Math.pow(2, 24) - 1;
+var Buffer                       = require('safe-buffer').Buffer;
+
+module.exports = PacketWriter;
+function PacketWriter() {
+  this._buffer = null;
+  this._offset = 0;
+}
+
+PacketWriter.prototype.toBuffer = function toBuffer(parser) {
+  if (!this._buffer) {
+    this._buffer = Buffer.alloc(0);
+    this._offset = 0;
+  }
+
+  var buffer  = this._buffer;
+  var length  = this._offset;
+  var packets = Math.floor(length / MAX_PACKET_LENGTH) + 1;
+
+  this._buffer = Buffer.allocUnsafe(length + packets * 4);
+  this._offset = 0;
+
+  for (var packet = 0; packet < packets; packet++) {
+    var isLast = (packet + 1 === packets);
+    var packetLength = (isLast)
+      ? length % MAX_PACKET_LENGTH
+      : MAX_PACKET_LENGTH;
+
+    var packetNumber = parser.incrementPacketNumber();
+
+    this.writeUnsignedNumber(3, packetLength);
+    this.writeUnsignedNumber(1, packetNumber);
+
+    var start = packet * MAX_PACKET_LENGTH;
+    var end   = start + packetLength;
+
+    this.writeBuffer(buffer.slice(start, end));
+  }
+
+  return this._buffer;
+};
+
+PacketWriter.prototype.writeUnsignedNumber = function(bytes, value) {
+  this._allocate(bytes);
+
+  for (var i = 0; i < bytes; i++) {
+    this._buffer[this._offset++] = (value >> (i * 8)) & 0xff;
+  }
+};
+
+PacketWriter.prototype.writeFiller = function(bytes) {
+  this._allocate(bytes);
+
+  for (var i = 0; i < bytes; i++) {
+    this._buffer[this._offset++] = 0x00;
+  }
+};
+
+PacketWriter.prototype.writeNullTerminatedString = function(value, encoding) {
+  // Typecast undefined into '' and numbers into strings
+  value = value || '';
+  value = value + '';
+
+  var bytes = Buffer.byteLength(value, encoding || 'utf-8') + 1;
+  this._allocate(bytes);
+
+  this._buffer.write(value, this._offset, encoding);
+  this._buffer[this._offset + bytes - 1] = 0x00;
+
+  this._offset += bytes;
+};
+
+PacketWriter.prototype.writeString = function(value) {
+  // Typecast undefined into '' and numbers into strings
+  value = value || '';
+  value = value + '';
+
+  var bytes = Buffer.byteLength(value, 'utf-8');
+  this._allocate(bytes);
+
+  this._buffer.write(value, this._offset, 'utf-8');
+
+  this._offset += bytes;
+};
+
+PacketWriter.prototype.writeBuffer = function(value) {
+  var bytes = value.length;
+
+  this._allocate(bytes);
+  value.copy(this._buffer, this._offset);
+  this._offset += bytes;
+};
+
+PacketWriter.prototype.writeLengthCodedNumber = function(value) {
+  if (value === null) {
+    this._allocate(1);
+    this._buffer[this._offset++] = 251;
+    return;
+  }
+
+  if (value <= 250) {
+    this._allocate(1);
+    this._buffer[this._offset++] = value;
+    return;
+  }
+
+  if (value > IEEE_754_BINARY_64_PRECISION) {
+    throw new Error(
+      'writeLengthCodedNumber: JS precision range exceeded, your ' +
+      'number is > 53 bit: "' + value + '"'
+    );
+  }
+
+  if (value < BIT_16) {
+    this._allocate(3);
+    this._buffer[this._offset++] = 252;
+  } else if (value < BIT_24) {
+    this._allocate(4);
+    this._buffer[this._offset++] = 253;
+  } else {
+    this._allocate(9);
+    this._buffer[this._offset++] = 254;
+  }
+
+  // 16 Bit
+  this._buffer[this._offset++] = value & 0xff;
+  this._buffer[this._offset++] = (value >> 8) & 0xff;
+
+  if (value < BIT_16) {
+    return;
+  }
+
+  // 24 Bit
+  this._buffer[this._offset++] = (value >> 16) & 0xff;
+
+  if (value < BIT_24) {
+    return;
+  }
+
+  this._buffer[this._offset++] = (value >> 24) & 0xff;
+
+  // Hack: Get the most significant 32 bit (JS bitwise operators are 32 bit)
+  value = value.toString(2);
+  value = value.substr(0, value.length - 32);
+  value = parseInt(value, 2);
+
+  this._buffer[this._offset++] = value & 0xff;
+  this._buffer[this._offset++] = (value >> 8) & 0xff;
+  this._buffer[this._offset++] = (value >> 16) & 0xff;
+
+  // Set last byte to 0, as we can only support 53 bits in JS (see above)
+  this._buffer[this._offset++] = 0;
+};
+
+PacketWriter.prototype.writeLengthCodedBuffer = function(value) {
+  var bytes = value.length;
+  this.writeLengthCodedNumber(bytes);
+  this.writeBuffer(value);
+};
+
+PacketWriter.prototype.writeNullTerminatedBuffer = function(value) {
+  this.writeBuffer(value);
+  this.writeFiller(1); // 0x00 terminator
+};
+
+PacketWriter.prototype.writeLengthCodedString = function(value) {
+  if (value === null) {
+    this.writeLengthCodedNumber(null);
+    return;
+  }
+
+  value = (value === undefined)
+    ? ''
+    : String(value);
+
+  var bytes = Buffer.byteLength(value, 'utf-8');
+  this.writeLengthCodedNumber(bytes);
+
+  if (!bytes) {
+    return;
+  }
+
+  this._allocate(bytes);
+  this._buffer.write(value, this._offset, 'utf-8');
+  this._offset += bytes;
+};
+
+PacketWriter.prototype._allocate = function _allocate(bytes) {
+  if (!this._buffer) {
+    this._buffer = Buffer.alloc(Math.max(BUFFER_ALLOC_SIZE, bytes));
+    this._offset = 0;
+    return;
+  }
+
+  var bytesRemaining = this._buffer.length - this._offset;
+  if (bytesRemaining >= bytes) {
+    return;
+  }
+
+  var newSize   = this._buffer.length + Math.max(BUFFER_ALLOC_SIZE, bytes);
+  var oldBuffer = this._buffer;
+
+  this._buffer = Buffer.alloc(newSize);
+  oldBuffer.copy(this._buffer);
+};
+
+},{"safe-buffer":413}],354:[function(require,module,exports){
+(function (process){
+var MAX_PACKET_LENGTH = Math.pow(2, 24) - 1;
+var MUL_32BIT         = Math.pow(2, 32);
+var PacketHeader      = require('./PacketHeader');
+var BigNumber         = require('bignumber.js');
+var Buffer            = require('safe-buffer').Buffer;
+var BufferList        = require('./BufferList');
+
+module.exports = Parser;
+function Parser(options) {
+  options = options || {};
+
+  this._supportBigNumbers = options.config && options.config.supportBigNumbers;
+  this._buffer            = Buffer.alloc(0);
+  this._nextBuffers       = new BufferList();
+  this._longPacketBuffers = new BufferList();
+  this._offset            = 0;
+  this._packetEnd         = null;
+  this._packetHeader      = null;
+  this._packetOffset      = null;
+  this._onError           = options.onError || function(err) { throw err; };
+  this._onPacket          = options.onPacket || function() {};
+  this._nextPacketNumber  = 0;
+  this._encoding          = 'utf-8';
+  this._paused            = false;
+}
+
+Parser.prototype.write = function write(chunk) {
+  this._nextBuffers.push(chunk);
+
+  while (!this._paused) {
+    if (!this._packetHeader) {
+      if (!this._combineNextBuffers(4)) {
+        break;
+      }
+
+      this._packetHeader = new PacketHeader(
+        this.parseUnsignedNumber(3),
+        this.parseUnsignedNumber(1)
+      );
+
+      if (this._packetHeader.number !== this._nextPacketNumber) {
+        var err = new Error(
+          'Packets out of order. Got: ' + this._packetHeader.number + ' ' +
+          'Expected: ' + this._nextPacketNumber
+        );
+
+        err.code  = 'PROTOCOL_PACKETS_OUT_OF_ORDER';
+        err.fatal = true;
+
+        this._onError(err);
+      }
+
+      this.incrementPacketNumber();
+    }
+
+    if (!this._combineNextBuffers(this._packetHeader.length)) {
+      break;
+    }
+
+    this._packetEnd    = this._offset + this._packetHeader.length;
+    this._packetOffset = this._offset;
+
+    if (this._packetHeader.length === MAX_PACKET_LENGTH) {
+      this._longPacketBuffers.push(this._buffer.slice(this._packetOffset, this._packetEnd));
+
+      this._advanceToNextPacket();
+      continue;
+    }
+
+    this._combineLongPacketBuffers();
+
+    // Try...finally to ensure exception safety. Unfortunately this is costing
+    // us up to ~10% performance in some benchmarks.
+    var hadException = true;
+    try {
+      this._onPacket(this._packetHeader);
+      hadException = false;
+    } catch (err) {
+      if (!err || typeof err.code !== 'string' || err.code.substr(0, 7) !== 'PARSER_') {
+        throw err; // Rethrow non-MySQL errors
+      }
+
+      // Pass down parser errors
+      this._onError(err);
+      hadException = false;
+    } finally {
+      this._advanceToNextPacket();
+
+      // If we had an exception, the parser while loop will be broken out
+      // of after the finally block. So we need to make sure to re-enter it
+      // to continue parsing any bytes that may already have been received.
+      if (hadException) {
+        process.nextTick(this.write.bind(this));
+      }
+    }
+  }
+};
+
+Parser.prototype.append = function append(chunk) {
+  if (!chunk || chunk.length === 0) {
+    return;
+  }
+
+  // Calculate slice ranges
+  var sliceEnd    = this._buffer.length;
+  var sliceStart  = this._packetOffset === null
+    ? this._offset
+    : this._packetOffset;
+  var sliceLength = sliceEnd - sliceStart;
+
+  // Get chunk data
+  var buffer = null;
+  var chunks = !(chunk instanceof Array || Array.isArray(chunk)) ? [chunk] : chunk;
+  var length = 0;
+  var offset = 0;
+
+  for (var i = 0; i < chunks.length; i++) {
+    length += chunks[i].length;
+  }
+
+  if (sliceLength !== 0) {
+    // Create a new Buffer
+    buffer = Buffer.allocUnsafe(sliceLength + length);
+    offset = 0;
+
+    // Copy data slice
+    offset += this._buffer.copy(buffer, 0, sliceStart, sliceEnd);
+
+    // Copy chunks
+    for (var i = 0; i < chunks.length; i++) {
+      offset += chunks[i].copy(buffer, offset);
+    }
+  } else if (chunks.length > 1) {
+    // Create a new Buffer
+    buffer = Buffer.allocUnsafe(length);
+    offset = 0;
+
+    // Copy chunks
+    for (var i = 0; i < chunks.length; i++) {
+      offset += chunks[i].copy(buffer, offset);
+    }
+  } else {
+    // Buffer is the only chunk
+    buffer = chunks[0];
+  }
+
+  // Adjust data-tracking pointers
+  this._buffer       = buffer;
+  this._offset       = this._offset - sliceStart;
+  this._packetEnd    = this._packetEnd !== null
+    ? this._packetEnd - sliceStart
+    : null;
+  this._packetOffset = this._packetOffset !== null
+    ? this._packetOffset - sliceStart
+    : null;
+};
+
+Parser.prototype.pause = function() {
+  this._paused = true;
+};
+
+Parser.prototype.resume = function() {
+  this._paused = false;
+
+  // nextTick() to avoid entering write() multiple times within the same stack
+  // which would cause problems as write manipulates the state of the object.
+  process.nextTick(this.write.bind(this));
+};
+
+Parser.prototype.peak = function peak(offset) {
+  return this._buffer[this._offset + (offset >>> 0)];
+};
+
+Parser.prototype.parseUnsignedNumber = function parseUnsignedNumber(bytes) {
+  if (bytes === 1) {
+    return this._buffer[this._offset++];
+  }
+
+  var buffer = this._buffer;
+  var offset = this._offset + bytes - 1;
+  var value  = 0;
+
+  if (bytes > 4) {
+    var err    = new Error('parseUnsignedNumber: Supports only up to 4 bytes');
+    err.offset = (this._offset - this._packetOffset - 1);
+    err.code   = 'PARSER_UNSIGNED_TOO_LONG';
+    throw err;
+  }
+
+  while (offset >= this._offset) {
+    value = ((value << 8) | buffer[offset]) >>> 0;
+    offset--;
+  }
+
+  this._offset += bytes;
+
+  return value;
+};
+
+Parser.prototype.parseLengthCodedString = function() {
+  var length = this.parseLengthCodedNumber();
+
+  if (length === null) {
+    return null;
+  }
+
+  return this.parseString(length);
+};
+
+Parser.prototype.parseLengthCodedBuffer = function() {
+  var length = this.parseLengthCodedNumber();
+
+  if (length === null) {
+    return null;
+  }
+
+  return this.parseBuffer(length);
+};
+
+Parser.prototype.parseLengthCodedNumber = function parseLengthCodedNumber() {
+  if (this._offset >= this._buffer.length) {
+    var err    = new Error('Parser: read past end');
+    err.offset = (this._offset - this._packetOffset);
+    err.code   = 'PARSER_READ_PAST_END';
+    throw err;
+  }
+
+  var bits = this._buffer[this._offset++];
+
+  if (bits <= 250) {
+    return bits;
+  }
+
+  switch (bits) {
+    case 251:
+      return null;
+    case 252:
+      return this.parseUnsignedNumber(2);
+    case 253:
+      return this.parseUnsignedNumber(3);
+    case 254:
+      break;
+    default:
+      var err    = new Error('Unexpected first byte' + (bits ? ': 0x' + bits.toString(16) : ''));
+      err.offset = (this._offset - this._packetOffset - 1);
+      err.code   = 'PARSER_BAD_LENGTH_BYTE';
+      throw err;
+  }
+
+  var low = this.parseUnsignedNumber(4);
+  var high = this.parseUnsignedNumber(4);
+  var value;
+
+  if (high >>> 21) {
+    value = (new BigNumber(low)).plus((new BigNumber(MUL_32BIT)).times(high)).toString();
+
+    if (this._supportBigNumbers) {
+      return value;
+    }
+
+    var err    = new Error(
+      'parseLengthCodedNumber: JS precision range exceeded, ' +
+      'number is >= 53 bit: "' + value + '"'
+    );
+    err.offset = (this._offset - this._packetOffset - 8);
+    err.code   = 'PARSER_JS_PRECISION_RANGE_EXCEEDED';
+    throw err;
+  }
+
+  value = low + (MUL_32BIT * high);
+
+  return value;
+};
+
+Parser.prototype.parseFiller = function(length) {
+  return this.parseBuffer(length);
+};
+
+Parser.prototype.parseNullTerminatedBuffer = function() {
+  var end      = this._nullByteOffset();
+  var value    = this._buffer.slice(this._offset, end);
+  this._offset = end + 1;
+
+  return value;
+};
+
+Parser.prototype.parseNullTerminatedString = function() {
+  var end      = this._nullByteOffset();
+  var value    = this._buffer.toString(this._encoding, this._offset, end);
+  this._offset = end + 1;
+
+  return value;
+};
+
+Parser.prototype._nullByteOffset = function() {
+  var offset = this._offset;
+
+  while (this._buffer[offset] !== 0x00) {
+    offset++;
+
+    if (offset >= this._buffer.length) {
+      var err    = new Error('Offset of null terminated string not found.');
+      err.offset = (this._offset - this._packetOffset);
+      err.code   = 'PARSER_MISSING_NULL_BYTE';
+      throw err;
+    }
+  }
+
+  return offset;
+};
+
+Parser.prototype.parsePacketTerminatedBuffer = function parsePacketTerminatedBuffer() {
+  var length = this._packetEnd - this._offset;
+  return this.parseBuffer(length);
+};
+
+Parser.prototype.parsePacketTerminatedString = function() {
+  var length = this._packetEnd - this._offset;
+  return this.parseString(length);
+};
+
+Parser.prototype.parseBuffer = function(length) {
+  var response = Buffer.alloc(length);
+  this._buffer.copy(response, 0, this._offset, this._offset + length);
+
+  this._offset += length;
+  return response;
+};
+
+Parser.prototype.parseString = function(length) {
+  var offset = this._offset;
+  var end = offset + length;
+  var value = this._buffer.toString(this._encoding, offset, end);
+
+  this._offset = end;
+  return value;
+};
+
+Parser.prototype.parseGeometryValue = function() {
+  var buffer = this.parseLengthCodedBuffer();
+  var offset = 4;
+
+  if (buffer === null || !buffer.length) {
+    return null;
+  }
+
+  function parseGeometry() {
+    var result = null;
+    var byteOrder = buffer.readUInt8(offset); offset += 1;
+    var wkbType = byteOrder ? buffer.readUInt32LE(offset) : buffer.readUInt32BE(offset); offset += 4;
+    switch (wkbType) {
+      case 1: // WKBPoint
+        var x = byteOrder ? buffer.readDoubleLE(offset) : buffer.readDoubleBE(offset); offset += 8;
+        var y = byteOrder ? buffer.readDoubleLE(offset) : buffer.readDoubleBE(offset); offset += 8;
+        result = {x: x, y: y};
+        break;
+      case 2: // WKBLineString
+        var numPoints = byteOrder ? buffer.readUInt32LE(offset) : buffer.readUInt32BE(offset); offset += 4;
+        result = [];
+        for (var i = numPoints; i > 0; i--) {
+          var x = byteOrder ? buffer.readDoubleLE(offset) : buffer.readDoubleBE(offset); offset += 8;
+          var y = byteOrder ? buffer.readDoubleLE(offset) : buffer.readDoubleBE(offset); offset += 8;
+          result.push({x: x, y: y});
+        }
+        break;
+      case 3: // WKBPolygon
+        var numRings = byteOrder ? buffer.readUInt32LE(offset) : buffer.readUInt32BE(offset); offset += 4;
+        result = [];
+        for (var i = numRings; i > 0; i--) {
+          var numPoints = byteOrder ? buffer.readUInt32LE(offset) : buffer.readUInt32BE(offset); offset += 4;
+          var line = [];
+          for (var j = numPoints; j > 0; j--) {
+            var x = byteOrder ? buffer.readDoubleLE(offset) : buffer.readDoubleBE(offset); offset += 8;
+            var y = byteOrder ? buffer.readDoubleLE(offset) : buffer.readDoubleBE(offset); offset += 8;
+            line.push({x: x, y: y});
+          }
+          result.push(line);
+        }
+        break;
+      case 4: // WKBMultiPoint
+      case 5: // WKBMultiLineString
+      case 6: // WKBMultiPolygon
+      case 7: // WKBGeometryCollection
+        var num = byteOrder ? buffer.readUInt32LE(offset) : buffer.readUInt32BE(offset); offset += 4;
+        var result = [];
+        for (var i = num; i > 0; i--) {
+          result.push(parseGeometry());
+        }
+        break;
+    }
+    return result;
+  }
+  return parseGeometry();
+};
+
+Parser.prototype.reachedPacketEnd = function() {
+  return this._offset === this._packetEnd;
+};
+
+Parser.prototype.incrementPacketNumber = function() {
+  var currentPacketNumber = this._nextPacketNumber;
+  this._nextPacketNumber = (this._nextPacketNumber + 1) % 256;
+
+  return currentPacketNumber;
+};
+
+Parser.prototype.resetPacketNumber = function() {
+  this._nextPacketNumber = 0;
+};
+
+Parser.prototype.packetLength = function packetLength() {
+  if (!this._packetHeader) {
+    return null;
+  }
+
+  return this._packetHeader.length + this._longPacketBuffers.size;
+};
+
+Parser.prototype._combineNextBuffers = function _combineNextBuffers(bytes) {
+  var length = this._buffer.length - this._offset;
+
+  if (length >= bytes) {
+    return true;
+  }
+
+  if ((length + this._nextBuffers.size) < bytes) {
+    return false;
+  }
+
+  var buffers     = [];
+  var bytesNeeded = bytes - length;
+
+  while (bytesNeeded > 0) {
+    var buffer = this._nextBuffers.shift();
+    buffers.push(buffer);
+    bytesNeeded -= buffer.length;
+  }
+
+  this.append(buffers);
+  return true;
+};
+
+Parser.prototype._combineLongPacketBuffers = function _combineLongPacketBuffers() {
+  if (!this._longPacketBuffers.size) {
+    return;
+  }
+
+  // Calculate bytes
+  var remainingBytes      = this._buffer.length - this._offset;
+  var trailingPacketBytes = this._buffer.length - this._packetEnd;
+
+  // Create buffer
+  var buf    = null;
+  var buffer = Buffer.allocUnsafe(remainingBytes + this._longPacketBuffers.size);
+  var offset = 0;
+
+  // Copy long buffers
+  while ((buf = this._longPacketBuffers.shift())) {
+    offset += buf.copy(buffer, offset);
+  }
+
+  // Copy remaining bytes
+  this._buffer.copy(buffer, offset, this._offset);
+
+  this._buffer       = buffer;
+  this._offset       = 0;
+  this._packetEnd    = this._buffer.length - trailingPacketBytes;
+  this._packetOffset = 0;
+};
+
+Parser.prototype._advanceToNextPacket = function() {
+  this._offset       = this._packetEnd;
+  this._packetHeader = null;
+  this._packetEnd    = null;
+  this._packetOffset = null;
+};
+
+}).call(this,require('_process'))
+},{"./BufferList":351,"./PacketHeader":352,"_process":137,"bignumber.js":189,"safe-buffer":413}],355:[function(require,module,exports){
+(function (process){
+var Parser       = require('./Parser');
+var Sequences    = require('./sequences');
+var Packets      = require('./packets');
+var Stream       = require('stream').Stream;
+var Util         = require('util');
+var PacketWriter = require('./PacketWriter');
+
+module.exports = Protocol;
+Util.inherits(Protocol, Stream);
+function Protocol(options) {
+  Stream.call(this);
+
+  options = options || {};
+
+  this.readable = true;
+  this.writable = true;
+
+  this._config                        = options.config || {};
+  this._connection                    = options.connection;
+  this._callback                      = null;
+  this._fatalError                    = null;
+  this._quitSequence                  = null;
+  this._handshake                     = false;
+  this._handshaked                    = false;
+  this._ended                         = false;
+  this._destroyed                     = false;
+  this._queue                         = [];
+  this._handshakeInitializationPacket = null;
+
+  this._parser = new Parser({
+    onError  : this.handleParserError.bind(this),
+    onPacket : this._parsePacket.bind(this),
+    config   : this._config
+  });
+}
+
+Protocol.prototype.write = function(buffer) {
+  this._parser.write(buffer);
+  return true;
+};
+
+Protocol.prototype.handshake = function handshake(options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  options = options || {};
+  options.config = this._config;
+
+  var sequence = this._enqueue(new Sequences.Handshake(options, callback));
+
+  this._handshake = true;
+
+  return sequence;
+};
+
+Protocol.prototype.query = function query(options, callback) {
+  return this._enqueue(new Sequences.Query(options, callback));
+};
+
+Protocol.prototype.changeUser = function changeUser(options, callback) {
+  return this._enqueue(new Sequences.ChangeUser(options, callback));
+};
+
+Protocol.prototype.ping = function ping(options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  return this._enqueue(new Sequences.Ping(options, callback));
+};
+
+Protocol.prototype.stats = function stats(options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  return this._enqueue(new Sequences.Statistics(options, callback));
+};
+
+Protocol.prototype.quit = function quit(options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  var self     = this;
+  var sequence = this._enqueue(new Sequences.Quit(options, callback));
+
+  sequence.on('end', function () {
+    self.end();
+  });
+
+  return this._quitSequence = sequence;
+};
+
+Protocol.prototype.end = function() {
+  if (this._ended) {
+    return;
+  }
+  this._ended = true;
+
+  if (this._quitSequence && (this._quitSequence._ended || this._queue[0] === this._quitSequence)) {
+    this._quitSequence.end();
+    this.emit('end');
+    return;
+  }
+
+  var err = new Error('Connection lost: The server closed the connection.');
+  err.fatal = true;
+  err.code = 'PROTOCOL_CONNECTION_LOST';
+
+  this._delegateError(err);
+};
+
+Protocol.prototype.pause = function() {
+  this._parser.pause();
+  // Since there is a file stream in query, we must transmit pause/resume event to current sequence.
+  var seq = this._queue[0];
+  if (seq && seq.emit) {
+    seq.emit('pause');
+  }
+};
+
+Protocol.prototype.resume = function() {
+  this._parser.resume();
+  // Since there is a file stream in query, we must transmit pause/resume event to current sequence.
+  var seq = this._queue[0];
+  if (seq && seq.emit) {
+    seq.emit('resume');
+  }
+};
+
+Protocol.prototype._enqueue = function(sequence) {
+  if (!this._validateEnqueue(sequence)) {
+    return sequence;
+  }
+
+  if (this._config.trace) {
+    // Long stack trace support
+    sequence._callSite = sequence._callSite || new Error();
+  }
+
+  this._queue.push(sequence);
+  this.emit('enqueue', sequence);
+
+  var self = this;
+  sequence
+    .on('error', function(err) {
+      self._delegateError(err, sequence);
+    })
+    .on('packet', function(packet) {
+      sequence._timer.active();
+      self._emitPacket(packet);
+    })
+    .on('end', function() {
+      self._dequeue(sequence);
+    })
+    .on('timeout', function() {
+      var err = new Error(sequence.constructor.name + ' inactivity timeout');
+
+      err.code    = 'PROTOCOL_SEQUENCE_TIMEOUT';
+      err.fatal   = true;
+      err.timeout = sequence._timeout;
+
+      self._delegateError(err, sequence);
+    })
+    .on('start-tls', function() {
+      sequence._timer.active();
+      self._connection._startTLS(function(err) {
+        if (err) {
+          // SSL negotiation error are fatal
+          err.code  = 'HANDSHAKE_SSL_ERROR';
+          err.fatal = true;
+          sequence.end(err);
+          return;
+        }
+
+        sequence._timer.active();
+        sequence._tlsUpgradeCompleteHandler();
+      });
+    });
+
+  if (this._queue.length === 1) {
+    this._parser.resetPacketNumber();
+    this._startSequence(sequence);
+  }
+
+  return sequence;
+};
+
+Protocol.prototype._validateEnqueue = function _validateEnqueue(sequence) {
+  var err;
+  var prefix = 'Cannot enqueue ' + sequence.constructor.name;
+
+  if (this._fatalError) {
+    err      = new Error(prefix + ' after fatal error.');
+    err.code = 'PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR';
+  } else if (this._quitSequence) {
+    err      = new Error(prefix + ' after invoking quit.');
+    err.code = 'PROTOCOL_ENQUEUE_AFTER_QUIT';
+  } else if (this._destroyed) {
+    err      = new Error(prefix + ' after being destroyed.');
+    err.code = 'PROTOCOL_ENQUEUE_AFTER_DESTROY';
+  } else if ((this._handshake || this._handshaked) && sequence.constructor === Sequences.Handshake) {
+    err      = new Error(prefix + ' after already enqueuing a Handshake.');
+    err.code = 'PROTOCOL_ENQUEUE_HANDSHAKE_TWICE';
+  } else {
+    return true;
+  }
+
+  var self  = this;
+  err.fatal = false;
+
+  // add error handler
+  sequence.on('error', function (err) {
+    self._delegateError(err, sequence);
+  });
+
+  process.nextTick(function () {
+    sequence.end(err);
+  });
+
+  return false;
+};
+
+Protocol.prototype._parsePacket = function() {
+  var sequence = this._queue[0];
+
+  if (!sequence) {
+    var err   = new Error('Received packet with no active sequence.');
+    err.code  = 'PROTOCOL_STRAY_PACKET';
+    err.fatal = true;
+
+    this._delegateError(err);
+    return;
+  }
+
+  var Packet     = this._determinePacket(sequence);
+  var packet     = new Packet({protocol41: this._config.protocol41});
+  var packetName = Packet.name;
+
+  // Special case: Faster dispatch, and parsing done inside sequence
+  if (Packet === Packets.RowDataPacket) {
+    sequence.RowDataPacket(packet, this._parser, this._connection);
+
+    if (this._config.debug) {
+      this._debugPacket(true, packet);
+    }
+
+    return;
+  }
+
+  if (this._config.debug) {
+    this._parsePacketDebug(packet);
+  } else {
+    packet.parse(this._parser);
+  }
+
+  if (Packet === Packets.HandshakeInitializationPacket) {
+    this._handshakeInitializationPacket = packet;
+  }
+
+  sequence._timer.active();
+
+  if (!sequence[packetName]) {
+    var err   = new Error('Received packet in the wrong sequence.');
+    err.code  = 'PROTOCOL_INCORRECT_PACKET_SEQUENCE';
+    err.fatal = true;
+
+    this._delegateError(err);
+    return;
+  }
+
+  sequence[packetName](packet);
+};
+
+Protocol.prototype._parsePacketDebug = function _parsePacketDebug(packet) {
+  try {
+    packet.parse(this._parser);
+  } finally {
+    this._debugPacket(true, packet);
+  }
+};
+
+Protocol.prototype._emitPacket = function(packet) {
+  var packetWriter = new PacketWriter();
+  packet.write(packetWriter);
+  this.emit('data', packetWriter.toBuffer(this._parser));
+
+  if (this._config.debug) {
+    this._debugPacket(false, packet);
+  }
+};
+
+Protocol.prototype._determinePacket = function(sequence) {
+  var firstByte = this._parser.peak();
+
+  if (sequence.determinePacket) {
+    var Packet = sequence.determinePacket(firstByte, this._parser);
+    if (Packet) {
+      return Packet;
+    }
+  }
+
+  switch (firstByte) {
+    case 0x00:
+      if (!this._handshaked) {
+        this._handshaked = true;
+        this.emit('handshake', this._handshakeInitializationPacket);
+      }
+      return Packets.OkPacket;
+    case 0xfe: return Packets.EofPacket;
+    case 0xff: return Packets.ErrorPacket;
+  }
+
+  throw new Error('Could not determine packet, firstByte = ' + firstByte);
+};
+
+Protocol.prototype._dequeue = function(sequence) {
+  sequence._timer.stop();
+
+  // No point in advancing the queue, we are dead
+  if (this._fatalError) {
+    return;
+  }
+
+  this._queue.shift();
+
+  var sequence = this._queue[0];
+  if (!sequence) {
+    this.emit('drain');
+    return;
+  }
+
+  this._parser.resetPacketNumber();
+
+  this._startSequence(sequence);
+};
+
+Protocol.prototype._startSequence = function(sequence) {
+  if (sequence._timeout > 0 && isFinite(sequence._timeout)) {
+    sequence._timer.start(sequence._timeout);
+  }
+
+  if (sequence.constructor === Sequences.ChangeUser) {
+    sequence.start(this._handshakeInitializationPacket);
+  } else {
+    sequence.start();
+  }
+};
+
+Protocol.prototype.handleNetworkError = function(err) {
+  err.fatal = true;
+
+  var sequence = this._queue[0];
+  if (sequence) {
+    sequence.end(err);
+  } else {
+    this._delegateError(err);
+  }
+};
+
+Protocol.prototype.handleParserError = function handleParserError(err) {
+  var sequence = this._queue[0];
+  if (sequence) {
+    sequence.end(err);
+  } else {
+    this._delegateError(err);
+  }
+};
+
+Protocol.prototype._delegateError = function(err, sequence) {
+  // Stop delegating errors after the first fatal error
+  if (this._fatalError) {
+    return;
+  }
+
+  if (err.fatal) {
+    this._fatalError = err;
+  }
+
+  if (this._shouldErrorBubbleUp(err, sequence)) {
+    // Can't use regular 'error' event here as that always destroys the pipe
+    // between socket and protocol which is not what we want (unless the
+    // exception was fatal).
+    this.emit('unhandledError', err);
+  } else if (err.fatal) {
+    // Send fatal error to all sequences in the queue
+    var queue = this._queue;
+    process.nextTick(function () {
+      queue.forEach(function (sequence) {
+        sequence.end(err);
+      });
+      queue.length = 0;
+    });
+  }
+
+  // Make sure the stream we are piping to is getting closed
+  if (err.fatal) {
+    this.emit('end', err);
+  }
+};
+
+Protocol.prototype._shouldErrorBubbleUp = function(err, sequence) {
+  if (sequence) {
+    if (sequence.hasErrorHandler()) {
+      return false;
+    } else if (!err.fatal) {
+      return true;
+    }
+  }
+
+  return (err.fatal && !this._hasPendingErrorHandlers());
+};
+
+Protocol.prototype._hasPendingErrorHandlers = function() {
+  return this._queue.some(function(sequence) {
+    return sequence.hasErrorHandler();
+  });
+};
+
+Protocol.prototype.destroy = function() {
+  this._destroyed = true;
+  this._parser.pause();
+
+  if (this._connection.state !== 'disconnected') {
+    if (!this._ended) {
+      this.end();
+    }
+  }
+};
+
+Protocol.prototype._debugPacket = function(incoming, packet) {
+  var connection = this._connection;
+  var headline   = incoming
+    ? '<-- '
+    : '--> ';
+
+  if (connection && connection.threadId !== null) {
+    headline += '(' + connection.threadId + ') ';
+  }
+
+  headline += packet.constructor.name;
+
+  // check for debug packet restriction
+  if (Array.isArray(this._config.debug) && this._config.debug.indexOf(packet.constructor.name) === -1) {
+    return;
+  }
+
+  console.log(headline);
+  console.log(packet);
+  console.log('');
+};
+
+}).call(this,require('_process'))
+},{"./PacketWriter":353,"./Parser":354,"./packets":387,"./sequences":395,"_process":137,"stream":173,"util":185}],356:[function(require,module,exports){
+module.exports = ResultSet;
+function ResultSet(resultSetHeaderPacket) {
+  this.resultSetHeaderPacket = resultSetHeaderPacket;
+  this.fieldPackets          = [];
+  this.eofPackets            = [];
+  this.rows                  = [];
+}
+
+},{}],357:[function(require,module,exports){
+module.exports = require('sqlstring');
+
+},{"sqlstring":414}],358:[function(require,module,exports){
+var Timers = require('timers');
+
+module.exports = Timer;
+function Timer(object) {
+  this._object  = object;
+  this._timeout = null;
+}
+
+Timer.prototype.active = function active() {
+  if (this._timeout) {
+    if (this._timeout.refresh) {
+      this._timeout.refresh();
+    } else {
+      Timers.active(this._timeout);
+    }
+  }
+};
+
+Timer.prototype.start = function start(msecs) {
+  this.stop();
+  this._timeout = Timers.setTimeout(this._onTimeout.bind(this), msecs);
+};
+
+Timer.prototype.stop = function stop() {
+  if (this._timeout) {
+    Timers.clearTimeout(this._timeout);
+    this._timeout = null;
+  }
+};
+
+Timer.prototype._onTimeout = function _onTimeout() {
+  return this._object._onTimeout();
+};
+
+},{"timers":179}],359:[function(require,module,exports){
+exports.BIG5_CHINESE_CI              = 1;
+exports.LATIN2_CZECH_CS              = 2;
+exports.DEC8_SWEDISH_CI              = 3;
+exports.CP850_GENERAL_CI             = 4;
+exports.LATIN1_GERMAN1_CI            = 5;
+exports.HP8_ENGLISH_CI               = 6;
+exports.KOI8R_GENERAL_CI             = 7;
+exports.LATIN1_SWEDISH_CI            = 8;
+exports.LATIN2_GENERAL_CI            = 9;
+exports.SWE7_SWEDISH_CI              = 10;
+exports.ASCII_GENERAL_CI             = 11;
+exports.UJIS_JAPANESE_CI             = 12;
+exports.SJIS_JAPANESE_CI             = 13;
+exports.CP1251_BULGARIAN_CI          = 14;
+exports.LATIN1_DANISH_CI             = 15;
+exports.HEBREW_GENERAL_CI            = 16;
+exports.TIS620_THAI_CI               = 18;
+exports.EUCKR_KOREAN_CI              = 19;
+exports.LATIN7_ESTONIAN_CS           = 20;
+exports.LATIN2_HUNGARIAN_CI          = 21;
+exports.KOI8U_GENERAL_CI             = 22;
+exports.CP1251_UKRAINIAN_CI          = 23;
+exports.GB2312_CHINESE_CI            = 24;
+exports.GREEK_GENERAL_CI             = 25;
+exports.CP1250_GENERAL_CI            = 26;
+exports.LATIN2_CROATIAN_CI           = 27;
+exports.GBK_CHINESE_CI               = 28;
+exports.CP1257_LITHUANIAN_CI         = 29;
+exports.LATIN5_TURKISH_CI            = 30;
+exports.LATIN1_GERMAN2_CI            = 31;
+exports.ARMSCII8_GENERAL_CI          = 32;
+exports.UTF8_GENERAL_CI              = 33;
+exports.CP1250_CZECH_CS              = 34;
+exports.UCS2_GENERAL_CI              = 35;
+exports.CP866_GENERAL_CI             = 36;
+exports.KEYBCS2_GENERAL_CI           = 37;
+exports.MACCE_GENERAL_CI             = 38;
+exports.MACROMAN_GENERAL_CI          = 39;
+exports.CP852_GENERAL_CI             = 40;
+exports.LATIN7_GENERAL_CI            = 41;
+exports.LATIN7_GENERAL_CS            = 42;
+exports.MACCE_BIN                    = 43;
+exports.CP1250_CROATIAN_CI           = 44;
+exports.UTF8MB4_GENERAL_CI           = 45;
+exports.UTF8MB4_BIN                  = 46;
+exports.LATIN1_BIN                   = 47;
+exports.LATIN1_GENERAL_CI            = 48;
+exports.LATIN1_GENERAL_CS            = 49;
+exports.CP1251_BIN                   = 50;
+exports.CP1251_GENERAL_CI            = 51;
+exports.CP1251_GENERAL_CS            = 52;
+exports.MACROMAN_BIN                 = 53;
+exports.UTF16_GENERAL_CI             = 54;
+exports.UTF16_BIN                    = 55;
+exports.UTF16LE_GENERAL_CI           = 56;
+exports.CP1256_GENERAL_CI            = 57;
+exports.CP1257_BIN                   = 58;
+exports.CP1257_GENERAL_CI            = 59;
+exports.UTF32_GENERAL_CI             = 60;
+exports.UTF32_BIN                    = 61;
+exports.UTF16LE_BIN                  = 62;
+exports.BINARY                       = 63;
+exports.ARMSCII8_BIN                 = 64;
+exports.ASCII_BIN                    = 65;
+exports.CP1250_BIN                   = 66;
+exports.CP1256_BIN                   = 67;
+exports.CP866_BIN                    = 68;
+exports.DEC8_BIN                     = 69;
+exports.GREEK_BIN                    = 70;
+exports.HEBREW_BIN                   = 71;
+exports.HP8_BIN                      = 72;
+exports.KEYBCS2_BIN                  = 73;
+exports.KOI8R_BIN                    = 74;
+exports.KOI8U_BIN                    = 75;
+exports.LATIN2_BIN                   = 77;
+exports.LATIN5_BIN                   = 78;
+exports.LATIN7_BIN                   = 79;
+exports.CP850_BIN                    = 80;
+exports.CP852_BIN                    = 81;
+exports.SWE7_BIN                     = 82;
+exports.UTF8_BIN                     = 83;
+exports.BIG5_BIN                     = 84;
+exports.EUCKR_BIN                    = 85;
+exports.GB2312_BIN                   = 86;
+exports.GBK_BIN                      = 87;
+exports.SJIS_BIN                     = 88;
+exports.TIS620_BIN                   = 89;
+exports.UCS2_BIN                     = 90;
+exports.UJIS_BIN                     = 91;
+exports.GEOSTD8_GENERAL_CI           = 92;
+exports.GEOSTD8_BIN                  = 93;
+exports.LATIN1_SPANISH_CI            = 94;
+exports.CP932_JAPANESE_CI            = 95;
+exports.CP932_BIN                    = 96;
+exports.EUCJPMS_JAPANESE_CI          = 97;
+exports.EUCJPMS_BIN                  = 98;
+exports.CP1250_POLISH_CI             = 99;
+exports.UTF16_UNICODE_CI             = 101;
+exports.UTF16_ICELANDIC_CI           = 102;
+exports.UTF16_LATVIAN_CI             = 103;
+exports.UTF16_ROMANIAN_CI            = 104;
+exports.UTF16_SLOVENIAN_CI           = 105;
+exports.UTF16_POLISH_CI              = 106;
+exports.UTF16_ESTONIAN_CI            = 107;
+exports.UTF16_SPANISH_CI             = 108;
+exports.UTF16_SWEDISH_CI             = 109;
+exports.UTF16_TURKISH_CI             = 110;
+exports.UTF16_CZECH_CI               = 111;
+exports.UTF16_DANISH_CI              = 112;
+exports.UTF16_LITHUANIAN_CI          = 113;
+exports.UTF16_SLOVAK_CI              = 114;
+exports.UTF16_SPANISH2_CI            = 115;
+exports.UTF16_ROMAN_CI               = 116;
+exports.UTF16_PERSIAN_CI             = 117;
+exports.UTF16_ESPERANTO_CI           = 118;
+exports.UTF16_HUNGARIAN_CI           = 119;
+exports.UTF16_SINHALA_CI             = 120;
+exports.UTF16_GERMAN2_CI             = 121;
+exports.UTF16_CROATIAN_MYSQL561_CI   = 122;
+exports.UTF16_UNICODE_520_CI         = 123;
+exports.UTF16_VIETNAMESE_CI          = 124;
+exports.UCS2_UNICODE_CI              = 128;
+exports.UCS2_ICELANDIC_CI            = 129;
+exports.UCS2_LATVIAN_CI              = 130;
+exports.UCS2_ROMANIAN_CI             = 131;
+exports.UCS2_SLOVENIAN_CI            = 132;
+exports.UCS2_POLISH_CI               = 133;
+exports.UCS2_ESTONIAN_CI             = 134;
+exports.UCS2_SPANISH_CI              = 135;
+exports.UCS2_SWEDISH_CI              = 136;
+exports.UCS2_TURKISH_CI              = 137;
+exports.UCS2_CZECH_CI                = 138;
+exports.UCS2_DANISH_CI               = 139;
+exports.UCS2_LITHUANIAN_CI           = 140;
+exports.UCS2_SLOVAK_CI               = 141;
+exports.UCS2_SPANISH2_CI             = 142;
+exports.UCS2_ROMAN_CI                = 143;
+exports.UCS2_PERSIAN_CI              = 144;
+exports.UCS2_ESPERANTO_CI            = 145;
+exports.UCS2_HUNGARIAN_CI            = 146;
+exports.UCS2_SINHALA_CI              = 147;
+exports.UCS2_GERMAN2_CI              = 148;
+exports.UCS2_CROATIAN_MYSQL561_CI    = 149;
+exports.UCS2_UNICODE_520_CI          = 150;
+exports.UCS2_VIETNAMESE_CI           = 151;
+exports.UCS2_GENERAL_MYSQL500_CI     = 159;
+exports.UTF32_UNICODE_CI             = 160;
+exports.UTF32_ICELANDIC_CI           = 161;
+exports.UTF32_LATVIAN_CI             = 162;
+exports.UTF32_ROMANIAN_CI            = 163;
+exports.UTF32_SLOVENIAN_CI           = 164;
+exports.UTF32_POLISH_CI              = 165;
+exports.UTF32_ESTONIAN_CI            = 166;
+exports.UTF32_SPANISH_CI             = 167;
+exports.UTF32_SWEDISH_CI             = 168;
+exports.UTF32_TURKISH_CI             = 169;
+exports.UTF32_CZECH_CI               = 170;
+exports.UTF32_DANISH_CI              = 171;
+exports.UTF32_LITHUANIAN_CI          = 172;
+exports.UTF32_SLOVAK_CI              = 173;
+exports.UTF32_SPANISH2_CI            = 174;
+exports.UTF32_ROMAN_CI               = 175;
+exports.UTF32_PERSIAN_CI             = 176;
+exports.UTF32_ESPERANTO_CI           = 177;
+exports.UTF32_HUNGARIAN_CI           = 178;
+exports.UTF32_SINHALA_CI             = 179;
+exports.UTF32_GERMAN2_CI             = 180;
+exports.UTF32_CROATIAN_MYSQL561_CI   = 181;
+exports.UTF32_UNICODE_520_CI         = 182;
+exports.UTF32_VIETNAMESE_CI          = 183;
+exports.UTF8_UNICODE_CI              = 192;
+exports.UTF8_ICELANDIC_CI            = 193;
+exports.UTF8_LATVIAN_CI              = 194;
+exports.UTF8_ROMANIAN_CI             = 195;
+exports.UTF8_SLOVENIAN_CI            = 196;
+exports.UTF8_POLISH_CI               = 197;
+exports.UTF8_ESTONIAN_CI             = 198;
+exports.UTF8_SPANISH_CI              = 199;
+exports.UTF8_SWEDISH_CI              = 200;
+exports.UTF8_TURKISH_CI              = 201;
+exports.UTF8_CZECH_CI                = 202;
+exports.UTF8_DANISH_CI               = 203;
+exports.UTF8_LITHUANIAN_CI           = 204;
+exports.UTF8_SLOVAK_CI               = 205;
+exports.UTF8_SPANISH2_CI             = 206;
+exports.UTF8_ROMAN_CI                = 207;
+exports.UTF8_PERSIAN_CI              = 208;
+exports.UTF8_ESPERANTO_CI            = 209;
+exports.UTF8_HUNGARIAN_CI            = 210;
+exports.UTF8_SINHALA_CI              = 211;
+exports.UTF8_GERMAN2_CI              = 212;
+exports.UTF8_CROATIAN_MYSQL561_CI    = 213;
+exports.UTF8_UNICODE_520_CI          = 214;
+exports.UTF8_VIETNAMESE_CI           = 215;
+exports.UTF8_GENERAL_MYSQL500_CI     = 223;
+exports.UTF8MB4_UNICODE_CI           = 224;
+exports.UTF8MB4_ICELANDIC_CI         = 225;
+exports.UTF8MB4_LATVIAN_CI           = 226;
+exports.UTF8MB4_ROMANIAN_CI          = 227;
+exports.UTF8MB4_SLOVENIAN_CI         = 228;
+exports.UTF8MB4_POLISH_CI            = 229;
+exports.UTF8MB4_ESTONIAN_CI          = 230;
+exports.UTF8MB4_SPANISH_CI           = 231;
+exports.UTF8MB4_SWEDISH_CI           = 232;
+exports.UTF8MB4_TURKISH_CI           = 233;
+exports.UTF8MB4_CZECH_CI             = 234;
+exports.UTF8MB4_DANISH_CI            = 235;
+exports.UTF8MB4_LITHUANIAN_CI        = 236;
+exports.UTF8MB4_SLOVAK_CI            = 237;
+exports.UTF8MB4_SPANISH2_CI          = 238;
+exports.UTF8MB4_ROMAN_CI             = 239;
+exports.UTF8MB4_PERSIAN_CI           = 240;
+exports.UTF8MB4_ESPERANTO_CI         = 241;
+exports.UTF8MB4_HUNGARIAN_CI         = 242;
+exports.UTF8MB4_SINHALA_CI           = 243;
+exports.UTF8MB4_GERMAN2_CI           = 244;
+exports.UTF8MB4_CROATIAN_MYSQL561_CI = 245;
+exports.UTF8MB4_UNICODE_520_CI       = 246;
+exports.UTF8MB4_VIETNAMESE_CI        = 247;
+exports.UTF8_GENERAL50_CI            = 253;
+
+// short aliases
+exports.ARMSCII8 = exports.ARMSCII8_GENERAL_CI;
+exports.ASCII    = exports.ASCII_GENERAL_CI;
+exports.BIG5     = exports.BIG5_CHINESE_CI;
+exports.BINARY   = exports.BINARY;
+exports.CP1250   = exports.CP1250_GENERAL_CI;
+exports.CP1251   = exports.CP1251_GENERAL_CI;
+exports.CP1256   = exports.CP1256_GENERAL_CI;
+exports.CP1257   = exports.CP1257_GENERAL_CI;
+exports.CP866    = exports.CP866_GENERAL_CI;
+exports.CP850    = exports.CP850_GENERAL_CI;
+exports.CP852    = exports.CP852_GENERAL_CI;
+exports.CP932    = exports.CP932_JAPANESE_CI;
+exports.DEC8     = exports.DEC8_SWEDISH_CI;
+exports.EUCJPMS  = exports.EUCJPMS_JAPANESE_CI;
+exports.EUCKR    = exports.EUCKR_KOREAN_CI;
+exports.GB2312   = exports.GB2312_CHINESE_CI;
+exports.GBK      = exports.GBK_CHINESE_CI;
+exports.GEOSTD8  = exports.GEOSTD8_GENERAL_CI;
+exports.GREEK    = exports.GREEK_GENERAL_CI;
+exports.HEBREW   = exports.HEBREW_GENERAL_CI;
+exports.HP8      = exports.HP8_ENGLISH_CI;
+exports.KEYBCS2  = exports.KEYBCS2_GENERAL_CI;
+exports.KOI8R    = exports.KOI8R_GENERAL_CI;
+exports.KOI8U    = exports.KOI8U_GENERAL_CI;
+exports.LATIN1   = exports.LATIN1_SWEDISH_CI;
+exports.LATIN2   = exports.LATIN2_GENERAL_CI;
+exports.LATIN5   = exports.LATIN5_TURKISH_CI;
+exports.LATIN7   = exports.LATIN7_GENERAL_CI;
+exports.MACCE    = exports.MACCE_GENERAL_CI;
+exports.MACROMAN = exports.MACROMAN_GENERAL_CI;
+exports.SJIS     = exports.SJIS_JAPANESE_CI;
+exports.SWE7     = exports.SWE7_SWEDISH_CI;
+exports.TIS620   = exports.TIS620_THAI_CI;
+exports.UCS2     = exports.UCS2_GENERAL_CI;
+exports.UJIS     = exports.UJIS_JAPANESE_CI;
+exports.UTF16    = exports.UTF16_GENERAL_CI;
+exports.UTF16LE  = exports.UTF16LE_GENERAL_CI;
+exports.UTF8     = exports.UTF8_GENERAL_CI;
+exports.UTF8MB4  = exports.UTF8MB4_GENERAL_CI;
+exports.UTF32    = exports.UTF32_GENERAL_CI;
+
+},{}],360:[function(require,module,exports){
+// Manually extracted from mysql-5.5.23/include/mysql_com.h
+exports.CLIENT_LONG_PASSWORD     = 1; /* new more secure passwords */
+exports.CLIENT_FOUND_ROWS        = 2; /* Found instead of affected rows */
+exports.CLIENT_LONG_FLAG         = 4; /* Get all column flags */
+exports.CLIENT_CONNECT_WITH_DB   = 8; /* One can specify db on connect */
+exports.CLIENT_NO_SCHEMA         = 16; /* Don't allow database.table.column */
+exports.CLIENT_COMPRESS          = 32; /* Can use compression protocol */
+exports.CLIENT_ODBC              = 64; /* Odbc client */
+exports.CLIENT_LOCAL_FILES       = 128; /* Can use LOAD DATA LOCAL */
+exports.CLIENT_IGNORE_SPACE      = 256; /* Ignore spaces before '(' */
+exports.CLIENT_PROTOCOL_41       = 512; /* New 4.1 protocol */
+exports.CLIENT_INTERACTIVE       = 1024; /* This is an interactive client */
+exports.CLIENT_SSL               = 2048; /* Switch to SSL after handshake */
+exports.CLIENT_IGNORE_SIGPIPE    = 4096;    /* IGNORE sigpipes */
+exports.CLIENT_TRANSACTIONS      = 8192; /* Client knows about transactions */
+exports.CLIENT_RESERVED          = 16384;   /* Old flag for 4.1 protocol  */
+exports.CLIENT_SECURE_CONNECTION = 32768;  /* New 4.1 authentication */
+
+exports.CLIENT_MULTI_STATEMENTS = 65536; /* Enable/disable multi-stmt support */
+exports.CLIENT_MULTI_RESULTS    = 131072; /* Enable/disable multi-results */
+exports.CLIENT_PS_MULTI_RESULTS = 262144; /* Multi-results in PS-protocol */
+
+exports.CLIENT_PLUGIN_AUTH = 524288; /* Client supports plugin authentication */
+
+exports.CLIENT_SSL_VERIFY_SERVER_CERT = 1073741824;
+exports.CLIENT_REMEMBER_OPTIONS       = 2147483648;
+
+},{}],361:[function(require,module,exports){
+/**
+ * MySQL error constants
+ *
+ * Extracted from version 5.7.21
+ *
+ * !! Generated by generate-error-constants.js, do not modify by hand !!
+ */
+
+exports.EE_CANTCREATEFILE                                                                = 1;
+exports.EE_READ                                                                          = 2;
+exports.EE_WRITE                                                                         = 3;
+exports.EE_BADCLOSE                                                                      = 4;
+exports.EE_OUTOFMEMORY                                                                   = 5;
+exports.EE_DELETE                                                                        = 6;
+exports.EE_LINK                                                                          = 7;
+exports.EE_EOFERR                                                                        = 9;
+exports.EE_CANTLOCK                                                                      = 10;
+exports.EE_CANTUNLOCK                                                                    = 11;
+exports.EE_DIR                                                                           = 12;
+exports.EE_STAT                                                                          = 13;
+exports.EE_CANT_CHSIZE                                                                   = 14;
+exports.EE_CANT_OPEN_STREAM                                                              = 15;
+exports.EE_GETWD                                                                         = 16;
+exports.EE_SETWD                                                                         = 17;
+exports.EE_LINK_WARNING                                                                  = 18;
+exports.EE_OPEN_WARNING                                                                  = 19;
+exports.EE_DISK_FULL                                                                     = 20;
+exports.EE_CANT_MKDIR                                                                    = 21;
+exports.EE_UNKNOWN_CHARSET                                                               = 22;
+exports.EE_OUT_OF_FILERESOURCES                                                          = 23;
+exports.EE_CANT_READLINK                                                                 = 24;
+exports.EE_CANT_SYMLINK                                                                  = 25;
+exports.EE_REALPATH                                                                      = 26;
+exports.EE_SYNC                                                                          = 27;
+exports.EE_UNKNOWN_COLLATION                                                             = 28;
+exports.EE_FILENOTFOUND                                                                  = 29;
+exports.EE_FILE_NOT_CLOSED                                                               = 30;
+exports.EE_CHANGE_OWNERSHIP                                                              = 31;
+exports.EE_CHANGE_PERMISSIONS                                                            = 32;
+exports.EE_CANT_SEEK                                                                     = 33;
+exports.EE_CAPACITY_EXCEEDED                                                             = 34;
+exports.HA_ERR_KEY_NOT_FOUND                                                             = 120;
+exports.HA_ERR_FOUND_DUPP_KEY                                                            = 121;
+exports.HA_ERR_INTERNAL_ERROR                                                            = 122;
+exports.HA_ERR_RECORD_CHANGED                                                            = 123;
+exports.HA_ERR_WRONG_INDEX                                                               = 124;
+exports.HA_ERR_CRASHED                                                                   = 126;
+exports.HA_ERR_WRONG_IN_RECORD                                                           = 127;
+exports.HA_ERR_OUT_OF_MEM                                                                = 128;
+exports.HA_ERR_NOT_A_TABLE                                                               = 130;
+exports.HA_ERR_WRONG_COMMAND                                                             = 131;
+exports.HA_ERR_OLD_FILE                                                                  = 132;
+exports.HA_ERR_NO_ACTIVE_RECORD                                                          = 133;
+exports.HA_ERR_RECORD_DELETED                                                            = 134;
+exports.HA_ERR_RECORD_FILE_FULL                                                          = 135;
+exports.HA_ERR_INDEX_FILE_FULL                                                           = 136;
+exports.HA_ERR_END_OF_FILE                                                               = 137;
+exports.HA_ERR_UNSUPPORTED                                                               = 138;
+exports.HA_ERR_TOO_BIG_ROW                                                               = 139;
+exports.HA_WRONG_CREATE_OPTION                                                           = 140;
+exports.HA_ERR_FOUND_DUPP_UNIQUE                                                         = 141;
+exports.HA_ERR_UNKNOWN_CHARSET                                                           = 142;
+exports.HA_ERR_WRONG_MRG_TABLE_DEF                                                       = 143;
+exports.HA_ERR_CRASHED_ON_REPAIR                                                         = 144;
+exports.HA_ERR_CRASHED_ON_USAGE                                                          = 145;
+exports.HA_ERR_LOCK_WAIT_TIMEOUT                                                         = 146;
+exports.HA_ERR_LOCK_TABLE_FULL                                                           = 147;
+exports.HA_ERR_READ_ONLY_TRANSACTION                                                     = 148;
+exports.HA_ERR_LOCK_DEADLOCK                                                             = 149;
+exports.HA_ERR_CANNOT_ADD_FOREIGN                                                        = 150;
+exports.HA_ERR_NO_REFERENCED_ROW                                                         = 151;
+exports.HA_ERR_ROW_IS_REFERENCED                                                         = 152;
+exports.HA_ERR_NO_SAVEPOINT                                                              = 153;
+exports.HA_ERR_NON_UNIQUE_BLOCK_SIZE                                                     = 154;
+exports.HA_ERR_NO_SUCH_TABLE                                                             = 155;
+exports.HA_ERR_TABLE_EXIST                                                               = 156;
+exports.HA_ERR_NO_CONNECTION                                                             = 157;
+exports.HA_ERR_NULL_IN_SPATIAL                                                           = 158;
+exports.HA_ERR_TABLE_DEF_CHANGED                                                         = 159;
+exports.HA_ERR_NO_PARTITION_FOUND                                                        = 160;
+exports.HA_ERR_RBR_LOGGING_FAILED                                                        = 161;
+exports.HA_ERR_DROP_INDEX_FK                                                             = 162;
+exports.HA_ERR_FOREIGN_DUPLICATE_KEY                                                     = 163;
+exports.HA_ERR_TABLE_NEEDS_UPGRADE                                                       = 164;
+exports.HA_ERR_TABLE_READONLY                                                            = 165;
+exports.HA_ERR_AUTOINC_READ_FAILED                                                       = 166;
+exports.HA_ERR_AUTOINC_ERANGE                                                            = 167;
+exports.HA_ERR_GENERIC                                                                   = 168;
+exports.HA_ERR_RECORD_IS_THE_SAME                                                        = 169;
+exports.HA_ERR_LOGGING_IMPOSSIBLE                                                        = 170;
+exports.HA_ERR_CORRUPT_EVENT                                                             = 171;
+exports.HA_ERR_NEW_FILE                                                                  = 172;
+exports.HA_ERR_ROWS_EVENT_APPLY                                                          = 173;
+exports.HA_ERR_INITIALIZATION                                                            = 174;
+exports.HA_ERR_FILE_TOO_SHORT                                                            = 175;
+exports.HA_ERR_WRONG_CRC                                                                 = 176;
+exports.HA_ERR_TOO_MANY_CONCURRENT_TRXS                                                  = 177;
+exports.HA_ERR_NOT_IN_LOCK_PARTITIONS                                                    = 178;
+exports.HA_ERR_INDEX_COL_TOO_LONG                                                        = 179;
+exports.HA_ERR_INDEX_CORRUPT                                                             = 180;
+exports.HA_ERR_UNDO_REC_TOO_BIG                                                          = 181;
+exports.HA_FTS_INVALID_DOCID                                                             = 182;
+exports.HA_ERR_TABLE_IN_FK_CHECK                                                         = 183;
+exports.HA_ERR_TABLESPACE_EXISTS                                                         = 184;
+exports.HA_ERR_TOO_MANY_FIELDS                                                           = 185;
+exports.HA_ERR_ROW_IN_WRONG_PARTITION                                                    = 186;
+exports.HA_ERR_INNODB_READ_ONLY                                                          = 187;
+exports.HA_ERR_FTS_EXCEED_RESULT_CACHE_LIMIT                                             = 188;
+exports.HA_ERR_TEMP_FILE_WRITE_FAILURE                                                   = 189;
+exports.HA_ERR_INNODB_FORCED_RECOVERY                                                    = 190;
+exports.HA_ERR_FTS_TOO_MANY_WORDS_IN_PHRASE                                              = 191;
+exports.HA_ERR_FK_DEPTH_EXCEEDED                                                         = 192;
+exports.HA_MISSING_CREATE_OPTION                                                         = 193;
+exports.HA_ERR_SE_OUT_OF_MEMORY                                                          = 194;
+exports.HA_ERR_TABLE_CORRUPT                                                             = 195;
+exports.HA_ERR_QUERY_INTERRUPTED                                                         = 196;
+exports.HA_ERR_TABLESPACE_MISSING                                                        = 197;
+exports.HA_ERR_TABLESPACE_IS_NOT_EMPTY                                                   = 198;
+exports.HA_ERR_WRONG_FILE_NAME                                                           = 199;
+exports.HA_ERR_NOT_ALLOWED_COMMAND                                                       = 200;
+exports.HA_ERR_COMPUTE_FAILED                                                            = 201;
+exports.ER_HASHCHK                                                                       = 1000;
+exports.ER_NISAMCHK                                                                      = 1001;
+exports.ER_NO                                                                            = 1002;
+exports.ER_YES                                                                           = 1003;
+exports.ER_CANT_CREATE_FILE                                                              = 1004;
+exports.ER_CANT_CREATE_TABLE                                                             = 1005;
+exports.ER_CANT_CREATE_DB                                                                = 1006;
+exports.ER_DB_CREATE_EXISTS                                                              = 1007;
+exports.ER_DB_DROP_EXISTS                                                                = 1008;
+exports.ER_DB_DROP_DELETE                                                                = 1009;
+exports.ER_DB_DROP_RMDIR                                                                 = 1010;
+exports.ER_CANT_DELETE_FILE                                                              = 1011;
+exports.ER_CANT_FIND_SYSTEM_REC                                                          = 1012;
+exports.ER_CANT_GET_STAT                                                                 = 1013;
+exports.ER_CANT_GET_WD                                                                   = 1014;
+exports.ER_CANT_LOCK                                                                     = 1015;
+exports.ER_CANT_OPEN_FILE                                                                = 1016;
+exports.ER_FILE_NOT_FOUND                                                                = 1017;
+exports.ER_CANT_READ_DIR                                                                 = 1018;
+exports.ER_CANT_SET_WD                                                                   = 1019;
+exports.ER_CHECKREAD                                                                     = 1020;
+exports.ER_DISK_FULL                                                                     = 1021;
+exports.ER_DUP_KEY                                                                       = 1022;
+exports.ER_ERROR_ON_CLOSE                                                                = 1023;
+exports.ER_ERROR_ON_READ                                                                 = 1024;
+exports.ER_ERROR_ON_RENAME                                                               = 1025;
+exports.ER_ERROR_ON_WRITE                                                                = 1026;
+exports.ER_FILE_USED                                                                     = 1027;
+exports.ER_FILSORT_ABORT                                                                 = 1028;
+exports.ER_FORM_NOT_FOUND                                                                = 1029;
+exports.ER_GET_ERRNO                                                                     = 1030;
+exports.ER_ILLEGAL_HA                                                                    = 1031;
+exports.ER_KEY_NOT_FOUND                                                                 = 1032;
+exports.ER_NOT_FORM_FILE                                                                 = 1033;
+exports.ER_NOT_KEYFILE                                                                   = 1034;
+exports.ER_OLD_KEYFILE                                                                   = 1035;
+exports.ER_OPEN_AS_READONLY                                                              = 1036;
+exports.ER_OUTOFMEMORY                                                                   = 1037;
+exports.ER_OUT_OF_SORTMEMORY                                                             = 1038;
+exports.ER_UNEXPECTED_EOF                                                                = 1039;
+exports.ER_CON_COUNT_ERROR                                                               = 1040;
+exports.ER_OUT_OF_RESOURCES                                                              = 1041;
+exports.ER_BAD_HOST_ERROR                                                                = 1042;
+exports.ER_HANDSHAKE_ERROR                                                               = 1043;
+exports.ER_DBACCESS_DENIED_ERROR                                                         = 1044;
+exports.ER_ACCESS_DENIED_ERROR                                                           = 1045;
+exports.ER_NO_DB_ERROR                                                                   = 1046;
+exports.ER_UNKNOWN_COM_ERROR                                                             = 1047;
+exports.ER_BAD_NULL_ERROR                                                                = 1048;
+exports.ER_BAD_DB_ERROR                                                                  = 1049;
+exports.ER_TABLE_EXISTS_ERROR                                                            = 1050;
+exports.ER_BAD_TABLE_ERROR                                                               = 1051;
+exports.ER_NON_UNIQ_ERROR                                                                = 1052;
+exports.ER_SERVER_SHUTDOWN                                                               = 1053;
+exports.ER_BAD_FIELD_ERROR                                                               = 1054;
+exports.ER_WRONG_FIELD_WITH_GROUP                                                        = 1055;
+exports.ER_WRONG_GROUP_FIELD                                                             = 1056;
+exports.ER_WRONG_SUM_SELECT                                                              = 1057;
+exports.ER_WRONG_VALUE_COUNT                                                             = 1058;
+exports.ER_TOO_LONG_IDENT                                                                = 1059;
+exports.ER_DUP_FIELDNAME                                                                 = 1060;
+exports.ER_DUP_KEYNAME                                                                   = 1061;
+exports.ER_DUP_ENTRY                                                                     = 1062;
+exports.ER_WRONG_FIELD_SPEC                                                              = 1063;
+exports.ER_PARSE_ERROR                                                                   = 1064;
+exports.ER_EMPTY_QUERY                                                                   = 1065;
+exports.ER_NONUNIQ_TABLE                                                                 = 1066;
+exports.ER_INVALID_DEFAULT                                                               = 1067;
+exports.ER_MULTIPLE_PRI_KEY                                                              = 1068;
+exports.ER_TOO_MANY_KEYS                                                                 = 1069;
+exports.ER_TOO_MANY_KEY_PARTS                                                            = 1070;
+exports.ER_TOO_LONG_KEY                                                                  = 1071;
+exports.ER_KEY_COLUMN_DOES_NOT_EXITS                                                     = 1072;
+exports.ER_BLOB_USED_AS_KEY                                                              = 1073;
+exports.ER_TOO_BIG_FIELDLENGTH                                                           = 1074;
+exports.ER_WRONG_AUTO_KEY                                                                = 1075;
+exports.ER_READY                                                                         = 1076;
+exports.ER_NORMAL_SHUTDOWN                                                               = 1077;
+exports.ER_GOT_SIGNAL                                                                    = 1078;
+exports.ER_SHUTDOWN_COMPLETE                                                             = 1079;
+exports.ER_FORCING_CLOSE                                                                 = 1080;
+exports.ER_IPSOCK_ERROR                                                                  = 1081;
+exports.ER_NO_SUCH_INDEX                                                                 = 1082;
+exports.ER_WRONG_FIELD_TERMINATORS                                                       = 1083;
+exports.ER_BLOBS_AND_NO_TERMINATED                                                       = 1084;
+exports.ER_TEXTFILE_NOT_READABLE                                                         = 1085;
+exports.ER_FILE_EXISTS_ERROR                                                             = 1086;
+exports.ER_LOAD_INFO                                                                     = 1087;
+exports.ER_ALTER_INFO                                                                    = 1088;
+exports.ER_WRONG_SUB_KEY                                                                 = 1089;
+exports.ER_CANT_REMOVE_ALL_FIELDS                                                        = 1090;
+exports.ER_CANT_DROP_FIELD_OR_KEY                                                        = 1091;
+exports.ER_INSERT_INFO                                                                   = 1092;
+exports.ER_UPDATE_TABLE_USED                                                             = 1093;
+exports.ER_NO_SUCH_THREAD                                                                = 1094;
+exports.ER_KILL_DENIED_ERROR                                                             = 1095;
+exports.ER_NO_TABLES_USED                                                                = 1096;
+exports.ER_TOO_BIG_SET                                                                   = 1097;
+exports.ER_NO_UNIQUE_LOGFILE                                                             = 1098;
+exports.ER_TABLE_NOT_LOCKED_FOR_WRITE                                                    = 1099;
+exports.ER_TABLE_NOT_LOCKED                                                              = 1100;
+exports.ER_BLOB_CANT_HAVE_DEFAULT                                                        = 1101;
+exports.ER_WRONG_DB_NAME                                                                 = 1102;
+exports.ER_WRONG_TABLE_NAME                                                              = 1103;
+exports.ER_TOO_BIG_SELECT                                                                = 1104;
+exports.ER_UNKNOWN_ERROR                                                                 = 1105;
+exports.ER_UNKNOWN_PROCEDURE                                                             = 1106;
+exports.ER_WRONG_PARAMCOUNT_TO_PROCEDURE                                                 = 1107;
+exports.ER_WRONG_PARAMETERS_TO_PROCEDURE                                                 = 1108;
+exports.ER_UNKNOWN_TABLE                                                                 = 1109;
+exports.ER_FIELD_SPECIFIED_TWICE                                                         = 1110;
+exports.ER_INVALID_GROUP_FUNC_USE                                                        = 1111;
+exports.ER_UNSUPPORTED_EXTENSION                                                         = 1112;
+exports.ER_TABLE_MUST_HAVE_COLUMNS                                                       = 1113;
+exports.ER_RECORD_FILE_FULL                                                              = 1114;
+exports.ER_UNKNOWN_CHARACTER_SET                                                         = 1115;
+exports.ER_TOO_MANY_TABLES                                                               = 1116;
+exports.ER_TOO_MANY_FIELDS                                                               = 1117;
+exports.ER_TOO_BIG_ROWSIZE                                                               = 1118;
+exports.ER_STACK_OVERRUN                                                                 = 1119;
+exports.ER_WRONG_OUTER_JOIN                                                              = 1120;
+exports.ER_NULL_COLUMN_IN_INDEX                                                          = 1121;
+exports.ER_CANT_FIND_UDF                                                                 = 1122;
+exports.ER_CANT_INITIALIZE_UDF                                                           = 1123;
+exports.ER_UDF_NO_PATHS                                                                  = 1124;
+exports.ER_UDF_EXISTS                                                                    = 1125;
+exports.ER_CANT_OPEN_LIBRARY                                                             = 1126;
+exports.ER_CANT_FIND_DL_ENTRY                                                            = 1127;
+exports.ER_FUNCTION_NOT_DEFINED                                                          = 1128;
+exports.ER_HOST_IS_BLOCKED                                                               = 1129;
+exports.ER_HOST_NOT_PRIVILEGED                                                           = 1130;
+exports.ER_PASSWORD_ANONYMOUS_USER                                                       = 1131;
+exports.ER_PASSWORD_NOT_ALLOWED                                                          = 1132;
+exports.ER_PASSWORD_NO_MATCH                                                             = 1133;
+exports.ER_UPDATE_INFO                                                                   = 1134;
+exports.ER_CANT_CREATE_THREAD                                                            = 1135;
+exports.ER_WRONG_VALUE_COUNT_ON_ROW                                                      = 1136;
+exports.ER_CANT_REOPEN_TABLE                                                             = 1137;
+exports.ER_INVALID_USE_OF_NULL                                                           = 1138;
+exports.ER_REGEXP_ERROR                                                                  = 1139;
+exports.ER_MIX_OF_GROUP_FUNC_AND_FIELDS                                                  = 1140;
+exports.ER_NONEXISTING_GRANT                                                             = 1141;
+exports.ER_TABLEACCESS_DENIED_ERROR                                                      = 1142;
+exports.ER_COLUMNACCESS_DENIED_ERROR                                                     = 1143;
+exports.ER_ILLEGAL_GRANT_FOR_TABLE                                                       = 1144;
+exports.ER_GRANT_WRONG_HOST_OR_USER                                                      = 1145;
+exports.ER_NO_SUCH_TABLE                                                                 = 1146;
+exports.ER_NONEXISTING_TABLE_GRANT                                                       = 1147;
+exports.ER_NOT_ALLOWED_COMMAND                                                           = 1148;
+exports.ER_SYNTAX_ERROR                                                                  = 1149;
+exports.ER_DELAYED_CANT_CHANGE_LOCK                                                      = 1150;
+exports.ER_TOO_MANY_DELAYED_THREADS                                                      = 1151;
+exports.ER_ABORTING_CONNECTION                                                           = 1152;
+exports.ER_NET_PACKET_TOO_LARGE                                                          = 1153;
+exports.ER_NET_READ_ERROR_FROM_PIPE                                                      = 1154;
+exports.ER_NET_FCNTL_ERROR                                                               = 1155;
+exports.ER_NET_PACKETS_OUT_OF_ORDER                                                      = 1156;
+exports.ER_NET_UNCOMPRESS_ERROR                                                          = 1157;
+exports.ER_NET_READ_ERROR                                                                = 1158;
+exports.ER_NET_READ_INTERRUPTED                                                          = 1159;
+exports.ER_NET_ERROR_ON_WRITE                                                            = 1160;
+exports.ER_NET_WRITE_INTERRUPTED                                                         = 1161;
+exports.ER_TOO_LONG_STRING                                                               = 1162;
+exports.ER_TABLE_CANT_HANDLE_BLOB                                                        = 1163;
+exports.ER_TABLE_CANT_HANDLE_AUTO_INCREMENT                                              = 1164;
+exports.ER_DELAYED_INSERT_TABLE_LOCKED                                                   = 1165;
+exports.ER_WRONG_COLUMN_NAME                                                             = 1166;
+exports.ER_WRONG_KEY_COLUMN                                                              = 1167;
+exports.ER_WRONG_MRG_TABLE                                                               = 1168;
+exports.ER_DUP_UNIQUE                                                                    = 1169;
+exports.ER_BLOB_KEY_WITHOUT_LENGTH                                                       = 1170;
+exports.ER_PRIMARY_CANT_HAVE_NULL                                                        = 1171;
+exports.ER_TOO_MANY_ROWS                                                                 = 1172;
+exports.ER_REQUIRES_PRIMARY_KEY                                                          = 1173;
+exports.ER_NO_RAID_COMPILED                                                              = 1174;
+exports.ER_UPDATE_WITHOUT_KEY_IN_SAFE_MODE                                               = 1175;
+exports.ER_KEY_DOES_NOT_EXITS                                                            = 1176;
+exports.ER_CHECK_NO_SUCH_TABLE                                                           = 1177;
+exports.ER_CHECK_NOT_IMPLEMENTED                                                         = 1178;
+exports.ER_CANT_DO_THIS_DURING_AN_TRANSACTION                                            = 1179;
+exports.ER_ERROR_DURING_COMMIT                                                           = 1180;
+exports.ER_ERROR_DURING_ROLLBACK                                                         = 1181;
+exports.ER_ERROR_DURING_FLUSH_LOGS                                                       = 1182;
+exports.ER_ERROR_DURING_CHECKPOINT                                                       = 1183;
+exports.ER_NEW_ABORTING_CONNECTION                                                       = 1184;
+exports.ER_DUMP_NOT_IMPLEMENTED                                                          = 1185;
+exports.ER_FLUSH_MASTER_BINLOG_CLOSED                                                    = 1186;
+exports.ER_INDEX_REBUILD                                                                 = 1187;
+exports.ER_MASTER                                                                        = 1188;
+exports.ER_MASTER_NET_READ                                                               = 1189;
+exports.ER_MASTER_NET_WRITE                                                              = 1190;
+exports.ER_FT_MATCHING_KEY_NOT_FOUND                                                     = 1191;
+exports.ER_LOCK_OR_ACTIVE_TRANSACTION                                                    = 1192;
+exports.ER_UNKNOWN_SYSTEM_VARIABLE                                                       = 1193;
+exports.ER_CRASHED_ON_USAGE                                                              = 1194;
+exports.ER_CRASHED_ON_REPAIR                                                             = 1195;
+exports.ER_WARNING_NOT_COMPLETE_ROLLBACK                                                 = 1196;
+exports.ER_TRANS_CACHE_FULL                                                              = 1197;
+exports.ER_SLAVE_MUST_STOP                                                               = 1198;
+exports.ER_SLAVE_NOT_RUNNING                                                             = 1199;
+exports.ER_BAD_SLAVE                                                                     = 1200;
+exports.ER_MASTER_INFO                                                                   = 1201;
+exports.ER_SLAVE_THREAD                                                                  = 1202;
+exports.ER_TOO_MANY_USER_CONNECTIONS                                                     = 1203;
+exports.ER_SET_CONSTANTS_ONLY                                                            = 1204;
+exports.ER_LOCK_WAIT_TIMEOUT                                                             = 1205;
+exports.ER_LOCK_TABLE_FULL                                                               = 1206;
+exports.ER_READ_ONLY_TRANSACTION                                                         = 1207;
+exports.ER_DROP_DB_WITH_READ_LOCK                                                        = 1208;
+exports.ER_CREATE_DB_WITH_READ_LOCK                                                      = 1209;
+exports.ER_WRONG_ARGUMENTS                                                               = 1210;
+exports.ER_NO_PERMISSION_TO_CREATE_USER                                                  = 1211;
+exports.ER_UNION_TABLES_IN_DIFFERENT_DIR                                                 = 1212;
+exports.ER_LOCK_DEADLOCK                                                                 = 1213;
+exports.ER_TABLE_CANT_HANDLE_FT                                                          = 1214;
+exports.ER_CANNOT_ADD_FOREIGN                                                            = 1215;
+exports.ER_NO_REFERENCED_ROW                                                             = 1216;
+exports.ER_ROW_IS_REFERENCED                                                             = 1217;
+exports.ER_CONNECT_TO_MASTER                                                             = 1218;
+exports.ER_QUERY_ON_MASTER                                                               = 1219;
+exports.ER_ERROR_WHEN_EXECUTING_COMMAND                                                  = 1220;
+exports.ER_WRONG_USAGE                                                                   = 1221;
+exports.ER_WRONG_NUMBER_OF_COLUMNS_IN_SELECT                                             = 1222;
+exports.ER_CANT_UPDATE_WITH_READLOCK                                                     = 1223;
+exports.ER_MIXING_NOT_ALLOWED                                                            = 1224;
+exports.ER_DUP_ARGUMENT                                                                  = 1225;
+exports.ER_USER_LIMIT_REACHED                                                            = 1226;
+exports.ER_SPECIFIC_ACCESS_DENIED_ERROR                                                  = 1227;
+exports.ER_LOCAL_VARIABLE                                                                = 1228;
+exports.ER_GLOBAL_VARIABLE                                                               = 1229;
+exports.ER_NO_DEFAULT                                                                    = 1230;
+exports.ER_WRONG_VALUE_FOR_VAR                                                           = 1231;
+exports.ER_WRONG_TYPE_FOR_VAR                                                            = 1232;
+exports.ER_VAR_CANT_BE_READ                                                              = 1233;
+exports.ER_CANT_USE_OPTION_HERE                                                          = 1234;
+exports.ER_NOT_SUPPORTED_YET                                                             = 1235;
+exports.ER_MASTER_FATAL_ERROR_READING_BINLOG                                             = 1236;
+exports.ER_SLAVE_IGNORED_TABLE                                                           = 1237;
+exports.ER_INCORRECT_GLOBAL_LOCAL_VAR                                                    = 1238;
+exports.ER_WRONG_FK_DEF                                                                  = 1239;
+exports.ER_KEY_REF_DO_NOT_MATCH_TABLE_REF                                                = 1240;
+exports.ER_OPERAND_COLUMNS                                                               = 1241;
+exports.ER_SUBQUERY_NO_1_ROW                                                             = 1242;
+exports.ER_UNKNOWN_STMT_HANDLER                                                          = 1243;
+exports.ER_CORRUPT_HELP_DB                                                               = 1244;
+exports.ER_CYCLIC_REFERENCE                                                              = 1245;
+exports.ER_AUTO_CONVERT                                                                  = 1246;
+exports.ER_ILLEGAL_REFERENCE                                                             = 1247;
+exports.ER_DERIVED_MUST_HAVE_ALIAS                                                       = 1248;
+exports.ER_SELECT_REDUCED                                                                = 1249;
+exports.ER_TABLENAME_NOT_ALLOWED_HERE                                                    = 1250;
+exports.ER_NOT_SUPPORTED_AUTH_MODE                                                       = 1251;
+exports.ER_SPATIAL_CANT_HAVE_NULL                                                        = 1252;
+exports.ER_COLLATION_CHARSET_MISMATCH                                                    = 1253;
+exports.ER_SLAVE_WAS_RUNNING                                                             = 1254;
+exports.ER_SLAVE_WAS_NOT_RUNNING                                                         = 1255;
+exports.ER_TOO_BIG_FOR_UNCOMPRESS                                                        = 1256;
+exports.ER_ZLIB_Z_MEM_ERROR                                                              = 1257;
+exports.ER_ZLIB_Z_BUF_ERROR                                                              = 1258;
+exports.ER_ZLIB_Z_DATA_ERROR                                                             = 1259;
+exports.ER_CUT_VALUE_GROUP_CONCAT                                                        = 1260;
+exports.ER_WARN_TOO_FEW_RECORDS                                                          = 1261;
+exports.ER_WARN_TOO_MANY_RECORDS                                                         = 1262;
+exports.ER_WARN_NULL_TO_NOTNULL                                                          = 1263;
+exports.ER_WARN_DATA_OUT_OF_RANGE                                                        = 1264;
+exports.WARN_DATA_TRUNCATED                                                              = 1265;
+exports.ER_WARN_USING_OTHER_HANDLER                                                      = 1266;
+exports.ER_CANT_AGGREGATE_2COLLATIONS                                                    = 1267;
+exports.ER_DROP_USER                                                                     = 1268;
+exports.ER_REVOKE_GRANTS                                                                 = 1269;
+exports.ER_CANT_AGGREGATE_3COLLATIONS                                                    = 1270;
+exports.ER_CANT_AGGREGATE_NCOLLATIONS                                                    = 1271;
+exports.ER_VARIABLE_IS_NOT_STRUCT                                                        = 1272;
+exports.ER_UNKNOWN_COLLATION                                                             = 1273;
+exports.ER_SLAVE_IGNORED_SSL_PARAMS                                                      = 1274;
+exports.ER_SERVER_IS_IN_SECURE_AUTH_MODE                                                 = 1275;
+exports.ER_WARN_FIELD_RESOLVED                                                           = 1276;
+exports.ER_BAD_SLAVE_UNTIL_COND                                                          = 1277;
+exports.ER_MISSING_SKIP_SLAVE                                                            = 1278;
+exports.ER_UNTIL_COND_IGNORED                                                            = 1279;
+exports.ER_WRONG_NAME_FOR_INDEX                                                          = 1280;
+exports.ER_WRONG_NAME_FOR_CATALOG                                                        = 1281;
+exports.ER_WARN_QC_RESIZE                                                                = 1282;
+exports.ER_BAD_FT_COLUMN                                                                 = 1283;
+exports.ER_UNKNOWN_KEY_CACHE                                                             = 1284;
+exports.ER_WARN_HOSTNAME_WONT_WORK                                                       = 1285;
+exports.ER_UNKNOWN_STORAGE_ENGINE                                                        = 1286;
+exports.ER_WARN_DEPRECATED_SYNTAX                                                        = 1287;
+exports.ER_NON_UPDATABLE_TABLE                                                           = 1288;
+exports.ER_FEATURE_DISABLED                                                              = 1289;
+exports.ER_OPTION_PREVENTS_STATEMENT                                                     = 1290;
+exports.ER_DUPLICATED_VALUE_IN_TYPE                                                      = 1291;
+exports.ER_TRUNCATED_WRONG_VALUE                                                         = 1292;
+exports.ER_TOO_MUCH_AUTO_TIMESTAMP_COLS                                                  = 1293;
+exports.ER_INVALID_ON_UPDATE                                                             = 1294;
+exports.ER_UNSUPPORTED_PS                                                                = 1295;
+exports.ER_GET_ERRMSG                                                                    = 1296;
+exports.ER_GET_TEMPORARY_ERRMSG                                                          = 1297;
+exports.ER_UNKNOWN_TIME_ZONE                                                             = 1298;
+exports.ER_WARN_INVALID_TIMESTAMP                                                        = 1299;
+exports.ER_INVALID_CHARACTER_STRING                                                      = 1300;
+exports.ER_WARN_ALLOWED_PACKET_OVERFLOWED                                                = 1301;
+exports.ER_CONFLICTING_DECLARATIONS                                                      = 1302;
+exports.ER_SP_NO_RECURSIVE_CREATE                                                        = 1303;
+exports.ER_SP_ALREADY_EXISTS                                                             = 1304;
+exports.ER_SP_DOES_NOT_EXIST                                                             = 1305;
+exports.ER_SP_DROP_FAILED                                                                = 1306;
+exports.ER_SP_STORE_FAILED                                                               = 1307;
+exports.ER_SP_LILABEL_MISMATCH                                                           = 1308;
+exports.ER_SP_LABEL_REDEFINE                                                             = 1309;
+exports.ER_SP_LABEL_MISMATCH                                                             = 1310;
+exports.ER_SP_UNINIT_VAR                                                                 = 1311;
+exports.ER_SP_BADSELECT                                                                  = 1312;
+exports.ER_SP_BADRETURN                                                                  = 1313;
+exports.ER_SP_BADSTATEMENT                                                               = 1314;
+exports.ER_UPDATE_LOG_DEPRECATED_IGNORED                                                 = 1315;
+exports.ER_UPDATE_LOG_DEPRECATED_TRANSLATED                                              = 1316;
+exports.ER_QUERY_INTERRUPTED                                                             = 1317;
+exports.ER_SP_WRONG_NO_OF_ARGS                                                           = 1318;
+exports.ER_SP_COND_MISMATCH                                                              = 1319;
+exports.ER_SP_NORETURN                                                                   = 1320;
+exports.ER_SP_NORETURNEND                                                                = 1321;
+exports.ER_SP_BAD_CURSOR_QUERY                                                           = 1322;
+exports.ER_SP_BAD_CURSOR_SELECT                                                          = 1323;
+exports.ER_SP_CURSOR_MISMATCH                                                            = 1324;
+exports.ER_SP_CURSOR_ALREADY_OPEN                                                        = 1325;
+exports.ER_SP_CURSOR_NOT_OPEN                                                            = 1326;
+exports.ER_SP_UNDECLARED_VAR                                                             = 1327;
+exports.ER_SP_WRONG_NO_OF_FETCH_ARGS                                                     = 1328;
+exports.ER_SP_FETCH_NO_DATA                                                              = 1329;
+exports.ER_SP_DUP_PARAM                                                                  = 1330;
+exports.ER_SP_DUP_VAR                                                                    = 1331;
+exports.ER_SP_DUP_COND                                                                   = 1332;
+exports.ER_SP_DUP_CURS                                                                   = 1333;
+exports.ER_SP_CANT_ALTER                                                                 = 1334;
+exports.ER_SP_SUBSELECT_NYI                                                              = 1335;
+exports.ER_STMT_NOT_ALLOWED_IN_SF_OR_TRG                                                 = 1336;
+exports.ER_SP_VARCOND_AFTER_CURSHNDLR                                                    = 1337;
+exports.ER_SP_CURSOR_AFTER_HANDLER                                                       = 1338;
+exports.ER_SP_CASE_NOT_FOUND                                                             = 1339;
+exports.ER_FPARSER_TOO_BIG_FILE                                                          = 1340;
+exports.ER_FPARSER_BAD_HEADER                                                            = 1341;
+exports.ER_FPARSER_EOF_IN_COMMENT                                                        = 1342;
+exports.ER_FPARSER_ERROR_IN_PARAMETER                                                    = 1343;
+exports.ER_FPARSER_EOF_IN_UNKNOWN_PARAMETER                                              = 1344;
+exports.ER_VIEW_NO_EXPLAIN                                                               = 1345;
+exports.ER_FRM_UNKNOWN_TYPE                                                              = 1346;
+exports.ER_WRONG_OBJECT                                                                  = 1347;
+exports.ER_NONUPDATEABLE_COLUMN                                                          = 1348;
+exports.ER_VIEW_SELECT_DERIVED                                                           = 1349;
+exports.ER_VIEW_SELECT_CLAUSE                                                            = 1350;
+exports.ER_VIEW_SELECT_VARIABLE                                                          = 1351;
+exports.ER_VIEW_SELECT_TMPTABLE                                                          = 1352;
+exports.ER_VIEW_WRONG_LIST                                                               = 1353;
+exports.ER_WARN_VIEW_MERGE                                                               = 1354;
+exports.ER_WARN_VIEW_WITHOUT_KEY                                                         = 1355;
+exports.ER_VIEW_INVALID                                                                  = 1356;
+exports.ER_SP_NO_DROP_SP                                                                 = 1357;
+exports.ER_SP_GOTO_IN_HNDLR                                                              = 1358;
+exports.ER_TRG_ALREADY_EXISTS                                                            = 1359;
+exports.ER_TRG_DOES_NOT_EXIST                                                            = 1360;
+exports.ER_TRG_ON_VIEW_OR_TEMP_TABLE                                                     = 1361;
+exports.ER_TRG_CANT_CHANGE_ROW                                                           = 1362;
+exports.ER_TRG_NO_SUCH_ROW_IN_TRG                                                        = 1363;
+exports.ER_NO_DEFAULT_FOR_FIELD                                                          = 1364;
+exports.ER_DIVISION_BY_ZERO                                                              = 1365;
+exports.ER_TRUNCATED_WRONG_VALUE_FOR_FIELD                                               = 1366;
+exports.ER_ILLEGAL_VALUE_FOR_TYPE                                                        = 1367;
+exports.ER_VIEW_NONUPD_CHECK                                                             = 1368;
+exports.ER_VIEW_CHECK_FAILED                                                             = 1369;
+exports.ER_PROCACCESS_DENIED_ERROR                                                       = 1370;
+exports.ER_RELAY_LOG_FAIL                                                                = 1371;
+exports.ER_PASSWD_LENGTH                                                                 = 1372;
+exports.ER_UNKNOWN_TARGET_BINLOG                                                         = 1373;
+exports.ER_IO_ERR_LOG_INDEX_READ                                                         = 1374;
+exports.ER_BINLOG_PURGE_PROHIBITED                                                       = 1375;
+exports.ER_FSEEK_FAIL                                                                    = 1376;
+exports.ER_BINLOG_PURGE_FATAL_ERR                                                        = 1377;
+exports.ER_LOG_IN_USE                                                                    = 1378;
+exports.ER_LOG_PURGE_UNKNOWN_ERR                                                         = 1379;
+exports.ER_RELAY_LOG_INIT                                                                = 1380;
+exports.ER_NO_BINARY_LOGGING                                                             = 1381;
+exports.ER_RESERVED_SYNTAX                                                               = 1382;
+exports.ER_WSAS_FAILED                                                                   = 1383;
+exports.ER_DIFF_GROUPS_PROC                                                              = 1384;
+exports.ER_NO_GROUP_FOR_PROC                                                             = 1385;
+exports.ER_ORDER_WITH_PROC                                                               = 1386;
+exports.ER_LOGGING_PROHIBIT_CHANGING_OF                                                  = 1387;
+exports.ER_NO_FILE_MAPPING                                                               = 1388;
+exports.ER_WRONG_MAGIC                                                                   = 1389;
+exports.ER_PS_MANY_PARAM                                                                 = 1390;
+exports.ER_KEY_PART_0                                                                    = 1391;
+exports.ER_VIEW_CHECKSUM                                                                 = 1392;
+exports.ER_VIEW_MULTIUPDATE                                                              = 1393;
+exports.ER_VIEW_NO_INSERT_FIELD_LIST                                                     = 1394;
+exports.ER_VIEW_DELETE_MERGE_VIEW                                                        = 1395;
+exports.ER_CANNOT_USER                                                                   = 1396;
+exports.ER_XAER_NOTA                                                                     = 1397;
+exports.ER_XAER_INVAL                                                                    = 1398;
+exports.ER_XAER_RMFAIL                                                                   = 1399;
+exports.ER_XAER_OUTSIDE                                                                  = 1400;
+exports.ER_XAER_RMERR                                                                    = 1401;
+exports.ER_XA_RBROLLBACK                                                                 = 1402;
+exports.ER_NONEXISTING_PROC_GRANT                                                        = 1403;
+exports.ER_PROC_AUTO_GRANT_FAIL                                                          = 1404;
+exports.ER_PROC_AUTO_REVOKE_FAIL                                                         = 1405;
+exports.ER_DATA_TOO_LONG                                                                 = 1406;
+exports.ER_SP_BAD_SQLSTATE                                                               = 1407;
+exports.ER_STARTUP                                                                       = 1408;
+exports.ER_LOAD_FROM_FIXED_SIZE_ROWS_TO_VAR                                              = 1409;
+exports.ER_CANT_CREATE_USER_WITH_GRANT                                                   = 1410;
+exports.ER_WRONG_VALUE_FOR_TYPE                                                          = 1411;
+exports.ER_TABLE_DEF_CHANGED                                                             = 1412;
+exports.ER_SP_DUP_HANDLER                                                                = 1413;
+exports.ER_SP_NOT_VAR_ARG                                                                = 1414;
+exports.ER_SP_NO_RETSET                                                                  = 1415;
+exports.ER_CANT_CREATE_GEOMETRY_OBJECT                                                   = 1416;
+exports.ER_FAILED_ROUTINE_BREAK_BINLOG                                                   = 1417;
+exports.ER_BINLOG_UNSAFE_ROUTINE                                                         = 1418;
+exports.ER_BINLOG_CREATE_ROUTINE_NEED_SUPER                                              = 1419;
+exports.ER_EXEC_STMT_WITH_OPEN_CURSOR                                                    = 1420;
+exports.ER_STMT_HAS_NO_OPEN_CURSOR                                                       = 1421;
+exports.ER_COMMIT_NOT_ALLOWED_IN_SF_OR_TRG                                               = 1422;
+exports.ER_NO_DEFAULT_FOR_VIEW_FIELD                                                     = 1423;
+exports.ER_SP_NO_RECURSION                                                               = 1424;
+exports.ER_TOO_BIG_SCALE                                                                 = 1425;
+exports.ER_TOO_BIG_PRECISION                                                             = 1426;
+exports.ER_M_BIGGER_THAN_D                                                               = 1427;
+exports.ER_WRONG_LOCK_OF_SYSTEM_TABLE                                                    = 1428;
+exports.ER_CONNECT_TO_FOREIGN_DATA_SOURCE                                                = 1429;
+exports.ER_QUERY_ON_FOREIGN_DATA_SOURCE                                                  = 1430;
+exports.ER_FOREIGN_DATA_SOURCE_DOESNT_EXIST                                              = 1431;
+exports.ER_FOREIGN_DATA_STRING_INVALID_CANT_CREATE                                       = 1432;
+exports.ER_FOREIGN_DATA_STRING_INVALID                                                   = 1433;
+exports.ER_CANT_CREATE_FEDERATED_TABLE                                                   = 1434;
+exports.ER_TRG_IN_WRONG_SCHEMA                                                           = 1435;
+exports.ER_STACK_OVERRUN_NEED_MORE                                                       = 1436;
+exports.ER_TOO_LONG_BODY                                                                 = 1437;
+exports.ER_WARN_CANT_DROP_DEFAULT_KEYCACHE                                               = 1438;
+exports.ER_TOO_BIG_DISPLAYWIDTH                                                          = 1439;
+exports.ER_XAER_DUPID                                                                    = 1440;
+exports.ER_DATETIME_FUNCTION_OVERFLOW                                                    = 1441;
+exports.ER_CANT_UPDATE_USED_TABLE_IN_SF_OR_TRG                                           = 1442;
+exports.ER_VIEW_PREVENT_UPDATE                                                           = 1443;
+exports.ER_PS_NO_RECURSION                                                               = 1444;
+exports.ER_SP_CANT_SET_AUTOCOMMIT                                                        = 1445;
+exports.ER_MALFORMED_DEFINER                                                             = 1446;
+exports.ER_VIEW_FRM_NO_USER                                                              = 1447;
+exports.ER_VIEW_OTHER_USER                                                               = 1448;
+exports.ER_NO_SUCH_USER                                                                  = 1449;
+exports.ER_FORBID_SCHEMA_CHANGE                                                          = 1450;
+exports.ER_ROW_IS_REFERENCED_2                                                           = 1451;
+exports.ER_NO_REFERENCED_ROW_2                                                           = 1452;
+exports.ER_SP_BAD_VAR_SHADOW                                                             = 1453;
+exports.ER_TRG_NO_DEFINER                                                                = 1454;
+exports.ER_OLD_FILE_FORMAT                                                               = 1455;
+exports.ER_SP_RECURSION_LIMIT                                                            = 1456;
+exports.ER_SP_PROC_TABLE_CORRUPT                                                         = 1457;
+exports.ER_SP_WRONG_NAME                                                                 = 1458;
+exports.ER_TABLE_NEEDS_UPGRADE                                                           = 1459;
+exports.ER_SP_NO_AGGREGATE                                                               = 1460;
+exports.ER_MAX_PREPARED_STMT_COUNT_REACHED                                               = 1461;
+exports.ER_VIEW_RECURSIVE                                                                = 1462;
+exports.ER_NON_GROUPING_FIELD_USED                                                       = 1463;
+exports.ER_TABLE_CANT_HANDLE_SPKEYS                                                      = 1464;
+exports.ER_NO_TRIGGERS_ON_SYSTEM_SCHEMA                                                  = 1465;
+exports.ER_REMOVED_SPACES                                                                = 1466;
+exports.ER_AUTOINC_READ_FAILED                                                           = 1467;
+exports.ER_USERNAME                                                                      = 1468;
+exports.ER_HOSTNAME                                                                      = 1469;
+exports.ER_WRONG_STRING_LENGTH                                                           = 1470;
+exports.ER_NON_INSERTABLE_TABLE                                                          = 1471;
+exports.ER_ADMIN_WRONG_MRG_TABLE                                                         = 1472;
+exports.ER_TOO_HIGH_LEVEL_OF_NESTING_FOR_SELECT                                          = 1473;
+exports.ER_NAME_BECOMES_EMPTY                                                            = 1474;
+exports.ER_AMBIGUOUS_FIELD_TERM                                                          = 1475;
+exports.ER_FOREIGN_SERVER_EXISTS                                                         = 1476;
+exports.ER_FOREIGN_SERVER_DOESNT_EXIST                                                   = 1477;
+exports.ER_ILLEGAL_HA_CREATE_OPTION                                                      = 1478;
+exports.ER_PARTITION_REQUIRES_VALUES_ERROR                                               = 1479;
+exports.ER_PARTITION_WRONG_VALUES_ERROR                                                  = 1480;
+exports.ER_PARTITION_MAXVALUE_ERROR                                                      = 1481;
+exports.ER_PARTITION_SUBPARTITION_ERROR                                                  = 1482;
+exports.ER_PARTITION_SUBPART_MIX_ERROR                                                   = 1483;
+exports.ER_PARTITION_WRONG_NO_PART_ERROR                                                 = 1484;
+exports.ER_PARTITION_WRONG_NO_SUBPART_ERROR                                              = 1485;
+exports.ER_WRONG_EXPR_IN_PARTITION_FUNC_ERROR                                            = 1486;
+exports.ER_NO_CONST_EXPR_IN_RANGE_OR_LIST_ERROR                                          = 1487;
+exports.ER_FIELD_NOT_FOUND_PART_ERROR                                                    = 1488;
+exports.ER_LIST_OF_FIELDS_ONLY_IN_HASH_ERROR                                             = 1489;
+exports.ER_INCONSISTENT_PARTITION_INFO_ERROR                                             = 1490;
+exports.ER_PARTITION_FUNC_NOT_ALLOWED_ERROR                                              = 1491;
+exports.ER_PARTITIONS_MUST_BE_DEFINED_ERROR                                              = 1492;
+exports.ER_RANGE_NOT_INCREASING_ERROR                                                    = 1493;
+exports.ER_INCONSISTENT_TYPE_OF_FUNCTIONS_ERROR                                          = 1494;
+exports.ER_MULTIPLE_DEF_CONST_IN_LIST_PART_ERROR                                         = 1495;
+exports.ER_PARTITION_ENTRY_ERROR                                                         = 1496;
+exports.ER_MIX_HANDLER_ERROR                                                             = 1497;
+exports.ER_PARTITION_NOT_DEFINED_ERROR                                                   = 1498;
+exports.ER_TOO_MANY_PARTITIONS_ERROR                                                     = 1499;
+exports.ER_SUBPARTITION_ERROR                                                            = 1500;
+exports.ER_CANT_CREATE_HANDLER_FILE                                                      = 1501;
+exports.ER_BLOB_FIELD_IN_PART_FUNC_ERROR                                                 = 1502;
+exports.ER_UNIQUE_KEY_NEED_ALL_FIELDS_IN_PF                                              = 1503;
+exports.ER_NO_PARTS_ERROR                                                                = 1504;
+exports.ER_PARTITION_MGMT_ON_NONPARTITIONED                                              = 1505;
+exports.ER_FOREIGN_KEY_ON_PARTITIONED                                                    = 1506;
+exports.ER_DROP_PARTITION_NON_EXISTENT                                                   = 1507;
+exports.ER_DROP_LAST_PARTITION                                                           = 1508;
+exports.ER_COALESCE_ONLY_ON_HASH_PARTITION                                               = 1509;
+exports.ER_REORG_HASH_ONLY_ON_SAME_NO                                                    = 1510;
+exports.ER_REORG_NO_PARAM_ERROR                                                          = 1511;
+exports.ER_ONLY_ON_RANGE_LIST_PARTITION                                                  = 1512;
+exports.ER_ADD_PARTITION_SUBPART_ERROR                                                   = 1513;
+exports.ER_ADD_PARTITION_NO_NEW_PARTITION                                                = 1514;
+exports.ER_COALESCE_PARTITION_NO_PARTITION                                               = 1515;
+exports.ER_REORG_PARTITION_NOT_EXIST                                                     = 1516;
+exports.ER_SAME_NAME_PARTITION                                                           = 1517;
+exports.ER_NO_BINLOG_ERROR                                                               = 1518;
+exports.ER_CONSECUTIVE_REORG_PARTITIONS                                                  = 1519;
+exports.ER_REORG_OUTSIDE_RANGE                                                           = 1520;
+exports.ER_PARTITION_FUNCTION_FAILURE                                                    = 1521;
+exports.ER_PART_STATE_ERROR                                                              = 1522;
+exports.ER_LIMITED_PART_RANGE                                                            = 1523;
+exports.ER_PLUGIN_IS_NOT_LOADED                                                          = 1524;
+exports.ER_WRONG_VALUE                                                                   = 1525;
+exports.ER_NO_PARTITION_FOR_GIVEN_VALUE                                                  = 1526;
+exports.ER_FILEGROUP_OPTION_ONLY_ONCE                                                    = 1527;
+exports.ER_CREATE_FILEGROUP_FAILED                                                       = 1528;
+exports.ER_DROP_FILEGROUP_FAILED                                                         = 1529;
+exports.ER_TABLESPACE_AUTO_EXTEND_ERROR                                                  = 1530;
+exports.ER_WRONG_SIZE_NUMBER                                                             = 1531;
+exports.ER_SIZE_OVERFLOW_ERROR                                                           = 1532;
+exports.ER_ALTER_FILEGROUP_FAILED                                                        = 1533;
+exports.ER_BINLOG_ROW_LOGGING_FAILED                                                     = 1534;
+exports.ER_BINLOG_ROW_WRONG_TABLE_DEF                                                    = 1535;
+exports.ER_BINLOG_ROW_RBR_TO_SBR                                                         = 1536;
+exports.ER_EVENT_ALREADY_EXISTS                                                          = 1537;
+exports.ER_EVENT_STORE_FAILED                                                            = 1538;
+exports.ER_EVENT_DOES_NOT_EXIST                                                          = 1539;
+exports.ER_EVENT_CANT_ALTER                                                              = 1540;
+exports.ER_EVENT_DROP_FAILED                                                             = 1541;
+exports.ER_EVENT_INTERVAL_NOT_POSITIVE_OR_TOO_BIG                                        = 1542;
+exports.ER_EVENT_ENDS_BEFORE_STARTS                                                      = 1543;
+exports.ER_EVENT_EXEC_TIME_IN_THE_PAST                                                   = 1544;
+exports.ER_EVENT_OPEN_TABLE_FAILED                                                       = 1545;
+exports.ER_EVENT_NEITHER_M_EXPR_NOR_M_AT                                                 = 1546;
+exports.ER_COL_COUNT_DOESNT_MATCH_CORRUPTED                                              = 1547;
+exports.ER_CANNOT_LOAD_FROM_TABLE                                                        = 1548;
+exports.ER_EVENT_CANNOT_DELETE                                                           = 1549;
+exports.ER_EVENT_COMPILE_ERROR                                                           = 1550;
+exports.ER_EVENT_SAME_NAME                                                               = 1551;
+exports.ER_EVENT_DATA_TOO_LONG                                                           = 1552;
+exports.ER_DROP_INDEX_FK                                                                 = 1553;
+exports.ER_WARN_DEPRECATED_SYNTAX_WITH_VER                                               = 1554;
+exports.ER_CANT_WRITE_LOCK_LOG_TABLE                                                     = 1555;
+exports.ER_CANT_LOCK_LOG_TABLE                                                           = 1556;
+exports.ER_FOREIGN_DUPLICATE_KEY                                                         = 1557;
+exports.ER_COL_COUNT_DOESNT_MATCH_PLEASE_UPDATE                                          = 1558;
+exports.ER_TEMP_TABLE_PREVENTS_SWITCH_OUT_OF_RBR                                         = 1559;
+exports.ER_STORED_FUNCTION_PREVENTS_SWITCH_BINLOG_FORMAT                                 = 1560;
+exports.ER_NDB_CANT_SWITCH_BINLOG_FORMAT                                                 = 1561;
+exports.ER_PARTITION_NO_TEMPORARY                                                        = 1562;
+exports.ER_PARTITION_CONST_DOMAIN_ERROR                                                  = 1563;
+exports.ER_PARTITION_FUNCTION_IS_NOT_ALLOWED                                             = 1564;
+exports.ER_DDL_LOG_ERROR                                                                 = 1565;
+exports.ER_NULL_IN_VALUES_LESS_THAN                                                      = 1566;
+exports.ER_WRONG_PARTITION_NAME                                                          = 1567;
+exports.ER_CANT_CHANGE_TX_CHARACTERISTICS                                                = 1568;
+exports.ER_DUP_ENTRY_AUTOINCREMENT_CASE                                                  = 1569;
+exports.ER_EVENT_MODIFY_QUEUE_ERROR                                                      = 1570;
+exports.ER_EVENT_SET_VAR_ERROR                                                           = 1571;
+exports.ER_PARTITION_MERGE_ERROR                                                         = 1572;
+exports.ER_CANT_ACTIVATE_LOG                                                             = 1573;
+exports.ER_RBR_NOT_AVAILABLE                                                             = 1574;
+exports.ER_BASE64_DECODE_ERROR                                                           = 1575;
+exports.ER_EVENT_RECURSION_FORBIDDEN                                                     = 1576;
+exports.ER_EVENTS_DB_ERROR                                                               = 1577;
+exports.ER_ONLY_INTEGERS_ALLOWED                                                         = 1578;
+exports.ER_UNSUPORTED_LOG_ENGINE                                                         = 1579;
+exports.ER_BAD_LOG_STATEMENT                                                             = 1580;
+exports.ER_CANT_RENAME_LOG_TABLE                                                         = 1581;
+exports.ER_WRONG_PARAMCOUNT_TO_NATIVE_FCT                                                = 1582;
+exports.ER_WRONG_PARAMETERS_TO_NATIVE_FCT                                                = 1583;
+exports.ER_WRONG_PARAMETERS_TO_STORED_FCT                                                = 1584;
+exports.ER_NATIVE_FCT_NAME_COLLISION                                                     = 1585;
+exports.ER_DUP_ENTRY_WITH_KEY_NAME                                                       = 1586;
+exports.ER_BINLOG_PURGE_EMFILE                                                           = 1587;
+exports.ER_EVENT_CANNOT_CREATE_IN_THE_PAST                                               = 1588;
+exports.ER_EVENT_CANNOT_ALTER_IN_THE_PAST                                                = 1589;
+exports.ER_SLAVE_INCIDENT                                                                = 1590;
+exports.ER_NO_PARTITION_FOR_GIVEN_VALUE_SILENT                                           = 1591;
+exports.ER_BINLOG_UNSAFE_STATEMENT                                                       = 1592;
+exports.ER_SLAVE_FATAL_ERROR                                                             = 1593;
+exports.ER_SLAVE_RELAY_LOG_READ_FAILURE                                                  = 1594;
+exports.ER_SLAVE_RELAY_LOG_WRITE_FAILURE                                                 = 1595;
+exports.ER_SLAVE_CREATE_EVENT_FAILURE                                                    = 1596;
+exports.ER_SLAVE_MASTER_COM_FAILURE                                                      = 1597;
+exports.ER_BINLOG_LOGGING_IMPOSSIBLE                                                     = 1598;
+exports.ER_VIEW_NO_CREATION_CTX                                                          = 1599;
+exports.ER_VIEW_INVALID_CREATION_CTX                                                     = 1600;
+exports.ER_SR_INVALID_CREATION_CTX                                                       = 1601;
+exports.ER_TRG_CORRUPTED_FILE                                                            = 1602;
+exports.ER_TRG_NO_CREATION_CTX                                                           = 1603;
+exports.ER_TRG_INVALID_CREATION_CTX                                                      = 1604;
+exports.ER_EVENT_INVALID_CREATION_CTX                                                    = 1605;
+exports.ER_TRG_CANT_OPEN_TABLE                                                           = 1606;
+exports.ER_CANT_CREATE_SROUTINE                                                          = 1607;
+exports.ER_NEVER_USED                                                                    = 1608;
+exports.ER_NO_FORMAT_DESCRIPTION_EVENT_BEFORE_BINLOG_STATEMENT                           = 1609;
+exports.ER_SLAVE_CORRUPT_EVENT                                                           = 1610;
+exports.ER_LOAD_DATA_INVALID_COLUMN                                                      = 1611;
+exports.ER_LOG_PURGE_NO_FILE                                                             = 1612;
+exports.ER_XA_RBTIMEOUT                                                                  = 1613;
+exports.ER_XA_RBDEADLOCK                                                                 = 1614;
+exports.ER_NEED_REPREPARE                                                                = 1615;
+exports.ER_DELAYED_NOT_SUPPORTED                                                         = 1616;
+exports.WARN_NO_MASTER_INFO                                                              = 1617;
+exports.WARN_OPTION_IGNORED                                                              = 1618;
+exports.ER_PLUGIN_DELETE_BUILTIN                                                         = 1619;
+exports.WARN_PLUGIN_BUSY                                                                 = 1620;
+exports.ER_VARIABLE_IS_READONLY                                                          = 1621;
+exports.ER_WARN_ENGINE_TRANSACTION_ROLLBACK                                              = 1622;
+exports.ER_SLAVE_HEARTBEAT_FAILURE                                                       = 1623;
+exports.ER_SLAVE_HEARTBEAT_VALUE_OUT_OF_RANGE                                            = 1624;
+exports.ER_NDB_REPLICATION_SCHEMA_ERROR                                                  = 1625;
+exports.ER_CONFLICT_FN_PARSE_ERROR                                                       = 1626;
+exports.ER_EXCEPTIONS_WRITE_ERROR                                                        = 1627;
+exports.ER_TOO_LONG_TABLE_COMMENT                                                        = 1628;
+exports.ER_TOO_LONG_FIELD_COMMENT                                                        = 1629;
+exports.ER_FUNC_INEXISTENT_NAME_COLLISION                                                = 1630;
+exports.ER_DATABASE_NAME                                                                 = 1631;
+exports.ER_TABLE_NAME                                                                    = 1632;
+exports.ER_PARTITION_NAME                                                                = 1633;
+exports.ER_SUBPARTITION_NAME                                                             = 1634;
+exports.ER_TEMPORARY_NAME                                                                = 1635;
+exports.ER_RENAMED_NAME                                                                  = 1636;
+exports.ER_TOO_MANY_CONCURRENT_TRXS                                                      = 1637;
+exports.WARN_NON_ASCII_SEPARATOR_NOT_IMPLEMENTED                                         = 1638;
+exports.ER_DEBUG_SYNC_TIMEOUT                                                            = 1639;
+exports.ER_DEBUG_SYNC_HIT_LIMIT                                                          = 1640;
+exports.ER_DUP_SIGNAL_SET                                                                = 1641;
+exports.ER_SIGNAL_WARN                                                                   = 1642;
+exports.ER_SIGNAL_NOT_FOUND                                                              = 1643;
+exports.ER_SIGNAL_EXCEPTION                                                              = 1644;
+exports.ER_RESIGNAL_WITHOUT_ACTIVE_HANDLER                                               = 1645;
+exports.ER_SIGNAL_BAD_CONDITION_TYPE                                                     = 1646;
+exports.WARN_COND_ITEM_TRUNCATED                                                         = 1647;
+exports.ER_COND_ITEM_TOO_LONG                                                            = 1648;
+exports.ER_UNKNOWN_LOCALE                                                                = 1649;
+exports.ER_SLAVE_IGNORE_SERVER_IDS                                                       = 1650;
+exports.ER_QUERY_CACHE_DISABLED                                                          = 1651;
+exports.ER_SAME_NAME_PARTITION_FIELD                                                     = 1652;
+exports.ER_PARTITION_COLUMN_LIST_ERROR                                                   = 1653;
+exports.ER_WRONG_TYPE_COLUMN_VALUE_ERROR                                                 = 1654;
+exports.ER_TOO_MANY_PARTITION_FUNC_FIELDS_ERROR                                          = 1655;
+exports.ER_MAXVALUE_IN_VALUES_IN                                                         = 1656;
+exports.ER_TOO_MANY_VALUES_ERROR                                                         = 1657;
+exports.ER_ROW_SINGLE_PARTITION_FIELD_ERROR                                              = 1658;
+exports.ER_FIELD_TYPE_NOT_ALLOWED_AS_PARTITION_FIELD                                     = 1659;
+exports.ER_PARTITION_FIELDS_TOO_LONG                                                     = 1660;
+exports.ER_BINLOG_ROW_ENGINE_AND_STMT_ENGINE                                             = 1661;
+exports.ER_BINLOG_ROW_MODE_AND_STMT_ENGINE                                               = 1662;
+exports.ER_BINLOG_UNSAFE_AND_STMT_ENGINE                                                 = 1663;
+exports.ER_BINLOG_ROW_INJECTION_AND_STMT_ENGINE                                          = 1664;
+exports.ER_BINLOG_STMT_MODE_AND_ROW_ENGINE                                               = 1665;
+exports.ER_BINLOG_ROW_INJECTION_AND_STMT_MODE                                            = 1666;
+exports.ER_BINLOG_MULTIPLE_ENGINES_AND_SELF_LOGGING_ENGINE                               = 1667;
+exports.ER_BINLOG_UNSAFE_LIMIT                                                           = 1668;
+exports.ER_BINLOG_UNSAFE_INSERT_DELAYED                                                  = 1669;
+exports.ER_BINLOG_UNSAFE_SYSTEM_TABLE                                                    = 1670;
+exports.ER_BINLOG_UNSAFE_AUTOINC_COLUMNS                                                 = 1671;
+exports.ER_BINLOG_UNSAFE_UDF                                                             = 1672;
+exports.ER_BINLOG_UNSAFE_SYSTEM_VARIABLE                                                 = 1673;
+exports.ER_BINLOG_UNSAFE_SYSTEM_FUNCTION                                                 = 1674;
+exports.ER_BINLOG_UNSAFE_NONTRANS_AFTER_TRANS                                            = 1675;
+exports.ER_MESSAGE_AND_STATEMENT                                                         = 1676;
+exports.ER_SLAVE_CONVERSION_FAILED                                                       = 1677;
+exports.ER_SLAVE_CANT_CREATE_CONVERSION                                                  = 1678;
+exports.ER_INSIDE_TRANSACTION_PREVENTS_SWITCH_BINLOG_FORMAT                              = 1679;
+exports.ER_PATH_LENGTH                                                                   = 1680;
+exports.ER_WARN_DEPRECATED_SYNTAX_NO_REPLACEMENT                                         = 1681;
+exports.ER_WRONG_NATIVE_TABLE_STRUCTURE                                                  = 1682;
+exports.ER_WRONG_PERFSCHEMA_USAGE                                                        = 1683;
+exports.ER_WARN_I_S_SKIPPED_TABLE                                                        = 1684;
+exports.ER_INSIDE_TRANSACTION_PREVENTS_SWITCH_BINLOG_DIRECT                              = 1685;
+exports.ER_STORED_FUNCTION_PREVENTS_SWITCH_BINLOG_DIRECT                                 = 1686;
+exports.ER_SPATIAL_MUST_HAVE_GEOM_COL                                                    = 1687;
+exports.ER_TOO_LONG_INDEX_COMMENT                                                        = 1688;
+exports.ER_LOCK_ABORTED                                                                  = 1689;
+exports.ER_DATA_OUT_OF_RANGE                                                             = 1690;
+exports.ER_WRONG_SPVAR_TYPE_IN_LIMIT                                                     = 1691;
+exports.ER_BINLOG_UNSAFE_MULTIPLE_ENGINES_AND_SELF_LOGGING_ENGINE                        = 1692;
+exports.ER_BINLOG_UNSAFE_MIXED_STATEMENT                                                 = 1693;
+exports.ER_INSIDE_TRANSACTION_PREVENTS_SWITCH_SQL_LOG_BIN                                = 1694;
+exports.ER_STORED_FUNCTION_PREVENTS_SWITCH_SQL_LOG_BIN                                   = 1695;
+exports.ER_FAILED_READ_FROM_PAR_FILE                                                     = 1696;
+exports.ER_VALUES_IS_NOT_INT_TYPE_ERROR                                                  = 1697;
+exports.ER_ACCESS_DENIED_NO_PASSWORD_ERROR                                               = 1698;
+exports.ER_SET_PASSWORD_AUTH_PLUGIN                                                      = 1699;
+exports.ER_GRANT_PLUGIN_USER_EXISTS                                                      = 1700;
+exports.ER_TRUNCATE_ILLEGAL_FK                                                           = 1701;
+exports.ER_PLUGIN_IS_PERMANENT                                                           = 1702;
+exports.ER_SLAVE_HEARTBEAT_VALUE_OUT_OF_RANGE_MIN                                        = 1703;
+exports.ER_SLAVE_HEARTBEAT_VALUE_OUT_OF_RANGE_MAX                                        = 1704;
+exports.ER_STMT_CACHE_FULL                                                               = 1705;
+exports.ER_MULTI_UPDATE_KEY_CONFLICT                                                     = 1706;
+exports.ER_TABLE_NEEDS_REBUILD                                                           = 1707;
+exports.WARN_OPTION_BELOW_LIMIT                                                          = 1708;
+exports.ER_INDEX_COLUMN_TOO_LONG                                                         = 1709;
+exports.ER_ERROR_IN_TRIGGER_BODY                                                         = 1710;
+exports.ER_ERROR_IN_UNKNOWN_TRIGGER_BODY                                                 = 1711;
+exports.ER_INDEX_CORRUPT                                                                 = 1712;
+exports.ER_UNDO_RECORD_TOO_BIG                                                           = 1713;
+exports.ER_BINLOG_UNSAFE_INSERT_IGNORE_SELECT                                            = 1714;
+exports.ER_BINLOG_UNSAFE_INSERT_SELECT_UPDATE                                            = 1715;
+exports.ER_BINLOG_UNSAFE_REPLACE_SELECT                                                  = 1716;
+exports.ER_BINLOG_UNSAFE_CREATE_IGNORE_SELECT                                            = 1717;
+exports.ER_BINLOG_UNSAFE_CREATE_REPLACE_SELECT                                           = 1718;
+exports.ER_BINLOG_UNSAFE_UPDATE_IGNORE                                                   = 1719;
+exports.ER_PLUGIN_NO_UNINSTALL                                                           = 1720;
+exports.ER_PLUGIN_NO_INSTALL                                                             = 1721;
+exports.ER_BINLOG_UNSAFE_WRITE_AUTOINC_SELECT                                            = 1722;
+exports.ER_BINLOG_UNSAFE_CREATE_SELECT_AUTOINC                                           = 1723;
+exports.ER_BINLOG_UNSAFE_INSERT_TWO_KEYS                                                 = 1724;
+exports.ER_TABLE_IN_FK_CHECK                                                             = 1725;
+exports.ER_UNSUPPORTED_ENGINE                                                            = 1726;
+exports.ER_BINLOG_UNSAFE_AUTOINC_NOT_FIRST                                               = 1727;
+exports.ER_CANNOT_LOAD_FROM_TABLE_V2                                                     = 1728;
+exports.ER_MASTER_DELAY_VALUE_OUT_OF_RANGE                                               = 1729;
+exports.ER_ONLY_FD_AND_RBR_EVENTS_ALLOWED_IN_BINLOG_STATEMENT                            = 1730;
+exports.ER_PARTITION_EXCHANGE_DIFFERENT_OPTION                                           = 1731;
+exports.ER_PARTITION_EXCHANGE_PART_TABLE                                                 = 1732;
+exports.ER_PARTITION_EXCHANGE_TEMP_TABLE                                                 = 1733;
+exports.ER_PARTITION_INSTEAD_OF_SUBPARTITION                                             = 1734;
+exports.ER_UNKNOWN_PARTITION                                                             = 1735;
+exports.ER_TABLES_DIFFERENT_METADATA                                                     = 1736;
+exports.ER_ROW_DOES_NOT_MATCH_PARTITION                                                  = 1737;
+exports.ER_BINLOG_CACHE_SIZE_GREATER_THAN_MAX                                            = 1738;
+exports.ER_WARN_INDEX_NOT_APPLICABLE                                                     = 1739;
+exports.ER_PARTITION_EXCHANGE_FOREIGN_KEY                                                = 1740;
+exports.ER_NO_SUCH_KEY_VALUE                                                             = 1741;
+exports.ER_RPL_INFO_DATA_TOO_LONG                                                        = 1742;
+exports.ER_NETWORK_READ_EVENT_CHECKSUM_FAILURE                                           = 1743;
+exports.ER_BINLOG_READ_EVENT_CHECKSUM_FAILURE                                            = 1744;
+exports.ER_BINLOG_STMT_CACHE_SIZE_GREATER_THAN_MAX                                       = 1745;
+exports.ER_CANT_UPDATE_TABLE_IN_CREATE_TABLE_SELECT                                      = 1746;
+exports.ER_PARTITION_CLAUSE_ON_NONPARTITIONED                                            = 1747;
+exports.ER_ROW_DOES_NOT_MATCH_GIVEN_PARTITION_SET                                        = 1748;
+exports.ER_NO_SUCH_PARTITION                                                             = 1749;
+exports.ER_CHANGE_RPL_INFO_REPOSITORY_FAILURE                                            = 1750;
+exports.ER_WARNING_NOT_COMPLETE_ROLLBACK_WITH_CREATED_TEMP_TABLE                         = 1751;
+exports.ER_WARNING_NOT_COMPLETE_ROLLBACK_WITH_DROPPED_TEMP_TABLE                         = 1752;
+exports.ER_MTS_FEATURE_IS_NOT_SUPPORTED                                                  = 1753;
+exports.ER_MTS_UPDATED_DBS_GREATER_MAX                                                   = 1754;
+exports.ER_MTS_CANT_PARALLEL                                                             = 1755;
+exports.ER_MTS_INCONSISTENT_DATA                                                         = 1756;
+exports.ER_FULLTEXT_NOT_SUPPORTED_WITH_PARTITIONING                                      = 1757;
+exports.ER_DA_INVALID_CONDITION_NUMBER                                                   = 1758;
+exports.ER_INSECURE_PLAIN_TEXT                                                           = 1759;
+exports.ER_INSECURE_CHANGE_MASTER                                                        = 1760;
+exports.ER_FOREIGN_DUPLICATE_KEY_WITH_CHILD_INFO                                         = 1761;
+exports.ER_FOREIGN_DUPLICATE_KEY_WITHOUT_CHILD_INFO                                      = 1762;
+exports.ER_SQLTHREAD_WITH_SECURE_SLAVE                                                   = 1763;
+exports.ER_TABLE_HAS_NO_FT                                                               = 1764;
+exports.ER_VARIABLE_NOT_SETTABLE_IN_SF_OR_TRIGGER                                        = 1765;
+exports.ER_VARIABLE_NOT_SETTABLE_IN_TRANSACTION                                          = 1766;
+exports.ER_GTID_NEXT_IS_NOT_IN_GTID_NEXT_LIST                                            = 1767;
+exports.ER_CANT_CHANGE_GTID_NEXT_IN_TRANSACTION                                          = 1768;
+exports.ER_SET_STATEMENT_CANNOT_INVOKE_FUNCTION                                          = 1769;
+exports.ER_GTID_NEXT_CANT_BE_AUTOMATIC_IF_GTID_NEXT_LIST_IS_NON_NULL                     = 1770;
+exports.ER_SKIPPING_LOGGED_TRANSACTION                                                   = 1771;
+exports.ER_MALFORMED_GTID_SET_SPECIFICATION                                              = 1772;
+exports.ER_MALFORMED_GTID_SET_ENCODING                                                   = 1773;
+exports.ER_MALFORMED_GTID_SPECIFICATION                                                  = 1774;
+exports.ER_GNO_EXHAUSTED                                                                 = 1775;
+exports.ER_BAD_SLAVE_AUTO_POSITION                                                       = 1776;
+exports.ER_AUTO_POSITION_REQUIRES_GTID_MODE_NOT_OFF                                      = 1777;
+exports.ER_CANT_DO_IMPLICIT_COMMIT_IN_TRX_WHEN_GTID_NEXT_IS_SET                          = 1778;
+exports.ER_GTID_MODE_ON_REQUIRES_ENFORCE_GTID_CONSISTENCY_ON                             = 1779;
+exports.ER_GTID_MODE_REQUIRES_BINLOG                                                     = 1780;
+exports.ER_CANT_SET_GTID_NEXT_TO_GTID_WHEN_GTID_MODE_IS_OFF                              = 1781;
+exports.ER_CANT_SET_GTID_NEXT_TO_ANONYMOUS_WHEN_GTID_MODE_IS_ON                          = 1782;
+exports.ER_CANT_SET_GTID_NEXT_LIST_TO_NON_NULL_WHEN_GTID_MODE_IS_OFF                     = 1783;
+exports.ER_FOUND_GTID_EVENT_WHEN_GTID_MODE_IS_OFF                                        = 1784;
+exports.ER_GTID_UNSAFE_NON_TRANSACTIONAL_TABLE                                           = 1785;
+exports.ER_GTID_UNSAFE_CREATE_SELECT                                                     = 1786;
+exports.ER_GTID_UNSAFE_CREATE_DROP_TEMPORARY_TABLE_IN_TRANSACTION                        = 1787;
+exports.ER_GTID_MODE_CAN_ONLY_CHANGE_ONE_STEP_AT_A_TIME                                  = 1788;
+exports.ER_MASTER_HAS_PURGED_REQUIRED_GTIDS                                              = 1789;
+exports.ER_CANT_SET_GTID_NEXT_WHEN_OWNING_GTID                                           = 1790;
+exports.ER_UNKNOWN_EXPLAIN_FORMAT                                                        = 1791;
+exports.ER_CANT_EXECUTE_IN_READ_ONLY_TRANSACTION                                         = 1792;
+exports.ER_TOO_LONG_TABLE_PARTITION_COMMENT                                              = 1793;
+exports.ER_SLAVE_CONFIGURATION                                                           = 1794;
+exports.ER_INNODB_FT_LIMIT                                                               = 1795;
+exports.ER_INNODB_NO_FT_TEMP_TABLE                                                       = 1796;
+exports.ER_INNODB_FT_WRONG_DOCID_COLUMN                                                  = 1797;
+exports.ER_INNODB_FT_WRONG_DOCID_INDEX                                                   = 1798;
+exports.ER_INNODB_ONLINE_LOG_TOO_BIG                                                     = 1799;
+exports.ER_UNKNOWN_ALTER_ALGORITHM                                                       = 1800;
+exports.ER_UNKNOWN_ALTER_LOCK                                                            = 1801;
+exports.ER_MTS_CHANGE_MASTER_CANT_RUN_WITH_GAPS                                          = 1802;
+exports.ER_MTS_RECOVERY_FAILURE                                                          = 1803;
+exports.ER_MTS_RESET_WORKERS                                                             = 1804;
+exports.ER_COL_COUNT_DOESNT_MATCH_CORRUPTED_V2                                           = 1805;
+exports.ER_SLAVE_SILENT_RETRY_TRANSACTION                                                = 1806;
+exports.ER_DISCARD_FK_CHECKS_RUNNING                                                     = 1807;
+exports.ER_TABLE_SCHEMA_MISMATCH                                                         = 1808;
+exports.ER_TABLE_IN_SYSTEM_TABLESPACE                                                    = 1809;
+exports.ER_IO_READ_ERROR                                                                 = 1810;
+exports.ER_IO_WRITE_ERROR                                                                = 1811;
+exports.ER_TABLESPACE_MISSING                                                            = 1812;
+exports.ER_TABLESPACE_EXISTS                                                             = 1813;
+exports.ER_TABLESPACE_DISCARDED                                                          = 1814;
+exports.ER_INTERNAL_ERROR                                                                = 1815;
+exports.ER_INNODB_IMPORT_ERROR                                                           = 1816;
+exports.ER_INNODB_INDEX_CORRUPT                                                          = 1817;
+exports.ER_INVALID_YEAR_COLUMN_LENGTH                                                    = 1818;
+exports.ER_NOT_VALID_PASSWORD                                                            = 1819;
+exports.ER_MUST_CHANGE_PASSWORD                                                          = 1820;
+exports.ER_FK_NO_INDEX_CHILD                                                             = 1821;
+exports.ER_FK_NO_INDEX_PARENT                                                            = 1822;
+exports.ER_FK_FAIL_ADD_SYSTEM                                                            = 1823;
+exports.ER_FK_CANNOT_OPEN_PARENT                                                         = 1824;
+exports.ER_FK_INCORRECT_OPTION                                                           = 1825;
+exports.ER_FK_DUP_NAME                                                                   = 1826;
+exports.ER_PASSWORD_FORMAT                                                               = 1827;
+exports.ER_FK_COLUMN_CANNOT_DROP                                                         = 1828;
+exports.ER_FK_COLUMN_CANNOT_DROP_CHILD                                                   = 1829;
+exports.ER_FK_COLUMN_NOT_NULL                                                            = 1830;
+exports.ER_DUP_INDEX                                                                     = 1831;
+exports.ER_FK_COLUMN_CANNOT_CHANGE                                                       = 1832;
+exports.ER_FK_COLUMN_CANNOT_CHANGE_CHILD                                                 = 1833;
+exports.ER_FK_CANNOT_DELETE_PARENT                                                       = 1834;
+exports.ER_MALFORMED_PACKET                                                              = 1835;
+exports.ER_READ_ONLY_MODE                                                                = 1836;
+exports.ER_GTID_NEXT_TYPE_UNDEFINED_GROUP                                                = 1837;
+exports.ER_VARIABLE_NOT_SETTABLE_IN_SP                                                   = 1838;
+exports.ER_CANT_SET_GTID_PURGED_WHEN_GTID_MODE_IS_OFF                                    = 1839;
+exports.ER_CANT_SET_GTID_PURGED_WHEN_GTID_EXECUTED_IS_NOT_EMPTY                          = 1840;
+exports.ER_CANT_SET_GTID_PURGED_WHEN_OWNED_GTIDS_IS_NOT_EMPTY                            = 1841;
+exports.ER_GTID_PURGED_WAS_CHANGED                                                       = 1842;
+exports.ER_GTID_EXECUTED_WAS_CHANGED                                                     = 1843;
+exports.ER_BINLOG_STMT_MODE_AND_NO_REPL_TABLES                                           = 1844;
+exports.ER_ALTER_OPERATION_NOT_SUPPORTED                                                 = 1845;
+exports.ER_ALTER_OPERATION_NOT_SUPPORTED_REASON                                          = 1846;
+exports.ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_COPY                                     = 1847;
+exports.ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_PARTITION                                = 1848;
+exports.ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_FK_RENAME                                = 1849;
+exports.ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_COLUMN_TYPE                              = 1850;
+exports.ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_FK_CHECK                                 = 1851;
+exports.ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_IGNORE                                   = 1852;
+exports.ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_NOPK                                     = 1853;
+exports.ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_AUTOINC                                  = 1854;
+exports.ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_HIDDEN_FTS                               = 1855;
+exports.ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_CHANGE_FTS                               = 1856;
+exports.ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_FTS                                      = 1857;
+exports.ER_SQL_SLAVE_SKIP_COUNTER_NOT_SETTABLE_IN_GTID_MODE                              = 1858;
+exports.ER_DUP_UNKNOWN_IN_INDEX                                                          = 1859;
+exports.ER_IDENT_CAUSES_TOO_LONG_PATH                                                    = 1860;
+exports.ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_NOT_NULL                                 = 1861;
+exports.ER_MUST_CHANGE_PASSWORD_LOGIN                                                    = 1862;
+exports.ER_ROW_IN_WRONG_PARTITION                                                        = 1863;
+exports.ER_MTS_EVENT_BIGGER_PENDING_JOBS_SIZE_MAX                                        = 1864;
+exports.ER_INNODB_NO_FT_USES_PARSER                                                      = 1865;
+exports.ER_BINLOG_LOGICAL_CORRUPTION                                                     = 1866;
+exports.ER_WARN_PURGE_LOG_IN_USE                                                         = 1867;
+exports.ER_WARN_PURGE_LOG_IS_ACTIVE                                                      = 1868;
+exports.ER_AUTO_INCREMENT_CONFLICT                                                       = 1869;
+exports.WARN_ON_BLOCKHOLE_IN_RBR                                                         = 1870;
+exports.ER_SLAVE_MI_INIT_REPOSITORY                                                      = 1871;
+exports.ER_SLAVE_RLI_INIT_REPOSITORY                                                     = 1872;
+exports.ER_ACCESS_DENIED_CHANGE_USER_ERROR                                               = 1873;
+exports.ER_INNODB_READ_ONLY                                                              = 1874;
+exports.ER_STOP_SLAVE_SQL_THREAD_TIMEOUT                                                 = 1875;
+exports.ER_STOP_SLAVE_IO_THREAD_TIMEOUT                                                  = 1876;
+exports.ER_TABLE_CORRUPT                                                                 = 1877;
+exports.ER_TEMP_FILE_WRITE_FAILURE                                                       = 1878;
+exports.ER_INNODB_FT_AUX_NOT_HEX_ID                                                      = 1879;
+exports.ER_OLD_TEMPORALS_UPGRADED                                                        = 1880;
+exports.ER_INNODB_FORCED_RECOVERY                                                        = 1881;
+exports.ER_AES_INVALID_IV                                                                = 1882;
+exports.ER_PLUGIN_CANNOT_BE_UNINSTALLED                                                  = 1883;
+exports.ER_GTID_UNSAFE_BINLOG_SPLITTABLE_STATEMENT_AND_GTID_GROUP                        = 1884;
+exports.ER_SLAVE_HAS_MORE_GTIDS_THAN_MASTER                                              = 1885;
+exports.ER_FILE_CORRUPT                                                                  = 3000;
+exports.ER_ERROR_ON_MASTER                                                               = 3001;
+exports.ER_INCONSISTENT_ERROR                                                            = 3002;
+exports.ER_STORAGE_ENGINE_NOT_LOADED                                                     = 3003;
+exports.ER_GET_STACKED_DA_WITHOUT_ACTIVE_HANDLER                                         = 3004;
+exports.ER_WARN_LEGACY_SYNTAX_CONVERTED                                                  = 3005;
+exports.ER_BINLOG_UNSAFE_FULLTEXT_PLUGIN                                                 = 3006;
+exports.ER_CANNOT_DISCARD_TEMPORARY_TABLE                                                = 3007;
+exports.ER_FK_DEPTH_EXCEEDED                                                             = 3008;
+exports.ER_COL_COUNT_DOESNT_MATCH_PLEASE_UPDATE_V2                                       = 3009;
+exports.ER_WARN_TRIGGER_DOESNT_HAVE_CREATED                                              = 3010;
+exports.ER_REFERENCED_TRG_DOES_NOT_EXIST                                                 = 3011;
+exports.ER_EXPLAIN_NOT_SUPPORTED                                                         = 3012;
+exports.ER_INVALID_FIELD_SIZE                                                            = 3013;
+exports.ER_MISSING_HA_CREATE_OPTION                                                      = 3014;
+exports.ER_ENGINE_OUT_OF_MEMORY                                                          = 3015;
+exports.ER_PASSWORD_EXPIRE_ANONYMOUS_USER                                                = 3016;
+exports.ER_SLAVE_SQL_THREAD_MUST_STOP                                                    = 3017;
+exports.ER_NO_FT_MATERIALIZED_SUBQUERY                                                   = 3018;
+exports.ER_INNODB_UNDO_LOG_FULL                                                          = 3019;
+exports.ER_INVALID_ARGUMENT_FOR_LOGARITHM                                                = 3020;
+exports.ER_SLAVE_CHANNEL_IO_THREAD_MUST_STOP                                             = 3021;
+exports.ER_WARN_OPEN_TEMP_TABLES_MUST_BE_ZERO                                            = 3022;
+exports.ER_WARN_ONLY_MASTER_LOG_FILE_NO_POS                                              = 3023;
+exports.ER_QUERY_TIMEOUT                                                                 = 3024;
+exports.ER_NON_RO_SELECT_DISABLE_TIMER                                                   = 3025;
+exports.ER_DUP_LIST_ENTRY                                                                = 3026;
+exports.ER_SQL_MODE_NO_EFFECT                                                            = 3027;
+exports.ER_AGGREGATE_ORDER_FOR_UNION                                                     = 3028;
+exports.ER_AGGREGATE_ORDER_NON_AGG_QUERY                                                 = 3029;
+exports.ER_SLAVE_WORKER_STOPPED_PREVIOUS_THD_ERROR                                       = 3030;
+exports.ER_DONT_SUPPORT_SLAVE_PRESERVE_COMMIT_ORDER                                      = 3031;
+exports.ER_SERVER_OFFLINE_MODE                                                           = 3032;
+exports.ER_GIS_DIFFERENT_SRIDS                                                           = 3033;
+exports.ER_GIS_UNSUPPORTED_ARGUMENT                                                      = 3034;
+exports.ER_GIS_UNKNOWN_ERROR                                                             = 3035;
+exports.ER_GIS_UNKNOWN_EXCEPTION                                                         = 3036;
+exports.ER_GIS_INVALID_DATA                                                              = 3037;
+exports.ER_BOOST_GEOMETRY_EMPTY_INPUT_EXCEPTION                                          = 3038;
+exports.ER_BOOST_GEOMETRY_CENTROID_EXCEPTION                                             = 3039;
+exports.ER_BOOST_GEOMETRY_OVERLAY_INVALID_INPUT_EXCEPTION                                = 3040;
+exports.ER_BOOST_GEOMETRY_TURN_INFO_EXCEPTION                                            = 3041;
+exports.ER_BOOST_GEOMETRY_SELF_INTERSECTION_POINT_EXCEPTION                              = 3042;
+exports.ER_BOOST_GEOMETRY_UNKNOWN_EXCEPTION                                              = 3043;
+exports.ER_STD_BAD_ALLOC_ERROR                                                           = 3044;
+exports.ER_STD_DOMAIN_ERROR                                                              = 3045;
+exports.ER_STD_LENGTH_ERROR                                                              = 3046;
+exports.ER_STD_INVALID_ARGUMENT                                                          = 3047;
+exports.ER_STD_OUT_OF_RANGE_ERROR                                                        = 3048;
+exports.ER_STD_OVERFLOW_ERROR                                                            = 3049;
+exports.ER_STD_RANGE_ERROR                                                               = 3050;
+exports.ER_STD_UNDERFLOW_ERROR                                                           = 3051;
+exports.ER_STD_LOGIC_ERROR                                                               = 3052;
+exports.ER_STD_RUNTIME_ERROR                                                             = 3053;
+exports.ER_STD_UNKNOWN_EXCEPTION                                                         = 3054;
+exports.ER_GIS_DATA_WRONG_ENDIANESS                                                      = 3055;
+exports.ER_CHANGE_MASTER_PASSWORD_LENGTH                                                 = 3056;
+exports.ER_USER_LOCK_WRONG_NAME                                                          = 3057;
+exports.ER_USER_LOCK_DEADLOCK                                                            = 3058;
+exports.ER_REPLACE_INACCESSIBLE_ROWS                                                     = 3059;
+exports.ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_GIS                                      = 3060;
+exports.ER_ILLEGAL_USER_VAR                                                              = 3061;
+exports.ER_GTID_MODE_OFF                                                                 = 3062;
+exports.ER_UNSUPPORTED_BY_REPLICATION_THREAD                                             = 3063;
+exports.ER_INCORRECT_TYPE                                                                = 3064;
+exports.ER_FIELD_IN_ORDER_NOT_SELECT                                                     = 3065;
+exports.ER_AGGREGATE_IN_ORDER_NOT_SELECT                                                 = 3066;
+exports.ER_INVALID_RPL_WILD_TABLE_FILTER_PATTERN                                         = 3067;
+exports.ER_NET_OK_PACKET_TOO_LARGE                                                       = 3068;
+exports.ER_INVALID_JSON_DATA                                                             = 3069;
+exports.ER_INVALID_GEOJSON_MISSING_MEMBER                                                = 3070;
+exports.ER_INVALID_GEOJSON_WRONG_TYPE                                                    = 3071;
+exports.ER_INVALID_GEOJSON_UNSPECIFIED                                                   = 3072;
+exports.ER_DIMENSION_UNSUPPORTED                                                         = 3073;
+exports.ER_SLAVE_CHANNEL_DOES_NOT_EXIST                                                  = 3074;
+exports.ER_SLAVE_MULTIPLE_CHANNELS_HOST_PORT                                             = 3075;
+exports.ER_SLAVE_CHANNEL_NAME_INVALID_OR_TOO_LONG                                        = 3076;
+exports.ER_SLAVE_NEW_CHANNEL_WRONG_REPOSITORY                                            = 3077;
+exports.ER_SLAVE_CHANNEL_DELETE                                                          = 3078;
+exports.ER_SLAVE_MULTIPLE_CHANNELS_CMD                                                   = 3079;
+exports.ER_SLAVE_MAX_CHANNELS_EXCEEDED                                                   = 3080;
+exports.ER_SLAVE_CHANNEL_MUST_STOP                                                       = 3081;
+exports.ER_SLAVE_CHANNEL_NOT_RUNNING                                                     = 3082;
+exports.ER_SLAVE_CHANNEL_WAS_RUNNING                                                     = 3083;
+exports.ER_SLAVE_CHANNEL_WAS_NOT_RUNNING                                                 = 3084;
+exports.ER_SLAVE_CHANNEL_SQL_THREAD_MUST_STOP                                            = 3085;
+exports.ER_SLAVE_CHANNEL_SQL_SKIP_COUNTER                                                = 3086;
+exports.ER_WRONG_FIELD_WITH_GROUP_V2                                                     = 3087;
+exports.ER_MIX_OF_GROUP_FUNC_AND_FIELDS_V2                                               = 3088;
+exports.ER_WARN_DEPRECATED_SYSVAR_UPDATE                                                 = 3089;
+exports.ER_WARN_DEPRECATED_SQLMODE                                                       = 3090;
+exports.ER_CANNOT_LOG_PARTIAL_DROP_DATABASE_WITH_GTID                                    = 3091;
+exports.ER_GROUP_REPLICATION_CONFIGURATION                                               = 3092;
+exports.ER_GROUP_REPLICATION_RUNNING                                                     = 3093;
+exports.ER_GROUP_REPLICATION_APPLIER_INIT_ERROR                                          = 3094;
+exports.ER_GROUP_REPLICATION_STOP_APPLIER_THREAD_TIMEOUT                                 = 3095;
+exports.ER_GROUP_REPLICATION_COMMUNICATION_LAYER_SESSION_ERROR                           = 3096;
+exports.ER_GROUP_REPLICATION_COMMUNICATION_LAYER_JOIN_ERROR                              = 3097;
+exports.ER_BEFORE_DML_VALIDATION_ERROR                                                   = 3098;
+exports.ER_PREVENTS_VARIABLE_WITHOUT_RBR                                                 = 3099;
+exports.ER_RUN_HOOK_ERROR                                                                = 3100;
+exports.ER_TRANSACTION_ROLLBACK_DURING_COMMIT                                            = 3101;
+exports.ER_GENERATED_COLUMN_FUNCTION_IS_NOT_ALLOWED                                      = 3102;
+exports.ER_UNSUPPORTED_ALTER_INPLACE_ON_VIRTUAL_COLUMN                                   = 3103;
+exports.ER_WRONG_FK_OPTION_FOR_GENERATED_COLUMN                                          = 3104;
+exports.ER_NON_DEFAULT_VALUE_FOR_GENERATED_COLUMN                                        = 3105;
+exports.ER_UNSUPPORTED_ACTION_ON_GENERATED_COLUMN                                        = 3106;
+exports.ER_GENERATED_COLUMN_NON_PRIOR                                                    = 3107;
+exports.ER_DEPENDENT_BY_GENERATED_COLUMN                                                 = 3108;
+exports.ER_GENERATED_COLUMN_REF_AUTO_INC                                                 = 3109;
+exports.ER_FEATURE_NOT_AVAILABLE                                                         = 3110;
+exports.ER_CANT_SET_GTID_MODE                                                            = 3111;
+exports.ER_CANT_USE_AUTO_POSITION_WITH_GTID_MODE_OFF                                     = 3112;
+exports.ER_CANT_REPLICATE_ANONYMOUS_WITH_AUTO_POSITION                                   = 3113;
+exports.ER_CANT_REPLICATE_ANONYMOUS_WITH_GTID_MODE_ON                                    = 3114;
+exports.ER_CANT_REPLICATE_GTID_WITH_GTID_MODE_OFF                                        = 3115;
+exports.ER_CANT_SET_ENFORCE_GTID_CONSISTENCY_ON_WITH_ONGOING_GTID_VIOLATING_TRANSACTIONS = 3116;
+exports.ER_SET_ENFORCE_GTID_CONSISTENCY_WARN_WITH_ONGOING_GTID_VIOLATING_TRANSACTIONS    = 3117;
+exports.ER_ACCOUNT_HAS_BEEN_LOCKED                                                       = 3118;
+exports.ER_WRONG_TABLESPACE_NAME                                                         = 3119;
+exports.ER_TABLESPACE_IS_NOT_EMPTY                                                       = 3120;
+exports.ER_WRONG_FILE_NAME                                                               = 3121;
+exports.ER_BOOST_GEOMETRY_INCONSISTENT_TURNS_EXCEPTION                                   = 3122;
+exports.ER_WARN_OPTIMIZER_HINT_SYNTAX_ERROR                                              = 3123;
+exports.ER_WARN_BAD_MAX_EXECUTION_TIME                                                   = 3124;
+exports.ER_WARN_UNSUPPORTED_MAX_EXECUTION_TIME                                           = 3125;
+exports.ER_WARN_CONFLICTING_HINT                                                         = 3126;
+exports.ER_WARN_UNKNOWN_QB_NAME                                                          = 3127;
+exports.ER_UNRESOLVED_HINT_NAME                                                          = 3128;
+exports.ER_WARN_ON_MODIFYING_GTID_EXECUTED_TABLE                                         = 3129;
+exports.ER_PLUGGABLE_PROTOCOL_COMMAND_NOT_SUPPORTED                                      = 3130;
+exports.ER_LOCKING_SERVICE_WRONG_NAME                                                    = 3131;
+exports.ER_LOCKING_SERVICE_DEADLOCK                                                      = 3132;
+exports.ER_LOCKING_SERVICE_TIMEOUT                                                       = 3133;
+exports.ER_GIS_MAX_POINTS_IN_GEOMETRY_OVERFLOWED                                         = 3134;
+exports.ER_SQL_MODE_MERGED                                                               = 3135;
+exports.ER_VTOKEN_PLUGIN_TOKEN_MISMATCH                                                  = 3136;
+exports.ER_VTOKEN_PLUGIN_TOKEN_NOT_FOUND                                                 = 3137;
+exports.ER_CANT_SET_VARIABLE_WHEN_OWNING_GTID                                            = 3138;
+exports.ER_SLAVE_CHANNEL_OPERATION_NOT_ALLOWED                                           = 3139;
+exports.ER_INVALID_JSON_TEXT                                                             = 3140;
+exports.ER_INVALID_JSON_TEXT_IN_PARAM                                                    = 3141;
+exports.ER_INVALID_JSON_BINARY_DATA                                                      = 3142;
+exports.ER_INVALID_JSON_PATH                                                             = 3143;
+exports.ER_INVALID_JSON_CHARSET                                                          = 3144;
+exports.ER_INVALID_JSON_CHARSET_IN_FUNCTION                                              = 3145;
+exports.ER_INVALID_TYPE_FOR_JSON                                                         = 3146;
+exports.ER_INVALID_CAST_TO_JSON                                                          = 3147;
+exports.ER_INVALID_JSON_PATH_CHARSET                                                     = 3148;
+exports.ER_INVALID_JSON_PATH_WILDCARD                                                    = 3149;
+exports.ER_JSON_VALUE_TOO_BIG                                                            = 3150;
+exports.ER_JSON_KEY_TOO_BIG                                                              = 3151;
+exports.ER_JSON_USED_AS_KEY                                                              = 3152;
+exports.ER_JSON_VACUOUS_PATH                                                             = 3153;
+exports.ER_JSON_BAD_ONE_OR_ALL_ARG                                                       = 3154;
+exports.ER_NUMERIC_JSON_VALUE_OUT_OF_RANGE                                               = 3155;
+exports.ER_INVALID_JSON_VALUE_FOR_CAST                                                   = 3156;
+exports.ER_JSON_DOCUMENT_TOO_DEEP                                                        = 3157;
+exports.ER_JSON_DOCUMENT_NULL_KEY                                                        = 3158;
+exports.ER_SECURE_TRANSPORT_REQUIRED                                                     = 3159;
+exports.ER_NO_SECURE_TRANSPORTS_CONFIGURED                                               = 3160;
+exports.ER_DISABLED_STORAGE_ENGINE                                                       = 3161;
+exports.ER_USER_DOES_NOT_EXIST                                                           = 3162;
+exports.ER_USER_ALREADY_EXISTS                                                           = 3163;
+exports.ER_AUDIT_API_ABORT                                                               = 3164;
+exports.ER_INVALID_JSON_PATH_ARRAY_CELL                                                  = 3165;
+exports.ER_BUFPOOL_RESIZE_INPROGRESS                                                     = 3166;
+exports.ER_FEATURE_DISABLED_SEE_DOC                                                      = 3167;
+exports.ER_SERVER_ISNT_AVAILABLE                                                         = 3168;
+exports.ER_SESSION_WAS_KILLED                                                            = 3169;
+exports.ER_CAPACITY_EXCEEDED                                                             = 3170;
+exports.ER_CAPACITY_EXCEEDED_IN_RANGE_OPTIMIZER                                          = 3171;
+exports.ER_TABLE_NEEDS_UPG_PART                                                          = 3172;
+exports.ER_CANT_WAIT_FOR_EXECUTED_GTID_SET_WHILE_OWNING_A_GTID                           = 3173;
+exports.ER_CANNOT_ADD_FOREIGN_BASE_COL_VIRTUAL                                           = 3174;
+exports.ER_CANNOT_CREATE_VIRTUAL_INDEX_CONSTRAINT                                        = 3175;
+exports.ER_ERROR_ON_MODIFYING_GTID_EXECUTED_TABLE                                        = 3176;
+exports.ER_LOCK_REFUSED_BY_ENGINE                                                        = 3177;
+exports.ER_UNSUPPORTED_ALTER_ONLINE_ON_VIRTUAL_COLUMN                                    = 3178;
+exports.ER_MASTER_KEY_ROTATION_NOT_SUPPORTED_BY_SE                                       = 3179;
+exports.ER_MASTER_KEY_ROTATION_ERROR_BY_SE                                               = 3180;
+exports.ER_MASTER_KEY_ROTATION_BINLOG_FAILED                                             = 3181;
+exports.ER_MASTER_KEY_ROTATION_SE_UNAVAILABLE                                            = 3182;
+exports.ER_TABLESPACE_CANNOT_ENCRYPT                                                     = 3183;
+exports.ER_INVALID_ENCRYPTION_OPTION                                                     = 3184;
+exports.ER_CANNOT_FIND_KEY_IN_KEYRING                                                    = 3185;
+exports.ER_CAPACITY_EXCEEDED_IN_PARSER                                                   = 3186;
+exports.ER_UNSUPPORTED_ALTER_ENCRYPTION_INPLACE                                          = 3187;
+exports.ER_KEYRING_UDF_KEYRING_SERVICE_ERROR                                             = 3188;
+exports.ER_USER_COLUMN_OLD_LENGTH                                                        = 3189;
+exports.ER_CANT_RESET_MASTER                                                             = 3190;
+exports.ER_GROUP_REPLICATION_MAX_GROUP_SIZE                                              = 3191;
+exports.ER_CANNOT_ADD_FOREIGN_BASE_COL_STORED                                            = 3192;
+exports.ER_TABLE_REFERENCED                                                              = 3193;
+exports.ER_PARTITION_ENGINE_DEPRECATED_FOR_TABLE                                         = 3194;
+exports.ER_WARN_USING_GEOMFROMWKB_TO_SET_SRID_ZERO                                       = 3195;
+exports.ER_WARN_USING_GEOMFROMWKB_TO_SET_SRID                                            = 3196;
+exports.ER_XA_RETRY                                                                      = 3197;
+exports.ER_KEYRING_AWS_UDF_AWS_KMS_ERROR                                                 = 3198;
+exports.ER_BINLOG_UNSAFE_XA                                                              = 3199;
+exports.ER_UDF_ERROR                                                                     = 3200;
+exports.ER_KEYRING_MIGRATION_FAILURE                                                     = 3201;
+exports.ER_KEYRING_ACCESS_DENIED_ERROR                                                   = 3202;
+exports.ER_KEYRING_MIGRATION_STATUS                                                      = 3203;
+
+// Lookup-by-number table
+exports[1]    = 'EE_CANTCREATEFILE';
+exports[2]    = 'EE_READ';
+exports[3]    = 'EE_WRITE';
+exports[4]    = 'EE_BADCLOSE';
+exports[5]    = 'EE_OUTOFMEMORY';
+exports[6]    = 'EE_DELETE';
+exports[7]    = 'EE_LINK';
+exports[9]    = 'EE_EOFERR';
+exports[10]   = 'EE_CANTLOCK';
+exports[11]   = 'EE_CANTUNLOCK';
+exports[12]   = 'EE_DIR';
+exports[13]   = 'EE_STAT';
+exports[14]   = 'EE_CANT_CHSIZE';
+exports[15]   = 'EE_CANT_OPEN_STREAM';
+exports[16]   = 'EE_GETWD';
+exports[17]   = 'EE_SETWD';
+exports[18]   = 'EE_LINK_WARNING';
+exports[19]   = 'EE_OPEN_WARNING';
+exports[20]   = 'EE_DISK_FULL';
+exports[21]   = 'EE_CANT_MKDIR';
+exports[22]   = 'EE_UNKNOWN_CHARSET';
+exports[23]   = 'EE_OUT_OF_FILERESOURCES';
+exports[24]   = 'EE_CANT_READLINK';
+exports[25]   = 'EE_CANT_SYMLINK';
+exports[26]   = 'EE_REALPATH';
+exports[27]   = 'EE_SYNC';
+exports[28]   = 'EE_UNKNOWN_COLLATION';
+exports[29]   = 'EE_FILENOTFOUND';
+exports[30]   = 'EE_FILE_NOT_CLOSED';
+exports[31]   = 'EE_CHANGE_OWNERSHIP';
+exports[32]   = 'EE_CHANGE_PERMISSIONS';
+exports[33]   = 'EE_CANT_SEEK';
+exports[34]   = 'EE_CAPACITY_EXCEEDED';
+exports[120]  = 'HA_ERR_KEY_NOT_FOUND';
+exports[121]  = 'HA_ERR_FOUND_DUPP_KEY';
+exports[122]  = 'HA_ERR_INTERNAL_ERROR';
+exports[123]  = 'HA_ERR_RECORD_CHANGED';
+exports[124]  = 'HA_ERR_WRONG_INDEX';
+exports[126]  = 'HA_ERR_CRASHED';
+exports[127]  = 'HA_ERR_WRONG_IN_RECORD';
+exports[128]  = 'HA_ERR_OUT_OF_MEM';
+exports[130]  = 'HA_ERR_NOT_A_TABLE';
+exports[131]  = 'HA_ERR_WRONG_COMMAND';
+exports[132]  = 'HA_ERR_OLD_FILE';
+exports[133]  = 'HA_ERR_NO_ACTIVE_RECORD';
+exports[134]  = 'HA_ERR_RECORD_DELETED';
+exports[135]  = 'HA_ERR_RECORD_FILE_FULL';
+exports[136]  = 'HA_ERR_INDEX_FILE_FULL';
+exports[137]  = 'HA_ERR_END_OF_FILE';
+exports[138]  = 'HA_ERR_UNSUPPORTED';
+exports[139]  = 'HA_ERR_TOO_BIG_ROW';
+exports[140]  = 'HA_WRONG_CREATE_OPTION';
+exports[141]  = 'HA_ERR_FOUND_DUPP_UNIQUE';
+exports[142]  = 'HA_ERR_UNKNOWN_CHARSET';
+exports[143]  = 'HA_ERR_WRONG_MRG_TABLE_DEF';
+exports[144]  = 'HA_ERR_CRASHED_ON_REPAIR';
+exports[145]  = 'HA_ERR_CRASHED_ON_USAGE';
+exports[146]  = 'HA_ERR_LOCK_WAIT_TIMEOUT';
+exports[147]  = 'HA_ERR_LOCK_TABLE_FULL';
+exports[148]  = 'HA_ERR_READ_ONLY_TRANSACTION';
+exports[149]  = 'HA_ERR_LOCK_DEADLOCK';
+exports[150]  = 'HA_ERR_CANNOT_ADD_FOREIGN';
+exports[151]  = 'HA_ERR_NO_REFERENCED_ROW';
+exports[152]  = 'HA_ERR_ROW_IS_REFERENCED';
+exports[153]  = 'HA_ERR_NO_SAVEPOINT';
+exports[154]  = 'HA_ERR_NON_UNIQUE_BLOCK_SIZE';
+exports[155]  = 'HA_ERR_NO_SUCH_TABLE';
+exports[156]  = 'HA_ERR_TABLE_EXIST';
+exports[157]  = 'HA_ERR_NO_CONNECTION';
+exports[158]  = 'HA_ERR_NULL_IN_SPATIAL';
+exports[159]  = 'HA_ERR_TABLE_DEF_CHANGED';
+exports[160]  = 'HA_ERR_NO_PARTITION_FOUND';
+exports[161]  = 'HA_ERR_RBR_LOGGING_FAILED';
+exports[162]  = 'HA_ERR_DROP_INDEX_FK';
+exports[163]  = 'HA_ERR_FOREIGN_DUPLICATE_KEY';
+exports[164]  = 'HA_ERR_TABLE_NEEDS_UPGRADE';
+exports[165]  = 'HA_ERR_TABLE_READONLY';
+exports[166]  = 'HA_ERR_AUTOINC_READ_FAILED';
+exports[167]  = 'HA_ERR_AUTOINC_ERANGE';
+exports[168]  = 'HA_ERR_GENERIC';
+exports[169]  = 'HA_ERR_RECORD_IS_THE_SAME';
+exports[170]  = 'HA_ERR_LOGGING_IMPOSSIBLE';
+exports[171]  = 'HA_ERR_CORRUPT_EVENT';
+exports[172]  = 'HA_ERR_NEW_FILE';
+exports[173]  = 'HA_ERR_ROWS_EVENT_APPLY';
+exports[174]  = 'HA_ERR_INITIALIZATION';
+exports[175]  = 'HA_ERR_FILE_TOO_SHORT';
+exports[176]  = 'HA_ERR_WRONG_CRC';
+exports[177]  = 'HA_ERR_TOO_MANY_CONCURRENT_TRXS';
+exports[178]  = 'HA_ERR_NOT_IN_LOCK_PARTITIONS';
+exports[179]  = 'HA_ERR_INDEX_COL_TOO_LONG';
+exports[180]  = 'HA_ERR_INDEX_CORRUPT';
+exports[181]  = 'HA_ERR_UNDO_REC_TOO_BIG';
+exports[182]  = 'HA_FTS_INVALID_DOCID';
+exports[183]  = 'HA_ERR_TABLE_IN_FK_CHECK';
+exports[184]  = 'HA_ERR_TABLESPACE_EXISTS';
+exports[185]  = 'HA_ERR_TOO_MANY_FIELDS';
+exports[186]  = 'HA_ERR_ROW_IN_WRONG_PARTITION';
+exports[187]  = 'HA_ERR_INNODB_READ_ONLY';
+exports[188]  = 'HA_ERR_FTS_EXCEED_RESULT_CACHE_LIMIT';
+exports[189]  = 'HA_ERR_TEMP_FILE_WRITE_FAILURE';
+exports[190]  = 'HA_ERR_INNODB_FORCED_RECOVERY';
+exports[191]  = 'HA_ERR_FTS_TOO_MANY_WORDS_IN_PHRASE';
+exports[192]  = 'HA_ERR_FK_DEPTH_EXCEEDED';
+exports[193]  = 'HA_MISSING_CREATE_OPTION';
+exports[194]  = 'HA_ERR_SE_OUT_OF_MEMORY';
+exports[195]  = 'HA_ERR_TABLE_CORRUPT';
+exports[196]  = 'HA_ERR_QUERY_INTERRUPTED';
+exports[197]  = 'HA_ERR_TABLESPACE_MISSING';
+exports[198]  = 'HA_ERR_TABLESPACE_IS_NOT_EMPTY';
+exports[199]  = 'HA_ERR_WRONG_FILE_NAME';
+exports[200]  = 'HA_ERR_NOT_ALLOWED_COMMAND';
+exports[201]  = 'HA_ERR_COMPUTE_FAILED';
+exports[1000] = 'ER_HASHCHK';
+exports[1001] = 'ER_NISAMCHK';
+exports[1002] = 'ER_NO';
+exports[1003] = 'ER_YES';
+exports[1004] = 'ER_CANT_CREATE_FILE';
+exports[1005] = 'ER_CANT_CREATE_TABLE';
+exports[1006] = 'ER_CANT_CREATE_DB';
+exports[1007] = 'ER_DB_CREATE_EXISTS';
+exports[1008] = 'ER_DB_DROP_EXISTS';
+exports[1009] = 'ER_DB_DROP_DELETE';
+exports[1010] = 'ER_DB_DROP_RMDIR';
+exports[1011] = 'ER_CANT_DELETE_FILE';
+exports[1012] = 'ER_CANT_FIND_SYSTEM_REC';
+exports[1013] = 'ER_CANT_GET_STAT';
+exports[1014] = 'ER_CANT_GET_WD';
+exports[1015] = 'ER_CANT_LOCK';
+exports[1016] = 'ER_CANT_OPEN_FILE';
+exports[1017] = 'ER_FILE_NOT_FOUND';
+exports[1018] = 'ER_CANT_READ_DIR';
+exports[1019] = 'ER_CANT_SET_WD';
+exports[1020] = 'ER_CHECKREAD';
+exports[1021] = 'ER_DISK_FULL';
+exports[1022] = 'ER_DUP_KEY';
+exports[1023] = 'ER_ERROR_ON_CLOSE';
+exports[1024] = 'ER_ERROR_ON_READ';
+exports[1025] = 'ER_ERROR_ON_RENAME';
+exports[1026] = 'ER_ERROR_ON_WRITE';
+exports[1027] = 'ER_FILE_USED';
+exports[1028] = 'ER_FILSORT_ABORT';
+exports[1029] = 'ER_FORM_NOT_FOUND';
+exports[1030] = 'ER_GET_ERRNO';
+exports[1031] = 'ER_ILLEGAL_HA';
+exports[1032] = 'ER_KEY_NOT_FOUND';
+exports[1033] = 'ER_NOT_FORM_FILE';
+exports[1034] = 'ER_NOT_KEYFILE';
+exports[1035] = 'ER_OLD_KEYFILE';
+exports[1036] = 'ER_OPEN_AS_READONLY';
+exports[1037] = 'ER_OUTOFMEMORY';
+exports[1038] = 'ER_OUT_OF_SORTMEMORY';
+exports[1039] = 'ER_UNEXPECTED_EOF';
+exports[1040] = 'ER_CON_COUNT_ERROR';
+exports[1041] = 'ER_OUT_OF_RESOURCES';
+exports[1042] = 'ER_BAD_HOST_ERROR';
+exports[1043] = 'ER_HANDSHAKE_ERROR';
+exports[1044] = 'ER_DBACCESS_DENIED_ERROR';
+exports[1045] = 'ER_ACCESS_DENIED_ERROR';
+exports[1046] = 'ER_NO_DB_ERROR';
+exports[1047] = 'ER_UNKNOWN_COM_ERROR';
+exports[1048] = 'ER_BAD_NULL_ERROR';
+exports[1049] = 'ER_BAD_DB_ERROR';
+exports[1050] = 'ER_TABLE_EXISTS_ERROR';
+exports[1051] = 'ER_BAD_TABLE_ERROR';
+exports[1052] = 'ER_NON_UNIQ_ERROR';
+exports[1053] = 'ER_SERVER_SHUTDOWN';
+exports[1054] = 'ER_BAD_FIELD_ERROR';
+exports[1055] = 'ER_WRONG_FIELD_WITH_GROUP';
+exports[1056] = 'ER_WRONG_GROUP_FIELD';
+exports[1057] = 'ER_WRONG_SUM_SELECT';
+exports[1058] = 'ER_WRONG_VALUE_COUNT';
+exports[1059] = 'ER_TOO_LONG_IDENT';
+exports[1060] = 'ER_DUP_FIELDNAME';
+exports[1061] = 'ER_DUP_KEYNAME';
+exports[1062] = 'ER_DUP_ENTRY';
+exports[1063] = 'ER_WRONG_FIELD_SPEC';
+exports[1064] = 'ER_PARSE_ERROR';
+exports[1065] = 'ER_EMPTY_QUERY';
+exports[1066] = 'ER_NONUNIQ_TABLE';
+exports[1067] = 'ER_INVALID_DEFAULT';
+exports[1068] = 'ER_MULTIPLE_PRI_KEY';
+exports[1069] = 'ER_TOO_MANY_KEYS';
+exports[1070] = 'ER_TOO_MANY_KEY_PARTS';
+exports[1071] = 'ER_TOO_LONG_KEY';
+exports[1072] = 'ER_KEY_COLUMN_DOES_NOT_EXITS';
+exports[1073] = 'ER_BLOB_USED_AS_KEY';
+exports[1074] = 'ER_TOO_BIG_FIELDLENGTH';
+exports[1075] = 'ER_WRONG_AUTO_KEY';
+exports[1076] = 'ER_READY';
+exports[1077] = 'ER_NORMAL_SHUTDOWN';
+exports[1078] = 'ER_GOT_SIGNAL';
+exports[1079] = 'ER_SHUTDOWN_COMPLETE';
+exports[1080] = 'ER_FORCING_CLOSE';
+exports[1081] = 'ER_IPSOCK_ERROR';
+exports[1082] = 'ER_NO_SUCH_INDEX';
+exports[1083] = 'ER_WRONG_FIELD_TERMINATORS';
+exports[1084] = 'ER_BLOBS_AND_NO_TERMINATED';
+exports[1085] = 'ER_TEXTFILE_NOT_READABLE';
+exports[1086] = 'ER_FILE_EXISTS_ERROR';
+exports[1087] = 'ER_LOAD_INFO';
+exports[1088] = 'ER_ALTER_INFO';
+exports[1089] = 'ER_WRONG_SUB_KEY';
+exports[1090] = 'ER_CANT_REMOVE_ALL_FIELDS';
+exports[1091] = 'ER_CANT_DROP_FIELD_OR_KEY';
+exports[1092] = 'ER_INSERT_INFO';
+exports[1093] = 'ER_UPDATE_TABLE_USED';
+exports[1094] = 'ER_NO_SUCH_THREAD';
+exports[1095] = 'ER_KILL_DENIED_ERROR';
+exports[1096] = 'ER_NO_TABLES_USED';
+exports[1097] = 'ER_TOO_BIG_SET';
+exports[1098] = 'ER_NO_UNIQUE_LOGFILE';
+exports[1099] = 'ER_TABLE_NOT_LOCKED_FOR_WRITE';
+exports[1100] = 'ER_TABLE_NOT_LOCKED';
+exports[1101] = 'ER_BLOB_CANT_HAVE_DEFAULT';
+exports[1102] = 'ER_WRONG_DB_NAME';
+exports[1103] = 'ER_WRONG_TABLE_NAME';
+exports[1104] = 'ER_TOO_BIG_SELECT';
+exports[1105] = 'ER_UNKNOWN_ERROR';
+exports[1106] = 'ER_UNKNOWN_PROCEDURE';
+exports[1107] = 'ER_WRONG_PARAMCOUNT_TO_PROCEDURE';
+exports[1108] = 'ER_WRONG_PARAMETERS_TO_PROCEDURE';
+exports[1109] = 'ER_UNKNOWN_TABLE';
+exports[1110] = 'ER_FIELD_SPECIFIED_TWICE';
+exports[1111] = 'ER_INVALID_GROUP_FUNC_USE';
+exports[1112] = 'ER_UNSUPPORTED_EXTENSION';
+exports[1113] = 'ER_TABLE_MUST_HAVE_COLUMNS';
+exports[1114] = 'ER_RECORD_FILE_FULL';
+exports[1115] = 'ER_UNKNOWN_CHARACTER_SET';
+exports[1116] = 'ER_TOO_MANY_TABLES';
+exports[1117] = 'ER_TOO_MANY_FIELDS';
+exports[1118] = 'ER_TOO_BIG_ROWSIZE';
+exports[1119] = 'ER_STACK_OVERRUN';
+exports[1120] = 'ER_WRONG_OUTER_JOIN';
+exports[1121] = 'ER_NULL_COLUMN_IN_INDEX';
+exports[1122] = 'ER_CANT_FIND_UDF';
+exports[1123] = 'ER_CANT_INITIALIZE_UDF';
+exports[1124] = 'ER_UDF_NO_PATHS';
+exports[1125] = 'ER_UDF_EXISTS';
+exports[1126] = 'ER_CANT_OPEN_LIBRARY';
+exports[1127] = 'ER_CANT_FIND_DL_ENTRY';
+exports[1128] = 'ER_FUNCTION_NOT_DEFINED';
+exports[1129] = 'ER_HOST_IS_BLOCKED';
+exports[1130] = 'ER_HOST_NOT_PRIVILEGED';
+exports[1131] = 'ER_PASSWORD_ANONYMOUS_USER';
+exports[1132] = 'ER_PASSWORD_NOT_ALLOWED';
+exports[1133] = 'ER_PASSWORD_NO_MATCH';
+exports[1134] = 'ER_UPDATE_INFO';
+exports[1135] = 'ER_CANT_CREATE_THREAD';
+exports[1136] = 'ER_WRONG_VALUE_COUNT_ON_ROW';
+exports[1137] = 'ER_CANT_REOPEN_TABLE';
+exports[1138] = 'ER_INVALID_USE_OF_NULL';
+exports[1139] = 'ER_REGEXP_ERROR';
+exports[1140] = 'ER_MIX_OF_GROUP_FUNC_AND_FIELDS';
+exports[1141] = 'ER_NONEXISTING_GRANT';
+exports[1142] = 'ER_TABLEACCESS_DENIED_ERROR';
+exports[1143] = 'ER_COLUMNACCESS_DENIED_ERROR';
+exports[1144] = 'ER_ILLEGAL_GRANT_FOR_TABLE';
+exports[1145] = 'ER_GRANT_WRONG_HOST_OR_USER';
+exports[1146] = 'ER_NO_SUCH_TABLE';
+exports[1147] = 'ER_NONEXISTING_TABLE_GRANT';
+exports[1148] = 'ER_NOT_ALLOWED_COMMAND';
+exports[1149] = 'ER_SYNTAX_ERROR';
+exports[1150] = 'ER_DELAYED_CANT_CHANGE_LOCK';
+exports[1151] = 'ER_TOO_MANY_DELAYED_THREADS';
+exports[1152] = 'ER_ABORTING_CONNECTION';
+exports[1153] = 'ER_NET_PACKET_TOO_LARGE';
+exports[1154] = 'ER_NET_READ_ERROR_FROM_PIPE';
+exports[1155] = 'ER_NET_FCNTL_ERROR';
+exports[1156] = 'ER_NET_PACKETS_OUT_OF_ORDER';
+exports[1157] = 'ER_NET_UNCOMPRESS_ERROR';
+exports[1158] = 'ER_NET_READ_ERROR';
+exports[1159] = 'ER_NET_READ_INTERRUPTED';
+exports[1160] = 'ER_NET_ERROR_ON_WRITE';
+exports[1161] = 'ER_NET_WRITE_INTERRUPTED';
+exports[1162] = 'ER_TOO_LONG_STRING';
+exports[1163] = 'ER_TABLE_CANT_HANDLE_BLOB';
+exports[1164] = 'ER_TABLE_CANT_HANDLE_AUTO_INCREMENT';
+exports[1165] = 'ER_DELAYED_INSERT_TABLE_LOCKED';
+exports[1166] = 'ER_WRONG_COLUMN_NAME';
+exports[1167] = 'ER_WRONG_KEY_COLUMN';
+exports[1168] = 'ER_WRONG_MRG_TABLE';
+exports[1169] = 'ER_DUP_UNIQUE';
+exports[1170] = 'ER_BLOB_KEY_WITHOUT_LENGTH';
+exports[1171] = 'ER_PRIMARY_CANT_HAVE_NULL';
+exports[1172] = 'ER_TOO_MANY_ROWS';
+exports[1173] = 'ER_REQUIRES_PRIMARY_KEY';
+exports[1174] = 'ER_NO_RAID_COMPILED';
+exports[1175] = 'ER_UPDATE_WITHOUT_KEY_IN_SAFE_MODE';
+exports[1176] = 'ER_KEY_DOES_NOT_EXITS';
+exports[1177] = 'ER_CHECK_NO_SUCH_TABLE';
+exports[1178] = 'ER_CHECK_NOT_IMPLEMENTED';
+exports[1179] = 'ER_CANT_DO_THIS_DURING_AN_TRANSACTION';
+exports[1180] = 'ER_ERROR_DURING_COMMIT';
+exports[1181] = 'ER_ERROR_DURING_ROLLBACK';
+exports[1182] = 'ER_ERROR_DURING_FLUSH_LOGS';
+exports[1183] = 'ER_ERROR_DURING_CHECKPOINT';
+exports[1184] = 'ER_NEW_ABORTING_CONNECTION';
+exports[1185] = 'ER_DUMP_NOT_IMPLEMENTED';
+exports[1186] = 'ER_FLUSH_MASTER_BINLOG_CLOSED';
+exports[1187] = 'ER_INDEX_REBUILD';
+exports[1188] = 'ER_MASTER';
+exports[1189] = 'ER_MASTER_NET_READ';
+exports[1190] = 'ER_MASTER_NET_WRITE';
+exports[1191] = 'ER_FT_MATCHING_KEY_NOT_FOUND';
+exports[1192] = 'ER_LOCK_OR_ACTIVE_TRANSACTION';
+exports[1193] = 'ER_UNKNOWN_SYSTEM_VARIABLE';
+exports[1194] = 'ER_CRASHED_ON_USAGE';
+exports[1195] = 'ER_CRASHED_ON_REPAIR';
+exports[1196] = 'ER_WARNING_NOT_COMPLETE_ROLLBACK';
+exports[1197] = 'ER_TRANS_CACHE_FULL';
+exports[1198] = 'ER_SLAVE_MUST_STOP';
+exports[1199] = 'ER_SLAVE_NOT_RUNNING';
+exports[1200] = 'ER_BAD_SLAVE';
+exports[1201] = 'ER_MASTER_INFO';
+exports[1202] = 'ER_SLAVE_THREAD';
+exports[1203] = 'ER_TOO_MANY_USER_CONNECTIONS';
+exports[1204] = 'ER_SET_CONSTANTS_ONLY';
+exports[1205] = 'ER_LOCK_WAIT_TIMEOUT';
+exports[1206] = 'ER_LOCK_TABLE_FULL';
+exports[1207] = 'ER_READ_ONLY_TRANSACTION';
+exports[1208] = 'ER_DROP_DB_WITH_READ_LOCK';
+exports[1209] = 'ER_CREATE_DB_WITH_READ_LOCK';
+exports[1210] = 'ER_WRONG_ARGUMENTS';
+exports[1211] = 'ER_NO_PERMISSION_TO_CREATE_USER';
+exports[1212] = 'ER_UNION_TABLES_IN_DIFFERENT_DIR';
+exports[1213] = 'ER_LOCK_DEADLOCK';
+exports[1214] = 'ER_TABLE_CANT_HANDLE_FT';
+exports[1215] = 'ER_CANNOT_ADD_FOREIGN';
+exports[1216] = 'ER_NO_REFERENCED_ROW';
+exports[1217] = 'ER_ROW_IS_REFERENCED';
+exports[1218] = 'ER_CONNECT_TO_MASTER';
+exports[1219] = 'ER_QUERY_ON_MASTER';
+exports[1220] = 'ER_ERROR_WHEN_EXECUTING_COMMAND';
+exports[1221] = 'ER_WRONG_USAGE';
+exports[1222] = 'ER_WRONG_NUMBER_OF_COLUMNS_IN_SELECT';
+exports[1223] = 'ER_CANT_UPDATE_WITH_READLOCK';
+exports[1224] = 'ER_MIXING_NOT_ALLOWED';
+exports[1225] = 'ER_DUP_ARGUMENT';
+exports[1226] = 'ER_USER_LIMIT_REACHED';
+exports[1227] = 'ER_SPECIFIC_ACCESS_DENIED_ERROR';
+exports[1228] = 'ER_LOCAL_VARIABLE';
+exports[1229] = 'ER_GLOBAL_VARIABLE';
+exports[1230] = 'ER_NO_DEFAULT';
+exports[1231] = 'ER_WRONG_VALUE_FOR_VAR';
+exports[1232] = 'ER_WRONG_TYPE_FOR_VAR';
+exports[1233] = 'ER_VAR_CANT_BE_READ';
+exports[1234] = 'ER_CANT_USE_OPTION_HERE';
+exports[1235] = 'ER_NOT_SUPPORTED_YET';
+exports[1236] = 'ER_MASTER_FATAL_ERROR_READING_BINLOG';
+exports[1237] = 'ER_SLAVE_IGNORED_TABLE';
+exports[1238] = 'ER_INCORRECT_GLOBAL_LOCAL_VAR';
+exports[1239] = 'ER_WRONG_FK_DEF';
+exports[1240] = 'ER_KEY_REF_DO_NOT_MATCH_TABLE_REF';
+exports[1241] = 'ER_OPERAND_COLUMNS';
+exports[1242] = 'ER_SUBQUERY_NO_1_ROW';
+exports[1243] = 'ER_UNKNOWN_STMT_HANDLER';
+exports[1244] = 'ER_CORRUPT_HELP_DB';
+exports[1245] = 'ER_CYCLIC_REFERENCE';
+exports[1246] = 'ER_AUTO_CONVERT';
+exports[1247] = 'ER_ILLEGAL_REFERENCE';
+exports[1248] = 'ER_DERIVED_MUST_HAVE_ALIAS';
+exports[1249] = 'ER_SELECT_REDUCED';
+exports[1250] = 'ER_TABLENAME_NOT_ALLOWED_HERE';
+exports[1251] = 'ER_NOT_SUPPORTED_AUTH_MODE';
+exports[1252] = 'ER_SPATIAL_CANT_HAVE_NULL';
+exports[1253] = 'ER_COLLATION_CHARSET_MISMATCH';
+exports[1254] = 'ER_SLAVE_WAS_RUNNING';
+exports[1255] = 'ER_SLAVE_WAS_NOT_RUNNING';
+exports[1256] = 'ER_TOO_BIG_FOR_UNCOMPRESS';
+exports[1257] = 'ER_ZLIB_Z_MEM_ERROR';
+exports[1258] = 'ER_ZLIB_Z_BUF_ERROR';
+exports[1259] = 'ER_ZLIB_Z_DATA_ERROR';
+exports[1260] = 'ER_CUT_VALUE_GROUP_CONCAT';
+exports[1261] = 'ER_WARN_TOO_FEW_RECORDS';
+exports[1262] = 'ER_WARN_TOO_MANY_RECORDS';
+exports[1263] = 'ER_WARN_NULL_TO_NOTNULL';
+exports[1264] = 'ER_WARN_DATA_OUT_OF_RANGE';
+exports[1265] = 'WARN_DATA_TRUNCATED';
+exports[1266] = 'ER_WARN_USING_OTHER_HANDLER';
+exports[1267] = 'ER_CANT_AGGREGATE_2COLLATIONS';
+exports[1268] = 'ER_DROP_USER';
+exports[1269] = 'ER_REVOKE_GRANTS';
+exports[1270] = 'ER_CANT_AGGREGATE_3COLLATIONS';
+exports[1271] = 'ER_CANT_AGGREGATE_NCOLLATIONS';
+exports[1272] = 'ER_VARIABLE_IS_NOT_STRUCT';
+exports[1273] = 'ER_UNKNOWN_COLLATION';
+exports[1274] = 'ER_SLAVE_IGNORED_SSL_PARAMS';
+exports[1275] = 'ER_SERVER_IS_IN_SECURE_AUTH_MODE';
+exports[1276] = 'ER_WARN_FIELD_RESOLVED';
+exports[1277] = 'ER_BAD_SLAVE_UNTIL_COND';
+exports[1278] = 'ER_MISSING_SKIP_SLAVE';
+exports[1279] = 'ER_UNTIL_COND_IGNORED';
+exports[1280] = 'ER_WRONG_NAME_FOR_INDEX';
+exports[1281] = 'ER_WRONG_NAME_FOR_CATALOG';
+exports[1282] = 'ER_WARN_QC_RESIZE';
+exports[1283] = 'ER_BAD_FT_COLUMN';
+exports[1284] = 'ER_UNKNOWN_KEY_CACHE';
+exports[1285] = 'ER_WARN_HOSTNAME_WONT_WORK';
+exports[1286] = 'ER_UNKNOWN_STORAGE_ENGINE';
+exports[1287] = 'ER_WARN_DEPRECATED_SYNTAX';
+exports[1288] = 'ER_NON_UPDATABLE_TABLE';
+exports[1289] = 'ER_FEATURE_DISABLED';
+exports[1290] = 'ER_OPTION_PREVENTS_STATEMENT';
+exports[1291] = 'ER_DUPLICATED_VALUE_IN_TYPE';
+exports[1292] = 'ER_TRUNCATED_WRONG_VALUE';
+exports[1293] = 'ER_TOO_MUCH_AUTO_TIMESTAMP_COLS';
+exports[1294] = 'ER_INVALID_ON_UPDATE';
+exports[1295] = 'ER_UNSUPPORTED_PS';
+exports[1296] = 'ER_GET_ERRMSG';
+exports[1297] = 'ER_GET_TEMPORARY_ERRMSG';
+exports[1298] = 'ER_UNKNOWN_TIME_ZONE';
+exports[1299] = 'ER_WARN_INVALID_TIMESTAMP';
+exports[1300] = 'ER_INVALID_CHARACTER_STRING';
+exports[1301] = 'ER_WARN_ALLOWED_PACKET_OVERFLOWED';
+exports[1302] = 'ER_CONFLICTING_DECLARATIONS';
+exports[1303] = 'ER_SP_NO_RECURSIVE_CREATE';
+exports[1304] = 'ER_SP_ALREADY_EXISTS';
+exports[1305] = 'ER_SP_DOES_NOT_EXIST';
+exports[1306] = 'ER_SP_DROP_FAILED';
+exports[1307] = 'ER_SP_STORE_FAILED';
+exports[1308] = 'ER_SP_LILABEL_MISMATCH';
+exports[1309] = 'ER_SP_LABEL_REDEFINE';
+exports[1310] = 'ER_SP_LABEL_MISMATCH';
+exports[1311] = 'ER_SP_UNINIT_VAR';
+exports[1312] = 'ER_SP_BADSELECT';
+exports[1313] = 'ER_SP_BADRETURN';
+exports[1314] = 'ER_SP_BADSTATEMENT';
+exports[1315] = 'ER_UPDATE_LOG_DEPRECATED_IGNORED';
+exports[1316] = 'ER_UPDATE_LOG_DEPRECATED_TRANSLATED';
+exports[1317] = 'ER_QUERY_INTERRUPTED';
+exports[1318] = 'ER_SP_WRONG_NO_OF_ARGS';
+exports[1319] = 'ER_SP_COND_MISMATCH';
+exports[1320] = 'ER_SP_NORETURN';
+exports[1321] = 'ER_SP_NORETURNEND';
+exports[1322] = 'ER_SP_BAD_CURSOR_QUERY';
+exports[1323] = 'ER_SP_BAD_CURSOR_SELECT';
+exports[1324] = 'ER_SP_CURSOR_MISMATCH';
+exports[1325] = 'ER_SP_CURSOR_ALREADY_OPEN';
+exports[1326] = 'ER_SP_CURSOR_NOT_OPEN';
+exports[1327] = 'ER_SP_UNDECLARED_VAR';
+exports[1328] = 'ER_SP_WRONG_NO_OF_FETCH_ARGS';
+exports[1329] = 'ER_SP_FETCH_NO_DATA';
+exports[1330] = 'ER_SP_DUP_PARAM';
+exports[1331] = 'ER_SP_DUP_VAR';
+exports[1332] = 'ER_SP_DUP_COND';
+exports[1333] = 'ER_SP_DUP_CURS';
+exports[1334] = 'ER_SP_CANT_ALTER';
+exports[1335] = 'ER_SP_SUBSELECT_NYI';
+exports[1336] = 'ER_STMT_NOT_ALLOWED_IN_SF_OR_TRG';
+exports[1337] = 'ER_SP_VARCOND_AFTER_CURSHNDLR';
+exports[1338] = 'ER_SP_CURSOR_AFTER_HANDLER';
+exports[1339] = 'ER_SP_CASE_NOT_FOUND';
+exports[1340] = 'ER_FPARSER_TOO_BIG_FILE';
+exports[1341] = 'ER_FPARSER_BAD_HEADER';
+exports[1342] = 'ER_FPARSER_EOF_IN_COMMENT';
+exports[1343] = 'ER_FPARSER_ERROR_IN_PARAMETER';
+exports[1344] = 'ER_FPARSER_EOF_IN_UNKNOWN_PARAMETER';
+exports[1345] = 'ER_VIEW_NO_EXPLAIN';
+exports[1346] = 'ER_FRM_UNKNOWN_TYPE';
+exports[1347] = 'ER_WRONG_OBJECT';
+exports[1348] = 'ER_NONUPDATEABLE_COLUMN';
+exports[1349] = 'ER_VIEW_SELECT_DERIVED';
+exports[1350] = 'ER_VIEW_SELECT_CLAUSE';
+exports[1351] = 'ER_VIEW_SELECT_VARIABLE';
+exports[1352] = 'ER_VIEW_SELECT_TMPTABLE';
+exports[1353] = 'ER_VIEW_WRONG_LIST';
+exports[1354] = 'ER_WARN_VIEW_MERGE';
+exports[1355] = 'ER_WARN_VIEW_WITHOUT_KEY';
+exports[1356] = 'ER_VIEW_INVALID';
+exports[1357] = 'ER_SP_NO_DROP_SP';
+exports[1358] = 'ER_SP_GOTO_IN_HNDLR';
+exports[1359] = 'ER_TRG_ALREADY_EXISTS';
+exports[1360] = 'ER_TRG_DOES_NOT_EXIST';
+exports[1361] = 'ER_TRG_ON_VIEW_OR_TEMP_TABLE';
+exports[1362] = 'ER_TRG_CANT_CHANGE_ROW';
+exports[1363] = 'ER_TRG_NO_SUCH_ROW_IN_TRG';
+exports[1364] = 'ER_NO_DEFAULT_FOR_FIELD';
+exports[1365] = 'ER_DIVISION_BY_ZERO';
+exports[1366] = 'ER_TRUNCATED_WRONG_VALUE_FOR_FIELD';
+exports[1367] = 'ER_ILLEGAL_VALUE_FOR_TYPE';
+exports[1368] = 'ER_VIEW_NONUPD_CHECK';
+exports[1369] = 'ER_VIEW_CHECK_FAILED';
+exports[1370] = 'ER_PROCACCESS_DENIED_ERROR';
+exports[1371] = 'ER_RELAY_LOG_FAIL';
+exports[1372] = 'ER_PASSWD_LENGTH';
+exports[1373] = 'ER_UNKNOWN_TARGET_BINLOG';
+exports[1374] = 'ER_IO_ERR_LOG_INDEX_READ';
+exports[1375] = 'ER_BINLOG_PURGE_PROHIBITED';
+exports[1376] = 'ER_FSEEK_FAIL';
+exports[1377] = 'ER_BINLOG_PURGE_FATAL_ERR';
+exports[1378] = 'ER_LOG_IN_USE';
+exports[1379] = 'ER_LOG_PURGE_UNKNOWN_ERR';
+exports[1380] = 'ER_RELAY_LOG_INIT';
+exports[1381] = 'ER_NO_BINARY_LOGGING';
+exports[1382] = 'ER_RESERVED_SYNTAX';
+exports[1383] = 'ER_WSAS_FAILED';
+exports[1384] = 'ER_DIFF_GROUPS_PROC';
+exports[1385] = 'ER_NO_GROUP_FOR_PROC';
+exports[1386] = 'ER_ORDER_WITH_PROC';
+exports[1387] = 'ER_LOGGING_PROHIBIT_CHANGING_OF';
+exports[1388] = 'ER_NO_FILE_MAPPING';
+exports[1389] = 'ER_WRONG_MAGIC';
+exports[1390] = 'ER_PS_MANY_PARAM';
+exports[1391] = 'ER_KEY_PART_0';
+exports[1392] = 'ER_VIEW_CHECKSUM';
+exports[1393] = 'ER_VIEW_MULTIUPDATE';
+exports[1394] = 'ER_VIEW_NO_INSERT_FIELD_LIST';
+exports[1395] = 'ER_VIEW_DELETE_MERGE_VIEW';
+exports[1396] = 'ER_CANNOT_USER';
+exports[1397] = 'ER_XAER_NOTA';
+exports[1398] = 'ER_XAER_INVAL';
+exports[1399] = 'ER_XAER_RMFAIL';
+exports[1400] = 'ER_XAER_OUTSIDE';
+exports[1401] = 'ER_XAER_RMERR';
+exports[1402] = 'ER_XA_RBROLLBACK';
+exports[1403] = 'ER_NONEXISTING_PROC_GRANT';
+exports[1404] = 'ER_PROC_AUTO_GRANT_FAIL';
+exports[1405] = 'ER_PROC_AUTO_REVOKE_FAIL';
+exports[1406] = 'ER_DATA_TOO_LONG';
+exports[1407] = 'ER_SP_BAD_SQLSTATE';
+exports[1408] = 'ER_STARTUP';
+exports[1409] = 'ER_LOAD_FROM_FIXED_SIZE_ROWS_TO_VAR';
+exports[1410] = 'ER_CANT_CREATE_USER_WITH_GRANT';
+exports[1411] = 'ER_WRONG_VALUE_FOR_TYPE';
+exports[1412] = 'ER_TABLE_DEF_CHANGED';
+exports[1413] = 'ER_SP_DUP_HANDLER';
+exports[1414] = 'ER_SP_NOT_VAR_ARG';
+exports[1415] = 'ER_SP_NO_RETSET';
+exports[1416] = 'ER_CANT_CREATE_GEOMETRY_OBJECT';
+exports[1417] = 'ER_FAILED_ROUTINE_BREAK_BINLOG';
+exports[1418] = 'ER_BINLOG_UNSAFE_ROUTINE';
+exports[1419] = 'ER_BINLOG_CREATE_ROUTINE_NEED_SUPER';
+exports[1420] = 'ER_EXEC_STMT_WITH_OPEN_CURSOR';
+exports[1421] = 'ER_STMT_HAS_NO_OPEN_CURSOR';
+exports[1422] = 'ER_COMMIT_NOT_ALLOWED_IN_SF_OR_TRG';
+exports[1423] = 'ER_NO_DEFAULT_FOR_VIEW_FIELD';
+exports[1424] = 'ER_SP_NO_RECURSION';
+exports[1425] = 'ER_TOO_BIG_SCALE';
+exports[1426] = 'ER_TOO_BIG_PRECISION';
+exports[1427] = 'ER_M_BIGGER_THAN_D';
+exports[1428] = 'ER_WRONG_LOCK_OF_SYSTEM_TABLE';
+exports[1429] = 'ER_CONNECT_TO_FOREIGN_DATA_SOURCE';
+exports[1430] = 'ER_QUERY_ON_FOREIGN_DATA_SOURCE';
+exports[1431] = 'ER_FOREIGN_DATA_SOURCE_DOESNT_EXIST';
+exports[1432] = 'ER_FOREIGN_DATA_STRING_INVALID_CANT_CREATE';
+exports[1433] = 'ER_FOREIGN_DATA_STRING_INVALID';
+exports[1434] = 'ER_CANT_CREATE_FEDERATED_TABLE';
+exports[1435] = 'ER_TRG_IN_WRONG_SCHEMA';
+exports[1436] = 'ER_STACK_OVERRUN_NEED_MORE';
+exports[1437] = 'ER_TOO_LONG_BODY';
+exports[1438] = 'ER_WARN_CANT_DROP_DEFAULT_KEYCACHE';
+exports[1439] = 'ER_TOO_BIG_DISPLAYWIDTH';
+exports[1440] = 'ER_XAER_DUPID';
+exports[1441] = 'ER_DATETIME_FUNCTION_OVERFLOW';
+exports[1442] = 'ER_CANT_UPDATE_USED_TABLE_IN_SF_OR_TRG';
+exports[1443] = 'ER_VIEW_PREVENT_UPDATE';
+exports[1444] = 'ER_PS_NO_RECURSION';
+exports[1445] = 'ER_SP_CANT_SET_AUTOCOMMIT';
+exports[1446] = 'ER_MALFORMED_DEFINER';
+exports[1447] = 'ER_VIEW_FRM_NO_USER';
+exports[1448] = 'ER_VIEW_OTHER_USER';
+exports[1449] = 'ER_NO_SUCH_USER';
+exports[1450] = 'ER_FORBID_SCHEMA_CHANGE';
+exports[1451] = 'ER_ROW_IS_REFERENCED_2';
+exports[1452] = 'ER_NO_REFERENCED_ROW_2';
+exports[1453] = 'ER_SP_BAD_VAR_SHADOW';
+exports[1454] = 'ER_TRG_NO_DEFINER';
+exports[1455] = 'ER_OLD_FILE_FORMAT';
+exports[1456] = 'ER_SP_RECURSION_LIMIT';
+exports[1457] = 'ER_SP_PROC_TABLE_CORRUPT';
+exports[1458] = 'ER_SP_WRONG_NAME';
+exports[1459] = 'ER_TABLE_NEEDS_UPGRADE';
+exports[1460] = 'ER_SP_NO_AGGREGATE';
+exports[1461] = 'ER_MAX_PREPARED_STMT_COUNT_REACHED';
+exports[1462] = 'ER_VIEW_RECURSIVE';
+exports[1463] = 'ER_NON_GROUPING_FIELD_USED';
+exports[1464] = 'ER_TABLE_CANT_HANDLE_SPKEYS';
+exports[1465] = 'ER_NO_TRIGGERS_ON_SYSTEM_SCHEMA';
+exports[1466] = 'ER_REMOVED_SPACES';
+exports[1467] = 'ER_AUTOINC_READ_FAILED';
+exports[1468] = 'ER_USERNAME';
+exports[1469] = 'ER_HOSTNAME';
+exports[1470] = 'ER_WRONG_STRING_LENGTH';
+exports[1471] = 'ER_NON_INSERTABLE_TABLE';
+exports[1472] = 'ER_ADMIN_WRONG_MRG_TABLE';
+exports[1473] = 'ER_TOO_HIGH_LEVEL_OF_NESTING_FOR_SELECT';
+exports[1474] = 'ER_NAME_BECOMES_EMPTY';
+exports[1475] = 'ER_AMBIGUOUS_FIELD_TERM';
+exports[1476] = 'ER_FOREIGN_SERVER_EXISTS';
+exports[1477] = 'ER_FOREIGN_SERVER_DOESNT_EXIST';
+exports[1478] = 'ER_ILLEGAL_HA_CREATE_OPTION';
+exports[1479] = 'ER_PARTITION_REQUIRES_VALUES_ERROR';
+exports[1480] = 'ER_PARTITION_WRONG_VALUES_ERROR';
+exports[1481] = 'ER_PARTITION_MAXVALUE_ERROR';
+exports[1482] = 'ER_PARTITION_SUBPARTITION_ERROR';
+exports[1483] = 'ER_PARTITION_SUBPART_MIX_ERROR';
+exports[1484] = 'ER_PARTITION_WRONG_NO_PART_ERROR';
+exports[1485] = 'ER_PARTITION_WRONG_NO_SUBPART_ERROR';
+exports[1486] = 'ER_WRONG_EXPR_IN_PARTITION_FUNC_ERROR';
+exports[1487] = 'ER_NO_CONST_EXPR_IN_RANGE_OR_LIST_ERROR';
+exports[1488] = 'ER_FIELD_NOT_FOUND_PART_ERROR';
+exports[1489] = 'ER_LIST_OF_FIELDS_ONLY_IN_HASH_ERROR';
+exports[1490] = 'ER_INCONSISTENT_PARTITION_INFO_ERROR';
+exports[1491] = 'ER_PARTITION_FUNC_NOT_ALLOWED_ERROR';
+exports[1492] = 'ER_PARTITIONS_MUST_BE_DEFINED_ERROR';
+exports[1493] = 'ER_RANGE_NOT_INCREASING_ERROR';
+exports[1494] = 'ER_INCONSISTENT_TYPE_OF_FUNCTIONS_ERROR';
+exports[1495] = 'ER_MULTIPLE_DEF_CONST_IN_LIST_PART_ERROR';
+exports[1496] = 'ER_PARTITION_ENTRY_ERROR';
+exports[1497] = 'ER_MIX_HANDLER_ERROR';
+exports[1498] = 'ER_PARTITION_NOT_DEFINED_ERROR';
+exports[1499] = 'ER_TOO_MANY_PARTITIONS_ERROR';
+exports[1500] = 'ER_SUBPARTITION_ERROR';
+exports[1501] = 'ER_CANT_CREATE_HANDLER_FILE';
+exports[1502] = 'ER_BLOB_FIELD_IN_PART_FUNC_ERROR';
+exports[1503] = 'ER_UNIQUE_KEY_NEED_ALL_FIELDS_IN_PF';
+exports[1504] = 'ER_NO_PARTS_ERROR';
+exports[1505] = 'ER_PARTITION_MGMT_ON_NONPARTITIONED';
+exports[1506] = 'ER_FOREIGN_KEY_ON_PARTITIONED';
+exports[1507] = 'ER_DROP_PARTITION_NON_EXISTENT';
+exports[1508] = 'ER_DROP_LAST_PARTITION';
+exports[1509] = 'ER_COALESCE_ONLY_ON_HASH_PARTITION';
+exports[1510] = 'ER_REORG_HASH_ONLY_ON_SAME_NO';
+exports[1511] = 'ER_REORG_NO_PARAM_ERROR';
+exports[1512] = 'ER_ONLY_ON_RANGE_LIST_PARTITION';
+exports[1513] = 'ER_ADD_PARTITION_SUBPART_ERROR';
+exports[1514] = 'ER_ADD_PARTITION_NO_NEW_PARTITION';
+exports[1515] = 'ER_COALESCE_PARTITION_NO_PARTITION';
+exports[1516] = 'ER_REORG_PARTITION_NOT_EXIST';
+exports[1517] = 'ER_SAME_NAME_PARTITION';
+exports[1518] = 'ER_NO_BINLOG_ERROR';
+exports[1519] = 'ER_CONSECUTIVE_REORG_PARTITIONS';
+exports[1520] = 'ER_REORG_OUTSIDE_RANGE';
+exports[1521] = 'ER_PARTITION_FUNCTION_FAILURE';
+exports[1522] = 'ER_PART_STATE_ERROR';
+exports[1523] = 'ER_LIMITED_PART_RANGE';
+exports[1524] = 'ER_PLUGIN_IS_NOT_LOADED';
+exports[1525] = 'ER_WRONG_VALUE';
+exports[1526] = 'ER_NO_PARTITION_FOR_GIVEN_VALUE';
+exports[1527] = 'ER_FILEGROUP_OPTION_ONLY_ONCE';
+exports[1528] = 'ER_CREATE_FILEGROUP_FAILED';
+exports[1529] = 'ER_DROP_FILEGROUP_FAILED';
+exports[1530] = 'ER_TABLESPACE_AUTO_EXTEND_ERROR';
+exports[1531] = 'ER_WRONG_SIZE_NUMBER';
+exports[1532] = 'ER_SIZE_OVERFLOW_ERROR';
+exports[1533] = 'ER_ALTER_FILEGROUP_FAILED';
+exports[1534] = 'ER_BINLOG_ROW_LOGGING_FAILED';
+exports[1535] = 'ER_BINLOG_ROW_WRONG_TABLE_DEF';
+exports[1536] = 'ER_BINLOG_ROW_RBR_TO_SBR';
+exports[1537] = 'ER_EVENT_ALREADY_EXISTS';
+exports[1538] = 'ER_EVENT_STORE_FAILED';
+exports[1539] = 'ER_EVENT_DOES_NOT_EXIST';
+exports[1540] = 'ER_EVENT_CANT_ALTER';
+exports[1541] = 'ER_EVENT_DROP_FAILED';
+exports[1542] = 'ER_EVENT_INTERVAL_NOT_POSITIVE_OR_TOO_BIG';
+exports[1543] = 'ER_EVENT_ENDS_BEFORE_STARTS';
+exports[1544] = 'ER_EVENT_EXEC_TIME_IN_THE_PAST';
+exports[1545] = 'ER_EVENT_OPEN_TABLE_FAILED';
+exports[1546] = 'ER_EVENT_NEITHER_M_EXPR_NOR_M_AT';
+exports[1547] = 'ER_COL_COUNT_DOESNT_MATCH_CORRUPTED';
+exports[1548] = 'ER_CANNOT_LOAD_FROM_TABLE';
+exports[1549] = 'ER_EVENT_CANNOT_DELETE';
+exports[1550] = 'ER_EVENT_COMPILE_ERROR';
+exports[1551] = 'ER_EVENT_SAME_NAME';
+exports[1552] = 'ER_EVENT_DATA_TOO_LONG';
+exports[1553] = 'ER_DROP_INDEX_FK';
+exports[1554] = 'ER_WARN_DEPRECATED_SYNTAX_WITH_VER';
+exports[1555] = 'ER_CANT_WRITE_LOCK_LOG_TABLE';
+exports[1556] = 'ER_CANT_LOCK_LOG_TABLE';
+exports[1557] = 'ER_FOREIGN_DUPLICATE_KEY';
+exports[1558] = 'ER_COL_COUNT_DOESNT_MATCH_PLEASE_UPDATE';
+exports[1559] = 'ER_TEMP_TABLE_PREVENTS_SWITCH_OUT_OF_RBR';
+exports[1560] = 'ER_STORED_FUNCTION_PREVENTS_SWITCH_BINLOG_FORMAT';
+exports[1561] = 'ER_NDB_CANT_SWITCH_BINLOG_FORMAT';
+exports[1562] = 'ER_PARTITION_NO_TEMPORARY';
+exports[1563] = 'ER_PARTITION_CONST_DOMAIN_ERROR';
+exports[1564] = 'ER_PARTITION_FUNCTION_IS_NOT_ALLOWED';
+exports[1565] = 'ER_DDL_LOG_ERROR';
+exports[1566] = 'ER_NULL_IN_VALUES_LESS_THAN';
+exports[1567] = 'ER_WRONG_PARTITION_NAME';
+exports[1568] = 'ER_CANT_CHANGE_TX_CHARACTERISTICS';
+exports[1569] = 'ER_DUP_ENTRY_AUTOINCREMENT_CASE';
+exports[1570] = 'ER_EVENT_MODIFY_QUEUE_ERROR';
+exports[1571] = 'ER_EVENT_SET_VAR_ERROR';
+exports[1572] = 'ER_PARTITION_MERGE_ERROR';
+exports[1573] = 'ER_CANT_ACTIVATE_LOG';
+exports[1574] = 'ER_RBR_NOT_AVAILABLE';
+exports[1575] = 'ER_BASE64_DECODE_ERROR';
+exports[1576] = 'ER_EVENT_RECURSION_FORBIDDEN';
+exports[1577] = 'ER_EVENTS_DB_ERROR';
+exports[1578] = 'ER_ONLY_INTEGERS_ALLOWED';
+exports[1579] = 'ER_UNSUPORTED_LOG_ENGINE';
+exports[1580] = 'ER_BAD_LOG_STATEMENT';
+exports[1581] = 'ER_CANT_RENAME_LOG_TABLE';
+exports[1582] = 'ER_WRONG_PARAMCOUNT_TO_NATIVE_FCT';
+exports[1583] = 'ER_WRONG_PARAMETERS_TO_NATIVE_FCT';
+exports[1584] = 'ER_WRONG_PARAMETERS_TO_STORED_FCT';
+exports[1585] = 'ER_NATIVE_FCT_NAME_COLLISION';
+exports[1586] = 'ER_DUP_ENTRY_WITH_KEY_NAME';
+exports[1587] = 'ER_BINLOG_PURGE_EMFILE';
+exports[1588] = 'ER_EVENT_CANNOT_CREATE_IN_THE_PAST';
+exports[1589] = 'ER_EVENT_CANNOT_ALTER_IN_THE_PAST';
+exports[1590] = 'ER_SLAVE_INCIDENT';
+exports[1591] = 'ER_NO_PARTITION_FOR_GIVEN_VALUE_SILENT';
+exports[1592] = 'ER_BINLOG_UNSAFE_STATEMENT';
+exports[1593] = 'ER_SLAVE_FATAL_ERROR';
+exports[1594] = 'ER_SLAVE_RELAY_LOG_READ_FAILURE';
+exports[1595] = 'ER_SLAVE_RELAY_LOG_WRITE_FAILURE';
+exports[1596] = 'ER_SLAVE_CREATE_EVENT_FAILURE';
+exports[1597] = 'ER_SLAVE_MASTER_COM_FAILURE';
+exports[1598] = 'ER_BINLOG_LOGGING_IMPOSSIBLE';
+exports[1599] = 'ER_VIEW_NO_CREATION_CTX';
+exports[1600] = 'ER_VIEW_INVALID_CREATION_CTX';
+exports[1601] = 'ER_SR_INVALID_CREATION_CTX';
+exports[1602] = 'ER_TRG_CORRUPTED_FILE';
+exports[1603] = 'ER_TRG_NO_CREATION_CTX';
+exports[1604] = 'ER_TRG_INVALID_CREATION_CTX';
+exports[1605] = 'ER_EVENT_INVALID_CREATION_CTX';
+exports[1606] = 'ER_TRG_CANT_OPEN_TABLE';
+exports[1607] = 'ER_CANT_CREATE_SROUTINE';
+exports[1608] = 'ER_NEVER_USED';
+exports[1609] = 'ER_NO_FORMAT_DESCRIPTION_EVENT_BEFORE_BINLOG_STATEMENT';
+exports[1610] = 'ER_SLAVE_CORRUPT_EVENT';
+exports[1611] = 'ER_LOAD_DATA_INVALID_COLUMN';
+exports[1612] = 'ER_LOG_PURGE_NO_FILE';
+exports[1613] = 'ER_XA_RBTIMEOUT';
+exports[1614] = 'ER_XA_RBDEADLOCK';
+exports[1615] = 'ER_NEED_REPREPARE';
+exports[1616] = 'ER_DELAYED_NOT_SUPPORTED';
+exports[1617] = 'WARN_NO_MASTER_INFO';
+exports[1618] = 'WARN_OPTION_IGNORED';
+exports[1619] = 'ER_PLUGIN_DELETE_BUILTIN';
+exports[1620] = 'WARN_PLUGIN_BUSY';
+exports[1621] = 'ER_VARIABLE_IS_READONLY';
+exports[1622] = 'ER_WARN_ENGINE_TRANSACTION_ROLLBACK';
+exports[1623] = 'ER_SLAVE_HEARTBEAT_FAILURE';
+exports[1624] = 'ER_SLAVE_HEARTBEAT_VALUE_OUT_OF_RANGE';
+exports[1625] = 'ER_NDB_REPLICATION_SCHEMA_ERROR';
+exports[1626] = 'ER_CONFLICT_FN_PARSE_ERROR';
+exports[1627] = 'ER_EXCEPTIONS_WRITE_ERROR';
+exports[1628] = 'ER_TOO_LONG_TABLE_COMMENT';
+exports[1629] = 'ER_TOO_LONG_FIELD_COMMENT';
+exports[1630] = 'ER_FUNC_INEXISTENT_NAME_COLLISION';
+exports[1631] = 'ER_DATABASE_NAME';
+exports[1632] = 'ER_TABLE_NAME';
+exports[1633] = 'ER_PARTITION_NAME';
+exports[1634] = 'ER_SUBPARTITION_NAME';
+exports[1635] = 'ER_TEMPORARY_NAME';
+exports[1636] = 'ER_RENAMED_NAME';
+exports[1637] = 'ER_TOO_MANY_CONCURRENT_TRXS';
+exports[1638] = 'WARN_NON_ASCII_SEPARATOR_NOT_IMPLEMENTED';
+exports[1639] = 'ER_DEBUG_SYNC_TIMEOUT';
+exports[1640] = 'ER_DEBUG_SYNC_HIT_LIMIT';
+exports[1641] = 'ER_DUP_SIGNAL_SET';
+exports[1642] = 'ER_SIGNAL_WARN';
+exports[1643] = 'ER_SIGNAL_NOT_FOUND';
+exports[1644] = 'ER_SIGNAL_EXCEPTION';
+exports[1645] = 'ER_RESIGNAL_WITHOUT_ACTIVE_HANDLER';
+exports[1646] = 'ER_SIGNAL_BAD_CONDITION_TYPE';
+exports[1647] = 'WARN_COND_ITEM_TRUNCATED';
+exports[1648] = 'ER_COND_ITEM_TOO_LONG';
+exports[1649] = 'ER_UNKNOWN_LOCALE';
+exports[1650] = 'ER_SLAVE_IGNORE_SERVER_IDS';
+exports[1651] = 'ER_QUERY_CACHE_DISABLED';
+exports[1652] = 'ER_SAME_NAME_PARTITION_FIELD';
+exports[1653] = 'ER_PARTITION_COLUMN_LIST_ERROR';
+exports[1654] = 'ER_WRONG_TYPE_COLUMN_VALUE_ERROR';
+exports[1655] = 'ER_TOO_MANY_PARTITION_FUNC_FIELDS_ERROR';
+exports[1656] = 'ER_MAXVALUE_IN_VALUES_IN';
+exports[1657] = 'ER_TOO_MANY_VALUES_ERROR';
+exports[1658] = 'ER_ROW_SINGLE_PARTITION_FIELD_ERROR';
+exports[1659] = 'ER_FIELD_TYPE_NOT_ALLOWED_AS_PARTITION_FIELD';
+exports[1660] = 'ER_PARTITION_FIELDS_TOO_LONG';
+exports[1661] = 'ER_BINLOG_ROW_ENGINE_AND_STMT_ENGINE';
+exports[1662] = 'ER_BINLOG_ROW_MODE_AND_STMT_ENGINE';
+exports[1663] = 'ER_BINLOG_UNSAFE_AND_STMT_ENGINE';
+exports[1664] = 'ER_BINLOG_ROW_INJECTION_AND_STMT_ENGINE';
+exports[1665] = 'ER_BINLOG_STMT_MODE_AND_ROW_ENGINE';
+exports[1666] = 'ER_BINLOG_ROW_INJECTION_AND_STMT_MODE';
+exports[1667] = 'ER_BINLOG_MULTIPLE_ENGINES_AND_SELF_LOGGING_ENGINE';
+exports[1668] = 'ER_BINLOG_UNSAFE_LIMIT';
+exports[1669] = 'ER_BINLOG_UNSAFE_INSERT_DELAYED';
+exports[1670] = 'ER_BINLOG_UNSAFE_SYSTEM_TABLE';
+exports[1671] = 'ER_BINLOG_UNSAFE_AUTOINC_COLUMNS';
+exports[1672] = 'ER_BINLOG_UNSAFE_UDF';
+exports[1673] = 'ER_BINLOG_UNSAFE_SYSTEM_VARIABLE';
+exports[1674] = 'ER_BINLOG_UNSAFE_SYSTEM_FUNCTION';
+exports[1675] = 'ER_BINLOG_UNSAFE_NONTRANS_AFTER_TRANS';
+exports[1676] = 'ER_MESSAGE_AND_STATEMENT';
+exports[1677] = 'ER_SLAVE_CONVERSION_FAILED';
+exports[1678] = 'ER_SLAVE_CANT_CREATE_CONVERSION';
+exports[1679] = 'ER_INSIDE_TRANSACTION_PREVENTS_SWITCH_BINLOG_FORMAT';
+exports[1680] = 'ER_PATH_LENGTH';
+exports[1681] = 'ER_WARN_DEPRECATED_SYNTAX_NO_REPLACEMENT';
+exports[1682] = 'ER_WRONG_NATIVE_TABLE_STRUCTURE';
+exports[1683] = 'ER_WRONG_PERFSCHEMA_USAGE';
+exports[1684] = 'ER_WARN_I_S_SKIPPED_TABLE';
+exports[1685] = 'ER_INSIDE_TRANSACTION_PREVENTS_SWITCH_BINLOG_DIRECT';
+exports[1686] = 'ER_STORED_FUNCTION_PREVENTS_SWITCH_BINLOG_DIRECT';
+exports[1687] = 'ER_SPATIAL_MUST_HAVE_GEOM_COL';
+exports[1688] = 'ER_TOO_LONG_INDEX_COMMENT';
+exports[1689] = 'ER_LOCK_ABORTED';
+exports[1690] = 'ER_DATA_OUT_OF_RANGE';
+exports[1691] = 'ER_WRONG_SPVAR_TYPE_IN_LIMIT';
+exports[1692] = 'ER_BINLOG_UNSAFE_MULTIPLE_ENGINES_AND_SELF_LOGGING_ENGINE';
+exports[1693] = 'ER_BINLOG_UNSAFE_MIXED_STATEMENT';
+exports[1694] = 'ER_INSIDE_TRANSACTION_PREVENTS_SWITCH_SQL_LOG_BIN';
+exports[1695] = 'ER_STORED_FUNCTION_PREVENTS_SWITCH_SQL_LOG_BIN';
+exports[1696] = 'ER_FAILED_READ_FROM_PAR_FILE';
+exports[1697] = 'ER_VALUES_IS_NOT_INT_TYPE_ERROR';
+exports[1698] = 'ER_ACCESS_DENIED_NO_PASSWORD_ERROR';
+exports[1699] = 'ER_SET_PASSWORD_AUTH_PLUGIN';
+exports[1700] = 'ER_GRANT_PLUGIN_USER_EXISTS';
+exports[1701] = 'ER_TRUNCATE_ILLEGAL_FK';
+exports[1702] = 'ER_PLUGIN_IS_PERMANENT';
+exports[1703] = 'ER_SLAVE_HEARTBEAT_VALUE_OUT_OF_RANGE_MIN';
+exports[1704] = 'ER_SLAVE_HEARTBEAT_VALUE_OUT_OF_RANGE_MAX';
+exports[1705] = 'ER_STMT_CACHE_FULL';
+exports[1706] = 'ER_MULTI_UPDATE_KEY_CONFLICT';
+exports[1707] = 'ER_TABLE_NEEDS_REBUILD';
+exports[1708] = 'WARN_OPTION_BELOW_LIMIT';
+exports[1709] = 'ER_INDEX_COLUMN_TOO_LONG';
+exports[1710] = 'ER_ERROR_IN_TRIGGER_BODY';
+exports[1711] = 'ER_ERROR_IN_UNKNOWN_TRIGGER_BODY';
+exports[1712] = 'ER_INDEX_CORRUPT';
+exports[1713] = 'ER_UNDO_RECORD_TOO_BIG';
+exports[1714] = 'ER_BINLOG_UNSAFE_INSERT_IGNORE_SELECT';
+exports[1715] = 'ER_BINLOG_UNSAFE_INSERT_SELECT_UPDATE';
+exports[1716] = 'ER_BINLOG_UNSAFE_REPLACE_SELECT';
+exports[1717] = 'ER_BINLOG_UNSAFE_CREATE_IGNORE_SELECT';
+exports[1718] = 'ER_BINLOG_UNSAFE_CREATE_REPLACE_SELECT';
+exports[1719] = 'ER_BINLOG_UNSAFE_UPDATE_IGNORE';
+exports[1720] = 'ER_PLUGIN_NO_UNINSTALL';
+exports[1721] = 'ER_PLUGIN_NO_INSTALL';
+exports[1722] = 'ER_BINLOG_UNSAFE_WRITE_AUTOINC_SELECT';
+exports[1723] = 'ER_BINLOG_UNSAFE_CREATE_SELECT_AUTOINC';
+exports[1724] = 'ER_BINLOG_UNSAFE_INSERT_TWO_KEYS';
+exports[1725] = 'ER_TABLE_IN_FK_CHECK';
+exports[1726] = 'ER_UNSUPPORTED_ENGINE';
+exports[1727] = 'ER_BINLOG_UNSAFE_AUTOINC_NOT_FIRST';
+exports[1728] = 'ER_CANNOT_LOAD_FROM_TABLE_V2';
+exports[1729] = 'ER_MASTER_DELAY_VALUE_OUT_OF_RANGE';
+exports[1730] = 'ER_ONLY_FD_AND_RBR_EVENTS_ALLOWED_IN_BINLOG_STATEMENT';
+exports[1731] = 'ER_PARTITION_EXCHANGE_DIFFERENT_OPTION';
+exports[1732] = 'ER_PARTITION_EXCHANGE_PART_TABLE';
+exports[1733] = 'ER_PARTITION_EXCHANGE_TEMP_TABLE';
+exports[1734] = 'ER_PARTITION_INSTEAD_OF_SUBPARTITION';
+exports[1735] = 'ER_UNKNOWN_PARTITION';
+exports[1736] = 'ER_TABLES_DIFFERENT_METADATA';
+exports[1737] = 'ER_ROW_DOES_NOT_MATCH_PARTITION';
+exports[1738] = 'ER_BINLOG_CACHE_SIZE_GREATER_THAN_MAX';
+exports[1739] = 'ER_WARN_INDEX_NOT_APPLICABLE';
+exports[1740] = 'ER_PARTITION_EXCHANGE_FOREIGN_KEY';
+exports[1741] = 'ER_NO_SUCH_KEY_VALUE';
+exports[1742] = 'ER_RPL_INFO_DATA_TOO_LONG';
+exports[1743] = 'ER_NETWORK_READ_EVENT_CHECKSUM_FAILURE';
+exports[1744] = 'ER_BINLOG_READ_EVENT_CHECKSUM_FAILURE';
+exports[1745] = 'ER_BINLOG_STMT_CACHE_SIZE_GREATER_THAN_MAX';
+exports[1746] = 'ER_CANT_UPDATE_TABLE_IN_CREATE_TABLE_SELECT';
+exports[1747] = 'ER_PARTITION_CLAUSE_ON_NONPARTITIONED';
+exports[1748] = 'ER_ROW_DOES_NOT_MATCH_GIVEN_PARTITION_SET';
+exports[1749] = 'ER_NO_SUCH_PARTITION';
+exports[1750] = 'ER_CHANGE_RPL_INFO_REPOSITORY_FAILURE';
+exports[1751] = 'ER_WARNING_NOT_COMPLETE_ROLLBACK_WITH_CREATED_TEMP_TABLE';
+exports[1752] = 'ER_WARNING_NOT_COMPLETE_ROLLBACK_WITH_DROPPED_TEMP_TABLE';
+exports[1753] = 'ER_MTS_FEATURE_IS_NOT_SUPPORTED';
+exports[1754] = 'ER_MTS_UPDATED_DBS_GREATER_MAX';
+exports[1755] = 'ER_MTS_CANT_PARALLEL';
+exports[1756] = 'ER_MTS_INCONSISTENT_DATA';
+exports[1757] = 'ER_FULLTEXT_NOT_SUPPORTED_WITH_PARTITIONING';
+exports[1758] = 'ER_DA_INVALID_CONDITION_NUMBER';
+exports[1759] = 'ER_INSECURE_PLAIN_TEXT';
+exports[1760] = 'ER_INSECURE_CHANGE_MASTER';
+exports[1761] = 'ER_FOREIGN_DUPLICATE_KEY_WITH_CHILD_INFO';
+exports[1762] = 'ER_FOREIGN_DUPLICATE_KEY_WITHOUT_CHILD_INFO';
+exports[1763] = 'ER_SQLTHREAD_WITH_SECURE_SLAVE';
+exports[1764] = 'ER_TABLE_HAS_NO_FT';
+exports[1765] = 'ER_VARIABLE_NOT_SETTABLE_IN_SF_OR_TRIGGER';
+exports[1766] = 'ER_VARIABLE_NOT_SETTABLE_IN_TRANSACTION';
+exports[1767] = 'ER_GTID_NEXT_IS_NOT_IN_GTID_NEXT_LIST';
+exports[1768] = 'ER_CANT_CHANGE_GTID_NEXT_IN_TRANSACTION';
+exports[1769] = 'ER_SET_STATEMENT_CANNOT_INVOKE_FUNCTION';
+exports[1770] = 'ER_GTID_NEXT_CANT_BE_AUTOMATIC_IF_GTID_NEXT_LIST_IS_NON_NULL';
+exports[1771] = 'ER_SKIPPING_LOGGED_TRANSACTION';
+exports[1772] = 'ER_MALFORMED_GTID_SET_SPECIFICATION';
+exports[1773] = 'ER_MALFORMED_GTID_SET_ENCODING';
+exports[1774] = 'ER_MALFORMED_GTID_SPECIFICATION';
+exports[1775] = 'ER_GNO_EXHAUSTED';
+exports[1776] = 'ER_BAD_SLAVE_AUTO_POSITION';
+exports[1777] = 'ER_AUTO_POSITION_REQUIRES_GTID_MODE_NOT_OFF';
+exports[1778] = 'ER_CANT_DO_IMPLICIT_COMMIT_IN_TRX_WHEN_GTID_NEXT_IS_SET';
+exports[1779] = 'ER_GTID_MODE_ON_REQUIRES_ENFORCE_GTID_CONSISTENCY_ON';
+exports[1780] = 'ER_GTID_MODE_REQUIRES_BINLOG';
+exports[1781] = 'ER_CANT_SET_GTID_NEXT_TO_GTID_WHEN_GTID_MODE_IS_OFF';
+exports[1782] = 'ER_CANT_SET_GTID_NEXT_TO_ANONYMOUS_WHEN_GTID_MODE_IS_ON';
+exports[1783] = 'ER_CANT_SET_GTID_NEXT_LIST_TO_NON_NULL_WHEN_GTID_MODE_IS_OFF';
+exports[1784] = 'ER_FOUND_GTID_EVENT_WHEN_GTID_MODE_IS_OFF';
+exports[1785] = 'ER_GTID_UNSAFE_NON_TRANSACTIONAL_TABLE';
+exports[1786] = 'ER_GTID_UNSAFE_CREATE_SELECT';
+exports[1787] = 'ER_GTID_UNSAFE_CREATE_DROP_TEMPORARY_TABLE_IN_TRANSACTION';
+exports[1788] = 'ER_GTID_MODE_CAN_ONLY_CHANGE_ONE_STEP_AT_A_TIME';
+exports[1789] = 'ER_MASTER_HAS_PURGED_REQUIRED_GTIDS';
+exports[1790] = 'ER_CANT_SET_GTID_NEXT_WHEN_OWNING_GTID';
+exports[1791] = 'ER_UNKNOWN_EXPLAIN_FORMAT';
+exports[1792] = 'ER_CANT_EXECUTE_IN_READ_ONLY_TRANSACTION';
+exports[1793] = 'ER_TOO_LONG_TABLE_PARTITION_COMMENT';
+exports[1794] = 'ER_SLAVE_CONFIGURATION';
+exports[1795] = 'ER_INNODB_FT_LIMIT';
+exports[1796] = 'ER_INNODB_NO_FT_TEMP_TABLE';
+exports[1797] = 'ER_INNODB_FT_WRONG_DOCID_COLUMN';
+exports[1798] = 'ER_INNODB_FT_WRONG_DOCID_INDEX';
+exports[1799] = 'ER_INNODB_ONLINE_LOG_TOO_BIG';
+exports[1800] = 'ER_UNKNOWN_ALTER_ALGORITHM';
+exports[1801] = 'ER_UNKNOWN_ALTER_LOCK';
+exports[1802] = 'ER_MTS_CHANGE_MASTER_CANT_RUN_WITH_GAPS';
+exports[1803] = 'ER_MTS_RECOVERY_FAILURE';
+exports[1804] = 'ER_MTS_RESET_WORKERS';
+exports[1805] = 'ER_COL_COUNT_DOESNT_MATCH_CORRUPTED_V2';
+exports[1806] = 'ER_SLAVE_SILENT_RETRY_TRANSACTION';
+exports[1807] = 'ER_DISCARD_FK_CHECKS_RUNNING';
+exports[1808] = 'ER_TABLE_SCHEMA_MISMATCH';
+exports[1809] = 'ER_TABLE_IN_SYSTEM_TABLESPACE';
+exports[1810] = 'ER_IO_READ_ERROR';
+exports[1811] = 'ER_IO_WRITE_ERROR';
+exports[1812] = 'ER_TABLESPACE_MISSING';
+exports[1813] = 'ER_TABLESPACE_EXISTS';
+exports[1814] = 'ER_TABLESPACE_DISCARDED';
+exports[1815] = 'ER_INTERNAL_ERROR';
+exports[1816] = 'ER_INNODB_IMPORT_ERROR';
+exports[1817] = 'ER_INNODB_INDEX_CORRUPT';
+exports[1818] = 'ER_INVALID_YEAR_COLUMN_LENGTH';
+exports[1819] = 'ER_NOT_VALID_PASSWORD';
+exports[1820] = 'ER_MUST_CHANGE_PASSWORD';
+exports[1821] = 'ER_FK_NO_INDEX_CHILD';
+exports[1822] = 'ER_FK_NO_INDEX_PARENT';
+exports[1823] = 'ER_FK_FAIL_ADD_SYSTEM';
+exports[1824] = 'ER_FK_CANNOT_OPEN_PARENT';
+exports[1825] = 'ER_FK_INCORRECT_OPTION';
+exports[1826] = 'ER_FK_DUP_NAME';
+exports[1827] = 'ER_PASSWORD_FORMAT';
+exports[1828] = 'ER_FK_COLUMN_CANNOT_DROP';
+exports[1829] = 'ER_FK_COLUMN_CANNOT_DROP_CHILD';
+exports[1830] = 'ER_FK_COLUMN_NOT_NULL';
+exports[1831] = 'ER_DUP_INDEX';
+exports[1832] = 'ER_FK_COLUMN_CANNOT_CHANGE';
+exports[1833] = 'ER_FK_COLUMN_CANNOT_CHANGE_CHILD';
+exports[1834] = 'ER_FK_CANNOT_DELETE_PARENT';
+exports[1835] = 'ER_MALFORMED_PACKET';
+exports[1836] = 'ER_READ_ONLY_MODE';
+exports[1837] = 'ER_GTID_NEXT_TYPE_UNDEFINED_GROUP';
+exports[1838] = 'ER_VARIABLE_NOT_SETTABLE_IN_SP';
+exports[1839] = 'ER_CANT_SET_GTID_PURGED_WHEN_GTID_MODE_IS_OFF';
+exports[1840] = 'ER_CANT_SET_GTID_PURGED_WHEN_GTID_EXECUTED_IS_NOT_EMPTY';
+exports[1841] = 'ER_CANT_SET_GTID_PURGED_WHEN_OWNED_GTIDS_IS_NOT_EMPTY';
+exports[1842] = 'ER_GTID_PURGED_WAS_CHANGED';
+exports[1843] = 'ER_GTID_EXECUTED_WAS_CHANGED';
+exports[1844] = 'ER_BINLOG_STMT_MODE_AND_NO_REPL_TABLES';
+exports[1845] = 'ER_ALTER_OPERATION_NOT_SUPPORTED';
+exports[1846] = 'ER_ALTER_OPERATION_NOT_SUPPORTED_REASON';
+exports[1847] = 'ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_COPY';
+exports[1848] = 'ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_PARTITION';
+exports[1849] = 'ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_FK_RENAME';
+exports[1850] = 'ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_COLUMN_TYPE';
+exports[1851] = 'ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_FK_CHECK';
+exports[1852] = 'ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_IGNORE';
+exports[1853] = 'ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_NOPK';
+exports[1854] = 'ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_AUTOINC';
+exports[1855] = 'ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_HIDDEN_FTS';
+exports[1856] = 'ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_CHANGE_FTS';
+exports[1857] = 'ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_FTS';
+exports[1858] = 'ER_SQL_SLAVE_SKIP_COUNTER_NOT_SETTABLE_IN_GTID_MODE';
+exports[1859] = 'ER_DUP_UNKNOWN_IN_INDEX';
+exports[1860] = 'ER_IDENT_CAUSES_TOO_LONG_PATH';
+exports[1861] = 'ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_NOT_NULL';
+exports[1862] = 'ER_MUST_CHANGE_PASSWORD_LOGIN';
+exports[1863] = 'ER_ROW_IN_WRONG_PARTITION';
+exports[1864] = 'ER_MTS_EVENT_BIGGER_PENDING_JOBS_SIZE_MAX';
+exports[1865] = 'ER_INNODB_NO_FT_USES_PARSER';
+exports[1866] = 'ER_BINLOG_LOGICAL_CORRUPTION';
+exports[1867] = 'ER_WARN_PURGE_LOG_IN_USE';
+exports[1868] = 'ER_WARN_PURGE_LOG_IS_ACTIVE';
+exports[1869] = 'ER_AUTO_INCREMENT_CONFLICT';
+exports[1870] = 'WARN_ON_BLOCKHOLE_IN_RBR';
+exports[1871] = 'ER_SLAVE_MI_INIT_REPOSITORY';
+exports[1872] = 'ER_SLAVE_RLI_INIT_REPOSITORY';
+exports[1873] = 'ER_ACCESS_DENIED_CHANGE_USER_ERROR';
+exports[1874] = 'ER_INNODB_READ_ONLY';
+exports[1875] = 'ER_STOP_SLAVE_SQL_THREAD_TIMEOUT';
+exports[1876] = 'ER_STOP_SLAVE_IO_THREAD_TIMEOUT';
+exports[1877] = 'ER_TABLE_CORRUPT';
+exports[1878] = 'ER_TEMP_FILE_WRITE_FAILURE';
+exports[1879] = 'ER_INNODB_FT_AUX_NOT_HEX_ID';
+exports[1880] = 'ER_OLD_TEMPORALS_UPGRADED';
+exports[1881] = 'ER_INNODB_FORCED_RECOVERY';
+exports[1882] = 'ER_AES_INVALID_IV';
+exports[1883] = 'ER_PLUGIN_CANNOT_BE_UNINSTALLED';
+exports[1884] = 'ER_GTID_UNSAFE_BINLOG_SPLITTABLE_STATEMENT_AND_GTID_GROUP';
+exports[1885] = 'ER_SLAVE_HAS_MORE_GTIDS_THAN_MASTER';
+exports[3000] = 'ER_FILE_CORRUPT';
+exports[3001] = 'ER_ERROR_ON_MASTER';
+exports[3002] = 'ER_INCONSISTENT_ERROR';
+exports[3003] = 'ER_STORAGE_ENGINE_NOT_LOADED';
+exports[3004] = 'ER_GET_STACKED_DA_WITHOUT_ACTIVE_HANDLER';
+exports[3005] = 'ER_WARN_LEGACY_SYNTAX_CONVERTED';
+exports[3006] = 'ER_BINLOG_UNSAFE_FULLTEXT_PLUGIN';
+exports[3007] = 'ER_CANNOT_DISCARD_TEMPORARY_TABLE';
+exports[3008] = 'ER_FK_DEPTH_EXCEEDED';
+exports[3009] = 'ER_COL_COUNT_DOESNT_MATCH_PLEASE_UPDATE_V2';
+exports[3010] = 'ER_WARN_TRIGGER_DOESNT_HAVE_CREATED';
+exports[3011] = 'ER_REFERENCED_TRG_DOES_NOT_EXIST';
+exports[3012] = 'ER_EXPLAIN_NOT_SUPPORTED';
+exports[3013] = 'ER_INVALID_FIELD_SIZE';
+exports[3014] = 'ER_MISSING_HA_CREATE_OPTION';
+exports[3015] = 'ER_ENGINE_OUT_OF_MEMORY';
+exports[3016] = 'ER_PASSWORD_EXPIRE_ANONYMOUS_USER';
+exports[3017] = 'ER_SLAVE_SQL_THREAD_MUST_STOP';
+exports[3018] = 'ER_NO_FT_MATERIALIZED_SUBQUERY';
+exports[3019] = 'ER_INNODB_UNDO_LOG_FULL';
+exports[3020] = 'ER_INVALID_ARGUMENT_FOR_LOGARITHM';
+exports[3021] = 'ER_SLAVE_CHANNEL_IO_THREAD_MUST_STOP';
+exports[3022] = 'ER_WARN_OPEN_TEMP_TABLES_MUST_BE_ZERO';
+exports[3023] = 'ER_WARN_ONLY_MASTER_LOG_FILE_NO_POS';
+exports[3024] = 'ER_QUERY_TIMEOUT';
+exports[3025] = 'ER_NON_RO_SELECT_DISABLE_TIMER';
+exports[3026] = 'ER_DUP_LIST_ENTRY';
+exports[3027] = 'ER_SQL_MODE_NO_EFFECT';
+exports[3028] = 'ER_AGGREGATE_ORDER_FOR_UNION';
+exports[3029] = 'ER_AGGREGATE_ORDER_NON_AGG_QUERY';
+exports[3030] = 'ER_SLAVE_WORKER_STOPPED_PREVIOUS_THD_ERROR';
+exports[3031] = 'ER_DONT_SUPPORT_SLAVE_PRESERVE_COMMIT_ORDER';
+exports[3032] = 'ER_SERVER_OFFLINE_MODE';
+exports[3033] = 'ER_GIS_DIFFERENT_SRIDS';
+exports[3034] = 'ER_GIS_UNSUPPORTED_ARGUMENT';
+exports[3035] = 'ER_GIS_UNKNOWN_ERROR';
+exports[3036] = 'ER_GIS_UNKNOWN_EXCEPTION';
+exports[3037] = 'ER_GIS_INVALID_DATA';
+exports[3038] = 'ER_BOOST_GEOMETRY_EMPTY_INPUT_EXCEPTION';
+exports[3039] = 'ER_BOOST_GEOMETRY_CENTROID_EXCEPTION';
+exports[3040] = 'ER_BOOST_GEOMETRY_OVERLAY_INVALID_INPUT_EXCEPTION';
+exports[3041] = 'ER_BOOST_GEOMETRY_TURN_INFO_EXCEPTION';
+exports[3042] = 'ER_BOOST_GEOMETRY_SELF_INTERSECTION_POINT_EXCEPTION';
+exports[3043] = 'ER_BOOST_GEOMETRY_UNKNOWN_EXCEPTION';
+exports[3044] = 'ER_STD_BAD_ALLOC_ERROR';
+exports[3045] = 'ER_STD_DOMAIN_ERROR';
+exports[3046] = 'ER_STD_LENGTH_ERROR';
+exports[3047] = 'ER_STD_INVALID_ARGUMENT';
+exports[3048] = 'ER_STD_OUT_OF_RANGE_ERROR';
+exports[3049] = 'ER_STD_OVERFLOW_ERROR';
+exports[3050] = 'ER_STD_RANGE_ERROR';
+exports[3051] = 'ER_STD_UNDERFLOW_ERROR';
+exports[3052] = 'ER_STD_LOGIC_ERROR';
+exports[3053] = 'ER_STD_RUNTIME_ERROR';
+exports[3054] = 'ER_STD_UNKNOWN_EXCEPTION';
+exports[3055] = 'ER_GIS_DATA_WRONG_ENDIANESS';
+exports[3056] = 'ER_CHANGE_MASTER_PASSWORD_LENGTH';
+exports[3057] = 'ER_USER_LOCK_WRONG_NAME';
+exports[3058] = 'ER_USER_LOCK_DEADLOCK';
+exports[3059] = 'ER_REPLACE_INACCESSIBLE_ROWS';
+exports[3060] = 'ER_ALTER_OPERATION_NOT_SUPPORTED_REASON_GIS';
+exports[3061] = 'ER_ILLEGAL_USER_VAR';
+exports[3062] = 'ER_GTID_MODE_OFF';
+exports[3063] = 'ER_UNSUPPORTED_BY_REPLICATION_THREAD';
+exports[3064] = 'ER_INCORRECT_TYPE';
+exports[3065] = 'ER_FIELD_IN_ORDER_NOT_SELECT';
+exports[3066] = 'ER_AGGREGATE_IN_ORDER_NOT_SELECT';
+exports[3067] = 'ER_INVALID_RPL_WILD_TABLE_FILTER_PATTERN';
+exports[3068] = 'ER_NET_OK_PACKET_TOO_LARGE';
+exports[3069] = 'ER_INVALID_JSON_DATA';
+exports[3070] = 'ER_INVALID_GEOJSON_MISSING_MEMBER';
+exports[3071] = 'ER_INVALID_GEOJSON_WRONG_TYPE';
+exports[3072] = 'ER_INVALID_GEOJSON_UNSPECIFIED';
+exports[3073] = 'ER_DIMENSION_UNSUPPORTED';
+exports[3074] = 'ER_SLAVE_CHANNEL_DOES_NOT_EXIST';
+exports[3075] = 'ER_SLAVE_MULTIPLE_CHANNELS_HOST_PORT';
+exports[3076] = 'ER_SLAVE_CHANNEL_NAME_INVALID_OR_TOO_LONG';
+exports[3077] = 'ER_SLAVE_NEW_CHANNEL_WRONG_REPOSITORY';
+exports[3078] = 'ER_SLAVE_CHANNEL_DELETE';
+exports[3079] = 'ER_SLAVE_MULTIPLE_CHANNELS_CMD';
+exports[3080] = 'ER_SLAVE_MAX_CHANNELS_EXCEEDED';
+exports[3081] = 'ER_SLAVE_CHANNEL_MUST_STOP';
+exports[3082] = 'ER_SLAVE_CHANNEL_NOT_RUNNING';
+exports[3083] = 'ER_SLAVE_CHANNEL_WAS_RUNNING';
+exports[3084] = 'ER_SLAVE_CHANNEL_WAS_NOT_RUNNING';
+exports[3085] = 'ER_SLAVE_CHANNEL_SQL_THREAD_MUST_STOP';
+exports[3086] = 'ER_SLAVE_CHANNEL_SQL_SKIP_COUNTER';
+exports[3087] = 'ER_WRONG_FIELD_WITH_GROUP_V2';
+exports[3088] = 'ER_MIX_OF_GROUP_FUNC_AND_FIELDS_V2';
+exports[3089] = 'ER_WARN_DEPRECATED_SYSVAR_UPDATE';
+exports[3090] = 'ER_WARN_DEPRECATED_SQLMODE';
+exports[3091] = 'ER_CANNOT_LOG_PARTIAL_DROP_DATABASE_WITH_GTID';
+exports[3092] = 'ER_GROUP_REPLICATION_CONFIGURATION';
+exports[3093] = 'ER_GROUP_REPLICATION_RUNNING';
+exports[3094] = 'ER_GROUP_REPLICATION_APPLIER_INIT_ERROR';
+exports[3095] = 'ER_GROUP_REPLICATION_STOP_APPLIER_THREAD_TIMEOUT';
+exports[3096] = 'ER_GROUP_REPLICATION_COMMUNICATION_LAYER_SESSION_ERROR';
+exports[3097] = 'ER_GROUP_REPLICATION_COMMUNICATION_LAYER_JOIN_ERROR';
+exports[3098] = 'ER_BEFORE_DML_VALIDATION_ERROR';
+exports[3099] = 'ER_PREVENTS_VARIABLE_WITHOUT_RBR';
+exports[3100] = 'ER_RUN_HOOK_ERROR';
+exports[3101] = 'ER_TRANSACTION_ROLLBACK_DURING_COMMIT';
+exports[3102] = 'ER_GENERATED_COLUMN_FUNCTION_IS_NOT_ALLOWED';
+exports[3103] = 'ER_UNSUPPORTED_ALTER_INPLACE_ON_VIRTUAL_COLUMN';
+exports[3104] = 'ER_WRONG_FK_OPTION_FOR_GENERATED_COLUMN';
+exports[3105] = 'ER_NON_DEFAULT_VALUE_FOR_GENERATED_COLUMN';
+exports[3106] = 'ER_UNSUPPORTED_ACTION_ON_GENERATED_COLUMN';
+exports[3107] = 'ER_GENERATED_COLUMN_NON_PRIOR';
+exports[3108] = 'ER_DEPENDENT_BY_GENERATED_COLUMN';
+exports[3109] = 'ER_GENERATED_COLUMN_REF_AUTO_INC';
+exports[3110] = 'ER_FEATURE_NOT_AVAILABLE';
+exports[3111] = 'ER_CANT_SET_GTID_MODE';
+exports[3112] = 'ER_CANT_USE_AUTO_POSITION_WITH_GTID_MODE_OFF';
+exports[3113] = 'ER_CANT_REPLICATE_ANONYMOUS_WITH_AUTO_POSITION';
+exports[3114] = 'ER_CANT_REPLICATE_ANONYMOUS_WITH_GTID_MODE_ON';
+exports[3115] = 'ER_CANT_REPLICATE_GTID_WITH_GTID_MODE_OFF';
+exports[3116] = 'ER_CANT_SET_ENFORCE_GTID_CONSISTENCY_ON_WITH_ONGOING_GTID_VIOLATING_TRANSACTIONS';
+exports[3117] = 'ER_SET_ENFORCE_GTID_CONSISTENCY_WARN_WITH_ONGOING_GTID_VIOLATING_TRANSACTIONS';
+exports[3118] = 'ER_ACCOUNT_HAS_BEEN_LOCKED';
+exports[3119] = 'ER_WRONG_TABLESPACE_NAME';
+exports[3120] = 'ER_TABLESPACE_IS_NOT_EMPTY';
+exports[3121] = 'ER_WRONG_FILE_NAME';
+exports[3122] = 'ER_BOOST_GEOMETRY_INCONSISTENT_TURNS_EXCEPTION';
+exports[3123] = 'ER_WARN_OPTIMIZER_HINT_SYNTAX_ERROR';
+exports[3124] = 'ER_WARN_BAD_MAX_EXECUTION_TIME';
+exports[3125] = 'ER_WARN_UNSUPPORTED_MAX_EXECUTION_TIME';
+exports[3126] = 'ER_WARN_CONFLICTING_HINT';
+exports[3127] = 'ER_WARN_UNKNOWN_QB_NAME';
+exports[3128] = 'ER_UNRESOLVED_HINT_NAME';
+exports[3129] = 'ER_WARN_ON_MODIFYING_GTID_EXECUTED_TABLE';
+exports[3130] = 'ER_PLUGGABLE_PROTOCOL_COMMAND_NOT_SUPPORTED';
+exports[3131] = 'ER_LOCKING_SERVICE_WRONG_NAME';
+exports[3132] = 'ER_LOCKING_SERVICE_DEADLOCK';
+exports[3133] = 'ER_LOCKING_SERVICE_TIMEOUT';
+exports[3134] = 'ER_GIS_MAX_POINTS_IN_GEOMETRY_OVERFLOWED';
+exports[3135] = 'ER_SQL_MODE_MERGED';
+exports[3136] = 'ER_VTOKEN_PLUGIN_TOKEN_MISMATCH';
+exports[3137] = 'ER_VTOKEN_PLUGIN_TOKEN_NOT_FOUND';
+exports[3138] = 'ER_CANT_SET_VARIABLE_WHEN_OWNING_GTID';
+exports[3139] = 'ER_SLAVE_CHANNEL_OPERATION_NOT_ALLOWED';
+exports[3140] = 'ER_INVALID_JSON_TEXT';
+exports[3141] = 'ER_INVALID_JSON_TEXT_IN_PARAM';
+exports[3142] = 'ER_INVALID_JSON_BINARY_DATA';
+exports[3143] = 'ER_INVALID_JSON_PATH';
+exports[3144] = 'ER_INVALID_JSON_CHARSET';
+exports[3145] = 'ER_INVALID_JSON_CHARSET_IN_FUNCTION';
+exports[3146] = 'ER_INVALID_TYPE_FOR_JSON';
+exports[3147] = 'ER_INVALID_CAST_TO_JSON';
+exports[3148] = 'ER_INVALID_JSON_PATH_CHARSET';
+exports[3149] = 'ER_INVALID_JSON_PATH_WILDCARD';
+exports[3150] = 'ER_JSON_VALUE_TOO_BIG';
+exports[3151] = 'ER_JSON_KEY_TOO_BIG';
+exports[3152] = 'ER_JSON_USED_AS_KEY';
+exports[3153] = 'ER_JSON_VACUOUS_PATH';
+exports[3154] = 'ER_JSON_BAD_ONE_OR_ALL_ARG';
+exports[3155] = 'ER_NUMERIC_JSON_VALUE_OUT_OF_RANGE';
+exports[3156] = 'ER_INVALID_JSON_VALUE_FOR_CAST';
+exports[3157] = 'ER_JSON_DOCUMENT_TOO_DEEP';
+exports[3158] = 'ER_JSON_DOCUMENT_NULL_KEY';
+exports[3159] = 'ER_SECURE_TRANSPORT_REQUIRED';
+exports[3160] = 'ER_NO_SECURE_TRANSPORTS_CONFIGURED';
+exports[3161] = 'ER_DISABLED_STORAGE_ENGINE';
+exports[3162] = 'ER_USER_DOES_NOT_EXIST';
+exports[3163] = 'ER_USER_ALREADY_EXISTS';
+exports[3164] = 'ER_AUDIT_API_ABORT';
+exports[3165] = 'ER_INVALID_JSON_PATH_ARRAY_CELL';
+exports[3166] = 'ER_BUFPOOL_RESIZE_INPROGRESS';
+exports[3167] = 'ER_FEATURE_DISABLED_SEE_DOC';
+exports[3168] = 'ER_SERVER_ISNT_AVAILABLE';
+exports[3169] = 'ER_SESSION_WAS_KILLED';
+exports[3170] = 'ER_CAPACITY_EXCEEDED';
+exports[3171] = 'ER_CAPACITY_EXCEEDED_IN_RANGE_OPTIMIZER';
+exports[3172] = 'ER_TABLE_NEEDS_UPG_PART';
+exports[3173] = 'ER_CANT_WAIT_FOR_EXECUTED_GTID_SET_WHILE_OWNING_A_GTID';
+exports[3174] = 'ER_CANNOT_ADD_FOREIGN_BASE_COL_VIRTUAL';
+exports[3175] = 'ER_CANNOT_CREATE_VIRTUAL_INDEX_CONSTRAINT';
+exports[3176] = 'ER_ERROR_ON_MODIFYING_GTID_EXECUTED_TABLE';
+exports[3177] = 'ER_LOCK_REFUSED_BY_ENGINE';
+exports[3178] = 'ER_UNSUPPORTED_ALTER_ONLINE_ON_VIRTUAL_COLUMN';
+exports[3179] = 'ER_MASTER_KEY_ROTATION_NOT_SUPPORTED_BY_SE';
+exports[3180] = 'ER_MASTER_KEY_ROTATION_ERROR_BY_SE';
+exports[3181] = 'ER_MASTER_KEY_ROTATION_BINLOG_FAILED';
+exports[3182] = 'ER_MASTER_KEY_ROTATION_SE_UNAVAILABLE';
+exports[3183] = 'ER_TABLESPACE_CANNOT_ENCRYPT';
+exports[3184] = 'ER_INVALID_ENCRYPTION_OPTION';
+exports[3185] = 'ER_CANNOT_FIND_KEY_IN_KEYRING';
+exports[3186] = 'ER_CAPACITY_EXCEEDED_IN_PARSER';
+exports[3187] = 'ER_UNSUPPORTED_ALTER_ENCRYPTION_INPLACE';
+exports[3188] = 'ER_KEYRING_UDF_KEYRING_SERVICE_ERROR';
+exports[3189] = 'ER_USER_COLUMN_OLD_LENGTH';
+exports[3190] = 'ER_CANT_RESET_MASTER';
+exports[3191] = 'ER_GROUP_REPLICATION_MAX_GROUP_SIZE';
+exports[3192] = 'ER_CANNOT_ADD_FOREIGN_BASE_COL_STORED';
+exports[3193] = 'ER_TABLE_REFERENCED';
+exports[3194] = 'ER_PARTITION_ENGINE_DEPRECATED_FOR_TABLE';
+exports[3195] = 'ER_WARN_USING_GEOMFROMWKB_TO_SET_SRID_ZERO';
+exports[3196] = 'ER_WARN_USING_GEOMFROMWKB_TO_SET_SRID';
+exports[3197] = 'ER_XA_RETRY';
+exports[3198] = 'ER_KEYRING_AWS_UDF_AWS_KMS_ERROR';
+exports[3199] = 'ER_BINLOG_UNSAFE_XA';
+exports[3200] = 'ER_UDF_ERROR';
+exports[3201] = 'ER_KEYRING_MIGRATION_FAILURE';
+exports[3202] = 'ER_KEYRING_ACCESS_DENIED_ERROR';
+exports[3203] = 'ER_KEYRING_MIGRATION_STATUS';
+
+},{}],362:[function(require,module,exports){
+// Manually extracted from mysql-5.5.23/include/mysql_com.h
+
+/**
+  Is raised when a multi-statement transaction
+  has been started, either explicitly, by means
+  of BEGIN or COMMIT AND CHAIN, or
+  implicitly, by the first transactional
+  statement, when autocommit=off.
+*/
+exports.SERVER_STATUS_IN_TRANS          = 1;
+exports.SERVER_STATUS_AUTOCOMMIT        = 2;  /* Server in auto_commit mode */
+exports.SERVER_MORE_RESULTS_EXISTS      = 8;    /* Multi query - next query exists */
+exports.SERVER_QUERY_NO_GOOD_INDEX_USED = 16;
+exports.SERVER_QUERY_NO_INDEX_USED      = 32;
+/**
+  The server was able to fulfill the clients request and opened a
+  read-only non-scrollable cursor for a query. This flag comes
+  in reply to COM_STMT_EXECUTE and COM_STMT_FETCH commands.
+*/
+exports.SERVER_STATUS_CURSOR_EXISTS = 64;
+/**
+  This flag is sent when a read-only cursor is exhausted, in reply to
+  COM_STMT_FETCH command.
+*/
+exports.SERVER_STATUS_LAST_ROW_SENT        = 128;
+exports.SERVER_STATUS_DB_DROPPED           = 256; /* A database was dropped */
+exports.SERVER_STATUS_NO_BACKSLASH_ESCAPES = 512;
+/**
+  Sent to the client if after a prepared statement reprepare
+  we discovered that the new statement returns a different
+  number of result set columns.
+*/
+exports.SERVER_STATUS_METADATA_CHANGED = 1024;
+exports.SERVER_QUERY_WAS_SLOW          = 2048;
+
+/**
+  To mark ResultSet containing output parameter values.
+*/
+exports.SERVER_PS_OUT_PARAMS = 4096;
+
+},{}],363:[function(require,module,exports){
+// Certificates for Amazon RDS
+exports['Amazon RDS'] = {
+  ca: [
+    /**
+     * Amazon RDS global certificate 2010 to 2015
+     *
+     *   CN = aws.amazon.com/rds/
+     *   OU = RDS
+     *   O = Amazon.com
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2010-04-05T22:44:31Z/2015-04-04T22:41:31Z
+     *   F = 7F:09:8D:A5:7D:BB:A6:EF:7C:70:D8:CA:4E:49:11:55:7E:89:A7:D3
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIIDQzCCAqygAwIBAgIJAOd1tlfiGoEoMA0GCSqGSIb3DQEBBQUAMHUxCzAJBgNV\n'
+    + 'BAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdTZWF0dGxlMRMw\n'
+    + 'EQYDVQQKEwpBbWF6b24uY29tMQwwCgYDVQQLEwNSRFMxHDAaBgNVBAMTE2F3cy5h\n'
+    + 'bWF6b24uY29tL3Jkcy8wHhcNMTAwNDA1MjI0NDMxWhcNMTUwNDA0MjI0NDMxWjB1\n'
+    + 'MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHU2Vh\n'
+    + 'dHRsZTETMBEGA1UEChMKQW1hem9uLmNvbTEMMAoGA1UECxMDUkRTMRwwGgYDVQQD\n'
+    + 'ExNhd3MuYW1hem9uLmNvbS9yZHMvMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKB\n'
+    + 'gQDKhXGU7tizxUR5WaFoMTFcxNxa05PEjZaIOEN5ctkWrqYSRov0/nOMoZjqk8bC\n'
+    + 'med9vPFoQGD0OTakPs0jVe3wwmR735hyVwmKIPPsGlaBYj1O6llIpZeQVyupNx56\n'
+    + 'UzqtiLaDzh1KcmfqP3qP2dInzBfJQKjiRudo1FWnpPt33QIDAQABo4HaMIHXMB0G\n'
+    + 'A1UdDgQWBBT/H3x+cqSkR/ePSIinPtc4yWKe3DCBpwYDVR0jBIGfMIGcgBT/H3x+\n'
+    + 'cqSkR/ePSIinPtc4yWKe3KF5pHcwdTELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldh\n'
+    + 'c2hpbmd0b24xEDAOBgNVBAcTB1NlYXR0bGUxEzARBgNVBAoTCkFtYXpvbi5jb20x\n'
+    + 'DDAKBgNVBAsTA1JEUzEcMBoGA1UEAxMTYXdzLmFtYXpvbi5jb20vcmRzL4IJAOd1\n'
+    + 'tlfiGoEoMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAvguZy/BDT66x\n'
+    + 'GfgnJlyQwnFSeVLQm9u/FIvz4huGjbq9dqnD6h/Gm56QPFdyMEyDiZWaqY6V08lY\n'
+    + 'LTBNb4kcIc9/6pc0/ojKciP5QJRm6OiZ4vgG05nF4fYjhU7WClUx7cxq1fKjNc2J\n'
+    + 'UCmmYqgiVkAGWRETVo+byOSDZ4swb10=\n'
+    + '-----END CERTIFICATE-----\n',
+
+    /**
+     * Amazon RDS global root CA 2015 to 2020
+     *
+     *   CN = Amazon RDS Root CA
+     *   OU = Amazon RDS
+     *   O = Amazon Web Services, Inc.
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2015-02-05T09:11:31Z/2020-03-05T09:11:31Z
+     *   F = E8:11:88:56:E7:A7:CE:3E:5E:DC:9A:31:25:1B:93:AC:DC:43:CE:B0
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIID9DCCAtygAwIBAgIBQjANBgkqhkiG9w0BAQUFADCBijELMAkGA1UEBhMCVVMx\n'
+    + 'EzARBgNVBAgMCldhc2hpbmd0b24xEDAOBgNVBAcMB1NlYXR0bGUxIjAgBgNVBAoM\n'
+    + 'GUFtYXpvbiBXZWIgU2VydmljZXMsIEluYy4xEzARBgNVBAsMCkFtYXpvbiBSRFMx\n'
+    + 'GzAZBgNVBAMMEkFtYXpvbiBSRFMgUm9vdCBDQTAeFw0xNTAyMDUwOTExMzFaFw0y\n'
+    + 'MDAzMDUwOTExMzFaMIGKMQswCQYDVQQGEwJVUzETMBEGA1UECAwKV2FzaGluZ3Rv\n'
+    + 'bjEQMA4GA1UEBwwHU2VhdHRsZTEiMCAGA1UECgwZQW1hem9uIFdlYiBTZXJ2aWNl\n'
+    + 'cywgSW5jLjETMBEGA1UECwwKQW1hem9uIFJEUzEbMBkGA1UEAwwSQW1hem9uIFJE\n'
+    + 'UyBSb290IENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuD8nrZ8V\n'
+    + 'u+VA8yVlUipCZIKPTDcOILYpUe8Tct0YeQQr0uyl018StdBsa3CjBgvwpDRq1HgF\n'
+    + 'Ji2N3+39+shCNspQeE6aYU+BHXhKhIIStt3r7gl/4NqYiDDMWKHxHq0nsGDFfArf\n'
+    + 'AOcjZdJagOMqb3fF46flc8k2E7THTm9Sz4L7RY1WdABMuurpICLFE3oHcGdapOb9\n'
+    + 'T53pQR+xpHW9atkcf3pf7gbO0rlKVSIoUenBlZipUlp1VZl/OD/E+TtRhDDNdI2J\n'
+    + 'P/DSMM3aEsq6ZQkfbz/Ilml+Lx3tJYXUDmp+ZjzMPLk/+3beT8EhrwtcG3VPpvwp\n'
+    + 'BIOqsqVVTvw/CwIDAQABo2MwYTAOBgNVHQ8BAf8EBAMCAQYwDwYDVR0TAQH/BAUw\n'
+    + 'AwEB/zAdBgNVHQ4EFgQUTgLurD72FchM7Sz1BcGPnIQISYMwHwYDVR0jBBgwFoAU\n'
+    + 'TgLurD72FchM7Sz1BcGPnIQISYMwDQYJKoZIhvcNAQEFBQADggEBAHZcgIio8pAm\n'
+    + 'MjHD5cl6wKjXxScXKtXygWH2BoDMYBJF9yfyKO2jEFxYKbHePpnXB1R04zJSWAw5\n'
+    + '2EUuDI1pSBh9BA82/5PkuNlNeSTB3dXDD2PEPdzVWbSKvUB8ZdooV+2vngL0Zm4r\n'
+    + '47QPyd18yPHrRIbtBtHR/6CwKevLZ394zgExqhnekYKIqqEX41xsUV0Gm6x4vpjf\n'
+    + '2u6O/+YE2U+qyyxHE5Wd5oqde0oo9UUpFETJPVb6Q2cEeQib8PBAyi0i6KnF+kIV\n'
+    + 'A9dY7IHSubtCK/i8wxMVqfd5GtbA8mmpeJFwnDvm9rBEsHybl08qlax9syEwsUYr\n'
+    + '/40NawZfTUU=\n'
+    + '-----END CERTIFICATE-----\n',
+
+    /**
+     * Amazon RDS ap-northeast-1 certificate CA 2015 to 2020
+     *
+     *   CN = Amazon RDS ap-northeast-1 CA
+     *   OU = Amazon RDS
+     *   O = Amazon Web Services, Inc.
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2015-02-05T22:03:06Z/2020-03-05T22:03:06Z
+     *   F = 4B:2D:8A:E0:C1:A3:A9:AF:A7:BB:65:0C:5A:16:8A:39:3C:03:F2:C5
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIIEATCCAumgAwIBAgIBRDANBgkqhkiG9w0BAQUFADCBijELMAkGA1UEBhMCVVMx\n'
+    + 'EzARBgNVBAgMCldhc2hpbmd0b24xEDAOBgNVBAcMB1NlYXR0bGUxIjAgBgNVBAoM\n'
+    + 'GUFtYXpvbiBXZWIgU2VydmljZXMsIEluYy4xEzARBgNVBAsMCkFtYXpvbiBSRFMx\n'
+    + 'GzAZBgNVBAMMEkFtYXpvbiBSRFMgUm9vdCBDQTAeFw0xNTAyMDUyMjAzMDZaFw0y\n'
+    + 'MDAzMDUyMjAzMDZaMIGUMQswCQYDVQQGEwJVUzETMBEGA1UECAwKV2FzaGluZ3Rv\n'
+    + 'bjEQMA4GA1UEBwwHU2VhdHRsZTEiMCAGA1UECgwZQW1hem9uIFdlYiBTZXJ2aWNl\n'
+    + 'cywgSW5jLjETMBEGA1UECwwKQW1hem9uIFJEUzElMCMGA1UEAwwcQW1hem9uIFJE\n'
+    + 'UyBhcC1ub3J0aGVhc3QtMSBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC\n'
+    + 'ggEBAMmM2B4PfTXCZjbZMWiDPyxvk/eeNwIRJAhfzesiGUiLozX6CRy3rwC1ZOPV\n'
+    + 'AcQf0LB+O8wY88C/cV+d4Q2nBDmnk+Vx7o2MyMh343r5rR3Na+4izd89tkQVt0WW\n'
+    + 'vO21KRH5i8EuBjinboOwAwu6IJ+HyiQiM0VjgjrmEr/YzFPL8MgHD/YUHehqjACn\n'
+    + 'C0+B7/gu7W4qJzBL2DOf7ub2qszGtwPE+qQzkCRDwE1A4AJmVE++/FLH2Zx78Egg\n'
+    + 'fV1sUxPtYgjGH76VyyO6GNKM6rAUMD/q5mnPASQVIXgKbupr618bnH+SWHFjBqZq\n'
+    + 'HvDGPMtiiWII41EmGUypyt5AbysCAwEAAaNmMGQwDgYDVR0PAQH/BAQDAgEGMBIG\n'
+    + 'A1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFIiKM0Q6n1K4EmLxs3ZXxINbwEwR\n'
+    + 'MB8GA1UdIwQYMBaAFE4C7qw+9hXITO0s9QXBj5yECEmDMA0GCSqGSIb3DQEBBQUA\n'
+    + 'A4IBAQBezGbE9Rw/k2e25iGjj5n8r+M3dlye8ORfCE/dijHtxqAKasXHgKX8I9Tw\n'
+    + 'JkBiGWiuzqn7gO5MJ0nMMro1+gq29qjZnYX1pDHPgsRjUX8R+juRhgJ3JSHijRbf\n'
+    + '4qNJrnwga7pj94MhcLq9u0f6dxH6dXbyMv21T4TZMTmcFduf1KgaiVx1PEyJjC6r\n'
+    + 'M+Ru+A0eM+jJ7uCjUoZKcpX8xkj4nmSnz9NMPog3wdOSB9cAW7XIc5mHa656wr7I\n'
+    + 'WJxVcYNHTXIjCcng2zMKd1aCcl2KSFfy56sRfT7J5Wp69QSr+jq8KM55gw8uqAwi\n'
+    + 'VPrXn2899T1rcTtFYFP16WXjGuc0\n'
+    + '-----END CERTIFICATE-----\n',
+
+    /**
+     * Amazon RDS ap-northeast-2 certificate CA 2015 to 2020
+     *
+     *   CN = Amazon RDS ap-northeast-2 CA
+     *   OU = Amazon RDS
+     *   O = Amazon Web Services, Inc.
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2015-11-06T00:05:46Z/2020-03-05T00:05:46Z
+     *   F = 77:D9:33:4E:CE:56:FC:42:7B:29:57:8D:67:59:ED:29:4E:18:CB:6B
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIIEATCCAumgAwIBAgIBTDANBgkqhkiG9w0BAQUFADCBijELMAkGA1UEBhMCVVMx\n'
+    + 'EzARBgNVBAgMCldhc2hpbmd0b24xEDAOBgNVBAcMB1NlYXR0bGUxIjAgBgNVBAoM\n'
+    + 'GUFtYXpvbiBXZWIgU2VydmljZXMsIEluYy4xEzARBgNVBAsMCkFtYXpvbiBSRFMx\n'
+    + 'GzAZBgNVBAMMEkFtYXpvbiBSRFMgUm9vdCBDQTAeFw0xNTExMDYwMDA1NDZaFw0y\n'
+    + 'MDAzMDUwMDA1NDZaMIGUMQswCQYDVQQGEwJVUzETMBEGA1UECAwKV2FzaGluZ3Rv\n'
+    + 'bjEQMA4GA1UEBwwHU2VhdHRsZTEiMCAGA1UECgwZQW1hem9uIFdlYiBTZXJ2aWNl\n'
+    + 'cywgSW5jLjETMBEGA1UECwwKQW1hem9uIFJEUzElMCMGA1UEAwwcQW1hem9uIFJE\n'
+    + 'UyBhcC1ub3J0aGVhc3QtMiBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC\n'
+    + 'ggEBAKSwd+RVUzTRH0FgnbwoTK8TMm/zMT4+2BvALpAUe6YXbkisg2goycWuuWLg\n'
+    + 'jOpFBB3GtyvXZnkqi7MkDWUmj1a2kf8l2oLyoaZ+Hm9x/sV+IJzOqPvj1XVUGjP6\n'
+    + 'yYYnPJmUYqvZeI7fEkIGdFkP2m4/sgsSGsFvpD9FK1bL1Kx2UDpYX0kHTtr18Zm/\n'
+    + '1oN6irqWALSmXMDydb8hE0FB2A1VFyeKE6PnoDj/Y5cPHwPPdEi6/3gkDkSaOG30\n'
+    + 'rWeQfL3pOcKqzbHaWTxMphd0DSL/quZ64Nr+Ly65Q5PRcTrtr55ekOUziuqXwk+o\n'
+    + '9QpACMwcJ7ROqOznZTqTzSFVXFECAwEAAaNmMGQwDgYDVR0PAQH/BAQDAgEGMBIG\n'
+    + 'A1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFM6Nox/QWbhzWVvzoJ/y0kGpNPK+\n'
+    + 'MB8GA1UdIwQYMBaAFE4C7qw+9hXITO0s9QXBj5yECEmDMA0GCSqGSIb3DQEBBQUA\n'
+    + 'A4IBAQCTkWBqNvyRf3Y/W21DwFx3oT/AIWrHt0BdGZO34tavummXemTH9LZ/mqv9\n'
+    + 'aljt6ZuDtf5DEQjdsAwXMsyo03ffnP7doWm8iaF1+Mui77ot0TmTsP/deyGwukvJ\n'
+    + 'tkxX8bZjDh+EaNauWKr+CYnniNxCQLfFtXYJsfOdVBzK3xNL+Z3ucOQRhr2helWc\n'
+    + 'CDQgwfhP1+3pRVKqHvWCPC4R3fT7RZHuRmZ38kndv476GxRntejh+ePffif78bFI\n'
+    + '3rIZCPBGobrrUMycafSbyXteoGca/kA+/IqrAPlk0pWQ4aEL0yTWN2h2dnjoD7oX\n'
+    + 'byIuL/g9AGRh97+ssn7D6bDRPTbW\n'
+    + '-----END CERTIFICATE-----\n',
+
+    /**
+     * Amazon RDS ap-southeast-1 certificate CA 2015 to 2020
+     *
+     *   CN = Amazon RDS ap-southeast-1 CA
+     *   OU = Amazon RDS
+     *   O = Amazon Web Services, Inc.
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2015-02-05T22:03:19Z/2020-03-05T22:03:19Z
+     *   F = 0E:EC:5D:BD:F9:80:EE:A9:A0:8D:81:AC:37:D9:8D:34:1C:CD:27:D1
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIIEATCCAumgAwIBAgIBRTANBgkqhkiG9w0BAQUFADCBijELMAkGA1UEBhMCVVMx\n'
+    + 'EzARBgNVBAgMCldhc2hpbmd0b24xEDAOBgNVBAcMB1NlYXR0bGUxIjAgBgNVBAoM\n'
+    + 'GUFtYXpvbiBXZWIgU2VydmljZXMsIEluYy4xEzARBgNVBAsMCkFtYXpvbiBSRFMx\n'
+    + 'GzAZBgNVBAMMEkFtYXpvbiBSRFMgUm9vdCBDQTAeFw0xNTAyMDUyMjAzMTlaFw0y\n'
+    + 'MDAzMDUyMjAzMTlaMIGUMQswCQYDVQQGEwJVUzETMBEGA1UECAwKV2FzaGluZ3Rv\n'
+    + 'bjEQMA4GA1UEBwwHU2VhdHRsZTEiMCAGA1UECgwZQW1hem9uIFdlYiBTZXJ2aWNl\n'
+    + 'cywgSW5jLjETMBEGA1UECwwKQW1hem9uIFJEUzElMCMGA1UEAwwcQW1hem9uIFJE\n'
+    + 'UyBhcC1zb3V0aGVhc3QtMSBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC\n'
+    + 'ggEBANaXElmSEYt/UtxHFsARFhSUahTf1KNJzR0Dmay6hqOXQuRVbKRwPd19u5vx\n'
+    + 'DdF1sLT7D69IK3VDnUiQScaCv2Dpu9foZt+rLx+cpx1qiQd1UHrvqq8xPzQOqCdC\n'
+    + 'RFStq6yVYZ69yfpfoI67AjclMOjl2Vph3ftVnqP0IgVKZdzeC7fd+umGgR9xY0Qr\n'
+    + 'Ubhd/lWdsbNvzK3f1TPWcfIKQnpvSt85PIEDJir6/nuJUKMtmJRwTymJf0i+JZ4x\n'
+    + '7dJa341p2kHKcHMgOPW7nJQklGBA70ytjUV6/qebS3yIugr/28mwReflg3TJzVDl\n'
+    + 'EOvi6pqbqNbkMuEwGDCmEQIVqgkCAwEAAaNmMGQwDgYDVR0PAQH/BAQDAgEGMBIG\n'
+    + 'A1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFAu93/4k5xbWOsgdCdn+/KdiRuit\n'
+    + 'MB8GA1UdIwQYMBaAFE4C7qw+9hXITO0s9QXBj5yECEmDMA0GCSqGSIb3DQEBBQUA\n'
+    + 'A4IBAQBlcjSyscpPjf5+MgzMuAsCxByqUt+WFspwcMCpwdaBeHOPSQrXNqX2Sk6P\n'
+    + 'kth6oCivA64trWo8tFMvPYlUA1FYVD5WpN0kCK+P5pD4KHlaDsXhuhClJzp/OP8t\n'
+    + 'pOyUr5109RHLxqoKB5J5m1XA7rgcFjnMxwBSWFe3/4uMk/+4T53YfCVXuc6QV3i7\n'
+    + 'I/2LAJwFf//pTtt6fZenYfCsahnr2nvrNRNyAxcfvGZ/4Opn/mJtR6R/AjvQZHiR\n'
+    + 'bkRNKF2GW0ueK5W4FkZVZVhhX9xh1Aj2Ollb+lbOqADaVj+AT3PoJPZ3MPQHKCXm\n'
+    + 'xwG0LOLlRr/TfD6li1AfOVTAJXv9\n'
+    + '-----END CERTIFICATE-----\n',
+
+    /**
+     * Amazon RDS ap-southeast-2 certificate CA 2015 to 2020
+     *
+     *   CN = Amazon RDS ap-southeast-2 CA
+     *   OU = Amazon RDS
+     *   O = Amazon Web Services, Inc.
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2015-02-05T22:03:24Z/2020-03-05T22:03:24Z
+     *   F = 20:D9:A8:82:23:AB:B9:E5:C5:24:10:D3:4D:0F:3D:B1:31:DF:E5:14
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIIEATCCAumgAwIBAgIBRjANBgkqhkiG9w0BAQUFADCBijELMAkGA1UEBhMCVVMx\n'
+    + 'EzARBgNVBAgMCldhc2hpbmd0b24xEDAOBgNVBAcMB1NlYXR0bGUxIjAgBgNVBAoM\n'
+    + 'GUFtYXpvbiBXZWIgU2VydmljZXMsIEluYy4xEzARBgNVBAsMCkFtYXpvbiBSRFMx\n'
+    + 'GzAZBgNVBAMMEkFtYXpvbiBSRFMgUm9vdCBDQTAeFw0xNTAyMDUyMjAzMjRaFw0y\n'
+    + 'MDAzMDUyMjAzMjRaMIGUMQswCQYDVQQGEwJVUzETMBEGA1UECAwKV2FzaGluZ3Rv\n'
+    + 'bjEQMA4GA1UEBwwHU2VhdHRsZTEiMCAGA1UECgwZQW1hem9uIFdlYiBTZXJ2aWNl\n'
+    + 'cywgSW5jLjETMBEGA1UECwwKQW1hem9uIFJEUzElMCMGA1UEAwwcQW1hem9uIFJE\n'
+    + 'UyBhcC1zb3V0aGVhc3QtMiBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC\n'
+    + 'ggEBAJqBAJutz69hFOh3BtLHZTbwE8eejGGKayn9hu98YMDPzWzGXWCmW+ZYWELA\n'
+    + 'cY3cNWNF8K4FqKXFr2ssorBYim1UtYFX8yhydT2hMD5zgQ2sCGUpuidijuPA6zaq\n'
+    + 'Z3tdhVR94f0q8mpwpv2zqR9PcqaGDx2VR1x773FupRPRo7mEW1vC3IptHCQlP/zE\n'
+    + '7jQiLl28bDIH2567xg7e7E9WnZToRnhlYdTaDaJsHTzi5mwILi4cihSok7Shv/ME\n'
+    + 'hnukvxeSPUpaVtFaBhfBqq055ePq9I+Ns4KGreTKMhU0O9fkkaBaBmPaFgmeX/XO\n'
+    + 'n2AX7gMouo3mtv34iDTZ0h6YCGkCAwEAAaNmMGQwDgYDVR0PAQH/BAQDAgEGMBIG\n'
+    + 'A1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFIlQnY0KHYWn1jYumSdJYfwj/Nfw\n'
+    + 'MB8GA1UdIwQYMBaAFE4C7qw+9hXITO0s9QXBj5yECEmDMA0GCSqGSIb3DQEBBQUA\n'
+    + 'A4IBAQA0wVU6/l41cTzHc4azc4CDYY2Wd90DFWiH9C/mw0SgToYfCJ/5Cfi0NT/Y\n'
+    + 'PRnk3GchychCJgoPA/k9d0//IhYEAIiIDjyFVgjbTkKV3sh4RbdldKVOUB9kumz/\n'
+    + 'ZpShplsGt3z4QQiVnKfrAgqxWDjR0I0pQKkxXa6Sjkicos9LQxVtJ0XA4ieG1E7z\n'
+    + 'zJr+6t80wmzxvkInSaWP3xNJK9azVRTrgQZQlvkbpDbExl4mNTG66VD3bAp6t3Wa\n'
+    + 'B49//uDdfZmPkqqbX+hsxp160OH0rxJppwO3Bh869PkDnaPEd/Pxw7PawC+li0gi\n'
+    + 'NRV8iCEx85aFxcyOhqn0WZOasxee\n'
+    + '-----END CERTIFICATE-----\n',
+
+    /**
+     * Amazon RDS eu-central-1 certificate CA 2015 to 2020
+     *
+     *   CN = Amazon RDS eu-central-1 CA
+     *   OU = Amazon RDS
+     *   O = Amazon Web Services, Inc.
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2015-02-05T22:03:31Z/2020-03-05T22:03:31Z
+     *   F = 94:B4:DF:B9:6D:7E:F7:C3:B7:BF:51:E9:A6:B7:44:A0:D0:82:11:84
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIID/zCCAuegAwIBAgIBRzANBgkqhkiG9w0BAQUFADCBijELMAkGA1UEBhMCVVMx\n'
+    + 'EzARBgNVBAgMCldhc2hpbmd0b24xEDAOBgNVBAcMB1NlYXR0bGUxIjAgBgNVBAoM\n'
+    + 'GUFtYXpvbiBXZWIgU2VydmljZXMsIEluYy4xEzARBgNVBAsMCkFtYXpvbiBSRFMx\n'
+    + 'GzAZBgNVBAMMEkFtYXpvbiBSRFMgUm9vdCBDQTAeFw0xNTAyMDUyMjAzMzFaFw0y\n'
+    + 'MDAzMDUyMjAzMzFaMIGSMQswCQYDVQQGEwJVUzETMBEGA1UECAwKV2FzaGluZ3Rv\n'
+    + 'bjEQMA4GA1UEBwwHU2VhdHRsZTEiMCAGA1UECgwZQW1hem9uIFdlYiBTZXJ2aWNl\n'
+    + 'cywgSW5jLjETMBEGA1UECwwKQW1hem9uIFJEUzEjMCEGA1UEAwwaQW1hem9uIFJE\n'
+    + 'UyBldS1jZW50cmFsLTEgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIB\n'
+    + 'AQDFtP2dhSLuaPOI4ZrrPWsK4OY9ocQBp3yApH1KJYmI9wpQKZG/KCH2E6Oo7JAw\n'
+    + 'QORU519r033T+FO2Z7pFPlmz1yrxGXyHpJs8ySx3Yo5S8ncDCdZJCLmtPiq/hahg\n'
+    + '5/0ffexMFUCQaYicFZsrJ/cStdxUV+tSw2JQLD7UxS9J97LQWUPyyG+ZrjYVTVq+\n'
+    + 'zudnFmNSe4QoecXMhAFTGJFQXxP7nhSL9Ao5FGgdXy7/JWeWdQIAj8ku6cBDKPa6\n'
+    + 'Y6kP+ak+In+Lye8z9qsCD/afUozfWjPR2aA4JoIZVF8dNRShIMo8l0XfgfM2q0+n\n'
+    + 'ApZWZ+BjhIO5XuoUgHS3D2YFAgMBAAGjZjBkMA4GA1UdDwEB/wQEAwIBBjASBgNV\n'
+    + 'HRMBAf8ECDAGAQH/AgEAMB0GA1UdDgQWBBRm4GsWIA/M6q+tK8WGHWDGh2gcyTAf\n'
+    + 'BgNVHSMEGDAWgBROAu6sPvYVyEztLPUFwY+chAhJgzANBgkqhkiG9w0BAQUFAAOC\n'
+    + 'AQEAHpMmeVQNqcxgfQdbDIi5UIy+E7zZykmtAygN1XQrvga9nXTis4kOTN6g5/+g\n'
+    + 'HCx7jIXeNJzAbvg8XFqBN84Quqgpl/tQkbpco9Jh1HDs558D5NnZQxNqH5qXQ3Mm\n'
+    + 'uPgCw0pYcPOa7bhs07i+MdVwPBsX27CFDtsgAIru8HvKxY1oTZrWnyIRo93tt/pk\n'
+    + 'WuItVMVHjaQZVfTCow0aDUbte6Vlw82KjUFq+n2NMSCJDiDKsDDHT6BJc4AJHIq3\n'
+    + '/4Z52MSC9KMr0yAaaoWfW/yMEj9LliQauAgwVjArF4q78rxpfKTG9Rfd8U1BZANP\n'
+    + '7FrFMN0ThjfA1IvmOYcgskY5bQ==\n'
+    + '-----END CERTIFICATE-----\n',
+
+    /**
+     * Amazon RDS eu-west-1 certificate CA 2015 to 2020
+     *
+     *   CN = Amazon RDS eu-west-1 CA
+     *   OU = Amazon RDS
+     *   O = Amazon Web Services, Inc.
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2015-02-05T22:03:35Z/2020-03-05T22:03:35Z
+     *   F = 1A:95:F0:43:82:D2:5D:A6:AD:F5:13:27:0B:40:8A:72:D9:92:F3:E0
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIID/DCCAuSgAwIBAgIBSDANBgkqhkiG9w0BAQUFADCBijELMAkGA1UEBhMCVVMx\n'
+    + 'EzARBgNVBAgMCldhc2hpbmd0b24xEDAOBgNVBAcMB1NlYXR0bGUxIjAgBgNVBAoM\n'
+    + 'GUFtYXpvbiBXZWIgU2VydmljZXMsIEluYy4xEzARBgNVBAsMCkFtYXpvbiBSRFMx\n'
+    + 'GzAZBgNVBAMMEkFtYXpvbiBSRFMgUm9vdCBDQTAeFw0xNTAyMDUyMjAzMzVaFw0y\n'
+    + 'MDAzMDUyMjAzMzVaMIGPMQswCQYDVQQGEwJVUzETMBEGA1UECAwKV2FzaGluZ3Rv\n'
+    + 'bjEQMA4GA1UEBwwHU2VhdHRsZTEiMCAGA1UECgwZQW1hem9uIFdlYiBTZXJ2aWNl\n'
+    + 'cywgSW5jLjETMBEGA1UECwwKQW1hem9uIFJEUzEgMB4GA1UEAwwXQW1hem9uIFJE\n'
+    + 'UyBldS13ZXN0LTEgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCx\n'
+    + 'PdbqQ0HKRj79Pmocxvjc+P6i4Ux24kgFIl+ckiir1vzkmesc3a58gjrMlCksEObt\n'
+    + 'Yihs5IhzEq1ePT0gbfS9GYFp34Uj/MtPwlrfCBWG4d2TcrsKRHr1/EXUYhWqmdrb\n'
+    + 'RhX8XqoRhVkbF/auzFSBhTzcGGvZpQ2KIaxRcQfcXlMVhj/pxxAjh8U4F350Fb0h\n'
+    + 'nX1jw4/KvEreBL0Xb2lnlGTkwVxaKGSgXEnOgIyOFdOQc61vdome0+eeZsP4jqeR\n'
+    + 'TGYJA9izJsRbe2YJxHuazD+548hsPlM3vFzKKEVURCha466rAaYAHy3rKur3HYQx\n'
+    + 'Yt+SoKcEz9PXuSGj96ejAgMBAAGjZjBkMA4GA1UdDwEB/wQEAwIBBjASBgNVHRMB\n'
+    + 'Af8ECDAGAQH/AgEAMB0GA1UdDgQWBBTebg//h2oeXbZjQ4uuoiuLYzuiPDAfBgNV\n'
+    + 'HSMEGDAWgBROAu6sPvYVyEztLPUFwY+chAhJgzANBgkqhkiG9w0BAQUFAAOCAQEA\n'
+    + 'TikPaGeZasTPw+4RBemlsyPAjtFFQLo7ddaFdORLgdEysVf8aBqndvbA6MT/v4lj\n'
+    + 'GtEtUdF59ZcbWOrVm+fBZ2h/jYJ59dYF/xzb09nyRbdMSzB9+mkSsnOMqluq5y8o\n'
+    + 'DY/PfP2vGhEg/2ZncRC7nlQU1Dm8F4lFWEiQ2fi7O1cW852Vmbq61RIfcYsH/9Ma\n'
+    + 'kpgk10VZ75b8m3UhmpZ/2uRY+JEHImH5WpcTJ7wNiPNJsciZMznGtrgOnPzYco8L\n'
+    + 'cDleOASIZifNMQi9PKOJKvi0ITz0B/imr8KBsW0YjZVJ54HMa7W1lwugSM7aMAs+\n'
+    + 'E3Sd5lS+SHwWaOCHwhOEVA==\n'
+    + '-----END CERTIFICATE-----\n',
+
+    /**
+     * Amazon RDS sa-east-1 certificate CA 2015 to 2020
+     *
+     *   CN = Amazon RDS sa-east-1 CA
+     *   OU = Amazon RDS
+     *   O = Amazon Web Services, Inc.
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2015-02-05T22:03:40Z/2020-03-05T22:03:40Z
+     *   F = 32:10:3D:FA:6D:42:F5:35:98:40:15:F4:4C:74:74:27:CB:CE:D4:B5
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIID/DCCAuSgAwIBAgIBSTANBgkqhkiG9w0BAQUFADCBijELMAkGA1UEBhMCVVMx\n'
+    + 'EzARBgNVBAgMCldhc2hpbmd0b24xEDAOBgNVBAcMB1NlYXR0bGUxIjAgBgNVBAoM\n'
+    + 'GUFtYXpvbiBXZWIgU2VydmljZXMsIEluYy4xEzARBgNVBAsMCkFtYXpvbiBSRFMx\n'
+    + 'GzAZBgNVBAMMEkFtYXpvbiBSRFMgUm9vdCBDQTAeFw0xNTAyMDUyMjAzNDBaFw0y\n'
+    + 'MDAzMDUyMjAzNDBaMIGPMQswCQYDVQQGEwJVUzETMBEGA1UECAwKV2FzaGluZ3Rv\n'
+    + 'bjEQMA4GA1UEBwwHU2VhdHRsZTEiMCAGA1UECgwZQW1hem9uIFdlYiBTZXJ2aWNl\n'
+    + 'cywgSW5jLjETMBEGA1UECwwKQW1hem9uIFJEUzEgMB4GA1UEAwwXQW1hem9uIFJE\n'
+    + 'UyBzYS1lYXN0LTEgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCU\n'
+    + 'X4OBnQ5xA6TLJAiFEI6l7bUWjoVJBa/VbMdCCSs2i2dOKmqUaXu2ix2zcPILj3lZ\n'
+    + 'GMk3d/2zvTK/cKhcFrewHUBamTeVHdEmynhMQamqNmkM4ptYzFcvEUw1TGxHT4pV\n'
+    + 'Q6gSN7+/AJewQvyHexHo8D0+LDN0/Wa9mRm4ixCYH2CyYYJNKaZt9+EZfNu+PPS4\n'
+    + '8iB0TWH0DgQkbWMBfCRgolLLitAZklZ4dvdlEBS7evN1/7ttBxUK6SvkeeSx3zBl\n'
+    + 'ww3BlXqc3bvTQL0A+RRysaVyFbvtp9domFaDKZCpMmDFAN/ntx215xmQdrSt+K3F\n'
+    + 'cXdGQYHx5q410CAclGnbAgMBAAGjZjBkMA4GA1UdDwEB/wQEAwIBBjASBgNVHRMB\n'
+    + 'Af8ECDAGAQH/AgEAMB0GA1UdDgQWBBT6iVWnm/uakS+tEX2mzIfw+8JL0zAfBgNV\n'
+    + 'HSMEGDAWgBROAu6sPvYVyEztLPUFwY+chAhJgzANBgkqhkiG9w0BAQUFAAOCAQEA\n'
+    + 'FmDD+QuDklXn2EgShwQxV13+txPRuVdOSrutHhoCgMwFWCMtPPtBAKs6KPY7Guvw\n'
+    + 'DpJoZSehDiOfsgMirjOWjvfkeWSNvKfjWTVneX7pZD9W5WPnsDBvTbCGezm+v87z\n'
+    + 'b+ZM2ZMo98m/wkMcIEAgdSKilR2fuw8rLkAjhYFfs0A7tDgZ9noKwgHvoE4dsrI0\n'
+    + 'KZYco6DlP/brASfHTPa2puBLN9McK3v+h0JaSqqm5Ro2Bh56tZkQh8AWy/miuDuK\n'
+    + '3+hNEVdxosxlkM1TPa1DGj0EzzK0yoeerXuH2HX7LlCrrxf6/wdKnjR12PMrLQ4A\n'
+    + 'pCqkcWw894z6bV9MAvKe6A==\n'
+    + '-----END CERTIFICATE-----\n',
+
+    /**
+     * Amazon RDS us-east-1 certificate CA 2015 to 2020
+     *
+     *   CN = Amazon RDS us-east-1 CA
+     *   OU = Amazon RDS
+     *   O = Amazon Web Services, Inc.
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2015-02-05T21:54:04Z/2020-03-05T21:54:04Z
+     *   F = 34:47:8A:90:8A:83:AE:45:DC:B6:16:76:D2:35:EC:E9:75:C6:2C:63
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIID/DCCAuSgAwIBAgIBQzANBgkqhkiG9w0BAQUFADCBijELMAkGA1UEBhMCVVMx\n'
+    + 'EzARBgNVBAgMCldhc2hpbmd0b24xEDAOBgNVBAcMB1NlYXR0bGUxIjAgBgNVBAoM\n'
+    + 'GUFtYXpvbiBXZWIgU2VydmljZXMsIEluYy4xEzARBgNVBAsMCkFtYXpvbiBSRFMx\n'
+    + 'GzAZBgNVBAMMEkFtYXpvbiBSRFMgUm9vdCBDQTAeFw0xNTAyMDUyMTU0MDRaFw0y\n'
+    + 'MDAzMDUyMTU0MDRaMIGPMQswCQYDVQQGEwJVUzETMBEGA1UECAwKV2FzaGluZ3Rv\n'
+    + 'bjEQMA4GA1UEBwwHU2VhdHRsZTEiMCAGA1UECgwZQW1hem9uIFdlYiBTZXJ2aWNl\n'
+    + 'cywgSW5jLjETMBEGA1UECwwKQW1hem9uIFJEUzEgMB4GA1UEAwwXQW1hem9uIFJE\n'
+    + 'UyB1cy1lYXN0LTEgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDI\n'
+    + 'UIuwh8NusKHk1SqPXcP7OqxY3S/M2ZyQWD3w7Bfihpyyy/fc1w0/suIpX3kbMhAV\n'
+    + '2ESwged2/2zSx4pVnjp/493r4luhSqQYzru78TuPt9bhJIJ51WXunZW2SWkisSaf\n'
+    + 'USYUzVN9ezR/bjXTumSUQaLIouJt3OHLX49s+3NAbUyOI8EdvgBQWD68H1epsC0n\n'
+    + 'CI5s+pIktyOZ59c4DCDLQcXErQ+tNbDC++oct1ANd/q8p9URonYwGCGOBy7sbCYq\n'
+    + '9eVHh1Iy2M+SNXddVOGw5EuruvHoCIQyOz5Lz4zSuZA9dRbrfztNOpezCNYu6NKM\n'
+    + 'n+hzcvdiyxv77uNm8EaxAgMBAAGjZjBkMA4GA1UdDwEB/wQEAwIBBjASBgNVHRMB\n'
+    + 'Af8ECDAGAQH/AgEAMB0GA1UdDgQWBBQSQG3TmMe6Sa3KufaPBa72v4QFDzAfBgNV\n'
+    + 'HSMEGDAWgBROAu6sPvYVyEztLPUFwY+chAhJgzANBgkqhkiG9w0BAQUFAAOCAQEA\n'
+    + 'L/mOZfB3187xTmjOHMqN2G2oSKHBKiQLM9uv8+97qT+XR+TVsBT6b3yoPpMAGhHA\n'
+    + 'Pc7nxAF5gPpuzatx0OTLPcmYucFmfqT/1qA5WlgCnMNtczyNMH97lKFTNV7Njtek\n'
+    + 'jWEzAEQSyEWrkNpNlC4j6kMYyPzVXQeXUeZTgJ9FNnVZqmvfjip2N22tawMjrCn5\n'
+    + '7KN/zN65EwY2oO9XsaTwwWmBu3NrDdMbzJnbxoWcFWj4RBwanR1XjQOVNhDwmCOl\n'
+    + '/1Et13b8CPyj69PC8BOVU6cfTSx8WUVy0qvYOKHNY9Bqa5BDnIL3IVmUkeTlM1mt\n'
+    + 'enRpyBj+Bk9rh/ICdiRKmA==\n'
+    + '-----END CERTIFICATE-----\n',
+
+    /**
+     * Amazon RDS us-west-1 certificate CA 2015 to 2020
+     *
+     *   CN = Amazon RDS us-west-1 CA
+     *   OU = Amazon RDS
+     *   O = Amazon Web Services, Inc.
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2015-02-05T22:03:45Z/2020-03-05T22:03:45Z
+     *   F = EF:94:2F:E3:58:0E:09:D6:79:C2:16:97:91:FB:37:EA:D7:70:A8:4B
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIID/DCCAuSgAwIBAgIBSjANBgkqhkiG9w0BAQUFADCBijELMAkGA1UEBhMCVVMx\n'
+    + 'EzARBgNVBAgMCldhc2hpbmd0b24xEDAOBgNVBAcMB1NlYXR0bGUxIjAgBgNVBAoM\n'
+    + 'GUFtYXpvbiBXZWIgU2VydmljZXMsIEluYy4xEzARBgNVBAsMCkFtYXpvbiBSRFMx\n'
+    + 'GzAZBgNVBAMMEkFtYXpvbiBSRFMgUm9vdCBDQTAeFw0xNTAyMDUyMjAzNDVaFw0y\n'
+    + 'MDAzMDUyMjAzNDVaMIGPMQswCQYDVQQGEwJVUzETMBEGA1UECAwKV2FzaGluZ3Rv\n'
+    + 'bjEQMA4GA1UEBwwHU2VhdHRsZTEiMCAGA1UECgwZQW1hem9uIFdlYiBTZXJ2aWNl\n'
+    + 'cywgSW5jLjETMBEGA1UECwwKQW1hem9uIFJEUzEgMB4GA1UEAwwXQW1hem9uIFJE\n'
+    + 'UyB1cy13ZXN0LTEgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDE\n'
+    + 'Dhw+uw/ycaiIhhyu2pXFRimq0DlB8cNtIe8hdqndH8TV/TFrljNgR8QdzOgZtZ9C\n'
+    + 'zzQ2GRpInN/qJF6slEd6wO+6TaDBQkPY+07TXNt52POFUhdVkhJXHpE2BS7Xn6J7\n'
+    + '7RFAOeG1IZmc2DDt+sR1BgXzUqHslQGfFYNS0/MBO4P+ya6W7IhruB1qfa4HiYQS\n'
+    + 'dbe4MvGWnv0UzwAqdR7OF8+8/5c58YXZIXCO9riYF2ql6KNSL5cyDPcYK5VK0+Q9\n'
+    + 'VI6vuJHSMYcF7wLePw8jtBktqAFE/wbdZiIHhZvNyiNWPPNTGUmQbaJ+TzQEHDs5\n'
+    + '8en+/W7JKnPyBOkxxENbAgMBAAGjZjBkMA4GA1UdDwEB/wQEAwIBBjASBgNVHRMB\n'
+    + 'Af8ECDAGAQH/AgEAMB0GA1UdDgQWBBS0nw/tFR9bCjgqWTPJkyy4oOD8bzAfBgNV\n'
+    + 'HSMEGDAWgBROAu6sPvYVyEztLPUFwY+chAhJgzANBgkqhkiG9w0BAQUFAAOCAQEA\n'
+    + 'CXGAY3feAak6lHdqj6+YWjy6yyUnLK37bRxZDsyDVXrPRQaXRzPTzx79jvDwEb/H\n'
+    + 'Q/bdQ7zQRWqJcbivQlwhuPJ4kWPUZgSt3JUUuqkMsDzsvj/bwIjlrEFDOdHGh0mi\n'
+    + 'eVIngFEjUXjMh+5aHPEF9BlQnB8LfVtKj18e15UDTXFa+xJPFxUR7wDzCfo4WI1m\n'
+    + 'sUMG4q1FkGAZgsoyFPZfF8IVvgCuGdR8z30VWKklFxttlK0eGLlPAyIO0CQxPQlo\n'
+    + 'saNJrHf4tLOgZIWk+LpDhNd9Et5EzvJ3aURUsKY4pISPPF5WdvM9OE59bERwUErd\n'
+    + 'nuOuQWQeeadMceZnauRzJQ==\n'
+    + '-----END CERTIFICATE-----\n',
+
+    /**
+     * Amazon RDS us-west-2 certificate CA 2015 to 2020
+     *
+     *   CN = Amazon RDS us-west-2 CA
+     *   OU = Amazon RDS
+     *   O = Amazon Web Services, Inc.
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2015-02-05T22:03:50Z/2020-03-05T22:03:50Z
+     *   F = 94:2C:A8:B0:23:48:17:F0:CD:2F:19:7F:C1:E0:21:7C:65:79:13:3A
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIID/DCCAuSgAwIBAgIBSzANBgkqhkiG9w0BAQUFADCBijELMAkGA1UEBhMCVVMx\n'
+    + 'EzARBgNVBAgMCldhc2hpbmd0b24xEDAOBgNVBAcMB1NlYXR0bGUxIjAgBgNVBAoM\n'
+    + 'GUFtYXpvbiBXZWIgU2VydmljZXMsIEluYy4xEzARBgNVBAsMCkFtYXpvbiBSRFMx\n'
+    + 'GzAZBgNVBAMMEkFtYXpvbiBSRFMgUm9vdCBDQTAeFw0xNTAyMDUyMjAzNTBaFw0y\n'
+    + 'MDAzMDUyMjAzNTBaMIGPMQswCQYDVQQGEwJVUzETMBEGA1UECAwKV2FzaGluZ3Rv\n'
+    + 'bjEQMA4GA1UEBwwHU2VhdHRsZTEiMCAGA1UECgwZQW1hem9uIFdlYiBTZXJ2aWNl\n'
+    + 'cywgSW5jLjETMBEGA1UECwwKQW1hem9uIFJEUzEgMB4GA1UEAwwXQW1hem9uIFJE\n'
+    + 'UyB1cy13ZXN0LTIgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDM\n'
+    + 'H58SR48U6jyERC1vYTnub34smf5EQVXyzaTmspWGWGzT31NLNZGSDFaa7yef9kdO\n'
+    + 'mzJsgebR5tXq6LdwlIoWkKYQ7ycUaadtVKVYdI40QcI3cHn0qLFlg2iBXmWp/B+i\n'
+    + 'Z34VuVlCh31Uj5WmhaBoz8t/GRqh1V/aCsf3Wc6jCezH3QfuCjBpzxdOOHN6Ie2v\n'
+    + 'xX09O5qmZTvMoRBAvPkxdaPg/Mi7fxueWTbEVk78kuFbF1jHYw8U1BLILIAhcqlq\n'
+    + 'x4u8nl73t3O3l/soNUcIwUDK0/S+Kfqhwn9yQyPlhb4Wy3pfnZLJdkyHldktnQav\n'
+    + '9TB9u7KH5Lk0aAYslMLxAgMBAAGjZjBkMA4GA1UdDwEB/wQEAwIBBjASBgNVHRMB\n'
+    + 'Af8ECDAGAQH/AgEAMB0GA1UdDgQWBBT8roM4lRnlFHWMPWRz0zkwFZog1jAfBgNV\n'
+    + 'HSMEGDAWgBROAu6sPvYVyEztLPUFwY+chAhJgzANBgkqhkiG9w0BAQUFAAOCAQEA\n'
+    + 'JwrxwgwmPtcdaU7O7WDdYa4hprpOMamI49NDzmE0s10oGrqmLwZygcWU0jT+fJ+Y\n'
+    + 'pJe1w0CVfKaeLYNsOBVW3X4ZPmffYfWBheZiaiEflq/P6t7/Eg81gaKYnZ/x1Dfa\n'
+    + 'sUYkzPvCkXe9wEz5zdUTOCptDt89rBR9CstL9vE7WYUgiVVmBJffWbHQLtfjv6OF\n'
+    + 'NMb0QME981kGRzc2WhgP71YS2hHd1kXtsoYP1yTu4vThSKsoN4bkiHsaC1cRkLoy\n'
+    + '0fFA4wpB3WloMEvCDaUvvH1LZlBXTNlwi9KtcwD4tDxkkBt4tQczKLGpQ/nF/W9n\n'
+    + '8YDWk3IIc1sd0bkZqoau2Q==\n'
+    + '-----END CERTIFICATE-----\n',
+
+    /**
+     * Amazon RDS ap-south-1 certificate CA 2016 to 2020
+     *
+     *   CN = Amazon RDS ap-south-1 CA
+     *   OU = Amazon RDS
+     *   O = Amazon Web Services, Inc.
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2016-05-03T21:29:22Z/2020-03-05T21:29:22Z
+     *   F = F3:A3:C2:52:D9:82:20:AC:8C:62:31:2A:8C:AD:5D:7B:1C:31:F1:DD
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIID/TCCAuWgAwIBAgIBTTANBgkqhkiG9w0BAQsFADCBijELMAkGA1UEBhMCVVMx\n'
+    + 'EzARBgNVBAgMCldhc2hpbmd0b24xEDAOBgNVBAcMB1NlYXR0bGUxIjAgBgNVBAoM\n'
+    + 'GUFtYXpvbiBXZWIgU2VydmljZXMsIEluYy4xEzARBgNVBAsMCkFtYXpvbiBSRFMx\n'
+    + 'GzAZBgNVBAMMEkFtYXpvbiBSRFMgUm9vdCBDQTAeFw0xNjA1MDMyMTI5MjJaFw0y\n'
+    + 'MDAzMDUyMTI5MjJaMIGQMQswCQYDVQQGEwJVUzETMBEGA1UECAwKV2FzaGluZ3Rv\n'
+    + 'bjEQMA4GA1UEBwwHU2VhdHRsZTEiMCAGA1UECgwZQW1hem9uIFdlYiBTZXJ2aWNl\n'
+    + 'cywgSW5jLjETMBEGA1UECwwKQW1hem9uIFJEUzEhMB8GA1UEAwwYQW1hem9uIFJE\n'
+    + 'UyBhcC1zb3V0aC0xIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA\n'
+    + '06eWGLE0TeqL9kyWOLkS8q0fXO97z+xyBV3DKSB2lg2GkgBz3B98MkmkeB0SZy3G\n'
+    + 'Ce4uCpCPbFKiFEdiUclOlhZsrBuCeaimxLM3Ig2wuenElO/7TqgaYHYUbT3d+VQW\n'
+    + 'GUbLn5GRZJZe1OAClYdOWm7A1CKpuo+cVV1vxbY2nGUQSJPpVn2sT9gnwvjdE60U\n'
+    + 'JGYU/RLCTm8zmZBvlWaNIeKDnreIc4rKn6gUnJ2cQn1ryCVleEeyc3xjYDSrjgdn\n'
+    + 'FLYGcp9mphqVT0byeQMOk0c7RHpxrCSA0V5V6/CreFV2LteK50qcDQzDSM18vWP/\n'
+    + 'p09FoN8O7QrtOeZJzH/lmwIDAQABo2YwZDAOBgNVHQ8BAf8EBAMCAQYwEgYDVR0T\n'
+    + 'AQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQU2i83QHuEl/d0keXF+69HNJph7cMwHwYD\n'
+    + 'VR0jBBgwFoAUTgLurD72FchM7Sz1BcGPnIQISYMwDQYJKoZIhvcNAQELBQADggEB\n'
+    + 'ACqnH2VjApoDqoSQOky52QBwsGaj+xWYHW5Gm7EvCqvQuhWMkeBuD6YJmMvNyA9G\n'
+    + 'I2lh6/o+sUk/RIsbYbxPRdhNPTOgDR9zsNRw6qxaHztq/CEC+mxDCLa3O1hHBaDV\n'
+    + 'BmB3nCZb93BvO0EQSEk7aytKq/f+sjyxqOcs385gintdHGU9uM7gTZHnU9vByJsm\n'
+    + '/TL07Miq67X0NlhIoo3jAk+xHaeKJdxdKATQp0448P5cY20q4b8aMk1twcNaMvCP\n'
+    + 'dG4M5doaoUA8OQ/0ukLLae/LBxLeTw04q1/a2SyFaVUX2Twbb1S3xVWwLA8vsyGr\n'
+    + 'igXx7B5GgP+IHb6DTjPJAi0=\n'
+    + '-----END CERTIFICATE-----\n',
+
+    /**
+     * Amazon RDS us-east-2 certificate CA 2016 to 2020
+     *
+     *   CN = Amazon RDS us-east-2 CA
+     *   OU = Amazon RDS
+     *   O = Amazon Web Services, Inc.
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2016-08-11T19:58:45Z/2020-03-05T19:58:45Z
+     *   F = 9B:78:E3:64:7F:74:BC:B2:52:18:CF:13:C3:62:B8:35:9D:3D:5F:B6
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIID/DCCAuSgAwIBAgIBTjANBgkqhkiG9w0BAQsFADCBijELMAkGA1UEBhMCVVMx\n'
+    + 'EzARBgNVBAgMCldhc2hpbmd0b24xEDAOBgNVBAcMB1NlYXR0bGUxIjAgBgNVBAoM\n'
+    + 'GUFtYXpvbiBXZWIgU2VydmljZXMsIEluYy4xEzARBgNVBAsMCkFtYXpvbiBSRFMx\n'
+    + 'GzAZBgNVBAMMEkFtYXpvbiBSRFMgUm9vdCBDQTAeFw0xNjA4MTExOTU4NDVaFw0y\n'
+    + 'MDAzMDUxOTU4NDVaMIGPMQswCQYDVQQGEwJVUzETMBEGA1UECAwKV2FzaGluZ3Rv\n'
+    + 'bjEQMA4GA1UEBwwHU2VhdHRsZTEiMCAGA1UECgwZQW1hem9uIFdlYiBTZXJ2aWNl\n'
+    + 'cywgSW5jLjETMBEGA1UECwwKQW1hem9uIFJEUzEgMB4GA1UEAwwXQW1hem9uIFJE\n'
+    + 'UyB1cy1lYXN0LTIgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCp\n'
+    + 'WnnUX7wM0zzstccX+4iXKJa9GR0a2PpvB1paEX4QRCgfhEdQWDaSqyrWNgdVCKkt\n'
+    + '1aQkWu5j6VAC2XIG7kKoonm1ZdBVyBLqW5lXNywlaiU9yhJkwo8BR+/OqgE+PLt/\n'
+    + 'EO1mlN0PQudja/XkExCXTO29TG2j7F/O7hox6vTyHNHc0H88zS21uPuBE+jivViS\n'
+    + 'yzj/BkyoQ85hnkues3f9R6gCGdc+J51JbZnmgzUkvXjAEuKhAm9JksVOxcOKUYe5\n'
+    + 'ERhn0U9zjzpfbAITIkul97VVa5IxskFFTHIPJbvRKHJkiF6wTJww/tc9wm+fSCJ1\n'
+    + '+DbQTGZgkQ3bJrqRN29/AgMBAAGjZjBkMA4GA1UdDwEB/wQEAwIBBjASBgNVHRMB\n'
+    + 'Af8ECDAGAQH/AgEAMB0GA1UdDgQWBBSAHQzUYYZbepwKEMvGdHp8wzHnfDAfBgNV\n'
+    + 'HSMEGDAWgBROAu6sPvYVyEztLPUFwY+chAhJgzANBgkqhkiG9w0BAQsFAAOCAQEA\n'
+    + 'MbaEzSYZ+aZeTBxf8yi0ta8K4RdwEJsEmP6IhFFQHYUtva2Cynl4Q9tZg3RMsybT\n'
+    + '9mlnSQQlbN/wqIIXbkrcgFcHoXG9Odm/bDtUwwwDaiEhXVfeQom3G77QHOWMTCGK\n'
+    + 'qadwuh5msrb17JdXZoXr4PYHDKP7j0ONfAyFNER2+uecblHfRSpVq5UeF3L6ZJb8\n'
+    + 'fSw/GtAV6an+/0r+Qm+PiI2H5XuZ4GmRJYnGMhqWhBYrY7p3jtVnKcsh39wgfUnW\n'
+    + 'AvZEZG/yhFyAZW0Essa39LiL5VSq14Y1DOj0wgnhSY/9WHxaAo1HB1T9OeZknYbD\n'
+    + 'fl/EGSZ0TEvZkENrXcPlVA==\n'
+    + '-----END CERTIFICATE-----\n',
+
+    /**
+     * Amazon RDS ca-central-1 certificate CA 2016 to 2020
+     *
+     *   CN = Amazon RDS ca-central-1 CA
+     *   OU = Amazon RDS
+     *   O = Amazon Web Services, Inc.
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2016-09-15T00:10:11Z/2020-03-05T00:10:11Z
+     *   F = D7:E0:16:AB:8A:0B:63:9F:67:1F:16:87:42:F4:0A:EE:73:A6:FC:04
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIID/zCCAuegAwIBAgIBTzANBgkqhkiG9w0BAQsFADCBijELMAkGA1UEBhMCVVMx\n'
+    + 'EzARBgNVBAgMCldhc2hpbmd0b24xEDAOBgNVBAcMB1NlYXR0bGUxIjAgBgNVBAoM\n'
+    + 'GUFtYXpvbiBXZWIgU2VydmljZXMsIEluYy4xEzARBgNVBAsMCkFtYXpvbiBSRFMx\n'
+    + 'GzAZBgNVBAMMEkFtYXpvbiBSRFMgUm9vdCBDQTAeFw0xNjA5MTUwMDEwMTFaFw0y\n'
+    + 'MDAzMDUwMDEwMTFaMIGSMQswCQYDVQQGEwJVUzETMBEGA1UECAwKV2FzaGluZ3Rv\n'
+    + 'bjEQMA4GA1UEBwwHU2VhdHRsZTEiMCAGA1UECgwZQW1hem9uIFdlYiBTZXJ2aWNl\n'
+    + 'cywgSW5jLjETMBEGA1UECwwKQW1hem9uIFJEUzEjMCEGA1UEAwwaQW1hem9uIFJE\n'
+    + 'UyBjYS1jZW50cmFsLTEgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIB\n'
+    + 'AQCZYI/iQ6DrS3ny3t1EwX1wAD+3LMgh7Fd01EW5LIuaK2kYIIQpsVKhxLCit/V5\n'
+    + 'AGc/1qiJS1Qz9ODLTh0Na6bZW6EakRzuHJLe32KJtoFYPC7Z09UqzXrpA/XL+1hM\n'
+    + 'P0ZmCWsU7Nn/EmvfBp9zX3dZp6P6ATrvDuYaVFr+SA7aT3FXpBroqBS1fyzUPs+W\n'
+    + 'c6zTR6+yc4zkHX0XQxC5RH6xjgpeRkoOajA/sNo7AQF7KlWmKHbdVF44cvvAhRKZ\n'
+    + 'XaoVs/C4GjkaAEPTCbopYdhzg+KLx9eB2BQnYLRrIOQZtRfbQI2Nbj7p3VsRuOW1\n'
+    + 'tlcks2w1Gb0YC6w6SuIMFkl1AgMBAAGjZjBkMA4GA1UdDwEB/wQEAwIBBjASBgNV\n'
+    + 'HRMBAf8ECDAGAQH/AgEAMB0GA1UdDgQWBBToYWxE1lawl6Ks6NsvpbHQ3GKEtzAf\n'
+    + 'BgNVHSMEGDAWgBROAu6sPvYVyEztLPUFwY+chAhJgzANBgkqhkiG9w0BAQsFAAOC\n'
+    + 'AQEAG/8tQ0ooi3hoQpa5EJz0/E5VYBsAz3YxA2HoIonn0jJyG16bzB4yZt4vNQMA\n'
+    + 'KsNlQ1uwDWYL1nz63axieUUFIxqxl1KmwfhsmLgZ0Hd2mnTPIl2Hw3uj5+wdgGBg\n'
+    + 'agnAZ0bajsBYgD2VGQbqjdk2Qn7Fjy3LEWIvGZx4KyZ99OJ2QxB7JOPdauURAtWA\n'
+    + 'DKYkP4LLJxtj07DSzG8kuRWb9B47uqUD+eKDIyjfjbnzGtd9HqqzYFau7EX3HVD9\n'
+    + '9Qhnjl7bTZ6YfAEZ3nH2t3Vc0z76XfGh47rd0pNRhMV+xpok75asKf/lNh5mcUrr\n'
+    + 'VKwflyMkQpSbDCmcdJ90N2xEXQ==\n'
+    + '-----END CERTIFICATE-----\n',
+
+    /**
+     * Amazon RDS eu-west-2 certificate CA 2016 to 2020
+     *
+     *   CN = Amazon RDS eu-west-2 CA
+     *   OU = Amazon RDS
+     *   O = Amazon Web Services, Inc.
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2016-10-10T17:44:42Z/2020-03-05T17:44:42Z
+     *   F = 47:79:51:9F:FF:07:D3:F4:27:D3:AB:64:56:7F:00:45:BB:84:C1:71
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIID/DCCAuSgAwIBAgIBUDANBgkqhkiG9w0BAQsFADCBijELMAkGA1UEBhMCVVMx\n'
+    + 'EzARBgNVBAgMCldhc2hpbmd0b24xEDAOBgNVBAcMB1NlYXR0bGUxIjAgBgNVBAoM\n'
+    + 'GUFtYXpvbiBXZWIgU2VydmljZXMsIEluYy4xEzARBgNVBAsMCkFtYXpvbiBSRFMx\n'
+    + 'GzAZBgNVBAMMEkFtYXpvbiBSRFMgUm9vdCBDQTAeFw0xNjEwMTAxNzQ0NDJaFw0y\n'
+    + 'MDAzMDUxNzQ0NDJaMIGPMQswCQYDVQQGEwJVUzETMBEGA1UECAwKV2FzaGluZ3Rv\n'
+    + 'bjEQMA4GA1UEBwwHU2VhdHRsZTEiMCAGA1UECgwZQW1hem9uIFdlYiBTZXJ2aWNl\n'
+    + 'cywgSW5jLjETMBEGA1UECwwKQW1hem9uIFJEUzEgMB4GA1UEAwwXQW1hem9uIFJE\n'
+    + 'UyBldS13ZXN0LTIgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDO\n'
+    + 'cttLJfubB4XMMIGWNfJISkIdCMGJyOzLiMJaiWB5GYoXKhEl7YGotpy0qklwW3BQ\n'
+    + 'a0fmVdcCLX+dIuVQ9iFK+ZcK7zwm7HtdDTCHOCKeOh2IcnU4c/VIokFi6Gn8udM6\n'
+    + 'N/Zi5M5OGpVwLVALQU7Yctsn3c95el6MdVx6mJiIPVu7tCVZn88Z2koBQ2gq9P4O\n'
+    + 'Sb249SHFqOb03lYDsaqy1NDsznEOhaRBw7DPJFpvmw1lA3/Y6qrExRI06H2VYR2i\n'
+    + '7qxwDV50N58fs10n7Ye1IOxTVJsgEA7X6EkRRXqYaM39Z76R894548WHfwXWjUsi\n'
+    + 'MEX0RS0/t1GmnUQjvevDAgMBAAGjZjBkMA4GA1UdDwEB/wQEAwIBBjASBgNVHRMB\n'
+    + 'Af8ECDAGAQH/AgEAMB0GA1UdDgQWBBQBxmcuRSxERYCtNnSr5xNfySokHjAfBgNV\n'
+    + 'HSMEGDAWgBROAu6sPvYVyEztLPUFwY+chAhJgzANBgkqhkiG9w0BAQsFAAOCAQEA\n'
+    + 'UyCUQjsF3nUAABjfEZmpksTuUo07aT3KGYt+EMMFdejnBQ0+2lJJFGtT+CDAk1SD\n'
+    + 'RSgfEBon5vvKEtlnTf9a3pv8WXOAkhfxnryr9FH6NiB8obISHNQNPHn0ljT2/T+I\n'
+    + 'Y6ytfRvKHa0cu3V0NXbJm2B4KEOt4QCDiFxUIX9z6eB4Kditwu05OgQh6KcogOiP\n'
+    + 'JesWxBMXXGoDC1rIYTFO7szwDyOHlCcVXJDNsTJhc32oDWYdeIbW7o/5I+aQsrXZ\n'
+    + 'C96HykZcgWzz6sElrQxUaT3IoMw/5nmw4uWKKnZnxgI9bY4fpQwMeBZ96iHfFxvH\n'
+    + 'mqfEEuC7uUoPofXdBp2ObQ==\n'
+    + '-----END CERTIFICATE-----\n',
+
+    /**
+     * Amazon RDS us-gov-west-1 CA 2017 to 2022
+     *
+     *   CN = Amazon RDS us-gov-west-1 CA
+     *   OU = Amazon RDS
+     *   O = Amazon Web Services, Inc.
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2017-05-19T22:31:19Z/2022-05-18T12:00:00Z
+     *   F = 77:55:8C:C4:5E:71:1F:1B:57:E3:DA:6E:5B:74:27:12:4E:E8:69:E8
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIIECjCCAvKgAwIBAgICEAAwDQYJKoZIhvcNAQELBQAwgZMxCzAJBgNVBAYTAlVT\n'
+    + 'MRAwDgYDVQQHDAdTZWF0dGxlMRMwEQYDVQQIDApXYXNoaW5ndG9uMSIwIAYDVQQK\n'
+    + 'DBlBbWF6b24gV2ViIFNlcnZpY2VzLCBJbmMuMRMwEQYDVQQLDApBbWF6b24gUkRT\n'
+    + 'MSQwIgYDVQQDDBtBbWF6b24gUkRTIEdvdkNsb3VkIFJvb3QgQ0EwHhcNMTcwNTE5\n'
+    + 'MjIzMTE5WhcNMjIwNTE4MTIwMDAwWjCBkzELMAkGA1UEBhMCVVMxEzARBgNVBAgM\n'
+    + 'Cldhc2hpbmd0b24xEDAOBgNVBAcMB1NlYXR0bGUxIjAgBgNVBAoMGUFtYXpvbiBX\n'
+    + 'ZWIgU2VydmljZXMsIEluYy4xEzARBgNVBAsMCkFtYXpvbiBSRFMxJDAiBgNVBAMM\n'
+    + 'G0FtYXpvbiBSRFMgdXMtZ292LXdlc3QtMSBDQTCCASIwDQYJKoZIhvcNAQEBBQAD\n'
+    + 'ggEPADCCAQoCggEBAM8YZLKAzzOdNnoi7Klih26Zkj+OCpDfwx4ZYB6f8L8UoQi5\n'
+    + '8z9ZtIwMjiJ/kO08P1yl4gfc7YZcNFvhGruQZNat3YNpxwUpQcr4mszjuffbL4uz\n'
+    + '+/8FBxALdqCVOJ5Q0EVSfz3d9Bd1pUPL7ARtSpy7bn/tUPyQeI+lODYO906C0TQ3\n'
+    + 'b9bjOsgAdBKkHfjLdsknsOZYYIzYWOJyFJJa0B11XjDUNBy/3IuC0KvDl6At0V5b\n'
+    + '8M6cWcKhte2hgjwTYepV+/GTadeube1z5z6mWsN5arOAQUtYDLH6Aztq9mCJzLHm\n'
+    + 'RccBugnGl3fRLJ2VjioN8PoGoN9l9hFBy5fnFgsCAwEAAaNmMGQwDgYDVR0PAQH/\n'
+    + 'BAQDAgEGMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFEG7+br8KkvwPd5g\n'
+    + '71Rvh2stclJbMB8GA1UdIwQYMBaAFEkQz6S4NS5lOYKcDjBSuCcVpdzjMA0GCSqG\n'
+    + 'SIb3DQEBCwUAA4IBAQBMA327u5ABmhX+aPxljoIbxnydmAFWxW6wNp5+rZrvPig8\n'
+    + 'zDRqGQWWr7wWOIjfcWugSElYtf/m9KZHG/Z6+NG7nAoUrdcd1h/IQhb+lFQ2b5g9\n'
+    + 'sVzQv/H2JNkfZA8fL/Ko/Tm/f9tcqe0zrGCtT+5u0Nvz35Wl8CEUKLloS5xEb3k5\n'
+    + '7D9IhG3fsE3vHWlWrGCk1cKry3j12wdPG5cUsug0vt34u6rdhP+FsM0tHI15Kjch\n'
+    + 'RuUCvyQecy2ZFNAa3jmd5ycNdL63RWe8oayRBpQBxPPCbHfILxGZEdJbCH9aJ2D/\n'
+    + 'l8oHIDnvOLdv7/cBjyYuvmprgPtu3QEkbre5Hln/\n'
+    + '-----END CERTIFICATE-----\n',
+
+    /**
+     * Amazon RDS eu-west-3 certificate CA 2017 to 2020
+     *
+     *   CN = Amazon RDS eu-west-3 CA
+     *   OU = Amazon RDS
+     *   O = Amazon Web Services, Inc.
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2017-08-25T21:39:26Z/2020-03-05T21:39:26Z
+     *   F = FD:35:A7:84:60:68:98:00:12:54:ED:34:26:8C:66:0F:72:DD:B2:F4
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIID/DCCAuSgAwIBAgIBUTANBgkqhkiG9w0BAQsFADCBijELMAkGA1UEBhMCVVMx\n'
+    + 'EzARBgNVBAgMCldhc2hpbmd0b24xEDAOBgNVBAcMB1NlYXR0bGUxIjAgBgNVBAoM\n'
+    + 'GUFtYXpvbiBXZWIgU2VydmljZXMsIEluYy4xEzARBgNVBAsMCkFtYXpvbiBSRFMx\n'
+    + 'GzAZBgNVBAMMEkFtYXpvbiBSRFMgUm9vdCBDQTAeFw0xNzA4MjUyMTM5MjZaFw0y\n'
+    + 'MDAzMDUyMTM5MjZaMIGPMQswCQYDVQQGEwJVUzETMBEGA1UECAwKV2FzaGluZ3Rv\n'
+    + 'bjEQMA4GA1UEBwwHU2VhdHRsZTEiMCAGA1UECgwZQW1hem9uIFdlYiBTZXJ2aWNl\n'
+    + 'cywgSW5jLjETMBEGA1UECwwKQW1hem9uIFJEUzEgMB4GA1UEAwwXQW1hem9uIFJE\n'
+    + 'UyBldS13ZXN0LTMgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC+\n'
+    + 'xmlEC/3a4cJH+UPwXCE02lC7Zq5NHd0dn6peMeLN8agb6jW4VfSY0NydjRj2DJZ8\n'
+    + 'K7wV6sub5NUGT1NuFmvSmdbNR2T59KX0p2dVvxmXHHtIpQ9Y8Aq3ZfhmC5q5Bqgw\n'
+    + 'tMA1xayDi7HmoPX3R8kk9ktAZQf6lDeksCvok8idjTu9tiSpDiMwds5BjMsWfyjZ\n'
+    + 'd13PTGGNHYVdP692BSyXzSP1Vj84nJKnciW8tAqwIiadreJt5oXyrCXi8ekUMs80\n'
+    + 'cUTuGm3aA3Q7PB5ljJMPqz0eVddaiIvmTJ9O3Ez3Du/HpImyMzXjkFaf+oNXf/Hx\n'
+    + '/EW5jCRR6vEiXJcDRDS7AgMBAAGjZjBkMA4GA1UdDwEB/wQEAwIBBjASBgNVHRMB\n'
+    + 'Af8ECDAGAQH/AgEAMB0GA1UdDgQWBBRZ9mRtS5fHk3ZKhG20Oack4cAqMTAfBgNV\n'
+    + 'HSMEGDAWgBROAu6sPvYVyEztLPUFwY+chAhJgzANBgkqhkiG9w0BAQsFAAOCAQEA\n'
+    + 'F/u/9L6ExQwD73F/bhCw7PWcwwqsK1mypIdrjdIsu0JSgwWwGCXmrIspA3n3Dqxq\n'
+    + 'sMhAJD88s9Em7337t+naar2VyLO63MGwjj+vA4mtvQRKq8ScIpiEc7xN6g8HUMsd\n'
+    + 'gPG9lBGfNjuAZsrGJflrko4HyuSM7zHExMjXLH+CXcv/m3lWOZwnIvlVMa4x0Tz0\n'
+    + 'A4fklaawryngzeEjuW6zOiYCzjZtPlP8Fw0SpzppJ8VpQfrZ751RDo4yudmPqoPK\n'
+    + '5EUe36L8U+oYBXnC5TlYs9bpVv9o5wJQI5qA9oQE2eFWxF1E0AyZ4V5sgGUBStaX\n'
+    + 'BjDDWul0wSo7rt1Tq7XpnA==\n'
+    + '-----END CERTIFICATE-----\n',
+
+    /**
+     * Amazon RDS ap-northeast-3 certificate CA 2017 to 2020
+     *
+     *   CN = Amazon RDS ap-northeast-3 CA
+     *   OU = Amazon RDS
+     *   O = Amazon Web Services, Inc.
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2017-12-01T00:55:42Z/2020-03-05T00:55:42Z
+     *   F = C0:C7:D4:B3:91:40:A0:77:43:28:BF:AF:77:57:DF:FD:98:FB:10:3F
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIIEATCCAumgAwIBAgIBTjANBgkqhkiG9w0BAQUFADCBijELMAkGA1UEBhMCVVMx\n'
+    + 'EzARBgNVBAgMCldhc2hpbmd0b24xEDAOBgNVBAcMB1NlYXR0bGUxIjAgBgNVBAoM\n'
+    + 'GUFtYXpvbiBXZWIgU2VydmljZXMsIEluYy4xEzARBgNVBAsMCkFtYXpvbiBSRFMx\n'
+    + 'GzAZBgNVBAMMEkFtYXpvbiBSRFMgUm9vdCBDQTAeFw0xNzEyMDEwMDU1NDJaFw0y\n'
+    + 'MDAzMDUwMDU1NDJaMIGUMQswCQYDVQQGEwJVUzETMBEGA1UECAwKV2FzaGluZ3Rv\n'
+    + 'bjEQMA4GA1UEBwwHU2VhdHRsZTEiMCAGA1UECgwZQW1hem9uIFdlYiBTZXJ2aWNl\n'
+    + 'cywgSW5jLjETMBEGA1UECwwKQW1hem9uIFJEUzElMCMGA1UEAwwcQW1hem9uIFJE\n'
+    + 'UyBhcC1ub3J0aGVhc3QtMyBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC\n'
+    + 'ggEBAMZtQNnm/XT19mTa10ftHLzg5UhajoI65JHv4TQNdGXdsv+CQdGYU49BJ9Eu\n'
+    + '3bYgiEtTzR2lQe9zGMvtuJobLhOWuavzp7IixoIQcHkFHN6wJ1CvqrxgvJfBq6Hy\n'
+    + 'EuCDCiU+PPDLUNA6XM6Qx3IpHd1wrJkjRB80dhmMSpxmRmx849uFafhN+P1QybsM\n'
+    + 'TI0o48VON2+vj+mNuQTyLMMP8D4odSQHjaoG+zyJfJGZeAyqQyoOUOFEyQaHC3TT\n'
+    + '3IDSNCQlpxb9LerbCoKu79WFBBq3CS5cYpg8/fsnV2CniRBFFUumBt5z4dhw9RJU\n'
+    + 'qlUXXO1ZyzpGd+c5v6FtrfXtnIUCAwEAAaNmMGQwDgYDVR0PAQH/BAQDAgEGMBIG\n'
+    + 'A1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFETv7ELNplYy/xTeIOInl6nzeiHg\n'
+    + 'MB8GA1UdIwQYMBaAFE4C7qw+9hXITO0s9QXBj5yECEmDMA0GCSqGSIb3DQEBBQUA\n'
+    + 'A4IBAQCpKxOQcd0tEKb3OtsOY8q/MPwTyustGk2Rt7t9G68idADp8IytB7M0SDRo\n'
+    + 'wWZqynEq7orQVKdVOanhEWksNDzGp0+FPAf/KpVvdYCd7ru3+iI+V4ZEp2JFdjuZ\n'
+    + 'Zz0PIjS6AgsZqE5Ri1J+NmfmjGZCPhsHnGZiBaenX6K5VRwwwmLN6xtoqrrfR5zL\n'
+    + 'QfBeeZNJG6KiM3R/DxJ5rAa6Fz+acrhJ60L7HprhB7SFtj1RCijau3+ZwiGmUOMr\n'
+    + 'yKlMv+VgmzSw7o4Hbxy1WVrA6zQsTHHSGf+vkQn2PHvnFMUEu/ZLbTDYFNmTLK91\n'
+    + 'K6o4nMsEvhBKgo4z7H1EqqxXhvN2\n'
+    + '-----END CERTIFICATE-----\n',
+
+    /**
+     * Amazon RDS GovCloud Root CA 2017 to 2022
+     *
+     *   CN = Amazon RDS GovCloud Root CA
+     *   OU = Amazon RDS
+     *   O = Amazon Web Services, Inc.
+     *   L = Seattle
+     *   ST = Washington
+     *   C = US
+     *   P = 2017-05-19T22:29:11Z/2022-05-18T22:29:11Z
+     *   F = A3:61:F9:C9:A2:5B:91:FE:73:A6:52:E3:59:14:8E:CE:35:12:0F:FD
+     */
+    '-----BEGIN CERTIFICATE-----\n'
+    + 'MIIEDjCCAvagAwIBAgIJAMM61RQn3/kdMA0GCSqGSIb3DQEBCwUAMIGTMQswCQYD\n'
+    + 'VQQGEwJVUzEQMA4GA1UEBwwHU2VhdHRsZTETMBEGA1UECAwKV2FzaGluZ3RvbjEi\n'
+    + 'MCAGA1UECgwZQW1hem9uIFdlYiBTZXJ2aWNlcywgSW5jLjETMBEGA1UECwwKQW1h\n'
+    + 'em9uIFJEUzEkMCIGA1UEAwwbQW1hem9uIFJEUyBHb3ZDbG91ZCBSb290IENBMB4X\n'
+    + 'DTE3MDUxOTIyMjkxMVoXDTIyMDUxODIyMjkxMVowgZMxCzAJBgNVBAYTAlVTMRAw\n'
+    + 'DgYDVQQHDAdTZWF0dGxlMRMwEQYDVQQIDApXYXNoaW5ndG9uMSIwIAYDVQQKDBlB\n'
+    + 'bWF6b24gV2ViIFNlcnZpY2VzLCBJbmMuMRMwEQYDVQQLDApBbWF6b24gUkRTMSQw\n'
+    + 'IgYDVQQDDBtBbWF6b24gUkRTIEdvdkNsb3VkIFJvb3QgQ0EwggEiMA0GCSqGSIb3\n'
+    + 'DQEBAQUAA4IBDwAwggEKAoIBAQDGS9bh1FGiJPT+GRb3C5aKypJVDC1H2gbh6n3u\n'
+    + 'j8cUiyMXfmm+ak402zdLpSYMaxiQ7oL/B3wEmumIpRDAsQrSp3B/qEeY7ipQGOfh\n'
+    + 'q2TXjXGIUjiJ/FaoGqkymHRLG+XkNNBtb7MRItsjlMVNELXECwSiMa3nJL2/YyHW\n'
+    + 'nTr1+11/weeZEKgVbCUrOugFkMXnfZIBSn40j6EnRlO2u/NFU5ksK5ak2+j8raZ7\n'
+    + 'xW7VXp9S1Tgf1IsWHjGZZZguwCkkh1tHOlHC9gVA3p63WecjrIzcrR/V27atul4m\n'
+    + 'tn56s5NwFvYPUIx1dbC8IajLUrepVm6XOwdQCfd02DmOyjWJAgMBAAGjYzBhMA4G\n'
+    + 'A1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBRJEM+kuDUu\n'
+    + 'ZTmCnA4wUrgnFaXc4zAfBgNVHSMEGDAWgBRJEM+kuDUuZTmCnA4wUrgnFaXc4zAN\n'
+    + 'BgkqhkiG9w0BAQsFAAOCAQEAcfA7uirXsNZyI2j4AJFVtOTKOZlQwqbyNducnmlg\n'
+    + '/5nug9fAkwM4AgvF5bBOD1Hw6khdsccMwIj+1S7wpL+EYb/nSc8G0qe1p/9lZ/mZ\n'
+    + 'ff5g4JOa26lLuCrZDqAk4TzYnt6sQKfa5ZXVUUn0BK3okhiXS0i+NloMyaBCL7vk\n'
+    + 'kDwkHwEqflRKfZ9/oFTcCfoiHPA7AdBtaPVr0/Kj9L7k+ouz122huqG5KqX0Zpo8\n'
+    + 'S0IGvcd2FZjNSNPttNAK7YuBVsZ0m2nIH1SLp//00v7yAHIgytQwwB17PBcp4NXD\n'
+    + 'pCfTa27ng9mMMC2YLqWQpW4TkqjDin2ZC+5X/mbrjzTvVg==\n'
+    + '-----END CERTIFICATE-----\n'
+  ]
+};
+
+},{}],364:[function(require,module,exports){
+// Manually extracted from mysql-5.7.9/include/mysql.h.pp
+// some more info here: http://dev.mysql.com/doc/refman/5.5/en/c-api-prepared-statement-type-codes.html
+exports.DECIMAL     = 0x00; // aka DECIMAL (http://dev.mysql.com/doc/refman/5.0/en/precision-math-decimal-changes.html)
+exports.TINY        = 0x01; // aka TINYINT, 1 byte
+exports.SHORT       = 0x02; // aka SMALLINT, 2 bytes
+exports.LONG        = 0x03; // aka INT, 4 bytes
+exports.FLOAT       = 0x04; // aka FLOAT, 4-8 bytes
+exports.DOUBLE      = 0x05; // aka DOUBLE, 8 bytes
+exports.NULL        = 0x06; // NULL (used for prepared statements, I think)
+exports.TIMESTAMP   = 0x07; // aka TIMESTAMP
+exports.LONGLONG    = 0x08; // aka BIGINT, 8 bytes
+exports.INT24       = 0x09; // aka MEDIUMINT, 3 bytes
+exports.DATE        = 0x0a; // aka DATE
+exports.TIME        = 0x0b; // aka TIME
+exports.DATETIME    = 0x0c; // aka DATETIME
+exports.YEAR        = 0x0d; // aka YEAR, 1 byte (don't ask)
+exports.NEWDATE     = 0x0e; // aka ?
+exports.VARCHAR     = 0x0f; // aka VARCHAR (?)
+exports.BIT         = 0x10; // aka BIT, 1-8 byte
+exports.TIMESTAMP2  = 0x11; // aka TIMESTAMP with fractional seconds
+exports.DATETIME2   = 0x12; // aka DATETIME with fractional seconds
+exports.TIME2       = 0x13; // aka TIME with fractional seconds
+exports.JSON        = 0xf5; // aka JSON
+exports.NEWDECIMAL  = 0xf6; // aka DECIMAL
+exports.ENUM        = 0xf7; // aka ENUM
+exports.SET         = 0xf8; // aka SET
+exports.TINY_BLOB   = 0xf9; // aka TINYBLOB, TINYTEXT
+exports.MEDIUM_BLOB = 0xfa; // aka MEDIUMBLOB, MEDIUMTEXT
+exports.LONG_BLOB   = 0xfb; // aka LONGBLOG, LONGTEXT
+exports.BLOB        = 0xfc; // aka BLOB, TEXT
+exports.VAR_STRING  = 0xfd; // aka VARCHAR, VARBINARY
+exports.STRING      = 0xfe; // aka CHAR, BINARY
+exports.GEOMETRY    = 0xff; // aka GEOMETRY
+
+},{}],365:[function(require,module,exports){
+module.exports = AuthSwitchRequestPacket;
+function AuthSwitchRequestPacket(options) {
+  options = options || {};
+
+  this.status         = 0xfe;
+  this.authMethodName = options.authMethodName;
+  this.authMethodData = options.authMethodData;
+}
+
+AuthSwitchRequestPacket.prototype.parse = function parse(parser) {
+  this.status         = parser.parseUnsignedNumber(1);
+  this.authMethodName = parser.parseNullTerminatedString();
+  this.authMethodData = parser.parsePacketTerminatedBuffer();
+};
+
+AuthSwitchRequestPacket.prototype.write = function write(writer) {
+  writer.writeUnsignedNumber(1, this.status);
+  writer.writeNullTerminatedString(this.authMethodName);
+  writer.writeBuffer(this.authMethodData);
+};
+
+},{}],366:[function(require,module,exports){
+module.exports = AuthSwitchResponsePacket;
+function AuthSwitchResponsePacket(options) {
+  options = options || {};
+
+  this.data = options.data;
+}
+
+AuthSwitchResponsePacket.prototype.parse = function parse(parser) {
+  this.data = parser.parsePacketTerminatedBuffer();
+};
+
+AuthSwitchResponsePacket.prototype.write = function write(writer) {
+  writer.writeBuffer(this.data);
+};
+
+},{}],367:[function(require,module,exports){
+var Buffer = require('safe-buffer').Buffer;
+
+module.exports = ClientAuthenticationPacket;
+function ClientAuthenticationPacket(options) {
+  options = options || {};
+
+  this.clientFlags   = options.clientFlags;
+  this.maxPacketSize = options.maxPacketSize;
+  this.charsetNumber = options.charsetNumber;
+  this.filler        = undefined;
+  this.user          = options.user;
+  this.scrambleBuff  = options.scrambleBuff;
+  this.database      = options.database;
+  this.protocol41    = options.protocol41;
+}
+
+ClientAuthenticationPacket.prototype.parse = function(parser) {
+  if (this.protocol41) {
+    this.clientFlags   = parser.parseUnsignedNumber(4);
+    this.maxPacketSize = parser.parseUnsignedNumber(4);
+    this.charsetNumber = parser.parseUnsignedNumber(1);
+    this.filler        = parser.parseFiller(23);
+    this.user          = parser.parseNullTerminatedString();
+    this.scrambleBuff  = parser.parseLengthCodedBuffer();
+    this.database      = parser.parseNullTerminatedString();
+  } else {
+    this.clientFlags   = parser.parseUnsignedNumber(2);
+    this.maxPacketSize = parser.parseUnsignedNumber(3);
+    this.user          = parser.parseNullTerminatedString();
+    this.scrambleBuff  = parser.parseBuffer(8);
+    this.database      = parser.parseLengthCodedBuffer();
+  }
+};
+
+ClientAuthenticationPacket.prototype.write = function(writer) {
+  if (this.protocol41) {
+    writer.writeUnsignedNumber(4, this.clientFlags);
+    writer.writeUnsignedNumber(4, this.maxPacketSize);
+    writer.writeUnsignedNumber(1, this.charsetNumber);
+    writer.writeFiller(23);
+    writer.writeNullTerminatedString(this.user);
+    writer.writeLengthCodedBuffer(this.scrambleBuff);
+    writer.writeNullTerminatedString(this.database);
+  } else {
+    writer.writeUnsignedNumber(2, this.clientFlags);
+    writer.writeUnsignedNumber(3, this.maxPacketSize);
+    writer.writeNullTerminatedString(this.user);
+    writer.writeBuffer(this.scrambleBuff);
+    if (this.database && this.database.length) {
+      writer.writeFiller(1);
+      writer.writeBuffer(Buffer.from(this.database));
+    }
+  }
+};
+
+},{"safe-buffer":413}],368:[function(require,module,exports){
+module.exports = ComChangeUserPacket;
+function ComChangeUserPacket(options) {
+  options = options || {};
+
+  this.command       = 0x11;
+  this.user          = options.user;
+  this.scrambleBuff  = options.scrambleBuff;
+  this.database      = options.database;
+  this.charsetNumber = options.charsetNumber;
+}
+
+ComChangeUserPacket.prototype.parse = function(parser) {
+  this.command       = parser.parseUnsignedNumber(1);
+  this.user          = parser.parseNullTerminatedString();
+  this.scrambleBuff  = parser.parseLengthCodedBuffer();
+  this.database      = parser.parseNullTerminatedString();
+  this.charsetNumber = parser.parseUnsignedNumber(1);
+};
+
+ComChangeUserPacket.prototype.write = function(writer) {
+  writer.writeUnsignedNumber(1, this.command);
+  writer.writeNullTerminatedString(this.user);
+  writer.writeLengthCodedBuffer(this.scrambleBuff);
+  writer.writeNullTerminatedString(this.database);
+  writer.writeUnsignedNumber(2, this.charsetNumber);
+};
+
+},{}],369:[function(require,module,exports){
+module.exports = ComPingPacket;
+function ComPingPacket() {
+  this.command = 0x0e;
+}
+
+ComPingPacket.prototype.write = function(writer) {
+  writer.writeUnsignedNumber(1, this.command);
+};
+
+ComPingPacket.prototype.parse = function(parser) {
+  this.command = parser.parseUnsignedNumber(1);
+};
+
+},{}],370:[function(require,module,exports){
+module.exports = ComQueryPacket;
+function ComQueryPacket(sql) {
+  this.command = 0x03;
+  this.sql     = sql;
+}
+
+ComQueryPacket.prototype.write = function(writer) {
+  writer.writeUnsignedNumber(1, this.command);
+  writer.writeString(this.sql);
+};
+
+ComQueryPacket.prototype.parse = function(parser) {
+  this.command = parser.parseUnsignedNumber(1);
+  this.sql     = parser.parsePacketTerminatedString();
+};
+
+},{}],371:[function(require,module,exports){
+module.exports = ComQuitPacket;
+function ComQuitPacket() {
+  this.command = 0x01;
+}
+
+ComQuitPacket.prototype.parse = function parse(parser) {
+  this.command = parser.parseUnsignedNumber(1);
+};
+
+ComQuitPacket.prototype.write = function write(writer) {
+  writer.writeUnsignedNumber(1, this.command);
+};
+
+},{}],372:[function(require,module,exports){
+module.exports = ComStatisticsPacket;
+function ComStatisticsPacket() {
+  this.command = 0x09;
+}
+
+ComStatisticsPacket.prototype.write = function(writer) {
+  writer.writeUnsignedNumber(1, this.command);
+};
+
+ComStatisticsPacket.prototype.parse = function(parser) {
+  this.command = parser.parseUnsignedNumber(1);
+};
+
+},{}],373:[function(require,module,exports){
+module.exports = EmptyPacket;
+function EmptyPacket() {
+}
+
+EmptyPacket.prototype.write = function write() {
+};
+
+},{}],374:[function(require,module,exports){
+module.exports = EofPacket;
+function EofPacket(options) {
+  options = options || {};
+
+  this.fieldCount   = undefined;
+  this.warningCount = options.warningCount;
+  this.serverStatus = options.serverStatus;
+  this.protocol41   = options.protocol41;
+}
+
+EofPacket.prototype.parse = function(parser) {
+  this.fieldCount   = parser.parseUnsignedNumber(1);
+  if (this.protocol41) {
+    this.warningCount = parser.parseUnsignedNumber(2);
+    this.serverStatus = parser.parseUnsignedNumber(2);
+  }
+};
+
+EofPacket.prototype.write = function(writer) {
+  writer.writeUnsignedNumber(1, 0xfe);
+  if (this.protocol41) {
+    writer.writeUnsignedNumber(2, this.warningCount);
+    writer.writeUnsignedNumber(2, this.serverStatus);
+  }
+};
+
+},{}],375:[function(require,module,exports){
+module.exports = ErrorPacket;
+function ErrorPacket(options) {
+  options = options || {};
+
+  this.fieldCount     = options.fieldCount;
+  this.errno          = options.errno;
+  this.sqlStateMarker = options.sqlStateMarker;
+  this.sqlState       = options.sqlState;
+  this.message        = options.message;
+}
+
+ErrorPacket.prototype.parse = function(parser) {
+  this.fieldCount = parser.parseUnsignedNumber(1);
+  this.errno      = parser.parseUnsignedNumber(2);
+
+  // sqlStateMarker ('#' = 0x23) indicates error packet format
+  if (parser.peak() === 0x23) {
+    this.sqlStateMarker = parser.parseString(1);
+    this.sqlState       = parser.parseString(5);
+  }
+
+  this.message = parser.parsePacketTerminatedString();
+};
+
+ErrorPacket.prototype.write = function(writer) {
+  writer.writeUnsignedNumber(1, 0xff);
+  writer.writeUnsignedNumber(2, this.errno);
+
+  if (this.sqlStateMarker) {
+    writer.writeString(this.sqlStateMarker);
+    writer.writeString(this.sqlState);
+  }
+
+  writer.writeString(this.message);
+};
+
+},{}],376:[function(require,module,exports){
+var Types = require('../constants/types');
+
+module.exports = Field;
+function Field(options) {
+  options = options || {};
+
+  this.parser = options.parser;
+  this.packet = options.packet;
+  this.db     = options.packet.db;
+  this.table  = options.packet.table;
+  this.name   = options.packet.name;
+  this.type   = typeToString(options.packet.type);
+  this.length = options.packet.length;
+}
+
+Field.prototype.string = function () {
+  return this.parser.parseLengthCodedString();
+};
+
+Field.prototype.buffer = function () {
+  return this.parser.parseLengthCodedBuffer();
+};
+
+Field.prototype.geometry = function () {
+  return this.parser.parseGeometryValue();
+};
+
+function typeToString(t) {
+  for (var k in Types) {
+    if (Types[k] === t) return k;
+  }
+
+  return undefined;
+}
+
+},{"../constants/types":364}],377:[function(require,module,exports){
+module.exports = FieldPacket;
+function FieldPacket(options) {
+  options = options || {};
+
+  this.catalog    = options.catalog;
+  this.db         = options.db;
+  this.table      = options.table;
+  this.orgTable   = options.orgTable;
+  this.name       = options.name;
+  this.orgName    = options.orgName;
+  this.charsetNr  = options.charsetNr;
+  this.length     = options.length;
+  this.type       = options.type;
+  this.flags      = options.flags;
+  this.decimals   = options.decimals;
+  this.default    = options.default;
+  this.zeroFill   = options.zeroFill;
+  this.protocol41 = options.protocol41;
+}
+
+FieldPacket.prototype.parse = function(parser) {
+  if (this.protocol41) {
+    this.catalog     = parser.parseLengthCodedString();
+    this.db          = parser.parseLengthCodedString();
+    this.table       = parser.parseLengthCodedString();
+    this.orgTable    = parser.parseLengthCodedString();
+    this.name        = parser.parseLengthCodedString();
+    this.orgName     = parser.parseLengthCodedString();
+
+    if (parser.parseLengthCodedNumber() !== 0x0c) {
+      var err  = new TypeError('Received invalid field length');
+      err.code = 'PARSER_INVALID_FIELD_LENGTH';
+      throw err;
+    }
+
+    this.charsetNr   = parser.parseUnsignedNumber(2);
+    this.length      = parser.parseUnsignedNumber(4);
+    this.type        = parser.parseUnsignedNumber(1);
+    this.flags       = parser.parseUnsignedNumber(2);
+    this.decimals    = parser.parseUnsignedNumber(1);
+
+    var filler       = parser.parseBuffer(2);
+    if (filler[0] !== 0x0 || filler[1] !== 0x0) {
+      var err  = new TypeError('Received invalid filler');
+      err.code = 'PARSER_INVALID_FILLER';
+      throw err;
+    }
+
+    // parsed flags
+    this.zeroFill    = (this.flags & 0x0040 ? true : false);
+
+    if (parser.reachedPacketEnd()) {
+      return;
+    }
+
+    this.default     = parser.parseLengthCodedString();
+  } else {
+    this.table       = parser.parseLengthCodedString();
+    this.name        = parser.parseLengthCodedString();
+    this.length      = parser.parseUnsignedNumber(parser.parseUnsignedNumber(1));
+    this.type        = parser.parseUnsignedNumber(parser.parseUnsignedNumber(1));
+  }
+};
+
+FieldPacket.prototype.write = function(writer) {
+  if (this.protocol41) {
+    writer.writeLengthCodedString(this.catalog);
+    writer.writeLengthCodedString(this.db);
+    writer.writeLengthCodedString(this.table);
+    writer.writeLengthCodedString(this.orgTable);
+    writer.writeLengthCodedString(this.name);
+    writer.writeLengthCodedString(this.orgName);
+
+    writer.writeLengthCodedNumber(0x0c);
+    writer.writeUnsignedNumber(2, this.charsetNr || 0);
+    writer.writeUnsignedNumber(4, this.length || 0);
+    writer.writeUnsignedNumber(1, this.type || 0);
+    writer.writeUnsignedNumber(2, this.flags || 0);
+    writer.writeUnsignedNumber(1, this.decimals || 0);
+    writer.writeFiller(2);
+
+    if (this.default !== undefined) {
+      writer.writeLengthCodedString(this.default);
+    }
+  } else {
+    writer.writeLengthCodedString(this.table);
+    writer.writeLengthCodedString(this.name);
+    writer.writeUnsignedNumber(1, 0x01);
+    writer.writeUnsignedNumber(1, this.length);
+    writer.writeUnsignedNumber(1, 0x01);
+    writer.writeUnsignedNumber(1, this.type);
+  }
+};
+
+},{}],378:[function(require,module,exports){
+var Buffer = require('safe-buffer').Buffer;
+var Client = require('../constants/client');
+
+module.exports = HandshakeInitializationPacket;
+function HandshakeInitializationPacket(options) {
+  options = options || {};
+
+  this.protocolVersion     = options.protocolVersion;
+  this.serverVersion       = options.serverVersion;
+  this.threadId            = options.threadId;
+  this.scrambleBuff1       = options.scrambleBuff1;
+  this.filler1             = options.filler1;
+  this.serverCapabilities1 = options.serverCapabilities1;
+  this.serverLanguage      = options.serverLanguage;
+  this.serverStatus        = options.serverStatus;
+  this.serverCapabilities2 = options.serverCapabilities2;
+  this.scrambleLength      = options.scrambleLength;
+  this.filler2             = options.filler2;
+  this.scrambleBuff2       = options.scrambleBuff2;
+  this.filler3             = options.filler3;
+  this.pluginData          = options.pluginData;
+  this.protocol41          = options.protocol41;
+
+  if (this.protocol41) {
+    // force set the bit in serverCapabilities1
+    this.serverCapabilities1 |= Client.CLIENT_PROTOCOL_41;
+  }
+}
+
+HandshakeInitializationPacket.prototype.parse = function(parser) {
+  this.protocolVersion     = parser.parseUnsignedNumber(1);
+  this.serverVersion       = parser.parseNullTerminatedString();
+  this.threadId            = parser.parseUnsignedNumber(4);
+  this.scrambleBuff1       = parser.parseBuffer(8);
+  this.filler1             = parser.parseFiller(1);
+  this.serverCapabilities1 = parser.parseUnsignedNumber(2);
+  this.serverLanguage      = parser.parseUnsignedNumber(1);
+  this.serverStatus        = parser.parseUnsignedNumber(2);
+
+  this.protocol41          = (this.serverCapabilities1 & (1 << 9)) > 0;
+
+  if (this.protocol41) {
+    this.serverCapabilities2 = parser.parseUnsignedNumber(2);
+    this.scrambleLength      = parser.parseUnsignedNumber(1);
+    this.filler2             = parser.parseFiller(10);
+    // scrambleBuff2 should be 0x00 terminated, but sphinx does not do this
+    // so we assume scrambleBuff2 to be 12 byte and treat the next byte as a
+    // filler byte.
+    this.scrambleBuff2       = parser.parseBuffer(12);
+    this.filler3             = parser.parseFiller(1);
+  } else {
+    this.filler2             = parser.parseFiller(13);
+  }
+
+  if (parser.reachedPacketEnd()) {
+    return;
+  }
+
+  // According to the docs this should be 0x00 terminated, but MariaDB does
+  // not do this, so we assume this string to be packet terminated.
+  this.pluginData = parser.parsePacketTerminatedString();
+
+  // However, if there is a trailing '\0', strip it
+  var lastChar = this.pluginData.length - 1;
+  if (this.pluginData[lastChar] === '\0') {
+    this.pluginData = this.pluginData.substr(0, lastChar);
+  }
+};
+
+HandshakeInitializationPacket.prototype.write = function(writer) {
+  writer.writeUnsignedNumber(1, this.protocolVersion);
+  writer.writeNullTerminatedString(this.serverVersion);
+  writer.writeUnsignedNumber(4, this.threadId);
+  writer.writeBuffer(this.scrambleBuff1);
+  writer.writeFiller(1);
+  writer.writeUnsignedNumber(2, this.serverCapabilities1);
+  writer.writeUnsignedNumber(1, this.serverLanguage);
+  writer.writeUnsignedNumber(2, this.serverStatus);
+  if (this.protocol41) {
+    writer.writeUnsignedNumber(2, this.serverCapabilities2);
+    writer.writeUnsignedNumber(1, this.scrambleLength);
+    writer.writeFiller(10);
+  }
+  writer.writeNullTerminatedBuffer(this.scrambleBuff2);
+
+  if (this.pluginData !== undefined) {
+    writer.writeNullTerminatedString(this.pluginData);
+  }
+};
+
+HandshakeInitializationPacket.prototype.scrambleBuff = function() {
+  var buffer = null;
+
+  if (typeof this.scrambleBuff2 === 'undefined') {
+    buffer = Buffer.from(this.scrambleBuff1);
+  } else {
+    buffer = Buffer.allocUnsafe(this.scrambleBuff1.length + this.scrambleBuff2.length);
+    this.scrambleBuff1.copy(buffer, 0);
+    this.scrambleBuff2.copy(buffer, this.scrambleBuff1.length);
+  }
+
+  return buffer;
+};
+
+},{"../constants/client":360,"safe-buffer":413}],379:[function(require,module,exports){
+module.exports = LocalDataFilePacket;
+
+/**
+ * Create a new LocalDataFilePacket
+ * @constructor
+ * @param {Buffer} data The data contents of the packet
+ * @public
+ */
+function LocalDataFilePacket(data) {
+  this.data = data;
+}
+
+LocalDataFilePacket.prototype.write = function(writer) {
+  writer.writeBuffer(this.data);
+};
+
+},{}],380:[function(require,module,exports){
+
+// Language-neutral expression to match ER_UPDATE_INFO
+var ER_UPDATE_INFO_REGEXP = /^[^:0-9]+: [0-9]+[^:0-9]+: ([0-9]+)[^:0-9]+: [0-9]+[^:0-9]*$/;
+
+module.exports = OkPacket;
+function OkPacket(options) {
+  options = options || {};
+
+  this.fieldCount   = undefined;
+  this.affectedRows = undefined;
+  this.insertId     = undefined;
+  this.serverStatus = undefined;
+  this.warningCount = undefined;
+  this.message      = undefined;
+  this.protocol41   = options.protocol41;
+}
+
+OkPacket.prototype.parse = function(parser) {
+  this.fieldCount   = parser.parseUnsignedNumber(1);
+  this.affectedRows = parser.parseLengthCodedNumber();
+  this.insertId     = parser.parseLengthCodedNumber();
+  if (this.protocol41) {
+    this.serverStatus = parser.parseUnsignedNumber(2);
+    this.warningCount = parser.parseUnsignedNumber(2);
+  }
+  this.message      = parser.parsePacketTerminatedString();
+  this.changedRows  = 0;
+
+  var m = ER_UPDATE_INFO_REGEXP.exec(this.message);
+  if (m !== null) {
+    this.changedRows = parseInt(m[1], 10);
+  }
+};
+
+OkPacket.prototype.write = function(writer) {
+  writer.writeUnsignedNumber(1, 0x00);
+  writer.writeLengthCodedNumber(this.affectedRows || 0);
+  writer.writeLengthCodedNumber(this.insertId || 0);
+  if (this.protocol41) {
+    writer.writeUnsignedNumber(2, this.serverStatus || 0);
+    writer.writeUnsignedNumber(2, this.warningCount || 0);
+  }
+  writer.writeString(this.message);
+};
+
+},{}],381:[function(require,module,exports){
+module.exports = OldPasswordPacket;
+function OldPasswordPacket(options) {
+  options = options || {};
+
+  this.scrambleBuff = options.scrambleBuff;
+}
+
+OldPasswordPacket.prototype.parse = function(parser) {
+  this.scrambleBuff = parser.parseNullTerminatedBuffer();
+};
+
+OldPasswordPacket.prototype.write = function(writer) {
+  writer.writeBuffer(this.scrambleBuff);
+  writer.writeFiller(1);
+};
+
+},{}],382:[function(require,module,exports){
+module.exports = ResultSetHeaderPacket;
+function ResultSetHeaderPacket(options) {
+  options = options || {};
+
+  this.fieldCount = options.fieldCount;
+  this.extra      = options.extra;
+}
+
+ResultSetHeaderPacket.prototype.parse = function(parser) {
+  this.fieldCount = parser.parseLengthCodedNumber();
+
+  if (parser.reachedPacketEnd()) return;
+
+  this.extra = (this.fieldCount === null)
+    ? parser.parsePacketTerminatedString()
+    : parser.parseLengthCodedNumber();
+};
+
+ResultSetHeaderPacket.prototype.write = function(writer) {
+  writer.writeLengthCodedNumber(this.fieldCount);
+
+  if (this.extra !== undefined) {
+    writer.writeLengthCodedNumber(this.extra);
+  }
+};
+
+},{}],383:[function(require,module,exports){
+var Types                        = require('../constants/types');
+var Charsets                     = require('../constants/charsets');
+var Field                        = require('./Field');
+var IEEE_754_BINARY_64_PRECISION = Math.pow(2, 53);
+
+module.exports = RowDataPacket;
+function RowDataPacket() {
+}
+
+Object.defineProperty(RowDataPacket.prototype, 'parse', {
+  configurable : true,
+  enumerable   : false,
+  value        : parse
+});
+
+Object.defineProperty(RowDataPacket.prototype, '_typeCast', {
+  configurable : true,
+  enumerable   : false,
+  value        : typeCast
+});
+
+function parse(parser, fieldPackets, typeCast, nestTables, connection) {
+  var self = this;
+  var next = function () {
+    return self._typeCast(fieldPacket, parser, connection.config.timezone, connection.config.supportBigNumbers, connection.config.bigNumberStrings, connection.config.dateStrings);
+  };
+
+  for (var i = 0; i < fieldPackets.length; i++) {
+    var fieldPacket = fieldPackets[i];
+    var value;
+
+    if (typeof typeCast === 'function') {
+      value = typeCast.apply(connection, [ new Field({ packet: fieldPacket, parser: parser }), next ]);
+    } else {
+      value = (typeCast)
+        ? this._typeCast(fieldPacket, parser, connection.config.timezone, connection.config.supportBigNumbers, connection.config.bigNumberStrings, connection.config.dateStrings)
+        : ( (fieldPacket.charsetNr === Charsets.BINARY)
+          ? parser.parseLengthCodedBuffer()
+          : parser.parseLengthCodedString() );
+    }
+
+    if (typeof nestTables === 'string' && nestTables.length) {
+      this[fieldPacket.table + nestTables + fieldPacket.name] = value;
+    } else if (nestTables) {
+      this[fieldPacket.table] = this[fieldPacket.table] || {};
+      this[fieldPacket.table][fieldPacket.name] = value;
+    } else {
+      this[fieldPacket.name] = value;
+    }
+  }
+}
+
+function typeCast(field, parser, timeZone, supportBigNumbers, bigNumberStrings, dateStrings) {
+  var numberString;
+
+  switch (field.type) {
+    case Types.TIMESTAMP:
+    case Types.TIMESTAMP2:
+    case Types.DATE:
+    case Types.DATETIME:
+    case Types.DATETIME2:
+    case Types.NEWDATE:
+      var dateString = parser.parseLengthCodedString();
+
+      if (typeMatch(field.type, dateStrings)) {
+        return dateString;
+      }
+
+      if (dateString === null) {
+        return null;
+      }
+
+      var originalString = dateString;
+      if (field.type === Types.DATE) {
+        dateString += ' 00:00:00';
+      }
+
+      if (timeZone !== 'local') {
+        dateString += ' ' + timeZone;
+      }
+
+      var dt = new Date(dateString);
+      if (isNaN(dt.getTime())) {
+        return originalString;
+      }
+
+      return dt;
+    case Types.TINY:
+    case Types.SHORT:
+    case Types.LONG:
+    case Types.INT24:
+    case Types.YEAR:
+    case Types.FLOAT:
+    case Types.DOUBLE:
+      numberString = parser.parseLengthCodedString();
+      return (numberString === null || (field.zeroFill && numberString[0] === '0'))
+        ? numberString : Number(numberString);
+    case Types.NEWDECIMAL:
+    case Types.LONGLONG:
+      numberString = parser.parseLengthCodedString();
+      return (numberString === null || (field.zeroFill && numberString[0] === '0'))
+        ? numberString
+        : ((supportBigNumbers && (bigNumberStrings || (Number(numberString) >= IEEE_754_BINARY_64_PRECISION) || Number(numberString) <= -IEEE_754_BINARY_64_PRECISION))
+          ? numberString
+          : Number(numberString));
+    case Types.BIT:
+      return parser.parseLengthCodedBuffer();
+    case Types.STRING:
+    case Types.VAR_STRING:
+    case Types.TINY_BLOB:
+    case Types.MEDIUM_BLOB:
+    case Types.LONG_BLOB:
+    case Types.BLOB:
+      return (field.charsetNr === Charsets.BINARY)
+        ? parser.parseLengthCodedBuffer()
+        : parser.parseLengthCodedString();
+    case Types.GEOMETRY:
+      return parser.parseGeometryValue();
+    default:
+      return parser.parseLengthCodedString();
+  }
+}
+
+function typeMatch(type, list) {
+  if (Array.isArray(list)) {
+    for (var i = 0; i < list.length; i++) {
+      if (Types[list[i]] === type) return true;
+    }
+    return false;
+  } else {
+    return Boolean(list);
+  }
+}
+
+},{"../constants/charsets":359,"../constants/types":364,"./Field":376}],384:[function(require,module,exports){
+// http://dev.mysql.com/doc/internals/en/ssl.html
+// http://dev.mysql.com/doc/internals/en/connection-phase-packets.html#packet-Protocol::SSLRequest
+
+var ClientConstants = require('../constants/client');
+
+module.exports = SSLRequestPacket;
+
+function SSLRequestPacket(options) {
+  options = options || {};
+  this.clientFlags   = options.clientFlags | ClientConstants.CLIENT_SSL;
+  this.maxPacketSize = options.maxPacketSize;
+  this.charsetNumber = options.charsetNumber;
+}
+
+SSLRequestPacket.prototype.parse = function(parser) {
+  // TODO: check SSLRequest packet v41 vs pre v41
+  this.clientFlags   = parser.parseUnsignedNumber(4);
+  this.maxPacketSize = parser.parseUnsignedNumber(4);
+  this.charsetNumber = parser.parseUnsignedNumber(1);
+};
+
+SSLRequestPacket.prototype.write = function(writer) {
+  writer.writeUnsignedNumber(4, this.clientFlags);
+  writer.writeUnsignedNumber(4, this.maxPacketSize);
+  writer.writeUnsignedNumber(1, this.charsetNumber);
+  writer.writeFiller(23);
+};
+
+},{"../constants/client":360}],385:[function(require,module,exports){
+module.exports = StatisticsPacket;
+function StatisticsPacket() {
+  this.message      = undefined;
+}
+
+StatisticsPacket.prototype.parse = function(parser) {
+  this.message      = parser.parsePacketTerminatedString();
+
+  var items = this.message.split(/\s\s/);
+  for (var i = 0; i < items.length; i++) {
+    var m = items[i].match(/^(.+)\:\s+(.+)$/);
+    if (m !== null) {
+      this[m[1].toLowerCase().replace(/\s/g, '_')] = Number(m[2]);
+    }
+  }
+};
+
+StatisticsPacket.prototype.write = function(writer) {
+  writer.writeString(this.message);
+};
+
+},{}],386:[function(require,module,exports){
+module.exports = UseOldPasswordPacket;
+function UseOldPasswordPacket(options) {
+  options = options || {};
+
+  this.firstByte = options.firstByte || 0xfe;
+}
+
+UseOldPasswordPacket.prototype.parse = function(parser) {
+  this.firstByte = parser.parseUnsignedNumber(1);
+};
+
+UseOldPasswordPacket.prototype.write = function(writer) {
+  writer.writeUnsignedNumber(1, this.firstByte);
+};
+
+},{}],387:[function(require,module,exports){
+exports.AuthSwitchRequestPacket = require('./AuthSwitchRequestPacket');
+exports.AuthSwitchResponsePacket = require('./AuthSwitchResponsePacket');
+exports.ClientAuthenticationPacket = require('./ClientAuthenticationPacket');
+exports.ComChangeUserPacket = require('./ComChangeUserPacket');
+exports.ComPingPacket = require('./ComPingPacket');
+exports.ComQueryPacket = require('./ComQueryPacket');
+exports.ComQuitPacket = require('./ComQuitPacket');
+exports.ComStatisticsPacket = require('./ComStatisticsPacket');
+exports.EmptyPacket = require('./EmptyPacket');
+exports.EofPacket = require('./EofPacket');
+exports.ErrorPacket = require('./ErrorPacket');
+exports.Field = require('./Field');
+exports.FieldPacket = require('./FieldPacket');
+exports.HandshakeInitializationPacket = require('./HandshakeInitializationPacket');
+exports.LocalDataFilePacket = require('./LocalDataFilePacket');
+exports.OkPacket = require('./OkPacket');
+exports.OldPasswordPacket = require('./OldPasswordPacket');
+exports.ResultSetHeaderPacket = require('./ResultSetHeaderPacket');
+exports.RowDataPacket = require('./RowDataPacket');
+exports.SSLRequestPacket = require('./SSLRequestPacket');
+exports.StatisticsPacket = require('./StatisticsPacket');
+exports.UseOldPasswordPacket = require('./UseOldPasswordPacket');
+
+},{"./AuthSwitchRequestPacket":365,"./AuthSwitchResponsePacket":366,"./ClientAuthenticationPacket":367,"./ComChangeUserPacket":368,"./ComPingPacket":369,"./ComQueryPacket":370,"./ComQuitPacket":371,"./ComStatisticsPacket":372,"./EmptyPacket":373,"./EofPacket":374,"./ErrorPacket":375,"./Field":376,"./FieldPacket":377,"./HandshakeInitializationPacket":378,"./LocalDataFilePacket":379,"./OkPacket":380,"./OldPasswordPacket":381,"./ResultSetHeaderPacket":382,"./RowDataPacket":383,"./SSLRequestPacket":384,"./StatisticsPacket":385,"./UseOldPasswordPacket":386}],388:[function(require,module,exports){
+var Sequence = require('./Sequence');
+var Util     = require('util');
+var Packets  = require('../packets');
+var Auth     = require('../Auth');
+
+module.exports = ChangeUser;
+Util.inherits(ChangeUser, Sequence);
+function ChangeUser(options, callback) {
+  Sequence.call(this, options, callback);
+
+  this._user          = options.user;
+  this._password      = options.password;
+  this._database      = options.database;
+  this._charsetNumber = options.charsetNumber;
+  this._currentConfig = options.currentConfig;
+}
+
+ChangeUser.prototype.start = function(handshakeInitializationPacket) {
+  var scrambleBuff = handshakeInitializationPacket.scrambleBuff();
+  scrambleBuff     = Auth.token(this._password, scrambleBuff);
+
+  var packet = new Packets.ComChangeUserPacket({
+    user          : this._user,
+    scrambleBuff  : scrambleBuff,
+    database      : this._database,
+    charsetNumber : this._charsetNumber
+  });
+
+  this._currentConfig.user          = this._user;
+  this._currentConfig.password      = this._password;
+  this._currentConfig.database      = this._database;
+  this._currentConfig.charsetNumber = this._charsetNumber;
+
+  this.emit('packet', packet);
+};
+
+ChangeUser.prototype['ErrorPacket'] = function(packet) {
+  var err = this._packetToError(packet);
+  err.fatal = true;
+  this.end(err);
+};
+
+},{"../Auth":350,"../packets":387,"./Sequence":393,"util":185}],389:[function(require,module,exports){
+var Sequence        = require('./Sequence');
+var Util            = require('util');
+var Packets         = require('../packets');
+var Auth            = require('../Auth');
+var ClientConstants = require('../constants/client');
+
+module.exports = Handshake;
+Util.inherits(Handshake, Sequence);
+function Handshake(options, callback) {
+  Sequence.call(this, options, callback);
+
+  options = options || {};
+
+  this._config                        = options.config;
+  this._handshakeInitializationPacket = null;
+}
+
+Handshake.prototype.determinePacket = function determinePacket(firstByte, parser) {
+  if (firstByte === 0xff) {
+    return Packets.ErrorPacket;
+  }
+
+  if (!this._handshakeInitializationPacket) {
+    return Packets.HandshakeInitializationPacket;
+  }
+
+  if (firstByte === 0xfe) {
+    return (parser.packetLength() === 1)
+      ? Packets.UseOldPasswordPacket
+      : Packets.AuthSwitchRequestPacket;
+  }
+
+  return undefined;
+};
+
+Handshake.prototype['AuthSwitchRequestPacket'] = function (packet) {
+  if (packet.authMethodName === 'mysql_native_password') {
+    var challenge = packet.authMethodData.slice(0, 20);
+
+    this.emit('packet', new Packets.AuthSwitchResponsePacket({
+      data: Auth.token(this._config.password, challenge)
+    }));
+  } else {
+    var err = new Error(
+      'MySQL is requesting the ' + packet.authMethodName + ' authentication method, which is not supported.'
+    );
+
+    err.code = 'UNSUPPORTED_AUTH_METHOD';
+    err.fatal = true;
+
+    this.end(err);
+  }
+};
+
+Handshake.prototype['HandshakeInitializationPacket'] = function(packet) {
+  this._handshakeInitializationPacket = packet;
+
+  this._config.protocol41 = packet.protocol41;
+
+  var serverSSLSupport = packet.serverCapabilities1 & ClientConstants.CLIENT_SSL;
+
+  if (this._config.ssl) {
+    if (!serverSSLSupport) {
+      var err = new Error('Server does not support secure connection');
+
+      err.code = 'HANDSHAKE_NO_SSL_SUPPORT';
+      err.fatal = true;
+
+      this.end(err);
+      return;
+    }
+
+    this._config.clientFlags |= ClientConstants.CLIENT_SSL;
+    this.emit('packet', new Packets.SSLRequestPacket({
+      clientFlags   : this._config.clientFlags,
+      maxPacketSize : this._config.maxPacketSize,
+      charsetNumber : this._config.charsetNumber
+    }));
+    this.emit('start-tls');
+  } else {
+    this._sendCredentials();
+  }
+};
+
+Handshake.prototype._tlsUpgradeCompleteHandler = function() {
+  this._sendCredentials();
+};
+
+Handshake.prototype._sendCredentials = function() {
+  var packet = this._handshakeInitializationPacket;
+  this.emit('packet', new Packets.ClientAuthenticationPacket({
+    clientFlags   : this._config.clientFlags,
+    maxPacketSize : this._config.maxPacketSize,
+    charsetNumber : this._config.charsetNumber,
+    user          : this._config.user,
+    database      : this._config.database,
+    protocol41    : packet.protocol41,
+    scrambleBuff  : (packet.protocol41)
+      ? Auth.token(this._config.password, packet.scrambleBuff())
+      : Auth.scramble323(packet.scrambleBuff(), this._config.password)
+  }));
+};
+
+Handshake.prototype['UseOldPasswordPacket'] = function() {
+  if (!this._config.insecureAuth) {
+    var err = new Error(
+      'MySQL server is requesting the old and insecure pre-4.1 auth mechanism. ' +
+      'Upgrade the user password or use the {insecureAuth: true} option.'
+    );
+
+    err.code = 'HANDSHAKE_INSECURE_AUTH';
+    err.fatal = true;
+
+    this.end(err);
+    return;
+  }
+
+  this.emit('packet', new Packets.OldPasswordPacket({
+    scrambleBuff: Auth.scramble323(this._handshakeInitializationPacket.scrambleBuff(), this._config.password)
+  }));
+};
+
+Handshake.prototype['ErrorPacket'] = function(packet) {
+  var err = this._packetToError(packet, true);
+  err.fatal = true;
+  this.end(err);
+};
+
+},{"../Auth":350,"../constants/client":360,"../packets":387,"./Sequence":393,"util":185}],390:[function(require,module,exports){
+var Sequence = require('./Sequence');
+var Util     = require('util');
+var Packets  = require('../packets');
+
+module.exports = Ping;
+Util.inherits(Ping, Sequence);
+
+function Ping(options, callback) {
+  if (!callback && typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  Sequence.call(this, options, callback);
+}
+
+Ping.prototype.start = function() {
+  this.emit('packet', new Packets.ComPingPacket());
+};
+
+},{"../packets":387,"./Sequence":393,"util":185}],391:[function(require,module,exports){
+(function (process){
+var Sequence     = require('./Sequence');
+var Util         = require('util');
+var Packets      = require('../packets');
+var ResultSet    = require('../ResultSet');
+var ServerStatus = require('../constants/server_status');
+var fs           = require('fs');
+var Readable     = require('readable-stream');
+
+module.exports = Query;
+Util.inherits(Query, Sequence);
+function Query(options, callback) {
+  Sequence.call(this, options, callback);
+
+  this.sql = options.sql;
+  this.values = options.values;
+  this.typeCast = (options.typeCast === undefined)
+    ? true
+    : options.typeCast;
+  this.nestTables = options.nestTables || false;
+
+  this._resultSet = null;
+  this._results   = [];
+  this._fields    = [];
+  this._index     = 0;
+  this._loadError = null;
+}
+
+Query.prototype.start = function() {
+  this.emit('packet', new Packets.ComQueryPacket(this.sql));
+};
+
+Query.prototype.determinePacket = function determinePacket(byte, parser) {
+  var resultSet = this._resultSet;
+
+  if (!resultSet) {
+    switch (byte) {
+      case 0x00: return Packets.OkPacket;
+      case 0xff: return Packets.ErrorPacket;
+      default:   return Packets.ResultSetHeaderPacket;
+    }
+  }
+
+  if (resultSet.eofPackets.length === 0) {
+    return (resultSet.fieldPackets.length < resultSet.resultSetHeaderPacket.fieldCount)
+      ? Packets.FieldPacket
+      : Packets.EofPacket;
+  }
+
+  if (byte === 0xff) {
+    return Packets.ErrorPacket;
+  }
+
+  if (byte === 0xfe && parser.packetLength() < 9) {
+    return Packets.EofPacket;
+  }
+
+  return Packets.RowDataPacket;
+};
+
+Query.prototype['OkPacket'] = function(packet) {
+  // try...finally for exception safety
+  try {
+    if (!this._callback) {
+      this.emit('result', packet, this._index);
+    } else {
+      this._results.push(packet);
+      this._fields.push(undefined);
+    }
+  } finally {
+    this._index++;
+    this._resultSet = null;
+    this._handleFinalResultPacket(packet);
+  }
+};
+
+Query.prototype['ErrorPacket'] = function(packet) {
+  var err = this._packetToError(packet);
+
+  var results = (this._results.length > 0)
+    ? this._results
+    : undefined;
+
+  var fields = (this._fields.length > 0)
+    ? this._fields
+    : undefined;
+
+  err.index = this._index;
+  err.sql   = this.sql;
+
+  this.end(err, results, fields);
+};
+
+Query.prototype['ResultSetHeaderPacket'] = function(packet) {
+  if (packet.fieldCount === null) {
+    this._sendLocalDataFile(packet.extra);
+  } else {
+    this._resultSet = new ResultSet(packet);
+  }
+};
+
+Query.prototype['FieldPacket'] = function(packet) {
+  this._resultSet.fieldPackets.push(packet);
+};
+
+Query.prototype['EofPacket'] = function(packet) {
+  this._resultSet.eofPackets.push(packet);
+
+  if (this._resultSet.eofPackets.length === 1 && !this._callback) {
+    this.emit('fields', this._resultSet.fieldPackets, this._index);
+  }
+
+  if (this._resultSet.eofPackets.length !== 2) {
+    return;
+  }
+
+  if (this._callback) {
+    this._results.push(this._resultSet.rows);
+    this._fields.push(this._resultSet.fieldPackets);
+  }
+
+  this._index++;
+  this._resultSet = null;
+  this._handleFinalResultPacket(packet);
+};
+
+Query.prototype._handleFinalResultPacket = function(packet) {
+  if (packet.serverStatus & ServerStatus.SERVER_MORE_RESULTS_EXISTS) {
+    return;
+  }
+
+  var results = (this._results.length > 1)
+    ? this._results
+    : this._results[0];
+
+  var fields = (this._fields.length > 1)
+    ? this._fields
+    : this._fields[0];
+
+  this.end(this._loadError, results, fields);
+};
+
+Query.prototype['RowDataPacket'] = function(packet, parser, connection) {
+  packet.parse(parser, this._resultSet.fieldPackets, this.typeCast, this.nestTables, connection);
+
+  if (this._callback) {
+    this._resultSet.rows.push(packet);
+  } else {
+    this.emit('result', packet, this._index);
+  }
+};
+
+Query.prototype._sendLocalDataFile = function(path) {
+  var self = this;
+  var localStream = fs.createReadStream(path, {
+    flag      : 'r',
+    encoding  : null,
+    autoClose : true
+  });
+
+  this.on('pause', function () {
+    localStream.pause();
+  });
+
+  this.on('resume', function () {
+    localStream.resume();
+  });
+
+  localStream.on('data', function (data) {
+    self.emit('packet', new Packets.LocalDataFilePacket(data));
+  });
+
+  localStream.on('error', function (err) {
+    self._loadError = err;
+    localStream.emit('end');
+  });
+
+  localStream.on('end', function () {
+    self.emit('packet', new Packets.EmptyPacket());
+  });
+};
+
+Query.prototype.stream = function(options) {
+  var self = this;
+
+  options = options || {};
+  options.objectMode = true;
+
+  var stream = new Readable(options);
+
+  stream._read = function() {
+    self._connection && self._connection.resume();
+  };
+
+  stream.once('end', function() {
+    process.nextTick(function () {
+      stream.emit('close');
+    });
+  });
+
+  this.on('result', function(row, i) {
+    if (!stream.push(row)) self._connection.pause();
+    stream.emit('result', row, i);  // replicate old emitter
+  });
+
+  this.on('error', function(err) {
+    stream.emit('error', err);  // Pass on any errors
+  });
+
+  this.on('end', function() {
+    stream.push(null);  // pushing null, indicating EOF
+  });
+
+  this.on('fields', function(fields, i) {
+    stream.emit('fields', fields, i);  // replicate old emitter
+  });
+
+  return stream;
+};
+
+}).call(this,require('_process'))
+},{"../ResultSet":356,"../constants/server_status":362,"../packets":387,"./Sequence":393,"_process":137,"fs":1,"readable-stream":412,"util":185}],392:[function(require,module,exports){
+var Sequence = require('./Sequence');
+var Util     = require('util');
+var Packets  = require('../packets');
+
+module.exports = Quit;
+Util.inherits(Quit, Sequence);
+function Quit(options, callback) {
+  if (!callback && typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  Sequence.call(this, options, callback);
+
+  this._started = false;
+}
+
+Quit.prototype.end = function end(err) {
+  if (this._ended) {
+    return;
+  }
+
+  if (!this._started) {
+    Sequence.prototype.end.call(this, err);
+    return;
+  }
+
+  if (err && err.code === 'ECONNRESET' && err.syscall === 'read') {
+    // Ignore read errors after packet sent
+    Sequence.prototype.end.call(this);
+    return;
+  }
+
+  Sequence.prototype.end.call(this, err);
+};
+
+Quit.prototype.start = function() {
+  this._started = true;
+  this.emit('packet', new Packets.ComQuitPacket());
+};
+
+},{"../packets":387,"./Sequence":393,"util":185}],393:[function(require,module,exports){
+var Util           = require('util');
+var EventEmitter   = require('events').EventEmitter;
+var Packets        = require('../packets');
+var ErrorConstants = require('../constants/errors');
+var Timer          = require('../Timer');
+
+// istanbul ignore next: Node.js < 0.10 not covered
+var listenerCount = EventEmitter.listenerCount
+  || function(emitter, type){ return emitter.listeners(type).length; };
+
+var LONG_STACK_DELIMITER = '\n    --------------------\n';
+
+module.exports = Sequence;
+Util.inherits(Sequence, EventEmitter);
+function Sequence(options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  EventEmitter.call(this);
+
+  options = options || {};
+
+  this._callback = callback;
+  this._callSite = null;
+  this._ended    = false;
+  this._timeout  = options.timeout;
+  this._timer    = new Timer(this);
+}
+
+Sequence.determinePacket = function(byte) {
+  switch (byte) {
+    case 0x00: return Packets.OkPacket;
+    case 0xfe: return Packets.EofPacket;
+    case 0xff: return Packets.ErrorPacket;
+    default:   return undefined;
+  }
+};
+
+Sequence.prototype.hasErrorHandler = function() {
+  return Boolean(this._callback) || listenerCount(this, 'error') > 1;
+};
+
+Sequence.prototype._packetToError = function(packet) {
+  var code = ErrorConstants[packet.errno] || 'UNKNOWN_CODE_PLEASE_REPORT';
+  var err  = new Error(code + ': ' + packet.message);
+  err.code = code;
+  err.errno = packet.errno;
+
+  err.sqlMessage = packet.message;
+  err.sqlState   = packet.sqlState;
+
+  return err;
+};
+
+Sequence.prototype.end = function(err) {
+  if (this._ended) {
+    return;
+  }
+
+  this._ended = true;
+
+  if (err) {
+    this._addLongStackTrace(err);
+  }
+
+  // Without this we are leaking memory. This problem was introduced in
+  // 8189925374e7ce3819bbe88b64c7b15abac96b16. I suspect that the error object
+  // causes a cyclic reference that the GC does not detect properly, but I was
+  // unable to produce a standalone version of this leak. This would be a great
+  // challenge for somebody interested in difficult problems : )!
+  this._callSite = null;
+
+  // try...finally for exception safety
+  try {
+    if (err) {
+      this.emit('error', err);
+    }
+  } finally {
+    try {
+      if (this._callback) {
+        this._callback.apply(this, arguments);
+      }
+    } finally {
+      this.emit('end');
+    }
+  }
+};
+
+Sequence.prototype['OkPacket'] = function(packet) {
+  this.end(null, packet);
+};
+
+Sequence.prototype['ErrorPacket'] = function(packet) {
+  this.end(this._packetToError(packet));
+};
+
+// Implemented by child classes
+Sequence.prototype.start = function() {};
+
+Sequence.prototype._addLongStackTrace = function _addLongStackTrace(err) {
+  var callSiteStack = this._callSite && this._callSite.stack;
+
+  if (!callSiteStack || typeof callSiteStack !== 'string') {
+    // No recorded call site
+    return;
+  }
+
+  if (err.stack.indexOf(LONG_STACK_DELIMITER) !== -1) {
+    // Error stack already looks long
+    return;
+  }
+
+  var index = callSiteStack.indexOf('\n');
+
+  if (index !== -1) {
+    // Append recorded call site
+    err.stack += LONG_STACK_DELIMITER + callSiteStack.substr(index + 1);
+  }
+};
+
+Sequence.prototype._onTimeout = function _onTimeout() {
+  this.emit('timeout');
+};
+
+},{"../Timer":358,"../constants/errors":361,"../packets":387,"events":90,"util":185}],394:[function(require,module,exports){
+var Sequence = require('./Sequence');
+var Util     = require('util');
+var Packets  = require('../packets');
+
+module.exports = Statistics;
+Util.inherits(Statistics, Sequence);
+function Statistics(options, callback) {
+  if (!callback && typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  Sequence.call(this, options, callback);
+}
+
+Statistics.prototype.start = function() {
+  this.emit('packet', new Packets.ComStatisticsPacket());
+};
+
+Statistics.prototype['StatisticsPacket'] = function (packet) {
+  this.end(null, packet);
+};
+
+Statistics.prototype.determinePacket = function determinePacket(firstByte) {
+  if (firstByte === 0x55) {
+    return Packets.StatisticsPacket;
+  }
+
+  return undefined;
+};
+
+},{"../packets":387,"./Sequence":393,"util":185}],395:[function(require,module,exports){
+exports.ChangeUser = require('./ChangeUser');
+exports.Handshake = require('./Handshake');
+exports.Ping = require('./Ping');
+exports.Query = require('./Query');
+exports.Quit = require('./Quit');
+exports.Sequence = require('./Sequence');
+exports.Statistics = require('./Statistics');
+
+},{"./ChangeUser":388,"./Handshake":389,"./Ping":390,"./Query":391,"./Quit":392,"./Sequence":393,"./Statistics":394}],396:[function(require,module,exports){
 module.exports = compile;
 
 var BaseFuncs = require("boolbase"),
@@ -72083,7 +83118,7 @@ function compile(parsed){
 		return pos <= b && pos % a === bMod;
 	};
 }
-},{"boolbase":194}],341:[function(require,module,exports){
+},{"boolbase":195}],397:[function(require,module,exports){
 var parse = require("./parse.js"),
     compile = require("./compile.js");
 
@@ -72093,7 +83128,7 @@ module.exports = function nthCheck(formula){
 
 module.exports.parse = parse;
 module.exports.compile = compile;
-},{"./compile.js":340,"./parse.js":342}],342:[function(require,module,exports){
+},{"./compile.js":396,"./parse.js":398}],398:[function(require,module,exports){
 module.exports = parse;
 
 //following http://www.w3.org/TR/css3-selectors/#nth-child-pseudo
@@ -72135,9 +83170,11 @@ function parse(formula){
 	}
 }
 
-},{}],343:[function(require,module,exports){
+},{}],399:[function(require,module,exports){
+arguments[4][136][0].apply(exports,arguments)
+},{"_process":137,"dup":136}],400:[function(require,module,exports){
 module.exports=["ac","com.ac","edu.ac","gov.ac","net.ac","mil.ac","org.ac","ad","nom.ad","ae","co.ae","net.ae","org.ae","sch.ae","ac.ae","gov.ae","mil.ae","aero","accident-investigation.aero","accident-prevention.aero","aerobatic.aero","aeroclub.aero","aerodrome.aero","agents.aero","aircraft.aero","airline.aero","airport.aero","air-surveillance.aero","airtraffic.aero","air-traffic-control.aero","ambulance.aero","amusement.aero","association.aero","author.aero","ballooning.aero","broker.aero","caa.aero","cargo.aero","catering.aero","certification.aero","championship.aero","charter.aero","civilaviation.aero","club.aero","conference.aero","consultant.aero","consulting.aero","control.aero","council.aero","crew.aero","design.aero","dgca.aero","educator.aero","emergency.aero","engine.aero","engineer.aero","entertainment.aero","equipment.aero","exchange.aero","express.aero","federation.aero","flight.aero","freight.aero","fuel.aero","gliding.aero","government.aero","groundhandling.aero","group.aero","hanggliding.aero","homebuilt.aero","insurance.aero","journal.aero","journalist.aero","leasing.aero","logistics.aero","magazine.aero","maintenance.aero","media.aero","microlight.aero","modelling.aero","navigation.aero","parachuting.aero","paragliding.aero","passenger-association.aero","pilot.aero","press.aero","production.aero","recreation.aero","repbody.aero","res.aero","research.aero","rotorcraft.aero","safety.aero","scientist.aero","services.aero","show.aero","skydiving.aero","software.aero","student.aero","trader.aero","trading.aero","trainer.aero","union.aero","workinggroup.aero","works.aero","af","gov.af","com.af","org.af","net.af","edu.af","ag","com.ag","org.ag","net.ag","co.ag","nom.ag","ai","off.ai","com.ai","net.ai","org.ai","al","com.al","edu.al","gov.al","mil.al","net.al","org.al","am","ao","ed.ao","gv.ao","og.ao","co.ao","pb.ao","it.ao","aq","ar","com.ar","edu.ar","gob.ar","gov.ar","int.ar","mil.ar","musica.ar","net.ar","org.ar","tur.ar","arpa","e164.arpa","in-addr.arpa","ip6.arpa","iris.arpa","uri.arpa","urn.arpa","as","gov.as","asia","at","ac.at","co.at","gv.at","or.at","au","com.au","net.au","org.au","edu.au","gov.au","asn.au","id.au","info.au","conf.au","oz.au","act.au","nsw.au","nt.au","qld.au","sa.au","tas.au","vic.au","wa.au","act.edu.au","nsw.edu.au","nt.edu.au","qld.edu.au","sa.edu.au","tas.edu.au","vic.edu.au","wa.edu.au","qld.gov.au","sa.gov.au","tas.gov.au","vic.gov.au","wa.gov.au","aw","com.aw","ax","az","com.az","net.az","int.az","gov.az","org.az","edu.az","info.az","pp.az","mil.az","name.az","pro.az","biz.az","ba","com.ba","edu.ba","gov.ba","mil.ba","net.ba","org.ba","bb","biz.bb","co.bb","com.bb","edu.bb","gov.bb","info.bb","net.bb","org.bb","store.bb","tv.bb","*.bd","be","ac.be","bf","gov.bf","bg","a.bg","b.bg","c.bg","d.bg","e.bg","f.bg","g.bg","h.bg","i.bg","j.bg","k.bg","l.bg","m.bg","n.bg","o.bg","p.bg","q.bg","r.bg","s.bg","t.bg","u.bg","v.bg","w.bg","x.bg","y.bg","z.bg","0.bg","1.bg","2.bg","3.bg","4.bg","5.bg","6.bg","7.bg","8.bg","9.bg","bh","com.bh","edu.bh","net.bh","org.bh","gov.bh","bi","co.bi","com.bi","edu.bi","or.bi","org.bi","biz","bj","asso.bj","barreau.bj","gouv.bj","bm","com.bm","edu.bm","gov.bm","net.bm","org.bm","*.bn","bo","com.bo","edu.bo","gob.bo","int.bo","org.bo","net.bo","mil.bo","tv.bo","web.bo","academia.bo","agro.bo","arte.bo","blog.bo","bolivia.bo","ciencia.bo","cooperativa.bo","democracia.bo","deporte.bo","ecologia.bo","economia.bo","empresa.bo","indigena.bo","industria.bo","info.bo","medicina.bo","movimiento.bo","musica.bo","natural.bo","nombre.bo","noticias.bo","patria.bo","politica.bo","profesional.bo","plurinacional.bo","pueblo.bo","revista.bo","salud.bo","tecnologia.bo","tksat.bo","transporte.bo","wiki.bo","br","9guacu.br","abc.br","adm.br","adv.br","agr.br","aju.br","am.br","anani.br","aparecida.br","arq.br","art.br","ato.br","b.br","barueri.br","belem.br","bhz.br","bio.br","blog.br","bmd.br","boavista.br","bsb.br","campinagrande.br","campinas.br","caxias.br","cim.br","cng.br","cnt.br","com.br","contagem.br","coop.br","cri.br","cuiaba.br","curitiba.br","def.br","ecn.br","eco.br","edu.br","emp.br","eng.br","esp.br","etc.br","eti.br","far.br","feira.br","flog.br","floripa.br","fm.br","fnd.br","fortal.br","fot.br","foz.br","fst.br","g12.br","ggf.br","goiania.br","gov.br","ac.gov.br","al.gov.br","am.gov.br","ap.gov.br","ba.gov.br","ce.gov.br","df.gov.br","es.gov.br","go.gov.br","ma.gov.br","mg.gov.br","ms.gov.br","mt.gov.br","pa.gov.br","pb.gov.br","pe.gov.br","pi.gov.br","pr.gov.br","rj.gov.br","rn.gov.br","ro.gov.br","rr.gov.br","rs.gov.br","sc.gov.br","se.gov.br","sp.gov.br","to.gov.br","gru.br","imb.br","ind.br","inf.br","jab.br","jampa.br","jdf.br","joinville.br","jor.br","jus.br","leg.br","lel.br","londrina.br","macapa.br","maceio.br","manaus.br","maringa.br","mat.br","med.br","mil.br","morena.br","mp.br","mus.br","natal.br","net.br","niteroi.br","*.nom.br","not.br","ntr.br","odo.br","org.br","osasco.br","palmas.br","poa.br","ppg.br","pro.br","psc.br","psi.br","pvh.br","qsl.br","radio.br","rec.br","recife.br","ribeirao.br","rio.br","riobranco.br","riopreto.br","salvador.br","sampa.br","santamaria.br","santoandre.br","saobernardo.br","saogonca.br","sjc.br","slg.br","slz.br","sorocaba.br","srv.br","taxi.br","teo.br","the.br","tmp.br","trd.br","tur.br","tv.br","udi.br","vet.br","vix.br","vlog.br","wiki.br","zlg.br","bs","com.bs","net.bs","org.bs","edu.bs","gov.bs","bt","com.bt","edu.bt","gov.bt","net.bt","org.bt","bv","bw","co.bw","org.bw","by","gov.by","mil.by","com.by","of.by","bz","com.bz","net.bz","org.bz","edu.bz","gov.bz","ca","ab.ca","bc.ca","mb.ca","nb.ca","nf.ca","nl.ca","ns.ca","nt.ca","nu.ca","on.ca","pe.ca","qc.ca","sk.ca","yk.ca","gc.ca","cat","cc","cd","gov.cd","cf","cg","ch","ci","org.ci","or.ci","com.ci","co.ci","edu.ci","ed.ci","ac.ci","net.ci","go.ci","asso.ci","aéroport.ci","int.ci","presse.ci","md.ci","gouv.ci","*.ck","!www.ck","cl","gov.cl","gob.cl","co.cl","mil.cl","cm","co.cm","com.cm","gov.cm","net.cm","cn","ac.cn","com.cn","edu.cn","gov.cn","net.cn","org.cn","mil.cn","公司.cn","网络.cn","網絡.cn","ah.cn","bj.cn","cq.cn","fj.cn","gd.cn","gs.cn","gz.cn","gx.cn","ha.cn","hb.cn","he.cn","hi.cn","hl.cn","hn.cn","jl.cn","js.cn","jx.cn","ln.cn","nm.cn","nx.cn","qh.cn","sc.cn","sd.cn","sh.cn","sn.cn","sx.cn","tj.cn","xj.cn","xz.cn","yn.cn","zj.cn","hk.cn","mo.cn","tw.cn","co","arts.co","com.co","edu.co","firm.co","gov.co","info.co","int.co","mil.co","net.co","nom.co","org.co","rec.co","web.co","com","coop","cr","ac.cr","co.cr","ed.cr","fi.cr","go.cr","or.cr","sa.cr","cu","com.cu","edu.cu","org.cu","net.cu","gov.cu","inf.cu","cv","cw","com.cw","edu.cw","net.cw","org.cw","cx","gov.cx","cy","ac.cy","biz.cy","com.cy","ekloges.cy","gov.cy","ltd.cy","name.cy","net.cy","org.cy","parliament.cy","press.cy","pro.cy","tm.cy","cz","de","dj","dk","dm","com.dm","net.dm","org.dm","edu.dm","gov.dm","do","art.do","com.do","edu.do","gob.do","gov.do","mil.do","net.do","org.do","sld.do","web.do","dz","com.dz","org.dz","net.dz","gov.dz","edu.dz","asso.dz","pol.dz","art.dz","ec","com.ec","info.ec","net.ec","fin.ec","k12.ec","med.ec","pro.ec","org.ec","edu.ec","gov.ec","gob.ec","mil.ec","edu","ee","edu.ee","gov.ee","riik.ee","lib.ee","med.ee","com.ee","pri.ee","aip.ee","org.ee","fie.ee","eg","com.eg","edu.eg","eun.eg","gov.eg","mil.eg","name.eg","net.eg","org.eg","sci.eg","*.er","es","com.es","nom.es","org.es","gob.es","edu.es","et","com.et","gov.et","org.et","edu.et","biz.et","name.et","info.et","net.et","eu","fi","aland.fi","*.fj","*.fk","fm","fo","fr","com.fr","asso.fr","nom.fr","prd.fr","presse.fr","tm.fr","aeroport.fr","assedic.fr","avocat.fr","avoues.fr","cci.fr","chambagri.fr","chirurgiens-dentistes.fr","experts-comptables.fr","geometre-expert.fr","gouv.fr","greta.fr","huissier-justice.fr","medecin.fr","notaires.fr","pharmacien.fr","port.fr","veterinaire.fr","ga","gb","gd","ge","com.ge","edu.ge","gov.ge","org.ge","mil.ge","net.ge","pvt.ge","gf","gg","co.gg","net.gg","org.gg","gh","com.gh","edu.gh","gov.gh","org.gh","mil.gh","gi","com.gi","ltd.gi","gov.gi","mod.gi","edu.gi","org.gi","gl","co.gl","com.gl","edu.gl","net.gl","org.gl","gm","gn","ac.gn","com.gn","edu.gn","gov.gn","org.gn","net.gn","gov","gp","com.gp","net.gp","mobi.gp","edu.gp","org.gp","asso.gp","gq","gr","com.gr","edu.gr","net.gr","org.gr","gov.gr","gs","gt","com.gt","edu.gt","gob.gt","ind.gt","mil.gt","net.gt","org.gt","gu","com.gu","edu.gu","gov.gu","guam.gu","info.gu","net.gu","org.gu","web.gu","gw","gy","co.gy","com.gy","edu.gy","gov.gy","net.gy","org.gy","hk","com.hk","edu.hk","gov.hk","idv.hk","net.hk","org.hk","公司.hk","教育.hk","敎育.hk","政府.hk","個人.hk","个人.hk","箇人.hk","網络.hk","网络.hk","组織.hk","網絡.hk","网絡.hk","组织.hk","組織.hk","組织.hk","hm","hn","com.hn","edu.hn","org.hn","net.hn","mil.hn","gob.hn","hr","iz.hr","from.hr","name.hr","com.hr","ht","com.ht","shop.ht","firm.ht","info.ht","adult.ht","net.ht","pro.ht","org.ht","med.ht","art.ht","coop.ht","pol.ht","asso.ht","edu.ht","rel.ht","gouv.ht","perso.ht","hu","co.hu","info.hu","org.hu","priv.hu","sport.hu","tm.hu","2000.hu","agrar.hu","bolt.hu","casino.hu","city.hu","erotica.hu","erotika.hu","film.hu","forum.hu","games.hu","hotel.hu","ingatlan.hu","jogasz.hu","konyvelo.hu","lakas.hu","media.hu","news.hu","reklam.hu","sex.hu","shop.hu","suli.hu","szex.hu","tozsde.hu","utazas.hu","video.hu","id","ac.id","biz.id","co.id","desa.id","go.id","mil.id","my.id","net.id","or.id","sch.id","web.id","ie","gov.ie","il","ac.il","co.il","gov.il","idf.il","k12.il","muni.il","net.il","org.il","im","ac.im","co.im","com.im","ltd.co.im","net.im","org.im","plc.co.im","tt.im","tv.im","in","co.in","firm.in","net.in","org.in","gen.in","ind.in","nic.in","ac.in","edu.in","res.in","gov.in","mil.in","info","int","eu.int","io","com.io","iq","gov.iq","edu.iq","mil.iq","com.iq","org.iq","net.iq","ir","ac.ir","co.ir","gov.ir","id.ir","net.ir","org.ir","sch.ir","ایران.ir","ايران.ir","is","net.is","com.is","edu.is","gov.is","org.is","int.is","it","gov.it","edu.it","abr.it","abruzzo.it","aosta-valley.it","aostavalley.it","bas.it","basilicata.it","cal.it","calabria.it","cam.it","campania.it","emilia-romagna.it","emiliaromagna.it","emr.it","friuli-v-giulia.it","friuli-ve-giulia.it","friuli-vegiulia.it","friuli-venezia-giulia.it","friuli-veneziagiulia.it","friuli-vgiulia.it","friuliv-giulia.it","friulive-giulia.it","friulivegiulia.it","friulivenezia-giulia.it","friuliveneziagiulia.it","friulivgiulia.it","fvg.it","laz.it","lazio.it","lig.it","liguria.it","lom.it","lombardia.it","lombardy.it","lucania.it","mar.it","marche.it","mol.it","molise.it","piedmont.it","piemonte.it","pmn.it","pug.it","puglia.it","sar.it","sardegna.it","sardinia.it","sic.it","sicilia.it","sicily.it","taa.it","tos.it","toscana.it","trentin-sud-tirol.it","trentin-süd-tirol.it","trentin-sudtirol.it","trentin-südtirol.it","trentin-sued-tirol.it","trentin-suedtirol.it","trentino-a-adige.it","trentino-aadige.it","trentino-alto-adige.it","trentino-altoadige.it","trentino-s-tirol.it","trentino-stirol.it","trentino-sud-tirol.it","trentino-süd-tirol.it","trentino-sudtirol.it","trentino-südtirol.it","trentino-sued-tirol.it","trentino-suedtirol.it","trentino.it","trentinoa-adige.it","trentinoaadige.it","trentinoalto-adige.it","trentinoaltoadige.it","trentinos-tirol.it","trentinostirol.it","trentinosud-tirol.it","trentinosüd-tirol.it","trentinosudtirol.it","trentinosüdtirol.it","trentinosued-tirol.it","trentinosuedtirol.it","trentinsud-tirol.it","trentinsüd-tirol.it","trentinsudtirol.it","trentinsüdtirol.it","trentinsued-tirol.it","trentinsuedtirol.it","tuscany.it","umb.it","umbria.it","val-d-aosta.it","val-daosta.it","vald-aosta.it","valdaosta.it","valle-aosta.it","valle-d-aosta.it","valle-daosta.it","valleaosta.it","valled-aosta.it","valledaosta.it","vallee-aoste.it","vallée-aoste.it","vallee-d-aoste.it","vallée-d-aoste.it","valleeaoste.it","valléeaoste.it","valleedaoste.it","valléedaoste.it","vao.it","vda.it","ven.it","veneto.it","ag.it","agrigento.it","al.it","alessandria.it","alto-adige.it","altoadige.it","an.it","ancona.it","andria-barletta-trani.it","andria-trani-barletta.it","andriabarlettatrani.it","andriatranibarletta.it","ao.it","aosta.it","aoste.it","ap.it","aq.it","aquila.it","ar.it","arezzo.it","ascoli-piceno.it","ascolipiceno.it","asti.it","at.it","av.it","avellino.it","ba.it","balsan-sudtirol.it","balsan-südtirol.it","balsan-suedtirol.it","balsan.it","bari.it","barletta-trani-andria.it","barlettatraniandria.it","belluno.it","benevento.it","bergamo.it","bg.it","bi.it","biella.it","bl.it","bn.it","bo.it","bologna.it","bolzano-altoadige.it","bolzano.it","bozen-sudtirol.it","bozen-südtirol.it","bozen-suedtirol.it","bozen.it","br.it","brescia.it","brindisi.it","bs.it","bt.it","bulsan-sudtirol.it","bulsan-südtirol.it","bulsan-suedtirol.it","bulsan.it","bz.it","ca.it","cagliari.it","caltanissetta.it","campidano-medio.it","campidanomedio.it","campobasso.it","carbonia-iglesias.it","carboniaiglesias.it","carrara-massa.it","carraramassa.it","caserta.it","catania.it","catanzaro.it","cb.it","ce.it","cesena-forli.it","cesena-forlì.it","cesenaforli.it","cesenaforlì.it","ch.it","chieti.it","ci.it","cl.it","cn.it","co.it","como.it","cosenza.it","cr.it","cremona.it","crotone.it","cs.it","ct.it","cuneo.it","cz.it","dell-ogliastra.it","dellogliastra.it","en.it","enna.it","fc.it","fe.it","fermo.it","ferrara.it","fg.it","fi.it","firenze.it","florence.it","fm.it","foggia.it","forli-cesena.it","forlì-cesena.it","forlicesena.it","forlìcesena.it","fr.it","frosinone.it","ge.it","genoa.it","genova.it","go.it","gorizia.it","gr.it","grosseto.it","iglesias-carbonia.it","iglesiascarbonia.it","im.it","imperia.it","is.it","isernia.it","kr.it","la-spezia.it","laquila.it","laspezia.it","latina.it","lc.it","le.it","lecce.it","lecco.it","li.it","livorno.it","lo.it","lodi.it","lt.it","lu.it","lucca.it","macerata.it","mantova.it","massa-carrara.it","massacarrara.it","matera.it","mb.it","mc.it","me.it","medio-campidano.it","mediocampidano.it","messina.it","mi.it","milan.it","milano.it","mn.it","mo.it","modena.it","monza-brianza.it","monza-e-della-brianza.it","monza.it","monzabrianza.it","monzaebrianza.it","monzaedellabrianza.it","ms.it","mt.it","na.it","naples.it","napoli.it","no.it","novara.it","nu.it","nuoro.it","og.it","ogliastra.it","olbia-tempio.it","olbiatempio.it","or.it","oristano.it","ot.it","pa.it","padova.it","padua.it","palermo.it","parma.it","pavia.it","pc.it","pd.it","pe.it","perugia.it","pesaro-urbino.it","pesarourbino.it","pescara.it","pg.it","pi.it","piacenza.it","pisa.it","pistoia.it","pn.it","po.it","pordenone.it","potenza.it","pr.it","prato.it","pt.it","pu.it","pv.it","pz.it","ra.it","ragusa.it","ravenna.it","rc.it","re.it","reggio-calabria.it","reggio-emilia.it","reggiocalabria.it","reggioemilia.it","rg.it","ri.it","rieti.it","rimini.it","rm.it","rn.it","ro.it","roma.it","rome.it","rovigo.it","sa.it","salerno.it","sassari.it","savona.it","si.it","siena.it","siracusa.it","so.it","sondrio.it","sp.it","sr.it","ss.it","suedtirol.it","südtirol.it","sv.it","ta.it","taranto.it","te.it","tempio-olbia.it","tempioolbia.it","teramo.it","terni.it","tn.it","to.it","torino.it","tp.it","tr.it","trani-andria-barletta.it","trani-barletta-andria.it","traniandriabarletta.it","tranibarlettaandria.it","trapani.it","trento.it","treviso.it","trieste.it","ts.it","turin.it","tv.it","ud.it","udine.it","urbino-pesaro.it","urbinopesaro.it","va.it","varese.it","vb.it","vc.it","ve.it","venezia.it","venice.it","verbania.it","vercelli.it","verona.it","vi.it","vibo-valentia.it","vibovalentia.it","vicenza.it","viterbo.it","vr.it","vs.it","vt.it","vv.it","je","co.je","net.je","org.je","*.jm","jo","com.jo","org.jo","net.jo","edu.jo","sch.jo","gov.jo","mil.jo","name.jo","jobs","jp","ac.jp","ad.jp","co.jp","ed.jp","go.jp","gr.jp","lg.jp","ne.jp","or.jp","aichi.jp","akita.jp","aomori.jp","chiba.jp","ehime.jp","fukui.jp","fukuoka.jp","fukushima.jp","gifu.jp","gunma.jp","hiroshima.jp","hokkaido.jp","hyogo.jp","ibaraki.jp","ishikawa.jp","iwate.jp","kagawa.jp","kagoshima.jp","kanagawa.jp","kochi.jp","kumamoto.jp","kyoto.jp","mie.jp","miyagi.jp","miyazaki.jp","nagano.jp","nagasaki.jp","nara.jp","niigata.jp","oita.jp","okayama.jp","okinawa.jp","osaka.jp","saga.jp","saitama.jp","shiga.jp","shimane.jp","shizuoka.jp","tochigi.jp","tokushima.jp","tokyo.jp","tottori.jp","toyama.jp","wakayama.jp","yamagata.jp","yamaguchi.jp","yamanashi.jp","栃木.jp","愛知.jp","愛媛.jp","兵庫.jp","熊本.jp","茨城.jp","北海道.jp","千葉.jp","和歌山.jp","長崎.jp","長野.jp","新潟.jp","青森.jp","静岡.jp","東京.jp","石川.jp","埼玉.jp","三重.jp","京都.jp","佐賀.jp","大分.jp","大阪.jp","奈良.jp","宮城.jp","宮崎.jp","富山.jp","山口.jp","山形.jp","山梨.jp","岩手.jp","岐阜.jp","岡山.jp","島根.jp","広島.jp","徳島.jp","沖縄.jp","滋賀.jp","神奈川.jp","福井.jp","福岡.jp","福島.jp","秋田.jp","群馬.jp","香川.jp","高知.jp","鳥取.jp","鹿児島.jp","*.kawasaki.jp","*.kitakyushu.jp","*.kobe.jp","*.nagoya.jp","*.sapporo.jp","*.sendai.jp","*.yokohama.jp","!city.kawasaki.jp","!city.kitakyushu.jp","!city.kobe.jp","!city.nagoya.jp","!city.sapporo.jp","!city.sendai.jp","!city.yokohama.jp","aisai.aichi.jp","ama.aichi.jp","anjo.aichi.jp","asuke.aichi.jp","chiryu.aichi.jp","chita.aichi.jp","fuso.aichi.jp","gamagori.aichi.jp","handa.aichi.jp","hazu.aichi.jp","hekinan.aichi.jp","higashiura.aichi.jp","ichinomiya.aichi.jp","inazawa.aichi.jp","inuyama.aichi.jp","isshiki.aichi.jp","iwakura.aichi.jp","kanie.aichi.jp","kariya.aichi.jp","kasugai.aichi.jp","kira.aichi.jp","kiyosu.aichi.jp","komaki.aichi.jp","konan.aichi.jp","kota.aichi.jp","mihama.aichi.jp","miyoshi.aichi.jp","nishio.aichi.jp","nisshin.aichi.jp","obu.aichi.jp","oguchi.aichi.jp","oharu.aichi.jp","okazaki.aichi.jp","owariasahi.aichi.jp","seto.aichi.jp","shikatsu.aichi.jp","shinshiro.aichi.jp","shitara.aichi.jp","tahara.aichi.jp","takahama.aichi.jp","tobishima.aichi.jp","toei.aichi.jp","togo.aichi.jp","tokai.aichi.jp","tokoname.aichi.jp","toyoake.aichi.jp","toyohashi.aichi.jp","toyokawa.aichi.jp","toyone.aichi.jp","toyota.aichi.jp","tsushima.aichi.jp","yatomi.aichi.jp","akita.akita.jp","daisen.akita.jp","fujisato.akita.jp","gojome.akita.jp","hachirogata.akita.jp","happou.akita.jp","higashinaruse.akita.jp","honjo.akita.jp","honjyo.akita.jp","ikawa.akita.jp","kamikoani.akita.jp","kamioka.akita.jp","katagami.akita.jp","kazuno.akita.jp","kitaakita.akita.jp","kosaka.akita.jp","kyowa.akita.jp","misato.akita.jp","mitane.akita.jp","moriyoshi.akita.jp","nikaho.akita.jp","noshiro.akita.jp","odate.akita.jp","oga.akita.jp","ogata.akita.jp","semboku.akita.jp","yokote.akita.jp","yurihonjo.akita.jp","aomori.aomori.jp","gonohe.aomori.jp","hachinohe.aomori.jp","hashikami.aomori.jp","hiranai.aomori.jp","hirosaki.aomori.jp","itayanagi.aomori.jp","kuroishi.aomori.jp","misawa.aomori.jp","mutsu.aomori.jp","nakadomari.aomori.jp","noheji.aomori.jp","oirase.aomori.jp","owani.aomori.jp","rokunohe.aomori.jp","sannohe.aomori.jp","shichinohe.aomori.jp","shingo.aomori.jp","takko.aomori.jp","towada.aomori.jp","tsugaru.aomori.jp","tsuruta.aomori.jp","abiko.chiba.jp","asahi.chiba.jp","chonan.chiba.jp","chosei.chiba.jp","choshi.chiba.jp","chuo.chiba.jp","funabashi.chiba.jp","futtsu.chiba.jp","hanamigawa.chiba.jp","ichihara.chiba.jp","ichikawa.chiba.jp","ichinomiya.chiba.jp","inzai.chiba.jp","isumi.chiba.jp","kamagaya.chiba.jp","kamogawa.chiba.jp","kashiwa.chiba.jp","katori.chiba.jp","katsuura.chiba.jp","kimitsu.chiba.jp","kisarazu.chiba.jp","kozaki.chiba.jp","kujukuri.chiba.jp","kyonan.chiba.jp","matsudo.chiba.jp","midori.chiba.jp","mihama.chiba.jp","minamiboso.chiba.jp","mobara.chiba.jp","mutsuzawa.chiba.jp","nagara.chiba.jp","nagareyama.chiba.jp","narashino.chiba.jp","narita.chiba.jp","noda.chiba.jp","oamishirasato.chiba.jp","omigawa.chiba.jp","onjuku.chiba.jp","otaki.chiba.jp","sakae.chiba.jp","sakura.chiba.jp","shimofusa.chiba.jp","shirako.chiba.jp","shiroi.chiba.jp","shisui.chiba.jp","sodegaura.chiba.jp","sosa.chiba.jp","tako.chiba.jp","tateyama.chiba.jp","togane.chiba.jp","tohnosho.chiba.jp","tomisato.chiba.jp","urayasu.chiba.jp","yachimata.chiba.jp","yachiyo.chiba.jp","yokaichiba.chiba.jp","yokoshibahikari.chiba.jp","yotsukaido.chiba.jp","ainan.ehime.jp","honai.ehime.jp","ikata.ehime.jp","imabari.ehime.jp","iyo.ehime.jp","kamijima.ehime.jp","kihoku.ehime.jp","kumakogen.ehime.jp","masaki.ehime.jp","matsuno.ehime.jp","matsuyama.ehime.jp","namikata.ehime.jp","niihama.ehime.jp","ozu.ehime.jp","saijo.ehime.jp","seiyo.ehime.jp","shikokuchuo.ehime.jp","tobe.ehime.jp","toon.ehime.jp","uchiko.ehime.jp","uwajima.ehime.jp","yawatahama.ehime.jp","echizen.fukui.jp","eiheiji.fukui.jp","fukui.fukui.jp","ikeda.fukui.jp","katsuyama.fukui.jp","mihama.fukui.jp","minamiechizen.fukui.jp","obama.fukui.jp","ohi.fukui.jp","ono.fukui.jp","sabae.fukui.jp","sakai.fukui.jp","takahama.fukui.jp","tsuruga.fukui.jp","wakasa.fukui.jp","ashiya.fukuoka.jp","buzen.fukuoka.jp","chikugo.fukuoka.jp","chikuho.fukuoka.jp","chikujo.fukuoka.jp","chikushino.fukuoka.jp","chikuzen.fukuoka.jp","chuo.fukuoka.jp","dazaifu.fukuoka.jp","fukuchi.fukuoka.jp","hakata.fukuoka.jp","higashi.fukuoka.jp","hirokawa.fukuoka.jp","hisayama.fukuoka.jp","iizuka.fukuoka.jp","inatsuki.fukuoka.jp","kaho.fukuoka.jp","kasuga.fukuoka.jp","kasuya.fukuoka.jp","kawara.fukuoka.jp","keisen.fukuoka.jp","koga.fukuoka.jp","kurate.fukuoka.jp","kurogi.fukuoka.jp","kurume.fukuoka.jp","minami.fukuoka.jp","miyako.fukuoka.jp","miyama.fukuoka.jp","miyawaka.fukuoka.jp","mizumaki.fukuoka.jp","munakata.fukuoka.jp","nakagawa.fukuoka.jp","nakama.fukuoka.jp","nishi.fukuoka.jp","nogata.fukuoka.jp","ogori.fukuoka.jp","okagaki.fukuoka.jp","okawa.fukuoka.jp","oki.fukuoka.jp","omuta.fukuoka.jp","onga.fukuoka.jp","onojo.fukuoka.jp","oto.fukuoka.jp","saigawa.fukuoka.jp","sasaguri.fukuoka.jp","shingu.fukuoka.jp","shinyoshitomi.fukuoka.jp","shonai.fukuoka.jp","soeda.fukuoka.jp","sue.fukuoka.jp","tachiarai.fukuoka.jp","tagawa.fukuoka.jp","takata.fukuoka.jp","toho.fukuoka.jp","toyotsu.fukuoka.jp","tsuiki.fukuoka.jp","ukiha.fukuoka.jp","umi.fukuoka.jp","usui.fukuoka.jp","yamada.fukuoka.jp","yame.fukuoka.jp","yanagawa.fukuoka.jp","yukuhashi.fukuoka.jp","aizubange.fukushima.jp","aizumisato.fukushima.jp","aizuwakamatsu.fukushima.jp","asakawa.fukushima.jp","bandai.fukushima.jp","date.fukushima.jp","fukushima.fukushima.jp","furudono.fukushima.jp","futaba.fukushima.jp","hanawa.fukushima.jp","higashi.fukushima.jp","hirata.fukushima.jp","hirono.fukushima.jp","iitate.fukushima.jp","inawashiro.fukushima.jp","ishikawa.fukushima.jp","iwaki.fukushima.jp","izumizaki.fukushima.jp","kagamiishi.fukushima.jp","kaneyama.fukushima.jp","kawamata.fukushima.jp","kitakata.fukushima.jp","kitashiobara.fukushima.jp","koori.fukushima.jp","koriyama.fukushima.jp","kunimi.fukushima.jp","miharu.fukushima.jp","mishima.fukushima.jp","namie.fukushima.jp","nango.fukushima.jp","nishiaizu.fukushima.jp","nishigo.fukushima.jp","okuma.fukushima.jp","omotego.fukushima.jp","ono.fukushima.jp","otama.fukushima.jp","samegawa.fukushima.jp","shimogo.fukushima.jp","shirakawa.fukushima.jp","showa.fukushima.jp","soma.fukushima.jp","sukagawa.fukushima.jp","taishin.fukushima.jp","tamakawa.fukushima.jp","tanagura.fukushima.jp","tenei.fukushima.jp","yabuki.fukushima.jp","yamato.fukushima.jp","yamatsuri.fukushima.jp","yanaizu.fukushima.jp","yugawa.fukushima.jp","anpachi.gifu.jp","ena.gifu.jp","gifu.gifu.jp","ginan.gifu.jp","godo.gifu.jp","gujo.gifu.jp","hashima.gifu.jp","hichiso.gifu.jp","hida.gifu.jp","higashishirakawa.gifu.jp","ibigawa.gifu.jp","ikeda.gifu.jp","kakamigahara.gifu.jp","kani.gifu.jp","kasahara.gifu.jp","kasamatsu.gifu.jp","kawaue.gifu.jp","kitagata.gifu.jp","mino.gifu.jp","minokamo.gifu.jp","mitake.gifu.jp","mizunami.gifu.jp","motosu.gifu.jp","nakatsugawa.gifu.jp","ogaki.gifu.jp","sakahogi.gifu.jp","seki.gifu.jp","sekigahara.gifu.jp","shirakawa.gifu.jp","tajimi.gifu.jp","takayama.gifu.jp","tarui.gifu.jp","toki.gifu.jp","tomika.gifu.jp","wanouchi.gifu.jp","yamagata.gifu.jp","yaotsu.gifu.jp","yoro.gifu.jp","annaka.gunma.jp","chiyoda.gunma.jp","fujioka.gunma.jp","higashiagatsuma.gunma.jp","isesaki.gunma.jp","itakura.gunma.jp","kanna.gunma.jp","kanra.gunma.jp","katashina.gunma.jp","kawaba.gunma.jp","kiryu.gunma.jp","kusatsu.gunma.jp","maebashi.gunma.jp","meiwa.gunma.jp","midori.gunma.jp","minakami.gunma.jp","naganohara.gunma.jp","nakanojo.gunma.jp","nanmoku.gunma.jp","numata.gunma.jp","oizumi.gunma.jp","ora.gunma.jp","ota.gunma.jp","shibukawa.gunma.jp","shimonita.gunma.jp","shinto.gunma.jp","showa.gunma.jp","takasaki.gunma.jp","takayama.gunma.jp","tamamura.gunma.jp","tatebayashi.gunma.jp","tomioka.gunma.jp","tsukiyono.gunma.jp","tsumagoi.gunma.jp","ueno.gunma.jp","yoshioka.gunma.jp","asaminami.hiroshima.jp","daiwa.hiroshima.jp","etajima.hiroshima.jp","fuchu.hiroshima.jp","fukuyama.hiroshima.jp","hatsukaichi.hiroshima.jp","higashihiroshima.hiroshima.jp","hongo.hiroshima.jp","jinsekikogen.hiroshima.jp","kaita.hiroshima.jp","kui.hiroshima.jp","kumano.hiroshima.jp","kure.hiroshima.jp","mihara.hiroshima.jp","miyoshi.hiroshima.jp","naka.hiroshima.jp","onomichi.hiroshima.jp","osakikamijima.hiroshima.jp","otake.hiroshima.jp","saka.hiroshima.jp","sera.hiroshima.jp","seranishi.hiroshima.jp","shinichi.hiroshima.jp","shobara.hiroshima.jp","takehara.hiroshima.jp","abashiri.hokkaido.jp","abira.hokkaido.jp","aibetsu.hokkaido.jp","akabira.hokkaido.jp","akkeshi.hokkaido.jp","asahikawa.hokkaido.jp","ashibetsu.hokkaido.jp","ashoro.hokkaido.jp","assabu.hokkaido.jp","atsuma.hokkaido.jp","bibai.hokkaido.jp","biei.hokkaido.jp","bifuka.hokkaido.jp","bihoro.hokkaido.jp","biratori.hokkaido.jp","chippubetsu.hokkaido.jp","chitose.hokkaido.jp","date.hokkaido.jp","ebetsu.hokkaido.jp","embetsu.hokkaido.jp","eniwa.hokkaido.jp","erimo.hokkaido.jp","esan.hokkaido.jp","esashi.hokkaido.jp","fukagawa.hokkaido.jp","fukushima.hokkaido.jp","furano.hokkaido.jp","furubira.hokkaido.jp","haboro.hokkaido.jp","hakodate.hokkaido.jp","hamatonbetsu.hokkaido.jp","hidaka.hokkaido.jp","higashikagura.hokkaido.jp","higashikawa.hokkaido.jp","hiroo.hokkaido.jp","hokuryu.hokkaido.jp","hokuto.hokkaido.jp","honbetsu.hokkaido.jp","horokanai.hokkaido.jp","horonobe.hokkaido.jp","ikeda.hokkaido.jp","imakane.hokkaido.jp","ishikari.hokkaido.jp","iwamizawa.hokkaido.jp","iwanai.hokkaido.jp","kamifurano.hokkaido.jp","kamikawa.hokkaido.jp","kamishihoro.hokkaido.jp","kamisunagawa.hokkaido.jp","kamoenai.hokkaido.jp","kayabe.hokkaido.jp","kembuchi.hokkaido.jp","kikonai.hokkaido.jp","kimobetsu.hokkaido.jp","kitahiroshima.hokkaido.jp","kitami.hokkaido.jp","kiyosato.hokkaido.jp","koshimizu.hokkaido.jp","kunneppu.hokkaido.jp","kuriyama.hokkaido.jp","kuromatsunai.hokkaido.jp","kushiro.hokkaido.jp","kutchan.hokkaido.jp","kyowa.hokkaido.jp","mashike.hokkaido.jp","matsumae.hokkaido.jp","mikasa.hokkaido.jp","minamifurano.hokkaido.jp","mombetsu.hokkaido.jp","moseushi.hokkaido.jp","mukawa.hokkaido.jp","muroran.hokkaido.jp","naie.hokkaido.jp","nakagawa.hokkaido.jp","nakasatsunai.hokkaido.jp","nakatombetsu.hokkaido.jp","nanae.hokkaido.jp","nanporo.hokkaido.jp","nayoro.hokkaido.jp","nemuro.hokkaido.jp","niikappu.hokkaido.jp","niki.hokkaido.jp","nishiokoppe.hokkaido.jp","noboribetsu.hokkaido.jp","numata.hokkaido.jp","obihiro.hokkaido.jp","obira.hokkaido.jp","oketo.hokkaido.jp","okoppe.hokkaido.jp","otaru.hokkaido.jp","otobe.hokkaido.jp","otofuke.hokkaido.jp","otoineppu.hokkaido.jp","oumu.hokkaido.jp","ozora.hokkaido.jp","pippu.hokkaido.jp","rankoshi.hokkaido.jp","rebun.hokkaido.jp","rikubetsu.hokkaido.jp","rishiri.hokkaido.jp","rishirifuji.hokkaido.jp","saroma.hokkaido.jp","sarufutsu.hokkaido.jp","shakotan.hokkaido.jp","shari.hokkaido.jp","shibecha.hokkaido.jp","shibetsu.hokkaido.jp","shikabe.hokkaido.jp","shikaoi.hokkaido.jp","shimamaki.hokkaido.jp","shimizu.hokkaido.jp","shimokawa.hokkaido.jp","shinshinotsu.hokkaido.jp","shintoku.hokkaido.jp","shiranuka.hokkaido.jp","shiraoi.hokkaido.jp","shiriuchi.hokkaido.jp","sobetsu.hokkaido.jp","sunagawa.hokkaido.jp","taiki.hokkaido.jp","takasu.hokkaido.jp","takikawa.hokkaido.jp","takinoue.hokkaido.jp","teshikaga.hokkaido.jp","tobetsu.hokkaido.jp","tohma.hokkaido.jp","tomakomai.hokkaido.jp","tomari.hokkaido.jp","toya.hokkaido.jp","toyako.hokkaido.jp","toyotomi.hokkaido.jp","toyoura.hokkaido.jp","tsubetsu.hokkaido.jp","tsukigata.hokkaido.jp","urakawa.hokkaido.jp","urausu.hokkaido.jp","uryu.hokkaido.jp","utashinai.hokkaido.jp","wakkanai.hokkaido.jp","wassamu.hokkaido.jp","yakumo.hokkaido.jp","yoichi.hokkaido.jp","aioi.hyogo.jp","akashi.hyogo.jp","ako.hyogo.jp","amagasaki.hyogo.jp","aogaki.hyogo.jp","asago.hyogo.jp","ashiya.hyogo.jp","awaji.hyogo.jp","fukusaki.hyogo.jp","goshiki.hyogo.jp","harima.hyogo.jp","himeji.hyogo.jp","ichikawa.hyogo.jp","inagawa.hyogo.jp","itami.hyogo.jp","kakogawa.hyogo.jp","kamigori.hyogo.jp","kamikawa.hyogo.jp","kasai.hyogo.jp","kasuga.hyogo.jp","kawanishi.hyogo.jp","miki.hyogo.jp","minamiawaji.hyogo.jp","nishinomiya.hyogo.jp","nishiwaki.hyogo.jp","ono.hyogo.jp","sanda.hyogo.jp","sannan.hyogo.jp","sasayama.hyogo.jp","sayo.hyogo.jp","shingu.hyogo.jp","shinonsen.hyogo.jp","shiso.hyogo.jp","sumoto.hyogo.jp","taishi.hyogo.jp","taka.hyogo.jp","takarazuka.hyogo.jp","takasago.hyogo.jp","takino.hyogo.jp","tamba.hyogo.jp","tatsuno.hyogo.jp","toyooka.hyogo.jp","yabu.hyogo.jp","yashiro.hyogo.jp","yoka.hyogo.jp","yokawa.hyogo.jp","ami.ibaraki.jp","asahi.ibaraki.jp","bando.ibaraki.jp","chikusei.ibaraki.jp","daigo.ibaraki.jp","fujishiro.ibaraki.jp","hitachi.ibaraki.jp","hitachinaka.ibaraki.jp","hitachiomiya.ibaraki.jp","hitachiota.ibaraki.jp","ibaraki.ibaraki.jp","ina.ibaraki.jp","inashiki.ibaraki.jp","itako.ibaraki.jp","iwama.ibaraki.jp","joso.ibaraki.jp","kamisu.ibaraki.jp","kasama.ibaraki.jp","kashima.ibaraki.jp","kasumigaura.ibaraki.jp","koga.ibaraki.jp","miho.ibaraki.jp","mito.ibaraki.jp","moriya.ibaraki.jp","naka.ibaraki.jp","namegata.ibaraki.jp","oarai.ibaraki.jp","ogawa.ibaraki.jp","omitama.ibaraki.jp","ryugasaki.ibaraki.jp","sakai.ibaraki.jp","sakuragawa.ibaraki.jp","shimodate.ibaraki.jp","shimotsuma.ibaraki.jp","shirosato.ibaraki.jp","sowa.ibaraki.jp","suifu.ibaraki.jp","takahagi.ibaraki.jp","tamatsukuri.ibaraki.jp","tokai.ibaraki.jp","tomobe.ibaraki.jp","tone.ibaraki.jp","toride.ibaraki.jp","tsuchiura.ibaraki.jp","tsukuba.ibaraki.jp","uchihara.ibaraki.jp","ushiku.ibaraki.jp","yachiyo.ibaraki.jp","yamagata.ibaraki.jp","yawara.ibaraki.jp","yuki.ibaraki.jp","anamizu.ishikawa.jp","hakui.ishikawa.jp","hakusan.ishikawa.jp","kaga.ishikawa.jp","kahoku.ishikawa.jp","kanazawa.ishikawa.jp","kawakita.ishikawa.jp","komatsu.ishikawa.jp","nakanoto.ishikawa.jp","nanao.ishikawa.jp","nomi.ishikawa.jp","nonoichi.ishikawa.jp","noto.ishikawa.jp","shika.ishikawa.jp","suzu.ishikawa.jp","tsubata.ishikawa.jp","tsurugi.ishikawa.jp","uchinada.ishikawa.jp","wajima.ishikawa.jp","fudai.iwate.jp","fujisawa.iwate.jp","hanamaki.iwate.jp","hiraizumi.iwate.jp","hirono.iwate.jp","ichinohe.iwate.jp","ichinoseki.iwate.jp","iwaizumi.iwate.jp","iwate.iwate.jp","joboji.iwate.jp","kamaishi.iwate.jp","kanegasaki.iwate.jp","karumai.iwate.jp","kawai.iwate.jp","kitakami.iwate.jp","kuji.iwate.jp","kunohe.iwate.jp","kuzumaki.iwate.jp","miyako.iwate.jp","mizusawa.iwate.jp","morioka.iwate.jp","ninohe.iwate.jp","noda.iwate.jp","ofunato.iwate.jp","oshu.iwate.jp","otsuchi.iwate.jp","rikuzentakata.iwate.jp","shiwa.iwate.jp","shizukuishi.iwate.jp","sumita.iwate.jp","tanohata.iwate.jp","tono.iwate.jp","yahaba.iwate.jp","yamada.iwate.jp","ayagawa.kagawa.jp","higashikagawa.kagawa.jp","kanonji.kagawa.jp","kotohira.kagawa.jp","manno.kagawa.jp","marugame.kagawa.jp","mitoyo.kagawa.jp","naoshima.kagawa.jp","sanuki.kagawa.jp","tadotsu.kagawa.jp","takamatsu.kagawa.jp","tonosho.kagawa.jp","uchinomi.kagawa.jp","utazu.kagawa.jp","zentsuji.kagawa.jp","akune.kagoshima.jp","amami.kagoshima.jp","hioki.kagoshima.jp","isa.kagoshima.jp","isen.kagoshima.jp","izumi.kagoshima.jp","kagoshima.kagoshima.jp","kanoya.kagoshima.jp","kawanabe.kagoshima.jp","kinko.kagoshima.jp","kouyama.kagoshima.jp","makurazaki.kagoshima.jp","matsumoto.kagoshima.jp","minamitane.kagoshima.jp","nakatane.kagoshima.jp","nishinoomote.kagoshima.jp","satsumasendai.kagoshima.jp","soo.kagoshima.jp","tarumizu.kagoshima.jp","yusui.kagoshima.jp","aikawa.kanagawa.jp","atsugi.kanagawa.jp","ayase.kanagawa.jp","chigasaki.kanagawa.jp","ebina.kanagawa.jp","fujisawa.kanagawa.jp","hadano.kanagawa.jp","hakone.kanagawa.jp","hiratsuka.kanagawa.jp","isehara.kanagawa.jp","kaisei.kanagawa.jp","kamakura.kanagawa.jp","kiyokawa.kanagawa.jp","matsuda.kanagawa.jp","minamiashigara.kanagawa.jp","miura.kanagawa.jp","nakai.kanagawa.jp","ninomiya.kanagawa.jp","odawara.kanagawa.jp","oi.kanagawa.jp","oiso.kanagawa.jp","sagamihara.kanagawa.jp","samukawa.kanagawa.jp","tsukui.kanagawa.jp","yamakita.kanagawa.jp","yamato.kanagawa.jp","yokosuka.kanagawa.jp","yugawara.kanagawa.jp","zama.kanagawa.jp","zushi.kanagawa.jp","aki.kochi.jp","geisei.kochi.jp","hidaka.kochi.jp","higashitsuno.kochi.jp","ino.kochi.jp","kagami.kochi.jp","kami.kochi.jp","kitagawa.kochi.jp","kochi.kochi.jp","mihara.kochi.jp","motoyama.kochi.jp","muroto.kochi.jp","nahari.kochi.jp","nakamura.kochi.jp","nankoku.kochi.jp","nishitosa.kochi.jp","niyodogawa.kochi.jp","ochi.kochi.jp","okawa.kochi.jp","otoyo.kochi.jp","otsuki.kochi.jp","sakawa.kochi.jp","sukumo.kochi.jp","susaki.kochi.jp","tosa.kochi.jp","tosashimizu.kochi.jp","toyo.kochi.jp","tsuno.kochi.jp","umaji.kochi.jp","yasuda.kochi.jp","yusuhara.kochi.jp","amakusa.kumamoto.jp","arao.kumamoto.jp","aso.kumamoto.jp","choyo.kumamoto.jp","gyokuto.kumamoto.jp","kamiamakusa.kumamoto.jp","kikuchi.kumamoto.jp","kumamoto.kumamoto.jp","mashiki.kumamoto.jp","mifune.kumamoto.jp","minamata.kumamoto.jp","minamioguni.kumamoto.jp","nagasu.kumamoto.jp","nishihara.kumamoto.jp","oguni.kumamoto.jp","ozu.kumamoto.jp","sumoto.kumamoto.jp","takamori.kumamoto.jp","uki.kumamoto.jp","uto.kumamoto.jp","yamaga.kumamoto.jp","yamato.kumamoto.jp","yatsushiro.kumamoto.jp","ayabe.kyoto.jp","fukuchiyama.kyoto.jp","higashiyama.kyoto.jp","ide.kyoto.jp","ine.kyoto.jp","joyo.kyoto.jp","kameoka.kyoto.jp","kamo.kyoto.jp","kita.kyoto.jp","kizu.kyoto.jp","kumiyama.kyoto.jp","kyotamba.kyoto.jp","kyotanabe.kyoto.jp","kyotango.kyoto.jp","maizuru.kyoto.jp","minami.kyoto.jp","minamiyamashiro.kyoto.jp","miyazu.kyoto.jp","muko.kyoto.jp","nagaokakyo.kyoto.jp","nakagyo.kyoto.jp","nantan.kyoto.jp","oyamazaki.kyoto.jp","sakyo.kyoto.jp","seika.kyoto.jp","tanabe.kyoto.jp","uji.kyoto.jp","ujitawara.kyoto.jp","wazuka.kyoto.jp","yamashina.kyoto.jp","yawata.kyoto.jp","asahi.mie.jp","inabe.mie.jp","ise.mie.jp","kameyama.mie.jp","kawagoe.mie.jp","kiho.mie.jp","kisosaki.mie.jp","kiwa.mie.jp","komono.mie.jp","kumano.mie.jp","kuwana.mie.jp","matsusaka.mie.jp","meiwa.mie.jp","mihama.mie.jp","minamiise.mie.jp","misugi.mie.jp","miyama.mie.jp","nabari.mie.jp","shima.mie.jp","suzuka.mie.jp","tado.mie.jp","taiki.mie.jp","taki.mie.jp","tamaki.mie.jp","toba.mie.jp","tsu.mie.jp","udono.mie.jp","ureshino.mie.jp","watarai.mie.jp","yokkaichi.mie.jp","furukawa.miyagi.jp","higashimatsushima.miyagi.jp","ishinomaki.miyagi.jp","iwanuma.miyagi.jp","kakuda.miyagi.jp","kami.miyagi.jp","kawasaki.miyagi.jp","marumori.miyagi.jp","matsushima.miyagi.jp","minamisanriku.miyagi.jp","misato.miyagi.jp","murata.miyagi.jp","natori.miyagi.jp","ogawara.miyagi.jp","ohira.miyagi.jp","onagawa.miyagi.jp","osaki.miyagi.jp","rifu.miyagi.jp","semine.miyagi.jp","shibata.miyagi.jp","shichikashuku.miyagi.jp","shikama.miyagi.jp","shiogama.miyagi.jp","shiroishi.miyagi.jp","tagajo.miyagi.jp","taiwa.miyagi.jp","tome.miyagi.jp","tomiya.miyagi.jp","wakuya.miyagi.jp","watari.miyagi.jp","yamamoto.miyagi.jp","zao.miyagi.jp","aya.miyazaki.jp","ebino.miyazaki.jp","gokase.miyazaki.jp","hyuga.miyazaki.jp","kadogawa.miyazaki.jp","kawaminami.miyazaki.jp","kijo.miyazaki.jp","kitagawa.miyazaki.jp","kitakata.miyazaki.jp","kitaura.miyazaki.jp","kobayashi.miyazaki.jp","kunitomi.miyazaki.jp","kushima.miyazaki.jp","mimata.miyazaki.jp","miyakonojo.miyazaki.jp","miyazaki.miyazaki.jp","morotsuka.miyazaki.jp","nichinan.miyazaki.jp","nishimera.miyazaki.jp","nobeoka.miyazaki.jp","saito.miyazaki.jp","shiiba.miyazaki.jp","shintomi.miyazaki.jp","takaharu.miyazaki.jp","takanabe.miyazaki.jp","takazaki.miyazaki.jp","tsuno.miyazaki.jp","achi.nagano.jp","agematsu.nagano.jp","anan.nagano.jp","aoki.nagano.jp","asahi.nagano.jp","azumino.nagano.jp","chikuhoku.nagano.jp","chikuma.nagano.jp","chino.nagano.jp","fujimi.nagano.jp","hakuba.nagano.jp","hara.nagano.jp","hiraya.nagano.jp","iida.nagano.jp","iijima.nagano.jp","iiyama.nagano.jp","iizuna.nagano.jp","ikeda.nagano.jp","ikusaka.nagano.jp","ina.nagano.jp","karuizawa.nagano.jp","kawakami.nagano.jp","kiso.nagano.jp","kisofukushima.nagano.jp","kitaaiki.nagano.jp","komagane.nagano.jp","komoro.nagano.jp","matsukawa.nagano.jp","matsumoto.nagano.jp","miasa.nagano.jp","minamiaiki.nagano.jp","minamimaki.nagano.jp","minamiminowa.nagano.jp","minowa.nagano.jp","miyada.nagano.jp","miyota.nagano.jp","mochizuki.nagano.jp","nagano.nagano.jp","nagawa.nagano.jp","nagiso.nagano.jp","nakagawa.nagano.jp","nakano.nagano.jp","nozawaonsen.nagano.jp","obuse.nagano.jp","ogawa.nagano.jp","okaya.nagano.jp","omachi.nagano.jp","omi.nagano.jp","ookuwa.nagano.jp","ooshika.nagano.jp","otaki.nagano.jp","otari.nagano.jp","sakae.nagano.jp","sakaki.nagano.jp","saku.nagano.jp","sakuho.nagano.jp","shimosuwa.nagano.jp","shinanomachi.nagano.jp","shiojiri.nagano.jp","suwa.nagano.jp","suzaka.nagano.jp","takagi.nagano.jp","takamori.nagano.jp","takayama.nagano.jp","tateshina.nagano.jp","tatsuno.nagano.jp","togakushi.nagano.jp","togura.nagano.jp","tomi.nagano.jp","ueda.nagano.jp","wada.nagano.jp","yamagata.nagano.jp","yamanouchi.nagano.jp","yasaka.nagano.jp","yasuoka.nagano.jp","chijiwa.nagasaki.jp","futsu.nagasaki.jp","goto.nagasaki.jp","hasami.nagasaki.jp","hirado.nagasaki.jp","iki.nagasaki.jp","isahaya.nagasaki.jp","kawatana.nagasaki.jp","kuchinotsu.nagasaki.jp","matsuura.nagasaki.jp","nagasaki.nagasaki.jp","obama.nagasaki.jp","omura.nagasaki.jp","oseto.nagasaki.jp","saikai.nagasaki.jp","sasebo.nagasaki.jp","seihi.nagasaki.jp","shimabara.nagasaki.jp","shinkamigoto.nagasaki.jp","togitsu.nagasaki.jp","tsushima.nagasaki.jp","unzen.nagasaki.jp","ando.nara.jp","gose.nara.jp","heguri.nara.jp","higashiyoshino.nara.jp","ikaruga.nara.jp","ikoma.nara.jp","kamikitayama.nara.jp","kanmaki.nara.jp","kashiba.nara.jp","kashihara.nara.jp","katsuragi.nara.jp","kawai.nara.jp","kawakami.nara.jp","kawanishi.nara.jp","koryo.nara.jp","kurotaki.nara.jp","mitsue.nara.jp","miyake.nara.jp","nara.nara.jp","nosegawa.nara.jp","oji.nara.jp","ouda.nara.jp","oyodo.nara.jp","sakurai.nara.jp","sango.nara.jp","shimoichi.nara.jp","shimokitayama.nara.jp","shinjo.nara.jp","soni.nara.jp","takatori.nara.jp","tawaramoto.nara.jp","tenkawa.nara.jp","tenri.nara.jp","uda.nara.jp","yamatokoriyama.nara.jp","yamatotakada.nara.jp","yamazoe.nara.jp","yoshino.nara.jp","aga.niigata.jp","agano.niigata.jp","gosen.niigata.jp","itoigawa.niigata.jp","izumozaki.niigata.jp","joetsu.niigata.jp","kamo.niigata.jp","kariwa.niigata.jp","kashiwazaki.niigata.jp","minamiuonuma.niigata.jp","mitsuke.niigata.jp","muika.niigata.jp","murakami.niigata.jp","myoko.niigata.jp","nagaoka.niigata.jp","niigata.niigata.jp","ojiya.niigata.jp","omi.niigata.jp","sado.niigata.jp","sanjo.niigata.jp","seiro.niigata.jp","seirou.niigata.jp","sekikawa.niigata.jp","shibata.niigata.jp","tagami.niigata.jp","tainai.niigata.jp","tochio.niigata.jp","tokamachi.niigata.jp","tsubame.niigata.jp","tsunan.niigata.jp","uonuma.niigata.jp","yahiko.niigata.jp","yoita.niigata.jp","yuzawa.niigata.jp","beppu.oita.jp","bungoono.oita.jp","bungotakada.oita.jp","hasama.oita.jp","hiji.oita.jp","himeshima.oita.jp","hita.oita.jp","kamitsue.oita.jp","kokonoe.oita.jp","kuju.oita.jp","kunisaki.oita.jp","kusu.oita.jp","oita.oita.jp","saiki.oita.jp","taketa.oita.jp","tsukumi.oita.jp","usa.oita.jp","usuki.oita.jp","yufu.oita.jp","akaiwa.okayama.jp","asakuchi.okayama.jp","bizen.okayama.jp","hayashima.okayama.jp","ibara.okayama.jp","kagamino.okayama.jp","kasaoka.okayama.jp","kibichuo.okayama.jp","kumenan.okayama.jp","kurashiki.okayama.jp","maniwa.okayama.jp","misaki.okayama.jp","nagi.okayama.jp","niimi.okayama.jp","nishiawakura.okayama.jp","okayama.okayama.jp","satosho.okayama.jp","setouchi.okayama.jp","shinjo.okayama.jp","shoo.okayama.jp","soja.okayama.jp","takahashi.okayama.jp","tamano.okayama.jp","tsuyama.okayama.jp","wake.okayama.jp","yakage.okayama.jp","aguni.okinawa.jp","ginowan.okinawa.jp","ginoza.okinawa.jp","gushikami.okinawa.jp","haebaru.okinawa.jp","higashi.okinawa.jp","hirara.okinawa.jp","iheya.okinawa.jp","ishigaki.okinawa.jp","ishikawa.okinawa.jp","itoman.okinawa.jp","izena.okinawa.jp","kadena.okinawa.jp","kin.okinawa.jp","kitadaito.okinawa.jp","kitanakagusuku.okinawa.jp","kumejima.okinawa.jp","kunigami.okinawa.jp","minamidaito.okinawa.jp","motobu.okinawa.jp","nago.okinawa.jp","naha.okinawa.jp","nakagusuku.okinawa.jp","nakijin.okinawa.jp","nanjo.okinawa.jp","nishihara.okinawa.jp","ogimi.okinawa.jp","okinawa.okinawa.jp","onna.okinawa.jp","shimoji.okinawa.jp","taketomi.okinawa.jp","tarama.okinawa.jp","tokashiki.okinawa.jp","tomigusuku.okinawa.jp","tonaki.okinawa.jp","urasoe.okinawa.jp","uruma.okinawa.jp","yaese.okinawa.jp","yomitan.okinawa.jp","yonabaru.okinawa.jp","yonaguni.okinawa.jp","zamami.okinawa.jp","abeno.osaka.jp","chihayaakasaka.osaka.jp","chuo.osaka.jp","daito.osaka.jp","fujiidera.osaka.jp","habikino.osaka.jp","hannan.osaka.jp","higashiosaka.osaka.jp","higashisumiyoshi.osaka.jp","higashiyodogawa.osaka.jp","hirakata.osaka.jp","ibaraki.osaka.jp","ikeda.osaka.jp","izumi.osaka.jp","izumiotsu.osaka.jp","izumisano.osaka.jp","kadoma.osaka.jp","kaizuka.osaka.jp","kanan.osaka.jp","kashiwara.osaka.jp","katano.osaka.jp","kawachinagano.osaka.jp","kishiwada.osaka.jp","kita.osaka.jp","kumatori.osaka.jp","matsubara.osaka.jp","minato.osaka.jp","minoh.osaka.jp","misaki.osaka.jp","moriguchi.osaka.jp","neyagawa.osaka.jp","nishi.osaka.jp","nose.osaka.jp","osakasayama.osaka.jp","sakai.osaka.jp","sayama.osaka.jp","sennan.osaka.jp","settsu.osaka.jp","shijonawate.osaka.jp","shimamoto.osaka.jp","suita.osaka.jp","tadaoka.osaka.jp","taishi.osaka.jp","tajiri.osaka.jp","takaishi.osaka.jp","takatsuki.osaka.jp","tondabayashi.osaka.jp","toyonaka.osaka.jp","toyono.osaka.jp","yao.osaka.jp","ariake.saga.jp","arita.saga.jp","fukudomi.saga.jp","genkai.saga.jp","hamatama.saga.jp","hizen.saga.jp","imari.saga.jp","kamimine.saga.jp","kanzaki.saga.jp","karatsu.saga.jp","kashima.saga.jp","kitagata.saga.jp","kitahata.saga.jp","kiyama.saga.jp","kouhoku.saga.jp","kyuragi.saga.jp","nishiarita.saga.jp","ogi.saga.jp","omachi.saga.jp","ouchi.saga.jp","saga.saga.jp","shiroishi.saga.jp","taku.saga.jp","tara.saga.jp","tosu.saga.jp","yoshinogari.saga.jp","arakawa.saitama.jp","asaka.saitama.jp","chichibu.saitama.jp","fujimi.saitama.jp","fujimino.saitama.jp","fukaya.saitama.jp","hanno.saitama.jp","hanyu.saitama.jp","hasuda.saitama.jp","hatogaya.saitama.jp","hatoyama.saitama.jp","hidaka.saitama.jp","higashichichibu.saitama.jp","higashimatsuyama.saitama.jp","honjo.saitama.jp","ina.saitama.jp","iruma.saitama.jp","iwatsuki.saitama.jp","kamiizumi.saitama.jp","kamikawa.saitama.jp","kamisato.saitama.jp","kasukabe.saitama.jp","kawagoe.saitama.jp","kawaguchi.saitama.jp","kawajima.saitama.jp","kazo.saitama.jp","kitamoto.saitama.jp","koshigaya.saitama.jp","kounosu.saitama.jp","kuki.saitama.jp","kumagaya.saitama.jp","matsubushi.saitama.jp","minano.saitama.jp","misato.saitama.jp","miyashiro.saitama.jp","miyoshi.saitama.jp","moroyama.saitama.jp","nagatoro.saitama.jp","namegawa.saitama.jp","niiza.saitama.jp","ogano.saitama.jp","ogawa.saitama.jp","ogose.saitama.jp","okegawa.saitama.jp","omiya.saitama.jp","otaki.saitama.jp","ranzan.saitama.jp","ryokami.saitama.jp","saitama.saitama.jp","sakado.saitama.jp","satte.saitama.jp","sayama.saitama.jp","shiki.saitama.jp","shiraoka.saitama.jp","soka.saitama.jp","sugito.saitama.jp","toda.saitama.jp","tokigawa.saitama.jp","tokorozawa.saitama.jp","tsurugashima.saitama.jp","urawa.saitama.jp","warabi.saitama.jp","yashio.saitama.jp","yokoze.saitama.jp","yono.saitama.jp","yorii.saitama.jp","yoshida.saitama.jp","yoshikawa.saitama.jp","yoshimi.saitama.jp","aisho.shiga.jp","gamo.shiga.jp","higashiomi.shiga.jp","hikone.shiga.jp","koka.shiga.jp","konan.shiga.jp","kosei.shiga.jp","koto.shiga.jp","kusatsu.shiga.jp","maibara.shiga.jp","moriyama.shiga.jp","nagahama.shiga.jp","nishiazai.shiga.jp","notogawa.shiga.jp","omihachiman.shiga.jp","otsu.shiga.jp","ritto.shiga.jp","ryuoh.shiga.jp","takashima.shiga.jp","takatsuki.shiga.jp","torahime.shiga.jp","toyosato.shiga.jp","yasu.shiga.jp","akagi.shimane.jp","ama.shimane.jp","gotsu.shimane.jp","hamada.shimane.jp","higashiizumo.shimane.jp","hikawa.shimane.jp","hikimi.shimane.jp","izumo.shimane.jp","kakinoki.shimane.jp","masuda.shimane.jp","matsue.shimane.jp","misato.shimane.jp","nishinoshima.shimane.jp","ohda.shimane.jp","okinoshima.shimane.jp","okuizumo.shimane.jp","shimane.shimane.jp","tamayu.shimane.jp","tsuwano.shimane.jp","unnan.shimane.jp","yakumo.shimane.jp","yasugi.shimane.jp","yatsuka.shimane.jp","arai.shizuoka.jp","atami.shizuoka.jp","fuji.shizuoka.jp","fujieda.shizuoka.jp","fujikawa.shizuoka.jp","fujinomiya.shizuoka.jp","fukuroi.shizuoka.jp","gotemba.shizuoka.jp","haibara.shizuoka.jp","hamamatsu.shizuoka.jp","higashiizu.shizuoka.jp","ito.shizuoka.jp","iwata.shizuoka.jp","izu.shizuoka.jp","izunokuni.shizuoka.jp","kakegawa.shizuoka.jp","kannami.shizuoka.jp","kawanehon.shizuoka.jp","kawazu.shizuoka.jp","kikugawa.shizuoka.jp","kosai.shizuoka.jp","makinohara.shizuoka.jp","matsuzaki.shizuoka.jp","minamiizu.shizuoka.jp","mishima.shizuoka.jp","morimachi.shizuoka.jp","nishiizu.shizuoka.jp","numazu.shizuoka.jp","omaezaki.shizuoka.jp","shimada.shizuoka.jp","shimizu.shizuoka.jp","shimoda.shizuoka.jp","shizuoka.shizuoka.jp","susono.shizuoka.jp","yaizu.shizuoka.jp","yoshida.shizuoka.jp","ashikaga.tochigi.jp","bato.tochigi.jp","haga.tochigi.jp","ichikai.tochigi.jp","iwafune.tochigi.jp","kaminokawa.tochigi.jp","kanuma.tochigi.jp","karasuyama.tochigi.jp","kuroiso.tochigi.jp","mashiko.tochigi.jp","mibu.tochigi.jp","moka.tochigi.jp","motegi.tochigi.jp","nasu.tochigi.jp","nasushiobara.tochigi.jp","nikko.tochigi.jp","nishikata.tochigi.jp","nogi.tochigi.jp","ohira.tochigi.jp","ohtawara.tochigi.jp","oyama.tochigi.jp","sakura.tochigi.jp","sano.tochigi.jp","shimotsuke.tochigi.jp","shioya.tochigi.jp","takanezawa.tochigi.jp","tochigi.tochigi.jp","tsuga.tochigi.jp","ujiie.tochigi.jp","utsunomiya.tochigi.jp","yaita.tochigi.jp","aizumi.tokushima.jp","anan.tokushima.jp","ichiba.tokushima.jp","itano.tokushima.jp","kainan.tokushima.jp","komatsushima.tokushima.jp","matsushige.tokushima.jp","mima.tokushima.jp","minami.tokushima.jp","miyoshi.tokushima.jp","mugi.tokushima.jp","nakagawa.tokushima.jp","naruto.tokushima.jp","sanagochi.tokushima.jp","shishikui.tokushima.jp","tokushima.tokushima.jp","wajiki.tokushima.jp","adachi.tokyo.jp","akiruno.tokyo.jp","akishima.tokyo.jp","aogashima.tokyo.jp","arakawa.tokyo.jp","bunkyo.tokyo.jp","chiyoda.tokyo.jp","chofu.tokyo.jp","chuo.tokyo.jp","edogawa.tokyo.jp","fuchu.tokyo.jp","fussa.tokyo.jp","hachijo.tokyo.jp","hachioji.tokyo.jp","hamura.tokyo.jp","higashikurume.tokyo.jp","higashimurayama.tokyo.jp","higashiyamato.tokyo.jp","hino.tokyo.jp","hinode.tokyo.jp","hinohara.tokyo.jp","inagi.tokyo.jp","itabashi.tokyo.jp","katsushika.tokyo.jp","kita.tokyo.jp","kiyose.tokyo.jp","kodaira.tokyo.jp","koganei.tokyo.jp","kokubunji.tokyo.jp","komae.tokyo.jp","koto.tokyo.jp","kouzushima.tokyo.jp","kunitachi.tokyo.jp","machida.tokyo.jp","meguro.tokyo.jp","minato.tokyo.jp","mitaka.tokyo.jp","mizuho.tokyo.jp","musashimurayama.tokyo.jp","musashino.tokyo.jp","nakano.tokyo.jp","nerima.tokyo.jp","ogasawara.tokyo.jp","okutama.tokyo.jp","ome.tokyo.jp","oshima.tokyo.jp","ota.tokyo.jp","setagaya.tokyo.jp","shibuya.tokyo.jp","shinagawa.tokyo.jp","shinjuku.tokyo.jp","suginami.tokyo.jp","sumida.tokyo.jp","tachikawa.tokyo.jp","taito.tokyo.jp","tama.tokyo.jp","toshima.tokyo.jp","chizu.tottori.jp","hino.tottori.jp","kawahara.tottori.jp","koge.tottori.jp","kotoura.tottori.jp","misasa.tottori.jp","nanbu.tottori.jp","nichinan.tottori.jp","sakaiminato.tottori.jp","tottori.tottori.jp","wakasa.tottori.jp","yazu.tottori.jp","yonago.tottori.jp","asahi.toyama.jp","fuchu.toyama.jp","fukumitsu.toyama.jp","funahashi.toyama.jp","himi.toyama.jp","imizu.toyama.jp","inami.toyama.jp","johana.toyama.jp","kamiichi.toyama.jp","kurobe.toyama.jp","nakaniikawa.toyama.jp","namerikawa.toyama.jp","nanto.toyama.jp","nyuzen.toyama.jp","oyabe.toyama.jp","taira.toyama.jp","takaoka.toyama.jp","tateyama.toyama.jp","toga.toyama.jp","tonami.toyama.jp","toyama.toyama.jp","unazuki.toyama.jp","uozu.toyama.jp","yamada.toyama.jp","arida.wakayama.jp","aridagawa.wakayama.jp","gobo.wakayama.jp","hashimoto.wakayama.jp","hidaka.wakayama.jp","hirogawa.wakayama.jp","inami.wakayama.jp","iwade.wakayama.jp","kainan.wakayama.jp","kamitonda.wakayama.jp","katsuragi.wakayama.jp","kimino.wakayama.jp","kinokawa.wakayama.jp","kitayama.wakayama.jp","koya.wakayama.jp","koza.wakayama.jp","kozagawa.wakayama.jp","kudoyama.wakayama.jp","kushimoto.wakayama.jp","mihama.wakayama.jp","misato.wakayama.jp","nachikatsuura.wakayama.jp","shingu.wakayama.jp","shirahama.wakayama.jp","taiji.wakayama.jp","tanabe.wakayama.jp","wakayama.wakayama.jp","yuasa.wakayama.jp","yura.wakayama.jp","asahi.yamagata.jp","funagata.yamagata.jp","higashine.yamagata.jp","iide.yamagata.jp","kahoku.yamagata.jp","kaminoyama.yamagata.jp","kaneyama.yamagata.jp","kawanishi.yamagata.jp","mamurogawa.yamagata.jp","mikawa.yamagata.jp","murayama.yamagata.jp","nagai.yamagata.jp","nakayama.yamagata.jp","nanyo.yamagata.jp","nishikawa.yamagata.jp","obanazawa.yamagata.jp","oe.yamagata.jp","oguni.yamagata.jp","ohkura.yamagata.jp","oishida.yamagata.jp","sagae.yamagata.jp","sakata.yamagata.jp","sakegawa.yamagata.jp","shinjo.yamagata.jp","shirataka.yamagata.jp","shonai.yamagata.jp","takahata.yamagata.jp","tendo.yamagata.jp","tozawa.yamagata.jp","tsuruoka.yamagata.jp","yamagata.yamagata.jp","yamanobe.yamagata.jp","yonezawa.yamagata.jp","yuza.yamagata.jp","abu.yamaguchi.jp","hagi.yamaguchi.jp","hikari.yamaguchi.jp","hofu.yamaguchi.jp","iwakuni.yamaguchi.jp","kudamatsu.yamaguchi.jp","mitou.yamaguchi.jp","nagato.yamaguchi.jp","oshima.yamaguchi.jp","shimonoseki.yamaguchi.jp","shunan.yamaguchi.jp","tabuse.yamaguchi.jp","tokuyama.yamaguchi.jp","toyota.yamaguchi.jp","ube.yamaguchi.jp","yuu.yamaguchi.jp","chuo.yamanashi.jp","doshi.yamanashi.jp","fuefuki.yamanashi.jp","fujikawa.yamanashi.jp","fujikawaguchiko.yamanashi.jp","fujiyoshida.yamanashi.jp","hayakawa.yamanashi.jp","hokuto.yamanashi.jp","ichikawamisato.yamanashi.jp","kai.yamanashi.jp","kofu.yamanashi.jp","koshu.yamanashi.jp","kosuge.yamanashi.jp","minami-alps.yamanashi.jp","minobu.yamanashi.jp","nakamichi.yamanashi.jp","nanbu.yamanashi.jp","narusawa.yamanashi.jp","nirasaki.yamanashi.jp","nishikatsura.yamanashi.jp","oshino.yamanashi.jp","otsuki.yamanashi.jp","showa.yamanashi.jp","tabayama.yamanashi.jp","tsuru.yamanashi.jp","uenohara.yamanashi.jp","yamanakako.yamanashi.jp","yamanashi.yamanashi.jp","ke","ac.ke","co.ke","go.ke","info.ke","me.ke","mobi.ke","ne.ke","or.ke","sc.ke","kg","org.kg","net.kg","com.kg","edu.kg","gov.kg","mil.kg","*.kh","ki","edu.ki","biz.ki","net.ki","org.ki","gov.ki","info.ki","com.ki","km","org.km","nom.km","gov.km","prd.km","tm.km","edu.km","mil.km","ass.km","com.km","coop.km","asso.km","presse.km","medecin.km","notaires.km","pharmaciens.km","veterinaire.km","gouv.km","kn","net.kn","org.kn","edu.kn","gov.kn","kp","com.kp","edu.kp","gov.kp","org.kp","rep.kp","tra.kp","kr","ac.kr","co.kr","es.kr","go.kr","hs.kr","kg.kr","mil.kr","ms.kr","ne.kr","or.kr","pe.kr","re.kr","sc.kr","busan.kr","chungbuk.kr","chungnam.kr","daegu.kr","daejeon.kr","gangwon.kr","gwangju.kr","gyeongbuk.kr","gyeonggi.kr","gyeongnam.kr","incheon.kr","jeju.kr","jeonbuk.kr","jeonnam.kr","seoul.kr","ulsan.kr","kw","com.kw","edu.kw","emb.kw","gov.kw","ind.kw","net.kw","org.kw","ky","edu.ky","gov.ky","com.ky","org.ky","net.ky","kz","org.kz","edu.kz","net.kz","gov.kz","mil.kz","com.kz","la","int.la","net.la","info.la","edu.la","gov.la","per.la","com.la","org.la","lb","com.lb","edu.lb","gov.lb","net.lb","org.lb","lc","com.lc","net.lc","co.lc","org.lc","edu.lc","gov.lc","li","lk","gov.lk","sch.lk","net.lk","int.lk","com.lk","org.lk","edu.lk","ngo.lk","soc.lk","web.lk","ltd.lk","assn.lk","grp.lk","hotel.lk","ac.lk","lr","com.lr","edu.lr","gov.lr","org.lr","net.lr","ls","co.ls","org.ls","lt","gov.lt","lu","lv","com.lv","edu.lv","gov.lv","org.lv","mil.lv","id.lv","net.lv","asn.lv","conf.lv","ly","com.ly","net.ly","gov.ly","plc.ly","edu.ly","sch.ly","med.ly","org.ly","id.ly","ma","co.ma","net.ma","gov.ma","org.ma","ac.ma","press.ma","mc","tm.mc","asso.mc","md","me","co.me","net.me","org.me","edu.me","ac.me","gov.me","its.me","priv.me","mg","org.mg","nom.mg","gov.mg","prd.mg","tm.mg","edu.mg","mil.mg","com.mg","co.mg","mh","mil","mk","com.mk","org.mk","net.mk","edu.mk","gov.mk","inf.mk","name.mk","ml","com.ml","edu.ml","gouv.ml","gov.ml","net.ml","org.ml","presse.ml","*.mm","mn","gov.mn","edu.mn","org.mn","mo","com.mo","net.mo","org.mo","edu.mo","gov.mo","mobi","mp","mq","mr","gov.mr","ms","com.ms","edu.ms","gov.ms","net.ms","org.ms","mt","com.mt","edu.mt","net.mt","org.mt","mu","com.mu","net.mu","org.mu","gov.mu","ac.mu","co.mu","or.mu","museum","academy.museum","agriculture.museum","air.museum","airguard.museum","alabama.museum","alaska.museum","amber.museum","ambulance.museum","american.museum","americana.museum","americanantiques.museum","americanart.museum","amsterdam.museum","and.museum","annefrank.museum","anthro.museum","anthropology.museum","antiques.museum","aquarium.museum","arboretum.museum","archaeological.museum","archaeology.museum","architecture.museum","art.museum","artanddesign.museum","artcenter.museum","artdeco.museum","arteducation.museum","artgallery.museum","arts.museum","artsandcrafts.museum","asmatart.museum","assassination.museum","assisi.museum","association.museum","astronomy.museum","atlanta.museum","austin.museum","australia.museum","automotive.museum","aviation.museum","axis.museum","badajoz.museum","baghdad.museum","bahn.museum","bale.museum","baltimore.museum","barcelona.museum","baseball.museum","basel.museum","baths.museum","bauern.museum","beauxarts.museum","beeldengeluid.museum","bellevue.museum","bergbau.museum","berkeley.museum","berlin.museum","bern.museum","bible.museum","bilbao.museum","bill.museum","birdart.museum","birthplace.museum","bonn.museum","boston.museum","botanical.museum","botanicalgarden.museum","botanicgarden.museum","botany.museum","brandywinevalley.museum","brasil.museum","bristol.museum","british.museum","britishcolumbia.museum","broadcast.museum","brunel.museum","brussel.museum","brussels.museum","bruxelles.museum","building.museum","burghof.museum","bus.museum","bushey.museum","cadaques.museum","california.museum","cambridge.museum","can.museum","canada.museum","capebreton.museum","carrier.museum","cartoonart.museum","casadelamoneda.museum","castle.museum","castres.museum","celtic.museum","center.museum","chattanooga.museum","cheltenham.museum","chesapeakebay.museum","chicago.museum","children.museum","childrens.museum","childrensgarden.museum","chiropractic.museum","chocolate.museum","christiansburg.museum","cincinnati.museum","cinema.museum","circus.museum","civilisation.museum","civilization.museum","civilwar.museum","clinton.museum","clock.museum","coal.museum","coastaldefence.museum","cody.museum","coldwar.museum","collection.museum","colonialwilliamsburg.museum","coloradoplateau.museum","columbia.museum","columbus.museum","communication.museum","communications.museum","community.museum","computer.museum","computerhistory.museum","comunicações.museum","contemporary.museum","contemporaryart.museum","convent.museum","copenhagen.museum","corporation.museum","correios-e-telecomunicações.museum","corvette.museum","costume.museum","countryestate.museum","county.museum","crafts.museum","cranbrook.museum","creation.museum","cultural.museum","culturalcenter.museum","culture.museum","cyber.museum","cymru.museum","dali.museum","dallas.museum","database.museum","ddr.museum","decorativearts.museum","delaware.museum","delmenhorst.museum","denmark.museum","depot.museum","design.museum","detroit.museum","dinosaur.museum","discovery.museum","dolls.museum","donostia.museum","durham.museum","eastafrica.museum","eastcoast.museum","education.museum","educational.museum","egyptian.museum","eisenbahn.museum","elburg.museum","elvendrell.museum","embroidery.museum","encyclopedic.museum","england.museum","entomology.museum","environment.museum","environmentalconservation.museum","epilepsy.museum","essex.museum","estate.museum","ethnology.museum","exeter.museum","exhibition.museum","family.museum","farm.museum","farmequipment.museum","farmers.museum","farmstead.museum","field.museum","figueres.museum","filatelia.museum","film.museum","fineart.museum","finearts.museum","finland.museum","flanders.museum","florida.museum","force.museum","fortmissoula.museum","fortworth.museum","foundation.museum","francaise.museum","frankfurt.museum","franziskaner.museum","freemasonry.museum","freiburg.museum","fribourg.museum","frog.museum","fundacio.museum","furniture.museum","gallery.museum","garden.museum","gateway.museum","geelvinck.museum","gemological.museum","geology.museum","georgia.museum","giessen.museum","glas.museum","glass.museum","gorge.museum","grandrapids.museum","graz.museum","guernsey.museum","halloffame.museum","hamburg.museum","handson.museum","harvestcelebration.museum","hawaii.museum","health.museum","heimatunduhren.museum","hellas.museum","helsinki.museum","hembygdsforbund.museum","heritage.museum","histoire.museum","historical.museum","historicalsociety.museum","historichouses.museum","historisch.museum","historisches.museum","history.museum","historyofscience.museum","horology.museum","house.museum","humanities.museum","illustration.museum","imageandsound.museum","indian.museum","indiana.museum","indianapolis.museum","indianmarket.museum","intelligence.museum","interactive.museum","iraq.museum","iron.museum","isleofman.museum","jamison.museum","jefferson.museum","jerusalem.museum","jewelry.museum","jewish.museum","jewishart.museum","jfk.museum","journalism.museum","judaica.museum","judygarland.museum","juedisches.museum","juif.museum","karate.museum","karikatur.museum","kids.museum","koebenhavn.museum","koeln.museum","kunst.museum","kunstsammlung.museum","kunstunddesign.museum","labor.museum","labour.museum","lajolla.museum","lancashire.museum","landes.museum","lans.museum","läns.museum","larsson.museum","lewismiller.museum","lincoln.museum","linz.museum","living.museum","livinghistory.museum","localhistory.museum","london.museum","losangeles.museum","louvre.museum","loyalist.museum","lucerne.museum","luxembourg.museum","luzern.museum","mad.museum","madrid.museum","mallorca.museum","manchester.museum","mansion.museum","mansions.museum","manx.museum","marburg.museum","maritime.museum","maritimo.museum","maryland.museum","marylhurst.museum","media.museum","medical.museum","medizinhistorisches.museum","meeres.museum","memorial.museum","mesaverde.museum","michigan.museum","midatlantic.museum","military.museum","mill.museum","miners.museum","mining.museum","minnesota.museum","missile.museum","missoula.museum","modern.museum","moma.museum","money.museum","monmouth.museum","monticello.museum","montreal.museum","moscow.museum","motorcycle.museum","muenchen.museum","muenster.museum","mulhouse.museum","muncie.museum","museet.museum","museumcenter.museum","museumvereniging.museum","music.museum","national.museum","nationalfirearms.museum","nationalheritage.museum","nativeamerican.museum","naturalhistory.museum","naturalhistorymuseum.museum","naturalsciences.museum","nature.museum","naturhistorisches.museum","natuurwetenschappen.museum","naumburg.museum","naval.museum","nebraska.museum","neues.museum","newhampshire.museum","newjersey.museum","newmexico.museum","newport.museum","newspaper.museum","newyork.museum","niepce.museum","norfolk.museum","north.museum","nrw.museum","nuernberg.museum","nuremberg.museum","nyc.museum","nyny.museum","oceanographic.museum","oceanographique.museum","omaha.museum","online.museum","ontario.museum","openair.museum","oregon.museum","oregontrail.museum","otago.museum","oxford.museum","pacific.museum","paderborn.museum","palace.museum","paleo.museum","palmsprings.museum","panama.museum","paris.museum","pasadena.museum","pharmacy.museum","philadelphia.museum","philadelphiaarea.museum","philately.museum","phoenix.museum","photography.museum","pilots.museum","pittsburgh.museum","planetarium.museum","plantation.museum","plants.museum","plaza.museum","portal.museum","portland.museum","portlligat.museum","posts-and-telecommunications.museum","preservation.museum","presidio.museum","press.museum","project.museum","public.museum","pubol.museum","quebec.museum","railroad.museum","railway.museum","research.museum","resistance.museum","riodejaneiro.museum","rochester.museum","rockart.museum","roma.museum","russia.museum","saintlouis.museum","salem.museum","salvadordali.museum","salzburg.museum","sandiego.museum","sanfrancisco.museum","santabarbara.museum","santacruz.museum","santafe.museum","saskatchewan.museum","satx.museum","savannahga.museum","schlesisches.museum","schoenbrunn.museum","schokoladen.museum","school.museum","schweiz.museum","science.museum","scienceandhistory.museum","scienceandindustry.museum","sciencecenter.museum","sciencecenters.museum","science-fiction.museum","sciencehistory.museum","sciences.museum","sciencesnaturelles.museum","scotland.museum","seaport.museum","settlement.museum","settlers.museum","shell.museum","sherbrooke.museum","sibenik.museum","silk.museum","ski.museum","skole.museum","society.museum","sologne.museum","soundandvision.museum","southcarolina.museum","southwest.museum","space.museum","spy.museum","square.museum","stadt.museum","stalbans.museum","starnberg.museum","state.museum","stateofdelaware.museum","station.museum","steam.museum","steiermark.museum","stjohn.museum","stockholm.museum","stpetersburg.museum","stuttgart.museum","suisse.museum","surgeonshall.museum","surrey.museum","svizzera.museum","sweden.museum","sydney.museum","tank.museum","tcm.museum","technology.museum","telekommunikation.museum","television.museum","texas.museum","textile.museum","theater.museum","time.museum","timekeeping.museum","topology.museum","torino.museum","touch.museum","town.museum","transport.museum","tree.museum","trolley.museum","trust.museum","trustee.museum","uhren.museum","ulm.museum","undersea.museum","university.museum","usa.museum","usantiques.museum","usarts.museum","uscountryestate.museum","usculture.museum","usdecorativearts.museum","usgarden.museum","ushistory.museum","ushuaia.museum","uslivinghistory.museum","utah.museum","uvic.museum","valley.museum","vantaa.museum","versailles.museum","viking.museum","village.museum","virginia.museum","virtual.museum","virtuel.museum","vlaanderen.museum","volkenkunde.museum","wales.museum","wallonie.museum","war.museum","washingtondc.museum","watchandclock.museum","watch-and-clock.museum","western.museum","westfalen.museum","whaling.museum","wildlife.museum","williamsburg.museum","windmill.museum","workshop.museum","york.museum","yorkshire.museum","yosemite.museum","youth.museum","zoological.museum","zoology.museum","ירושלים.museum","иком.museum","mv","aero.mv","biz.mv","com.mv","coop.mv","edu.mv","gov.mv","info.mv","int.mv","mil.mv","museum.mv","name.mv","net.mv","org.mv","pro.mv","mw","ac.mw","biz.mw","co.mw","com.mw","coop.mw","edu.mw","gov.mw","int.mw","museum.mw","net.mw","org.mw","mx","com.mx","org.mx","gob.mx","edu.mx","net.mx","my","com.my","net.my","org.my","gov.my","edu.my","mil.my","name.my","mz","ac.mz","adv.mz","co.mz","edu.mz","gov.mz","mil.mz","net.mz","org.mz","na","info.na","pro.na","name.na","school.na","or.na","dr.na","us.na","mx.na","ca.na","in.na","cc.na","tv.na","ws.na","mobi.na","co.na","com.na","org.na","name","nc","asso.nc","nom.nc","ne","net","nf","com.nf","net.nf","per.nf","rec.nf","web.nf","arts.nf","firm.nf","info.nf","other.nf","store.nf","ng","com.ng","edu.ng","gov.ng","i.ng","mil.ng","mobi.ng","name.ng","net.ng","org.ng","sch.ng","ni","ac.ni","biz.ni","co.ni","com.ni","edu.ni","gob.ni","in.ni","info.ni","int.ni","mil.ni","net.ni","nom.ni","org.ni","web.ni","nl","bv.nl","no","fhs.no","vgs.no","fylkesbibl.no","folkebibl.no","museum.no","idrett.no","priv.no","mil.no","stat.no","dep.no","kommune.no","herad.no","aa.no","ah.no","bu.no","fm.no","hl.no","hm.no","jan-mayen.no","mr.no","nl.no","nt.no","of.no","ol.no","oslo.no","rl.no","sf.no","st.no","svalbard.no","tm.no","tr.no","va.no","vf.no","gs.aa.no","gs.ah.no","gs.bu.no","gs.fm.no","gs.hl.no","gs.hm.no","gs.jan-mayen.no","gs.mr.no","gs.nl.no","gs.nt.no","gs.of.no","gs.ol.no","gs.oslo.no","gs.rl.no","gs.sf.no","gs.st.no","gs.svalbard.no","gs.tm.no","gs.tr.no","gs.va.no","gs.vf.no","akrehamn.no","åkrehamn.no","algard.no","ålgård.no","arna.no","brumunddal.no","bryne.no","bronnoysund.no","brønnøysund.no","drobak.no","drøbak.no","egersund.no","fetsund.no","floro.no","florø.no","fredrikstad.no","hokksund.no","honefoss.no","hønefoss.no","jessheim.no","jorpeland.no","jørpeland.no","kirkenes.no","kopervik.no","krokstadelva.no","langevag.no","langevåg.no","leirvik.no","mjondalen.no","mjøndalen.no","mo-i-rana.no","mosjoen.no","mosjøen.no","nesoddtangen.no","orkanger.no","osoyro.no","osøyro.no","raholt.no","råholt.no","sandnessjoen.no","sandnessjøen.no","skedsmokorset.no","slattum.no","spjelkavik.no","stathelle.no","stavern.no","stjordalshalsen.no","stjørdalshalsen.no","tananger.no","tranby.no","vossevangen.no","afjord.no","åfjord.no","agdenes.no","al.no","ål.no","alesund.no","ålesund.no","alstahaug.no","alta.no","áltá.no","alaheadju.no","álaheadju.no","alvdal.no","amli.no","åmli.no","amot.no","åmot.no","andebu.no","andoy.no","andøy.no","andasuolo.no","ardal.no","årdal.no","aremark.no","arendal.no","ås.no","aseral.no","åseral.no","asker.no","askim.no","askvoll.no","askoy.no","askøy.no","asnes.no","åsnes.no","audnedaln.no","aukra.no","aure.no","aurland.no","aurskog-holand.no","aurskog-høland.no","austevoll.no","austrheim.no","averoy.no","averøy.no","balestrand.no","ballangen.no","balat.no","bálát.no","balsfjord.no","bahccavuotna.no","báhccavuotna.no","bamble.no","bardu.no","beardu.no","beiarn.no","bajddar.no","bájddar.no","baidar.no","báidár.no","berg.no","bergen.no","berlevag.no","berlevåg.no","bearalvahki.no","bearalváhki.no","bindal.no","birkenes.no","bjarkoy.no","bjarkøy.no","bjerkreim.no","bjugn.no","bodo.no","bodø.no","badaddja.no","bådåddjå.no","budejju.no","bokn.no","bremanger.no","bronnoy.no","brønnøy.no","bygland.no","bykle.no","barum.no","bærum.no","bo.telemark.no","bø.telemark.no","bo.nordland.no","bø.nordland.no","bievat.no","bievát.no","bomlo.no","bømlo.no","batsfjord.no","båtsfjord.no","bahcavuotna.no","báhcavuotna.no","dovre.no","drammen.no","drangedal.no","dyroy.no","dyrøy.no","donna.no","dønna.no","eid.no","eidfjord.no","eidsberg.no","eidskog.no","eidsvoll.no","eigersund.no","elverum.no","enebakk.no","engerdal.no","etne.no","etnedal.no","evenes.no","evenassi.no","evenášši.no","evje-og-hornnes.no","farsund.no","fauske.no","fuossko.no","fuoisku.no","fedje.no","fet.no","finnoy.no","finnøy.no","fitjar.no","fjaler.no","fjell.no","flakstad.no","flatanger.no","flekkefjord.no","flesberg.no","flora.no","fla.no","flå.no","folldal.no","forsand.no","fosnes.no","frei.no","frogn.no","froland.no","frosta.no","frana.no","fræna.no","froya.no","frøya.no","fusa.no","fyresdal.no","forde.no","førde.no","gamvik.no","gangaviika.no","gáŋgaviika.no","gaular.no","gausdal.no","gildeskal.no","gildeskål.no","giske.no","gjemnes.no","gjerdrum.no","gjerstad.no","gjesdal.no","gjovik.no","gjøvik.no","gloppen.no","gol.no","gran.no","grane.no","granvin.no","gratangen.no","grimstad.no","grong.no","kraanghke.no","kråanghke.no","grue.no","gulen.no","hadsel.no","halden.no","halsa.no","hamar.no","hamaroy.no","habmer.no","hábmer.no","hapmir.no","hápmir.no","hammerfest.no","hammarfeasta.no","hámmárfeasta.no","haram.no","hareid.no","harstad.no","hasvik.no","aknoluokta.no","ákŋoluokta.no","hattfjelldal.no","aarborte.no","haugesund.no","hemne.no","hemnes.no","hemsedal.no","heroy.more-og-romsdal.no","herøy.møre-og-romsdal.no","heroy.nordland.no","herøy.nordland.no","hitra.no","hjartdal.no","hjelmeland.no","hobol.no","hobøl.no","hof.no","hol.no","hole.no","holmestrand.no","holtalen.no","holtålen.no","hornindal.no","horten.no","hurdal.no","hurum.no","hvaler.no","hyllestad.no","hagebostad.no","hægebostad.no","hoyanger.no","høyanger.no","hoylandet.no","høylandet.no","ha.no","hå.no","ibestad.no","inderoy.no","inderøy.no","iveland.no","jevnaker.no","jondal.no","jolster.no","jølster.no","karasjok.no","karasjohka.no","kárášjohka.no","karlsoy.no","galsa.no","gálsá.no","karmoy.no","karmøy.no","kautokeino.no","guovdageaidnu.no","klepp.no","klabu.no","klæbu.no","kongsberg.no","kongsvinger.no","kragero.no","kragerø.no","kristiansand.no","kristiansund.no","krodsherad.no","krødsherad.no","kvalsund.no","rahkkeravju.no","ráhkkerávju.no","kvam.no","kvinesdal.no","kvinnherad.no","kviteseid.no","kvitsoy.no","kvitsøy.no","kvafjord.no","kvæfjord.no","giehtavuoatna.no","kvanangen.no","kvænangen.no","navuotna.no","návuotna.no","kafjord.no","kåfjord.no","gaivuotna.no","gáivuotna.no","larvik.no","lavangen.no","lavagis.no","loabat.no","loabát.no","lebesby.no","davvesiida.no","leikanger.no","leirfjord.no","leka.no","leksvik.no","lenvik.no","leangaviika.no","leaŋgaviika.no","lesja.no","levanger.no","lier.no","lierne.no","lillehammer.no","lillesand.no","lindesnes.no","lindas.no","lindås.no","lom.no","loppa.no","lahppi.no","láhppi.no","lund.no","lunner.no","luroy.no","lurøy.no","luster.no","lyngdal.no","lyngen.no","ivgu.no","lardal.no","lerdal.no","lærdal.no","lodingen.no","lødingen.no","lorenskog.no","lørenskog.no","loten.no","løten.no","malvik.no","masoy.no","måsøy.no","muosat.no","muosát.no","mandal.no","marker.no","marnardal.no","masfjorden.no","meland.no","meldal.no","melhus.no","meloy.no","meløy.no","meraker.no","meråker.no","moareke.no","moåreke.no","midsund.no","midtre-gauldal.no","modalen.no","modum.no","molde.no","moskenes.no","moss.no","mosvik.no","malselv.no","målselv.no","malatvuopmi.no","málatvuopmi.no","namdalseid.no","aejrie.no","namsos.no","namsskogan.no","naamesjevuemie.no","nååmesjevuemie.no","laakesvuemie.no","nannestad.no","narvik.no","narviika.no","naustdal.no","nedre-eiker.no","nes.akershus.no","nes.buskerud.no","nesna.no","nesodden.no","nesseby.no","unjarga.no","unjárga.no","nesset.no","nissedal.no","nittedal.no","nord-aurdal.no","nord-fron.no","nord-odal.no","norddal.no","nordkapp.no","davvenjarga.no","davvenjárga.no","nordre-land.no","nordreisa.no","raisa.no","ráisa.no","nore-og-uvdal.no","notodden.no","naroy.no","nærøy.no","notteroy.no","nøtterøy.no","odda.no","oksnes.no","øksnes.no","oppdal.no","oppegard.no","oppegård.no","orkdal.no","orland.no","ørland.no","orskog.no","ørskog.no","orsta.no","ørsta.no","os.hedmark.no","os.hordaland.no","osen.no","osteroy.no","osterøy.no","ostre-toten.no","østre-toten.no","overhalla.no","ovre-eiker.no","øvre-eiker.no","oyer.no","øyer.no","oygarden.no","øygarden.no","oystre-slidre.no","øystre-slidre.no","porsanger.no","porsangu.no","porsáŋgu.no","porsgrunn.no","radoy.no","radøy.no","rakkestad.no","rana.no","ruovat.no","randaberg.no","rauma.no","rendalen.no","rennebu.no","rennesoy.no","rennesøy.no","rindal.no","ringebu.no","ringerike.no","ringsaker.no","rissa.no","risor.no","risør.no","roan.no","rollag.no","rygge.no","ralingen.no","rælingen.no","rodoy.no","rødøy.no","romskog.no","rømskog.no","roros.no","røros.no","rost.no","røst.no","royken.no","røyken.no","royrvik.no","røyrvik.no","rade.no","råde.no","salangen.no","siellak.no","saltdal.no","salat.no","sálát.no","sálat.no","samnanger.no","sande.more-og-romsdal.no","sande.møre-og-romsdal.no","sande.vestfold.no","sandefjord.no","sandnes.no","sandoy.no","sandøy.no","sarpsborg.no","sauda.no","sauherad.no","sel.no","selbu.no","selje.no","seljord.no","sigdal.no","siljan.no","sirdal.no","skaun.no","skedsmo.no","ski.no","skien.no","skiptvet.no","skjervoy.no","skjervøy.no","skierva.no","skiervá.no","skjak.no","skjåk.no","skodje.no","skanland.no","skånland.no","skanit.no","skánit.no","smola.no","smøla.no","snillfjord.no","snasa.no","snåsa.no","snoasa.no","snaase.no","snåase.no","sogndal.no","sokndal.no","sola.no","solund.no","songdalen.no","sortland.no","spydeberg.no","stange.no","stavanger.no","steigen.no","steinkjer.no","stjordal.no","stjørdal.no","stokke.no","stor-elvdal.no","stord.no","stordal.no","storfjord.no","omasvuotna.no","strand.no","stranda.no","stryn.no","sula.no","suldal.no","sund.no","sunndal.no","surnadal.no","sveio.no","svelvik.no","sykkylven.no","sogne.no","søgne.no","somna.no","sømna.no","sondre-land.no","søndre-land.no","sor-aurdal.no","sør-aurdal.no","sor-fron.no","sør-fron.no","sor-odal.no","sør-odal.no","sor-varanger.no","sør-varanger.no","matta-varjjat.no","mátta-várjjat.no","sorfold.no","sørfold.no","sorreisa.no","sørreisa.no","sorum.no","sørum.no","tana.no","deatnu.no","time.no","tingvoll.no","tinn.no","tjeldsund.no","dielddanuorri.no","tjome.no","tjøme.no","tokke.no","tolga.no","torsken.no","tranoy.no","tranøy.no","tromso.no","tromsø.no","tromsa.no","romsa.no","trondheim.no","troandin.no","trysil.no","trana.no","træna.no","trogstad.no","trøgstad.no","tvedestrand.no","tydal.no","tynset.no","tysfjord.no","divtasvuodna.no","divttasvuotna.no","tysnes.no","tysvar.no","tysvær.no","tonsberg.no","tønsberg.no","ullensaker.no","ullensvang.no","ulvik.no","utsira.no","vadso.no","vadsø.no","cahcesuolo.no","čáhcesuolo.no","vaksdal.no","valle.no","vang.no","vanylven.no","vardo.no","vardø.no","varggat.no","várggát.no","vefsn.no","vaapste.no","vega.no","vegarshei.no","vegårshei.no","vennesla.no","verdal.no","verran.no","vestby.no","vestnes.no","vestre-slidre.no","vestre-toten.no","vestvagoy.no","vestvågøy.no","vevelstad.no","vik.no","vikna.no","vindafjord.no","volda.no","voss.no","varoy.no","værøy.no","vagan.no","vågan.no","voagat.no","vagsoy.no","vågsøy.no","vaga.no","vågå.no","valer.ostfold.no","våler.østfold.no","valer.hedmark.no","våler.hedmark.no","*.np","nr","biz.nr","info.nr","gov.nr","edu.nr","org.nr","net.nr","com.nr","nu","nz","ac.nz","co.nz","cri.nz","geek.nz","gen.nz","govt.nz","health.nz","iwi.nz","kiwi.nz","maori.nz","mil.nz","māori.nz","net.nz","org.nz","parliament.nz","school.nz","om","co.om","com.om","edu.om","gov.om","med.om","museum.om","net.om","org.om","pro.om","onion","org","pa","ac.pa","gob.pa","com.pa","org.pa","sld.pa","edu.pa","net.pa","ing.pa","abo.pa","med.pa","nom.pa","pe","edu.pe","gob.pe","nom.pe","mil.pe","org.pe","com.pe","net.pe","pf","com.pf","org.pf","edu.pf","*.pg","ph","com.ph","net.ph","org.ph","gov.ph","edu.ph","ngo.ph","mil.ph","i.ph","pk","com.pk","net.pk","edu.pk","org.pk","fam.pk","biz.pk","web.pk","gov.pk","gob.pk","gok.pk","gon.pk","gop.pk","gos.pk","info.pk","pl","com.pl","net.pl","org.pl","aid.pl","agro.pl","atm.pl","auto.pl","biz.pl","edu.pl","gmina.pl","gsm.pl","info.pl","mail.pl","miasta.pl","media.pl","mil.pl","nieruchomosci.pl","nom.pl","pc.pl","powiat.pl","priv.pl","realestate.pl","rel.pl","sex.pl","shop.pl","sklep.pl","sos.pl","szkola.pl","targi.pl","tm.pl","tourism.pl","travel.pl","turystyka.pl","gov.pl","ap.gov.pl","ic.gov.pl","is.gov.pl","us.gov.pl","kmpsp.gov.pl","kppsp.gov.pl","kwpsp.gov.pl","psp.gov.pl","wskr.gov.pl","kwp.gov.pl","mw.gov.pl","ug.gov.pl","um.gov.pl","umig.gov.pl","ugim.gov.pl","upow.gov.pl","uw.gov.pl","starostwo.gov.pl","pa.gov.pl","po.gov.pl","psse.gov.pl","pup.gov.pl","rzgw.gov.pl","sa.gov.pl","so.gov.pl","sr.gov.pl","wsa.gov.pl","sko.gov.pl","uzs.gov.pl","wiih.gov.pl","winb.gov.pl","pinb.gov.pl","wios.gov.pl","witd.gov.pl","wzmiuw.gov.pl","piw.gov.pl","wiw.gov.pl","griw.gov.pl","wif.gov.pl","oum.gov.pl","sdn.gov.pl","zp.gov.pl","uppo.gov.pl","mup.gov.pl","wuoz.gov.pl","konsulat.gov.pl","oirm.gov.pl","augustow.pl","babia-gora.pl","bedzin.pl","beskidy.pl","bialowieza.pl","bialystok.pl","bielawa.pl","bieszczady.pl","boleslawiec.pl","bydgoszcz.pl","bytom.pl","cieszyn.pl","czeladz.pl","czest.pl","dlugoleka.pl","elblag.pl","elk.pl","glogow.pl","gniezno.pl","gorlice.pl","grajewo.pl","ilawa.pl","jaworzno.pl","jelenia-gora.pl","jgora.pl","kalisz.pl","kazimierz-dolny.pl","karpacz.pl","kartuzy.pl","kaszuby.pl","katowice.pl","kepno.pl","ketrzyn.pl","klodzko.pl","kobierzyce.pl","kolobrzeg.pl","konin.pl","konskowola.pl","kutno.pl","lapy.pl","lebork.pl","legnica.pl","lezajsk.pl","limanowa.pl","lomza.pl","lowicz.pl","lubin.pl","lukow.pl","malbork.pl","malopolska.pl","mazowsze.pl","mazury.pl","mielec.pl","mielno.pl","mragowo.pl","naklo.pl","nowaruda.pl","nysa.pl","olawa.pl","olecko.pl","olkusz.pl","olsztyn.pl","opoczno.pl","opole.pl","ostroda.pl","ostroleka.pl","ostrowiec.pl","ostrowwlkp.pl","pila.pl","pisz.pl","podhale.pl","podlasie.pl","polkowice.pl","pomorze.pl","pomorskie.pl","prochowice.pl","pruszkow.pl","przeworsk.pl","pulawy.pl","radom.pl","rawa-maz.pl","rybnik.pl","rzeszow.pl","sanok.pl","sejny.pl","slask.pl","slupsk.pl","sosnowiec.pl","stalowa-wola.pl","skoczow.pl","starachowice.pl","stargard.pl","suwalki.pl","swidnica.pl","swiebodzin.pl","swinoujscie.pl","szczecin.pl","szczytno.pl","tarnobrzeg.pl","tgory.pl","turek.pl","tychy.pl","ustka.pl","walbrzych.pl","warmia.pl","warszawa.pl","waw.pl","wegrow.pl","wielun.pl","wlocl.pl","wloclawek.pl","wodzislaw.pl","wolomin.pl","wroclaw.pl","zachpomor.pl","zagan.pl","zarow.pl","zgora.pl","zgorzelec.pl","pm","pn","gov.pn","co.pn","org.pn","edu.pn","net.pn","post","pr","com.pr","net.pr","org.pr","gov.pr","edu.pr","isla.pr","pro.pr","biz.pr","info.pr","name.pr","est.pr","prof.pr","ac.pr","pro","aaa.pro","aca.pro","acct.pro","avocat.pro","bar.pro","cpa.pro","eng.pro","jur.pro","law.pro","med.pro","recht.pro","ps","edu.ps","gov.ps","sec.ps","plo.ps","com.ps","org.ps","net.ps","pt","net.pt","gov.pt","org.pt","edu.pt","int.pt","publ.pt","com.pt","nome.pt","pw","co.pw","ne.pw","or.pw","ed.pw","go.pw","belau.pw","py","com.py","coop.py","edu.py","gov.py","mil.py","net.py","org.py","qa","com.qa","edu.qa","gov.qa","mil.qa","name.qa","net.qa","org.qa","sch.qa","re","asso.re","com.re","nom.re","ro","arts.ro","com.ro","firm.ro","info.ro","nom.ro","nt.ro","org.ro","rec.ro","store.ro","tm.ro","www.ro","rs","ac.rs","co.rs","edu.rs","gov.rs","in.rs","org.rs","ru","ac.ru","edu.ru","gov.ru","int.ru","mil.ru","test.ru","rw","gov.rw","net.rw","edu.rw","ac.rw","com.rw","co.rw","int.rw","mil.rw","gouv.rw","sa","com.sa","net.sa","org.sa","gov.sa","med.sa","pub.sa","edu.sa","sch.sa","sb","com.sb","edu.sb","gov.sb","net.sb","org.sb","sc","com.sc","gov.sc","net.sc","org.sc","edu.sc","sd","com.sd","net.sd","org.sd","edu.sd","med.sd","tv.sd","gov.sd","info.sd","se","a.se","ac.se","b.se","bd.se","brand.se","c.se","d.se","e.se","f.se","fh.se","fhsk.se","fhv.se","g.se","h.se","i.se","k.se","komforb.se","kommunalforbund.se","komvux.se","l.se","lanbib.se","m.se","n.se","naturbruksgymn.se","o.se","org.se","p.se","parti.se","pp.se","press.se","r.se","s.se","t.se","tm.se","u.se","w.se","x.se","y.se","z.se","sg","com.sg","net.sg","org.sg","gov.sg","edu.sg","per.sg","sh","com.sh","net.sh","gov.sh","org.sh","mil.sh","si","sj","sk","sl","com.sl","net.sl","edu.sl","gov.sl","org.sl","sm","sn","art.sn","com.sn","edu.sn","gouv.sn","org.sn","perso.sn","univ.sn","so","com.so","net.so","org.so","sr","st","co.st","com.st","consulado.st","edu.st","embaixada.st","gov.st","mil.st","net.st","org.st","principe.st","saotome.st","store.st","su","sv","com.sv","edu.sv","gob.sv","org.sv","red.sv","sx","gov.sx","sy","edu.sy","gov.sy","net.sy","mil.sy","com.sy","org.sy","sz","co.sz","ac.sz","org.sz","tc","td","tel","tf","tg","th","ac.th","co.th","go.th","in.th","mi.th","net.th","or.th","tj","ac.tj","biz.tj","co.tj","com.tj","edu.tj","go.tj","gov.tj","int.tj","mil.tj","name.tj","net.tj","nic.tj","org.tj","test.tj","web.tj","tk","tl","gov.tl","tm","com.tm","co.tm","org.tm","net.tm","nom.tm","gov.tm","mil.tm","edu.tm","tn","com.tn","ens.tn","fin.tn","gov.tn","ind.tn","intl.tn","nat.tn","net.tn","org.tn","info.tn","perso.tn","tourism.tn","edunet.tn","rnrt.tn","rns.tn","rnu.tn","mincom.tn","agrinet.tn","defense.tn","turen.tn","to","com.to","gov.to","net.to","org.to","edu.to","mil.to","tr","com.tr","info.tr","biz.tr","net.tr","org.tr","web.tr","gen.tr","tv.tr","av.tr","dr.tr","bbs.tr","name.tr","tel.tr","gov.tr","bel.tr","pol.tr","mil.tr","k12.tr","edu.tr","kep.tr","nc.tr","gov.nc.tr","tt","co.tt","com.tt","org.tt","net.tt","biz.tt","info.tt","pro.tt","int.tt","coop.tt","jobs.tt","mobi.tt","travel.tt","museum.tt","aero.tt","name.tt","gov.tt","edu.tt","tv","tw","edu.tw","gov.tw","mil.tw","com.tw","net.tw","org.tw","idv.tw","game.tw","ebiz.tw","club.tw","網路.tw","組織.tw","商業.tw","tz","ac.tz","co.tz","go.tz","hotel.tz","info.tz","me.tz","mil.tz","mobi.tz","ne.tz","or.tz","sc.tz","tv.tz","ua","com.ua","edu.ua","gov.ua","in.ua","net.ua","org.ua","cherkassy.ua","cherkasy.ua","chernigov.ua","chernihiv.ua","chernivtsi.ua","chernovtsy.ua","ck.ua","cn.ua","cr.ua","crimea.ua","cv.ua","dn.ua","dnepropetrovsk.ua","dnipropetrovsk.ua","dominic.ua","donetsk.ua","dp.ua","if.ua","ivano-frankivsk.ua","kh.ua","kharkiv.ua","kharkov.ua","kherson.ua","khmelnitskiy.ua","khmelnytskyi.ua","kiev.ua","kirovograd.ua","km.ua","kr.ua","krym.ua","ks.ua","kv.ua","kyiv.ua","lg.ua","lt.ua","lugansk.ua","lutsk.ua","lv.ua","lviv.ua","mk.ua","mykolaiv.ua","nikolaev.ua","od.ua","odesa.ua","odessa.ua","pl.ua","poltava.ua","rivne.ua","rovno.ua","rv.ua","sb.ua","sebastopol.ua","sevastopol.ua","sm.ua","sumy.ua","te.ua","ternopil.ua","uz.ua","uzhgorod.ua","vinnica.ua","vinnytsia.ua","vn.ua","volyn.ua","yalta.ua","zaporizhzhe.ua","zaporizhzhia.ua","zhitomir.ua","zhytomyr.ua","zp.ua","zt.ua","ug","co.ug","or.ug","ac.ug","sc.ug","go.ug","ne.ug","com.ug","org.ug","uk","ac.uk","co.uk","gov.uk","ltd.uk","me.uk","net.uk","nhs.uk","org.uk","plc.uk","police.uk","*.sch.uk","us","dni.us","fed.us","isa.us","kids.us","nsn.us","ak.us","al.us","ar.us","as.us","az.us","ca.us","co.us","ct.us","dc.us","de.us","fl.us","ga.us","gu.us","hi.us","ia.us","id.us","il.us","in.us","ks.us","ky.us","la.us","ma.us","md.us","me.us","mi.us","mn.us","mo.us","ms.us","mt.us","nc.us","nd.us","ne.us","nh.us","nj.us","nm.us","nv.us","ny.us","oh.us","ok.us","or.us","pa.us","pr.us","ri.us","sc.us","sd.us","tn.us","tx.us","ut.us","vi.us","vt.us","va.us","wa.us","wi.us","wv.us","wy.us","k12.ak.us","k12.al.us","k12.ar.us","k12.as.us","k12.az.us","k12.ca.us","k12.co.us","k12.ct.us","k12.dc.us","k12.de.us","k12.fl.us","k12.ga.us","k12.gu.us","k12.ia.us","k12.id.us","k12.il.us","k12.in.us","k12.ks.us","k12.ky.us","k12.la.us","k12.ma.us","k12.md.us","k12.me.us","k12.mi.us","k12.mn.us","k12.mo.us","k12.ms.us","k12.mt.us","k12.nc.us","k12.ne.us","k12.nh.us","k12.nj.us","k12.nm.us","k12.nv.us","k12.ny.us","k12.oh.us","k12.ok.us","k12.or.us","k12.pa.us","k12.pr.us","k12.ri.us","k12.sc.us","k12.tn.us","k12.tx.us","k12.ut.us","k12.vi.us","k12.vt.us","k12.va.us","k12.wa.us","k12.wi.us","k12.wy.us","cc.ak.us","cc.al.us","cc.ar.us","cc.as.us","cc.az.us","cc.ca.us","cc.co.us","cc.ct.us","cc.dc.us","cc.de.us","cc.fl.us","cc.ga.us","cc.gu.us","cc.hi.us","cc.ia.us","cc.id.us","cc.il.us","cc.in.us","cc.ks.us","cc.ky.us","cc.la.us","cc.ma.us","cc.md.us","cc.me.us","cc.mi.us","cc.mn.us","cc.mo.us","cc.ms.us","cc.mt.us","cc.nc.us","cc.nd.us","cc.ne.us","cc.nh.us","cc.nj.us","cc.nm.us","cc.nv.us","cc.ny.us","cc.oh.us","cc.ok.us","cc.or.us","cc.pa.us","cc.pr.us","cc.ri.us","cc.sc.us","cc.sd.us","cc.tn.us","cc.tx.us","cc.ut.us","cc.vi.us","cc.vt.us","cc.va.us","cc.wa.us","cc.wi.us","cc.wv.us","cc.wy.us","lib.ak.us","lib.al.us","lib.ar.us","lib.as.us","lib.az.us","lib.ca.us","lib.co.us","lib.ct.us","lib.dc.us","lib.fl.us","lib.ga.us","lib.gu.us","lib.hi.us","lib.ia.us","lib.id.us","lib.il.us","lib.in.us","lib.ks.us","lib.ky.us","lib.la.us","lib.ma.us","lib.md.us","lib.me.us","lib.mi.us","lib.mn.us","lib.mo.us","lib.ms.us","lib.mt.us","lib.nc.us","lib.nd.us","lib.ne.us","lib.nh.us","lib.nj.us","lib.nm.us","lib.nv.us","lib.ny.us","lib.oh.us","lib.ok.us","lib.or.us","lib.pa.us","lib.pr.us","lib.ri.us","lib.sc.us","lib.sd.us","lib.tn.us","lib.tx.us","lib.ut.us","lib.vi.us","lib.vt.us","lib.va.us","lib.wa.us","lib.wi.us","lib.wy.us","pvt.k12.ma.us","chtr.k12.ma.us","paroch.k12.ma.us","ann-arbor.mi.us","cog.mi.us","dst.mi.us","eaton.mi.us","gen.mi.us","mus.mi.us","tec.mi.us","washtenaw.mi.us","uy","com.uy","edu.uy","gub.uy","mil.uy","net.uy","org.uy","uz","co.uz","com.uz","net.uz","org.uz","va","vc","com.vc","net.vc","org.vc","gov.vc","mil.vc","edu.vc","ve","arts.ve","co.ve","com.ve","e12.ve","edu.ve","firm.ve","gob.ve","gov.ve","info.ve","int.ve","mil.ve","net.ve","org.ve","rec.ve","store.ve","tec.ve","web.ve","vg","vi","co.vi","com.vi","k12.vi","net.vi","org.vi","vn","com.vn","net.vn","org.vn","edu.vn","gov.vn","int.vn","ac.vn","biz.vn","info.vn","name.vn","pro.vn","health.vn","vu","com.vu","edu.vu","net.vu","org.vu","wf","ws","com.ws","net.ws","org.ws","gov.ws","edu.ws","yt","امارات","հայ","বাংলা","бг","бел","中国","中國","الجزائر","مصر","ею","გე","ελ","香港","公司.香港","教育.香港","政府.香港","個人.香港","網絡.香港","組織.香港","ಭಾರತ","ଭାରତ","ভাৰত","भारतम्","भारोत","ڀارت","ഭാരതം","भारत","بارت","بھارت","భారత్","ભારત","ਭਾਰਤ","ভারত","இந்தியா","ایران","ايران","عراق","الاردن","한국","қаз","ලංකා","இலங்கை","المغرب","мкд","мон","澳門","澳门","مليسيا","عمان","پاکستان","پاكستان","فلسطين","срб","пр.срб","орг.срб","обр.срб","од.срб","упр.срб","ак.срб","рф","قطر","السعودية","السعودیة","السعودیۃ","السعوديه","سودان","新加坡","சிங்கப்பூர்","سورية","سوريا","ไทย","ศึกษา.ไทย","ธุรกิจ.ไทย","รัฐบาล.ไทย","ทหาร.ไทย","เน็ต.ไทย","องค์กร.ไทย","تونس","台灣","台湾","臺灣","укр","اليمن","xxx","*.ye","ac.za","agric.za","alt.za","co.za","edu.za","gov.za","grondar.za","law.za","mil.za","net.za","ngo.za","nis.za","nom.za","org.za","school.za","tm.za","web.za","zm","ac.zm","biz.zm","co.zm","com.zm","edu.zm","gov.zm","info.zm","mil.zm","net.zm","org.zm","sch.zm","zw","ac.zw","co.zw","gov.zw","mil.zw","org.zw","aaa","aarp","abarth","abb","abbott","abbvie","abc","able","abogado","abudhabi","academy","accenture","accountant","accountants","aco","active","actor","adac","ads","adult","aeg","aetna","afamilycompany","afl","africa","agakhan","agency","aig","aigo","airbus","airforce","airtel","akdn","alfaromeo","alibaba","alipay","allfinanz","allstate","ally","alsace","alstom","americanexpress","americanfamily","amex","amfam","amica","amsterdam","analytics","android","anquan","anz","aol","apartments","app","apple","aquarelle","arab","aramco","archi","army","art","arte","asda","associates","athleta","attorney","auction","audi","audible","audio","auspost","author","auto","autos","avianca","aws","axa","azure","baby","baidu","banamex","bananarepublic","band","bank","bar","barcelona","barclaycard","barclays","barefoot","bargains","baseball","basketball","bauhaus","bayern","bbc","bbt","bbva","bcg","bcn","beats","beauty","beer","bentley","berlin","best","bestbuy","bet","bharti","bible","bid","bike","bing","bingo","bio","black","blackfriday","blanco","blockbuster","blog","bloomberg","blue","bms","bmw","bnl","bnpparibas","boats","boehringer","bofa","bom","bond","boo","book","booking","bosch","bostik","boston","bot","boutique","box","bradesco","bridgestone","broadway","broker","brother","brussels","budapest","bugatti","build","builders","business","buy","buzz","bzh","cab","cafe","cal","call","calvinklein","cam","camera","camp","cancerresearch","canon","capetown","capital","capitalone","car","caravan","cards","care","career","careers","cars","cartier","casa","case","caseih","cash","casino","catering","catholic","cba","cbn","cbre","cbs","ceb","center","ceo","cern","cfa","cfd","chanel","channel","charity","chase","chat","cheap","chintai","christmas","chrome","chrysler","church","cipriani","circle","cisco","citadel","citi","citic","city","cityeats","claims","cleaning","click","clinic","clinique","clothing","cloud","club","clubmed","coach","codes","coffee","college","cologne","comcast","commbank","community","company","compare","computer","comsec","condos","construction","consulting","contact","contractors","cooking","cookingchannel","cool","corsica","country","coupon","coupons","courses","credit","creditcard","creditunion","cricket","crown","crs","cruise","cruises","csc","cuisinella","cymru","cyou","dabur","dad","dance","data","date","dating","datsun","day","dclk","dds","deal","dealer","deals","degree","delivery","dell","deloitte","delta","democrat","dental","dentist","desi","design","dev","dhl","diamonds","diet","digital","direct","directory","discount","discover","dish","diy","dnp","docs","doctor","dodge","dog","doha","domains","dot","download","drive","dtv","dubai","duck","dunlop","duns","dupont","durban","dvag","dvr","earth","eat","eco","edeka","education","email","emerck","energy","engineer","engineering","enterprises","epost","epson","equipment","ericsson","erni","esq","estate","esurance","etisalat","eurovision","eus","events","everbank","exchange","expert","exposed","express","extraspace","fage","fail","fairwinds","faith","family","fan","fans","farm","farmers","fashion","fast","fedex","feedback","ferrari","ferrero","fiat","fidelity","fido","film","final","finance","financial","fire","firestone","firmdale","fish","fishing","fit","fitness","flickr","flights","flir","florist","flowers","fly","foo","food","foodnetwork","football","ford","forex","forsale","forum","foundation","fox","free","fresenius","frl","frogans","frontdoor","frontier","ftr","fujitsu","fujixerox","fun","fund","furniture","futbol","fyi","gal","gallery","gallo","gallup","game","games","gap","garden","gbiz","gdn","gea","gent","genting","george","ggee","gift","gifts","gives","giving","glade","glass","gle","global","globo","gmail","gmbh","gmo","gmx","godaddy","gold","goldpoint","golf","goo","goodhands","goodyear","goog","google","gop","got","grainger","graphics","gratis","green","gripe","grocery","group","guardian","gucci","guge","guide","guitars","guru","hair","hamburg","hangout","haus","hbo","hdfc","hdfcbank","health","healthcare","help","helsinki","here","hermes","hgtv","hiphop","hisamitsu","hitachi","hiv","hkt","hockey","holdings","holiday","homedepot","homegoods","homes","homesense","honda","honeywell","horse","hospital","host","hosting","hot","hoteles","hotels","hotmail","house","how","hsbc","hughes","hyatt","hyundai","ibm","icbc","ice","icu","ieee","ifm","ikano","imamat","imdb","immo","immobilien","inc","industries","infiniti","ing","ink","institute","insurance","insure","intel","international","intuit","investments","ipiranga","irish","iselect","ismaili","ist","istanbul","itau","itv","iveco","jaguar","java","jcb","jcp","jeep","jetzt","jewelry","jio","jlc","jll","jmp","jnj","joburg","jot","joy","jpmorgan","jprs","juegos","juniper","kaufen","kddi","kerryhotels","kerrylogistics","kerryproperties","kfh","kia","kim","kinder","kindle","kitchen","kiwi","koeln","komatsu","kosher","kpmg","kpn","krd","kred","kuokgroup","kyoto","lacaixa","ladbrokes","lamborghini","lamer","lancaster","lancia","lancome","land","landrover","lanxess","lasalle","lat","latino","latrobe","law","lawyer","lds","lease","leclerc","lefrak","legal","lego","lexus","lgbt","liaison","lidl","life","lifeinsurance","lifestyle","lighting","like","lilly","limited","limo","lincoln","linde","link","lipsy","live","living","lixil","llc","loan","loans","locker","locus","loft","lol","london","lotte","lotto","love","lpl","lplfinancial","ltd","ltda","lundbeck","lupin","luxe","luxury","macys","madrid","maif","maison","makeup","man","management","mango","map","market","marketing","markets","marriott","marshalls","maserati","mattel","mba","mckinsey","med","media","meet","melbourne","meme","memorial","men","menu","merckmsd","metlife","miami","microsoft","mini","mint","mit","mitsubishi","mlb","mls","mma","mobile","mobily","moda","moe","moi","mom","monash","money","monster","mopar","mormon","mortgage","moscow","moto","motorcycles","mov","movie","movistar","msd","mtn","mtr","mutual","nab","nadex","nagoya","nationwide","natura","navy","nba","nec","netbank","netflix","network","neustar","new","newholland","news","next","nextdirect","nexus","nfl","ngo","nhk","nico","nike","nikon","ninja","nissan","nissay","nokia","northwesternmutual","norton","now","nowruz","nowtv","nra","nrw","ntt","nyc","obi","observer","off","office","okinawa","olayan","olayangroup","oldnavy","ollo","omega","one","ong","onl","online","onyourside","ooo","open","oracle","orange","organic","origins","osaka","otsuka","ott","ovh","page","panasonic","panerai","paris","pars","partners","parts","party","passagens","pay","pccw","pet","pfizer","pharmacy","phd","philips","phone","photo","photography","photos","physio","piaget","pics","pictet","pictures","pid","pin","ping","pink","pioneer","pizza","place","play","playstation","plumbing","plus","pnc","pohl","poker","politie","porn","pramerica","praxi","press","prime","prod","productions","prof","progressive","promo","properties","property","protection","pru","prudential","pub","pwc","qpon","quebec","quest","qvc","racing","radio","raid","read","realestate","realtor","realty","recipes","red","redstone","redumbrella","rehab","reise","reisen","reit","reliance","ren","rent","rentals","repair","report","republican","rest","restaurant","review","reviews","rexroth","rich","richardli","ricoh","rightathome","ril","rio","rip","rmit","rocher","rocks","rodeo","rogers","room","rsvp","rugby","ruhr","run","rwe","ryukyu","saarland","safe","safety","sakura","sale","salon","samsclub","samsung","sandvik","sandvikcoromant","sanofi","sap","sarl","sas","save","saxo","sbi","sbs","sca","scb","schaeffler","schmidt","scholarships","school","schule","schwarz","science","scjohnson","scor","scot","search","seat","secure","security","seek","select","sener","services","ses","seven","sew","sex","sexy","sfr","shangrila","sharp","shaw","shell","shia","shiksha","shoes","shop","shopping","shouji","show","showtime","shriram","silk","sina","singles","site","ski","skin","sky","skype","sling","smart","smile","sncf","soccer","social","softbank","software","sohu","solar","solutions","song","sony","soy","space","spiegel","sport","spot","spreadbetting","srl","srt","stada","staples","star","starhub","statebank","statefarm","statoil","stc","stcgroup","stockholm","storage","store","stream","studio","study","style","sucks","supplies","supply","support","surf","surgery","suzuki","swatch","swiftcover","swiss","sydney","symantec","systems","tab","taipei","talk","taobao","target","tatamotors","tatar","tattoo","tax","taxi","tci","tdk","team","tech","technology","telecity","telefonica","temasek","tennis","teva","thd","theater","theatre","tiaa","tickets","tienda","tiffany","tips","tires","tirol","tjmaxx","tjx","tkmaxx","tmall","today","tokyo","tools","top","toray","toshiba","total","tours","town","toyota","toys","trade","trading","training","travel","travelchannel","travelers","travelersinsurance","trust","trv","tube","tui","tunes","tushu","tvs","ubank","ubs","uconnect","unicom","university","uno","uol","ups","vacations","vana","vanguard","vegas","ventures","verisign","versicherung","vet","viajes","video","vig","viking","villas","vin","vip","virgin","visa","vision","vista","vistaprint","viva","vivo","vlaanderen","vodka","volkswagen","volvo","vote","voting","voto","voyage","vuelos","wales","walmart","walter","wang","wanggou","warman","watch","watches","weather","weatherchannel","webcam","weber","website","wed","wedding","weibo","weir","whoswho","wien","wiki","williamhill","win","windows","wine","winners","wme","wolterskluwer","woodside","work","works","world","wow","wtc","wtf","xbox","xerox","xfinity","xihuan","xin","कॉम","セール","佛山","慈善","集团","在线","大众汽车","点看","คอม","八卦","موقع","公益","公司","香格里拉","网站","移动","我爱你","москва","католик","онлайн","сайт","联通","קום","时尚","微博","淡马锡","ファッション","орг","नेट","ストア","삼성","商标","商店","商城","дети","ポイント","新闻","工行","家電","كوم","中文网","中信","娱乐","谷歌","電訊盈科","购物","クラウド","通販","网店","संगठन","餐厅","网络","ком","诺基亚","食品","飞利浦","手表","手机","ارامكو","العليان","اتصالات","بازار","موبايلي","ابوظبي","كاثوليك","همراه","닷컴","政府","شبكة","بيتك","عرب","机构","组织机构","健康","招聘","рус","珠宝","大拿","みんな","グーグル","世界","書籍","网址","닷넷","コム","天主教","游戏","vermögensberater","vermögensberatung","企业","信息","嘉里大酒店","嘉里","广东","政务","xyz","yachts","yahoo","yamaxun","yandex","yodobashi","yoga","yokohama","you","youtube","yun","zappos","zara","zero","zip","zippo","zone","zuerich","cc.ua","inf.ua","ltd.ua","beep.pl","*.compute.estate","*.alces.network","alwaysdata.net","cloudfront.net","*.compute.amazonaws.com","*.compute-1.amazonaws.com","*.compute.amazonaws.com.cn","us-east-1.amazonaws.com","cn-north-1.eb.amazonaws.com.cn","elasticbeanstalk.com","ap-northeast-1.elasticbeanstalk.com","ap-northeast-2.elasticbeanstalk.com","ap-northeast-3.elasticbeanstalk.com","ap-south-1.elasticbeanstalk.com","ap-southeast-1.elasticbeanstalk.com","ap-southeast-2.elasticbeanstalk.com","ca-central-1.elasticbeanstalk.com","eu-central-1.elasticbeanstalk.com","eu-west-1.elasticbeanstalk.com","eu-west-2.elasticbeanstalk.com","eu-west-3.elasticbeanstalk.com","sa-east-1.elasticbeanstalk.com","us-east-1.elasticbeanstalk.com","us-east-2.elasticbeanstalk.com","us-gov-west-1.elasticbeanstalk.com","us-west-1.elasticbeanstalk.com","us-west-2.elasticbeanstalk.com","*.elb.amazonaws.com","*.elb.amazonaws.com.cn","s3.amazonaws.com","s3-ap-northeast-1.amazonaws.com","s3-ap-northeast-2.amazonaws.com","s3-ap-south-1.amazonaws.com","s3-ap-southeast-1.amazonaws.com","s3-ap-southeast-2.amazonaws.com","s3-ca-central-1.amazonaws.com","s3-eu-central-1.amazonaws.com","s3-eu-west-1.amazonaws.com","s3-eu-west-2.amazonaws.com","s3-eu-west-3.amazonaws.com","s3-external-1.amazonaws.com","s3-fips-us-gov-west-1.amazonaws.com","s3-sa-east-1.amazonaws.com","s3-us-gov-west-1.amazonaws.com","s3-us-east-2.amazonaws.com","s3-us-west-1.amazonaws.com","s3-us-west-2.amazonaws.com","s3.ap-northeast-2.amazonaws.com","s3.ap-south-1.amazonaws.com","s3.cn-north-1.amazonaws.com.cn","s3.ca-central-1.amazonaws.com","s3.eu-central-1.amazonaws.com","s3.eu-west-2.amazonaws.com","s3.eu-west-3.amazonaws.com","s3.us-east-2.amazonaws.com","s3.dualstack.ap-northeast-1.amazonaws.com","s3.dualstack.ap-northeast-2.amazonaws.com","s3.dualstack.ap-south-1.amazonaws.com","s3.dualstack.ap-southeast-1.amazonaws.com","s3.dualstack.ap-southeast-2.amazonaws.com","s3.dualstack.ca-central-1.amazonaws.com","s3.dualstack.eu-central-1.amazonaws.com","s3.dualstack.eu-west-1.amazonaws.com","s3.dualstack.eu-west-2.amazonaws.com","s3.dualstack.eu-west-3.amazonaws.com","s3.dualstack.sa-east-1.amazonaws.com","s3.dualstack.us-east-1.amazonaws.com","s3.dualstack.us-east-2.amazonaws.com","s3-website-us-east-1.amazonaws.com","s3-website-us-west-1.amazonaws.com","s3-website-us-west-2.amazonaws.com","s3-website-ap-northeast-1.amazonaws.com","s3-website-ap-southeast-1.amazonaws.com","s3-website-ap-southeast-2.amazonaws.com","s3-website-eu-west-1.amazonaws.com","s3-website-sa-east-1.amazonaws.com","s3-website.ap-northeast-2.amazonaws.com","s3-website.ap-south-1.amazonaws.com","s3-website.ca-central-1.amazonaws.com","s3-website.eu-central-1.amazonaws.com","s3-website.eu-west-2.amazonaws.com","s3-website.eu-west-3.amazonaws.com","s3-website.us-east-2.amazonaws.com","t3l3p0rt.net","tele.amune.org","on-aptible.com","user.party.eus","pimienta.org","poivron.org","potager.org","sweetpepper.org","myasustor.com","myfritz.net","*.awdev.ca","*.advisor.ws","backplaneapp.io","betainabox.com","bnr.la","blackbaudcdn.net","boomla.net","boxfuse.io","square7.ch","bplaced.com","bplaced.de","square7.de","bplaced.net","square7.net","browsersafetymark.io","mycd.eu","ae.org","ar.com","br.com","cn.com","com.de","com.se","de.com","eu.com","gb.com","gb.net","hu.com","hu.net","jp.net","jpn.com","kr.com","mex.com","no.com","qc.com","ru.com","sa.com","se.net","uk.com","uk.net","us.com","uy.com","za.bz","za.com","africa.com","gr.com","in.net","us.org","co.com","c.la","certmgr.org","xenapponazure.com","virtueeldomein.nl","cleverapps.io","c66.me","cloud66.ws","jdevcloud.com","wpdevcloud.com","cloudaccess.host","freesite.host","cloudaccess.net","cloudcontrolled.com","cloudcontrolapp.com","co.ca","*.otap.co","co.cz","c.cdn77.org","cdn77-ssl.net","r.cdn77.net","rsc.cdn77.org","ssl.origin.cdn77-secure.org","cloudns.asia","cloudns.biz","cloudns.club","cloudns.cc","cloudns.eu","cloudns.in","cloudns.info","cloudns.org","cloudns.pro","cloudns.pw","cloudns.us","cloudeity.net","cnpy.gdn","co.nl","co.no","webhosting.be","hosting-cluster.nl","dyn.cosidns.de","dynamisches-dns.de","dnsupdater.de","internet-dns.de","l-o-g-i-n.de","dynamic-dns.info","feste-ip.net","knx-server.net","static-access.net","realm.cz","*.cryptonomic.net","cupcake.is","cyon.link","cyon.site","daplie.me","localhost.daplie.me","dattolocal.com","dattorelay.com","dattoweb.com","mydatto.com","dattolocal.net","mydatto.net","biz.dk","co.dk","firm.dk","reg.dk","store.dk","debian.net","dedyn.io","dnshome.de","drayddns.com","dreamhosters.com","mydrobo.com","drud.io","drud.us","duckdns.org","dy.fi","tunk.org","dyndns-at-home.com","dyndns-at-work.com","dyndns-blog.com","dyndns-free.com","dyndns-home.com","dyndns-ip.com","dyndns-mail.com","dyndns-office.com","dyndns-pics.com","dyndns-remote.com","dyndns-server.com","dyndns-web.com","dyndns-wiki.com","dyndns-work.com","dyndns.biz","dyndns.info","dyndns.org","dyndns.tv","at-band-camp.net","ath.cx","barrel-of-knowledge.info","barrell-of-knowledge.info","better-than.tv","blogdns.com","blogdns.net","blogdns.org","blogsite.org","boldlygoingnowhere.org","broke-it.net","buyshouses.net","cechire.com","dnsalias.com","dnsalias.net","dnsalias.org","dnsdojo.com","dnsdojo.net","dnsdojo.org","does-it.net","doesntexist.com","doesntexist.org","dontexist.com","dontexist.net","dontexist.org","doomdns.com","doomdns.org","dvrdns.org","dyn-o-saur.com","dynalias.com","dynalias.net","dynalias.org","dynathome.net","dyndns.ws","endofinternet.net","endofinternet.org","endoftheinternet.org","est-a-la-maison.com","est-a-la-masion.com","est-le-patron.com","est-mon-blogueur.com","for-better.biz","for-more.biz","for-our.info","for-some.biz","for-the.biz","forgot.her.name","forgot.his.name","from-ak.com","from-al.com","from-ar.com","from-az.net","from-ca.com","from-co.net","from-ct.com","from-dc.com","from-de.com","from-fl.com","from-ga.com","from-hi.com","from-ia.com","from-id.com","from-il.com","from-in.com","from-ks.com","from-ky.com","from-la.net","from-ma.com","from-md.com","from-me.org","from-mi.com","from-mn.com","from-mo.com","from-ms.com","from-mt.com","from-nc.com","from-nd.com","from-ne.com","from-nh.com","from-nj.com","from-nm.com","from-nv.com","from-ny.net","from-oh.com","from-ok.com","from-or.com","from-pa.com","from-pr.com","from-ri.com","from-sc.com","from-sd.com","from-tn.com","from-tx.com","from-ut.com","from-va.com","from-vt.com","from-wa.com","from-wi.com","from-wv.com","from-wy.com","ftpaccess.cc","fuettertdasnetz.de","game-host.org","game-server.cc","getmyip.com","gets-it.net","go.dyndns.org","gotdns.com","gotdns.org","groks-the.info","groks-this.info","ham-radio-op.net","here-for-more.info","hobby-site.com","hobby-site.org","home.dyndns.org","homedns.org","homeftp.net","homeftp.org","homeip.net","homelinux.com","homelinux.net","homelinux.org","homeunix.com","homeunix.net","homeunix.org","iamallama.com","in-the-band.net","is-a-anarchist.com","is-a-blogger.com","is-a-bookkeeper.com","is-a-bruinsfan.org","is-a-bulls-fan.com","is-a-candidate.org","is-a-caterer.com","is-a-celticsfan.org","is-a-chef.com","is-a-chef.net","is-a-chef.org","is-a-conservative.com","is-a-cpa.com","is-a-cubicle-slave.com","is-a-democrat.com","is-a-designer.com","is-a-doctor.com","is-a-financialadvisor.com","is-a-geek.com","is-a-geek.net","is-a-geek.org","is-a-green.com","is-a-guru.com","is-a-hard-worker.com","is-a-hunter.com","is-a-knight.org","is-a-landscaper.com","is-a-lawyer.com","is-a-liberal.com","is-a-libertarian.com","is-a-linux-user.org","is-a-llama.com","is-a-musician.com","is-a-nascarfan.com","is-a-nurse.com","is-a-painter.com","is-a-patsfan.org","is-a-personaltrainer.com","is-a-photographer.com","is-a-player.com","is-a-republican.com","is-a-rockstar.com","is-a-socialist.com","is-a-soxfan.org","is-a-student.com","is-a-teacher.com","is-a-techie.com","is-a-therapist.com","is-an-accountant.com","is-an-actor.com","is-an-actress.com","is-an-anarchist.com","is-an-artist.com","is-an-engineer.com","is-an-entertainer.com","is-by.us","is-certified.com","is-found.org","is-gone.com","is-into-anime.com","is-into-cars.com","is-into-cartoons.com","is-into-games.com","is-leet.com","is-lost.org","is-not-certified.com","is-saved.org","is-slick.com","is-uberleet.com","is-very-bad.org","is-very-evil.org","is-very-good.org","is-very-nice.org","is-very-sweet.org","is-with-theband.com","isa-geek.com","isa-geek.net","isa-geek.org","isa-hockeynut.com","issmarterthanyou.com","isteingeek.de","istmein.de","kicks-ass.net","kicks-ass.org","knowsitall.info","land-4-sale.us","lebtimnetz.de","leitungsen.de","likes-pie.com","likescandy.com","merseine.nu","mine.nu","misconfused.org","mypets.ws","myphotos.cc","neat-url.com","office-on-the.net","on-the-web.tv","podzone.net","podzone.org","readmyblog.org","saves-the-whales.com","scrapper-site.net","scrapping.cc","selfip.biz","selfip.com","selfip.info","selfip.net","selfip.org","sells-for-less.com","sells-for-u.com","sells-it.net","sellsyourhome.org","servebbs.com","servebbs.net","servebbs.org","serveftp.net","serveftp.org","servegame.org","shacknet.nu","simple-url.com","space-to-rent.com","stuff-4-sale.org","stuff-4-sale.us","teaches-yoga.com","thruhere.net","traeumtgerade.de","webhop.biz","webhop.info","webhop.net","webhop.org","worse-than.tv","writesthisblog.com","ddnss.de","dyn.ddnss.de","dyndns.ddnss.de","dyndns1.de","dyn-ip24.de","home-webserver.de","dyn.home-webserver.de","myhome-server.de","ddnss.org","definima.net","definima.io","bci.dnstrace.pro","ddnsfree.com","ddnsgeek.com","giize.com","gleeze.com","kozow.com","loseyourip.com","ooguy.com","theworkpc.com","casacam.net","dynu.net","accesscam.org","camdvr.org","freeddns.org","mywire.org","webredirect.org","myddns.rocks","blogsite.xyz","dynv6.net","e4.cz","mytuleap.com","enonic.io","customer.enonic.io","eu.org","al.eu.org","asso.eu.org","at.eu.org","au.eu.org","be.eu.org","bg.eu.org","ca.eu.org","cd.eu.org","ch.eu.org","cn.eu.org","cy.eu.org","cz.eu.org","de.eu.org","dk.eu.org","edu.eu.org","ee.eu.org","es.eu.org","fi.eu.org","fr.eu.org","gr.eu.org","hr.eu.org","hu.eu.org","ie.eu.org","il.eu.org","in.eu.org","int.eu.org","is.eu.org","it.eu.org","jp.eu.org","kr.eu.org","lt.eu.org","lu.eu.org","lv.eu.org","mc.eu.org","me.eu.org","mk.eu.org","mt.eu.org","my.eu.org","net.eu.org","ng.eu.org","nl.eu.org","no.eu.org","nz.eu.org","paris.eu.org","pl.eu.org","pt.eu.org","q-a.eu.org","ro.eu.org","ru.eu.org","se.eu.org","si.eu.org","sk.eu.org","tr.eu.org","uk.eu.org","us.eu.org","eu-1.evennode.com","eu-2.evennode.com","eu-3.evennode.com","eu-4.evennode.com","us-1.evennode.com","us-2.evennode.com","us-3.evennode.com","us-4.evennode.com","twmail.cc","twmail.net","twmail.org","mymailer.com.tw","url.tw","apps.fbsbx.com","ru.net","adygeya.ru","bashkiria.ru","bir.ru","cbg.ru","com.ru","dagestan.ru","grozny.ru","kalmykia.ru","kustanai.ru","marine.ru","mordovia.ru","msk.ru","mytis.ru","nalchik.ru","nov.ru","pyatigorsk.ru","spb.ru","vladikavkaz.ru","vladimir.ru","abkhazia.su","adygeya.su","aktyubinsk.su","arkhangelsk.su","armenia.su","ashgabad.su","azerbaijan.su","balashov.su","bashkiria.su","bryansk.su","bukhara.su","chimkent.su","dagestan.su","east-kazakhstan.su","exnet.su","georgia.su","grozny.su","ivanovo.su","jambyl.su","kalmykia.su","kaluga.su","karacol.su","karaganda.su","karelia.su","khakassia.su","krasnodar.su","kurgan.su","kustanai.su","lenug.su","mangyshlak.su","mordovia.su","msk.su","murmansk.su","nalchik.su","navoi.su","north-kazakhstan.su","nov.su","obninsk.su","penza.su","pokrovsk.su","sochi.su","spb.su","tashkent.su","termez.su","togliatti.su","troitsk.su","tselinograd.su","tula.su","tuva.su","vladikavkaz.su","vladimir.su","vologda.su","channelsdvr.net","fastlylb.net","map.fastlylb.net","freetls.fastly.net","map.fastly.net","a.prod.fastly.net","global.prod.fastly.net","a.ssl.fastly.net","b.ssl.fastly.net","global.ssl.fastly.net","fastpanel.direct","fastvps-server.com","fhapp.xyz","fedorainfracloud.org","fedorapeople.org","cloud.fedoraproject.org","app.os.fedoraproject.org","app.os.stg.fedoraproject.org","filegear.me","firebaseapp.com","flynnhub.com","flynnhosting.net","freebox-os.com","freeboxos.com","fbx-os.fr","fbxos.fr","freebox-os.fr","freeboxos.fr","freedesktop.org","*.futurecms.at","*.ex.futurecms.at","*.in.futurecms.at","futurehosting.at","futuremailing.at","*.ex.ortsinfo.at","*.kunden.ortsinfo.at","*.statics.cloud","service.gov.uk","github.io","githubusercontent.com","gitlab.io","homeoffice.gov.uk","ro.im","shop.ro","goip.de","*.0emm.com","appspot.com","blogspot.ae","blogspot.al","blogspot.am","blogspot.ba","blogspot.be","blogspot.bg","blogspot.bj","blogspot.ca","blogspot.cf","blogspot.ch","blogspot.cl","blogspot.co.at","blogspot.co.id","blogspot.co.il","blogspot.co.ke","blogspot.co.nz","blogspot.co.uk","blogspot.co.za","blogspot.com","blogspot.com.ar","blogspot.com.au","blogspot.com.br","blogspot.com.by","blogspot.com.co","blogspot.com.cy","blogspot.com.ee","blogspot.com.eg","blogspot.com.es","blogspot.com.mt","blogspot.com.ng","blogspot.com.tr","blogspot.com.uy","blogspot.cv","blogspot.cz","blogspot.de","blogspot.dk","blogspot.fi","blogspot.fr","blogspot.gr","blogspot.hk","blogspot.hr","blogspot.hu","blogspot.ie","blogspot.in","blogspot.is","blogspot.it","blogspot.jp","blogspot.kr","blogspot.li","blogspot.lt","blogspot.lu","blogspot.md","blogspot.mk","blogspot.mr","blogspot.mx","blogspot.my","blogspot.nl","blogspot.no","blogspot.pe","blogspot.pt","blogspot.qa","blogspot.re","blogspot.ro","blogspot.rs","blogspot.ru","blogspot.se","blogspot.sg","blogspot.si","blogspot.sk","blogspot.sn","blogspot.td","blogspot.tw","blogspot.ug","blogspot.vn","cloudfunctions.net","cloud.goog","codespot.com","googleapis.com","googlecode.com","pagespeedmobilizer.com","publishproxy.com","withgoogle.com","withyoutube.com","hashbang.sh","hasura.app","hasura-app.io","hepforge.org","herokuapp.com","herokussl.com","myravendb.com","ravendb.community","ravendb.me","development.run","ravendb.run","moonscale.net","iki.fi","biz.at","info.at","info.cx","ac.leg.br","al.leg.br","am.leg.br","ap.leg.br","ba.leg.br","ce.leg.br","df.leg.br","es.leg.br","go.leg.br","ma.leg.br","mg.leg.br","ms.leg.br","mt.leg.br","pa.leg.br","pb.leg.br","pe.leg.br","pi.leg.br","pr.leg.br","rj.leg.br","rn.leg.br","ro.leg.br","rr.leg.br","rs.leg.br","sc.leg.br","se.leg.br","sp.leg.br","to.leg.br","pixolino.com","ipifony.net","mein-iserv.de","test-iserv.de","myjino.ru","*.hosting.myjino.ru","*.landing.myjino.ru","*.spectrum.myjino.ru","*.vps.myjino.ru","*.triton.zone","*.cns.joyent.com","js.org","keymachine.de","knightpoint.systems","co.krd","edu.krd","git-repos.de","lcube-server.de","svn-repos.de","app.lmpm.com","linkitools.space","linkyard.cloud","linkyard-cloud.ch","we.bs","uklugs.org","glug.org.uk","lug.org.uk","lugs.org.uk","barsy.bg","barsy.co.uk","barsyonline.co.uk","barsycenter.com","barsyonline.com","barsy.club","barsy.de","barsy.eu","barsy.in","barsy.info","barsy.io","barsy.me","barsy.menu","barsy.mobi","barsy.net","barsy.online","barsy.org","barsy.pro","barsy.pub","barsy.shop","barsy.site","barsy.support","barsy.uk","*.magentosite.cloud","mayfirst.info","mayfirst.org","hb.cldmail.ru","miniserver.com","memset.net","cloud.metacentrum.cz","custom.metacentrum.cz","flt.cloud.muni.cz","usr.cloud.muni.cz","meteorapp.com","eu.meteorapp.com","co.pl","azurecontainer.io","azurewebsites.net","azure-mobile.net","cloudapp.net","mozilla-iot.org","bmoattachments.org","net.ru","org.ru","pp.ru","bitballoon.com","netlify.com","4u.com","ngrok.io","nh-serv.co.uk","nfshost.com","dnsking.ch","mypi.co","n4t.co","001www.com","ddnslive.com","myiphost.com","forumz.info","16-b.it","32-b.it","64-b.it","soundcast.me","tcp4.me","dnsup.net","hicam.net","now-dns.net","ownip.net","vpndns.net","dynserv.org","now-dns.org","x443.pw","now-dns.top","ntdll.top","freeddns.us","crafting.xyz","zapto.xyz","nsupdate.info","nerdpol.ovh","blogsyte.com","brasilia.me","cable-modem.org","ciscofreak.com","collegefan.org","couchpotatofries.org","damnserver.com","ddns.me","ditchyourip.com","dnsfor.me","dnsiskinky.com","dvrcam.info","dynns.com","eating-organic.net","fantasyleague.cc","geekgalaxy.com","golffan.us","health-carereform.com","homesecuritymac.com","homesecuritypc.com","hopto.me","ilovecollege.info","loginto.me","mlbfan.org","mmafan.biz","myactivedirectory.com","mydissent.net","myeffect.net","mymediapc.net","mypsx.net","mysecuritycamera.com","mysecuritycamera.net","mysecuritycamera.org","net-freaks.com","nflfan.org","nhlfan.net","no-ip.ca","no-ip.co.uk","no-ip.net","noip.us","onthewifi.com","pgafan.net","point2this.com","pointto.us","privatizehealthinsurance.net","quicksytes.com","read-books.org","securitytactics.com","serveexchange.com","servehumour.com","servep2p.com","servesarcasm.com","stufftoread.com","ufcfan.org","unusualperson.com","workisboring.com","3utilities.com","bounceme.net","ddns.net","ddnsking.com","gotdns.ch","hopto.org","myftp.biz","myftp.org","myvnc.com","no-ip.biz","no-ip.info","no-ip.org","noip.me","redirectme.net","servebeer.com","serveblog.net","servecounterstrike.com","serveftp.com","servegame.com","servehalflife.com","servehttp.com","serveirc.com","serveminecraft.net","servemp3.com","servepics.com","servequake.com","sytes.net","webhop.me","zapto.org","stage.nodeart.io","nodum.co","nodum.io","pcloud.host","nyc.mn","nom.ae","nom.af","nom.ai","nom.al","nym.by","nym.bz","nom.cl","nom.gd","nom.ge","nom.gl","nym.gr","nom.gt","nym.gy","nom.hn","nym.ie","nom.im","nom.ke","nym.kz","nym.la","nym.lc","nom.li","nym.li","nym.lt","nym.lu","nym.me","nom.mk","nym.mn","nym.mx","nom.nu","nym.nz","nym.pe","nym.pt","nom.pw","nom.qa","nym.ro","nom.rs","nom.si","nym.sk","nom.st","nym.su","nym.sx","nom.tj","nym.tw","nom.ug","nom.uy","nom.vc","nom.vg","cya.gg","cloudycluster.net","nid.io","opencraft.hosting","operaunite.com","outsystemscloud.com","ownprovider.com","own.pm","ox.rs","oy.lc","pgfog.com","pagefrontapp.com","art.pl","gliwice.pl","krakow.pl","poznan.pl","wroc.pl","zakopane.pl","pantheonsite.io","gotpantheon.com","mypep.link","on-web.fr","*.platform.sh","*.platformsh.site","xen.prgmr.com","priv.at","protonet.io","chirurgiens-dentistes-en-france.fr","byen.site","ras.ru","qa2.com","dev-myqnapcloud.com","alpha-myqnapcloud.com","myqnapcloud.com","*.quipelements.com","vapor.cloud","vaporcloud.io","rackmaze.com","rackmaze.net","rhcloud.com","resindevice.io","devices.resinstaging.io","hzc.io","wellbeingzone.eu","ptplus.fit","wellbeingzone.co.uk","sandcats.io","logoip.de","logoip.com","schokokeks.net","scrysec.com","firewall-gateway.com","firewall-gateway.de","my-gateway.de","my-router.de","spdns.de","spdns.eu","firewall-gateway.net","my-firewall.org","myfirewall.org","spdns.org","*.s5y.io","*.sensiosite.cloud","biz.ua","co.ua","pp.ua","shiftedit.io","myshopblocks.com","1kapp.com","appchizi.com","applinzi.com","sinaapp.com","vipsinaapp.com","bounty-full.com","alpha.bounty-full.com","beta.bounty-full.com","static.land","dev.static.land","sites.static.land","apps.lair.io","*.stolos.io","spacekit.io","customer.speedpartner.de","storj.farm","utwente.io","temp-dns.com","diskstation.me","dscloud.biz","dscloud.me","dscloud.mobi","dsmynas.com","dsmynas.net","dsmynas.org","familyds.com","familyds.net","familyds.org","i234.me","myds.me","synology.me","vpnplus.to","taifun-dns.de","gda.pl","gdansk.pl","gdynia.pl","med.pl","sopot.pl","gwiddle.co.uk","cust.dev.thingdust.io","cust.disrec.thingdust.io","cust.prod.thingdust.io","cust.testing.thingdust.io","bloxcms.com","townnews-staging.com","12hp.at","2ix.at","4lima.at","lima-city.at","12hp.ch","2ix.ch","4lima.ch","lima-city.ch","trafficplex.cloud","de.cool","12hp.de","2ix.de","4lima.de","lima-city.de","1337.pictures","clan.rip","lima-city.rocks","webspace.rocks","lima.zone","*.transurl.be","*.transurl.eu","*.transurl.nl","tuxfamily.org","dd-dns.de","diskstation.eu","diskstation.org","dray-dns.de","draydns.de","dyn-vpn.de","dynvpn.de","mein-vigor.de","my-vigor.de","my-wan.de","syno-ds.de","synology-diskstation.de","synology-ds.de","uber.space","*.uberspace.de","hk.com","hk.org","ltd.hk","inc.hk","virtualuser.de","virtual-user.de","lib.de.us","2038.io","router.management","v-info.info","wedeploy.io","wedeploy.me","wedeploy.sh","remotewd.com","wmflabs.org","half.host","xnbay.com","u2.xnbay.com","u2-local.xnbay.com","cistron.nl","demon.nl","xs4all.space","official.academy","yolasite.com","ybo.faith","yombo.me","homelink.one","ybo.party","ybo.review","ybo.science","ybo.trade","nohost.me","noho.st","za.net","za.org","now.sh","zone.id"]
-},{}],344:[function(require,module,exports){
+},{}],401:[function(require,module,exports){
 /*eslint no-var:0, prefer-arrow-callback: 0, object-shorthand: 0 */
 'use strict';
 
@@ -72408,7 +83445,275 @@ exports.isValid = function (domain) {
   return Boolean(parsed.domain && parsed.listed);
 };
 
-},{"./data/rules.json":343,"punycode":144}],345:[function(require,module,exports){
+},{"./data/rules.json":400,"punycode":144}],402:[function(require,module,exports){
+arguments[4][151][0].apply(exports,arguments)
+},{"./_stream_readable":404,"./_stream_writable":406,"core-util-is":198,"dup":151,"inherits":218,"process-nextick-args":399}],403:[function(require,module,exports){
+arguments[4][152][0].apply(exports,arguments)
+},{"./_stream_transform":405,"core-util-is":198,"dup":152,"inherits":218}],404:[function(require,module,exports){
+arguments[4][153][0].apply(exports,arguments)
+},{"./_stream_duplex":402,"./internal/streams/BufferList":407,"./internal/streams/destroy":408,"./internal/streams/stream":409,"_process":137,"core-util-is":198,"dup":153,"events":90,"inherits":218,"isarray":410,"process-nextick-args":399,"safe-buffer":413,"string_decoder/":411,"util":23}],405:[function(require,module,exports){
+arguments[4][154][0].apply(exports,arguments)
+},{"./_stream_duplex":402,"core-util-is":198,"dup":154,"inherits":218}],406:[function(require,module,exports){
+arguments[4][155][0].apply(exports,arguments)
+},{"./_stream_duplex":402,"./internal/streams/destroy":408,"./internal/streams/stream":409,"_process":137,"core-util-is":198,"dup":155,"inherits":218,"process-nextick-args":399,"safe-buffer":413,"timers":179,"util-deprecate":425}],407:[function(require,module,exports){
+arguments[4][156][0].apply(exports,arguments)
+},{"dup":156,"safe-buffer":413,"util":23}],408:[function(require,module,exports){
+arguments[4][157][0].apply(exports,arguments)
+},{"dup":157,"process-nextick-args":399}],409:[function(require,module,exports){
+arguments[4][158][0].apply(exports,arguments)
+},{"dup":158,"events":90}],410:[function(require,module,exports){
+arguments[4][110][0].apply(exports,arguments)
+},{"dup":110}],411:[function(require,module,exports){
+arguments[4][178][0].apply(exports,arguments)
+},{"dup":178,"safe-buffer":413}],412:[function(require,module,exports){
+arguments[4][160][0].apply(exports,arguments)
+},{"./lib/_stream_duplex.js":402,"./lib/_stream_passthrough.js":403,"./lib/_stream_readable.js":404,"./lib/_stream_transform.js":405,"./lib/_stream_writable.js":406,"dup":160}],413:[function(require,module,exports){
+arguments[4][164][0].apply(exports,arguments)
+},{"buffer":54,"dup":164}],414:[function(require,module,exports){
+module.exports = require('./lib/SqlString');
+
+},{"./lib/SqlString":415}],415:[function(require,module,exports){
+(function (Buffer){
+var SqlString  = exports;
+
+var ID_GLOBAL_REGEXP    = /`/g;
+var QUAL_GLOBAL_REGEXP  = /\./g;
+var CHARS_GLOBAL_REGEXP = /[\0\b\t\n\r\x1a\"\'\\]/g; // eslint-disable-line no-control-regex
+var CHARS_ESCAPE_MAP    = {
+  '\0'   : '\\0',
+  '\b'   : '\\b',
+  '\t'   : '\\t',
+  '\n'   : '\\n',
+  '\r'   : '\\r',
+  '\x1a' : '\\Z',
+  '"'    : '\\"',
+  '\''   : '\\\'',
+  '\\'   : '\\\\'
+};
+
+SqlString.escapeId = function escapeId(val, forbidQualified) {
+  if (Array.isArray(val)) {
+    var sql = '';
+
+    for (var i = 0; i < val.length; i++) {
+      sql += (i === 0 ? '' : ', ') + SqlString.escapeId(val[i], forbidQualified);
+    }
+
+    return sql;
+  } else if (forbidQualified) {
+    return '`' + String(val).replace(ID_GLOBAL_REGEXP, '``') + '`';
+  } else {
+    return '`' + String(val).replace(ID_GLOBAL_REGEXP, '``').replace(QUAL_GLOBAL_REGEXP, '`.`') + '`';
+  }
+};
+
+SqlString.escape = function escape(val, stringifyObjects, timeZone) {
+  if (val === undefined || val === null) {
+    return 'NULL';
+  }
+
+  switch (typeof val) {
+    case 'boolean': return (val) ? 'true' : 'false';
+    case 'number': return val + '';
+    case 'object':
+      if (val instanceof Date) {
+        return SqlString.dateToString(val, timeZone || 'local');
+      } else if (Array.isArray(val)) {
+        return SqlString.arrayToList(val, timeZone);
+      } else if (Buffer.isBuffer(val)) {
+        return SqlString.bufferToString(val);
+      } else if (typeof val.toSqlString === 'function') {
+        return String(val.toSqlString());
+      } else if (stringifyObjects) {
+        return escapeString(val.toString());
+      } else {
+        return SqlString.objectToValues(val, timeZone);
+      }
+    default: return escapeString(val);
+  }
+};
+
+SqlString.arrayToList = function arrayToList(array, timeZone) {
+  var sql = '';
+
+  for (var i = 0; i < array.length; i++) {
+    var val = array[i];
+
+    if (Array.isArray(val)) {
+      sql += (i === 0 ? '' : ', ') + '(' + SqlString.arrayToList(val, timeZone) + ')';
+    } else {
+      sql += (i === 0 ? '' : ', ') + SqlString.escape(val, true, timeZone);
+    }
+  }
+
+  return sql;
+};
+
+SqlString.format = function format(sql, values, stringifyObjects, timeZone) {
+  if (values == null) {
+    return sql;
+  }
+
+  if (!(values instanceof Array || Array.isArray(values))) {
+    values = [values];
+  }
+
+  var chunkIndex        = 0;
+  var placeholdersRegex = /\?+/g;
+  var result            = '';
+  var valuesIndex       = 0;
+  var match;
+
+  while (valuesIndex < values.length && (match = placeholdersRegex.exec(sql))) {
+    var len = match[0].length;
+
+    if (len > 2) {
+      continue;
+    }
+
+    var value = len === 2
+      ? SqlString.escapeId(values[valuesIndex])
+      : SqlString.escape(values[valuesIndex], stringifyObjects, timeZone);
+
+    result += sql.slice(chunkIndex, match.index) + value;
+    chunkIndex = placeholdersRegex.lastIndex;
+    valuesIndex++;
+  }
+
+  if (chunkIndex === 0) {
+    // Nothing was replaced
+    return sql;
+  }
+
+  if (chunkIndex < sql.length) {
+    return result + sql.slice(chunkIndex);
+  }
+
+  return result;
+};
+
+SqlString.dateToString = function dateToString(date, timeZone) {
+  var dt = new Date(date);
+
+  if (isNaN(dt.getTime())) {
+    return 'NULL';
+  }
+
+  var year;
+  var month;
+  var day;
+  var hour;
+  var minute;
+  var second;
+  var millisecond;
+
+  if (timeZone === 'local') {
+    year        = dt.getFullYear();
+    month       = dt.getMonth() + 1;
+    day         = dt.getDate();
+    hour        = dt.getHours();
+    minute      = dt.getMinutes();
+    second      = dt.getSeconds();
+    millisecond = dt.getMilliseconds();
+  } else {
+    var tz = convertTimezone(timeZone);
+
+    if (tz !== false && tz !== 0) {
+      dt.setTime(dt.getTime() + (tz * 60000));
+    }
+
+    year       = dt.getUTCFullYear();
+    month       = dt.getUTCMonth() + 1;
+    day         = dt.getUTCDate();
+    hour        = dt.getUTCHours();
+    minute      = dt.getUTCMinutes();
+    second      = dt.getUTCSeconds();
+    millisecond = dt.getUTCMilliseconds();
+  }
+
+  // YYYY-MM-DD HH:mm:ss.mmm
+  var str = zeroPad(year, 4) + '-' + zeroPad(month, 2) + '-' + zeroPad(day, 2) + ' ' +
+    zeroPad(hour, 2) + ':' + zeroPad(minute, 2) + ':' + zeroPad(second, 2) + '.' +
+    zeroPad(millisecond, 3);
+
+  return escapeString(str);
+};
+
+SqlString.bufferToString = function bufferToString(buffer) {
+  return 'X' + escapeString(buffer.toString('hex'));
+};
+
+SqlString.objectToValues = function objectToValues(object, timeZone) {
+  var sql = '';
+
+  for (var key in object) {
+    var val = object[key];
+
+    if (typeof val === 'function') {
+      continue;
+    }
+
+    sql += (sql.length === 0 ? '' : ', ') + SqlString.escapeId(key) + ' = ' + SqlString.escape(val, true, timeZone);
+  }
+
+  return sql;
+};
+
+SqlString.raw = function raw(sql) {
+  if (typeof sql !== 'string') {
+    throw new TypeError('argument sql must be a string');
+  }
+
+  return {
+    toSqlString: function toSqlString() { return sql; }
+  };
+};
+
+function escapeString(val) {
+  var chunkIndex = CHARS_GLOBAL_REGEXP.lastIndex = 0;
+  var escapedVal = '';
+  var match;
+
+  while ((match = CHARS_GLOBAL_REGEXP.exec(val))) {
+    escapedVal += val.slice(chunkIndex, match.index) + CHARS_ESCAPE_MAP[match[0]];
+    chunkIndex = CHARS_GLOBAL_REGEXP.lastIndex;
+  }
+
+  if (chunkIndex === 0) {
+    // Nothing was escaped
+    return "'" + val + "'";
+  }
+
+  if (chunkIndex < val.length) {
+    return "'" + escapedVal + val.slice(chunkIndex) + "'";
+  }
+
+  return "'" + escapedVal + "'";
+}
+
+function zeroPad(number, length) {
+  number = number.toString();
+  while (number.length < length) {
+    number = '0' + number;
+  }
+
+  return number;
+}
+
+function convertTimezone(tz) {
+  if (tz === 'Z') {
+    return 0;
+  }
+
+  var m = tz.match(/([\+\-\s])(\d\d):?(\d\d)?/);
+  if (m) {
+    return (m[1] === '-' ? -1 : 1) * (parseInt(m[2], 10) + ((m[3] ? parseInt(m[3], 10) : 0) / 60)) * 60;
+  }
+  return false;
+}
+
+}).call(this,{"isBuffer":require("../../../../../../../../../Users/rbouamira/AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js")})
+},{"../../../../../../../../../Users/rbouamira/AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js":109}],416:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -72631,7 +83936,7 @@ function base64DetectIncompleteChar(buffer) {
   this.charLength = this.charReceived ? 3 : 0;
 }
 
-},{"buffer":54}],346:[function(require,module,exports){
+},{"buffer":54}],417:[function(require,module,exports){
 (function (Buffer){
 var util = require('util')
 var Stream = require('stream')
@@ -72737,7 +84042,7 @@ function alignedWrite(buffer) {
 }
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":54,"stream":173,"string_decoder":178,"util":185}],347:[function(require,module,exports){
+},{"buffer":54,"stream":173,"string_decoder":178,"util":185}],418:[function(require,module,exports){
 /*!
  * Copyright (c) 2015, Salesforce.com, Inc.
  * All rights reserved.
@@ -74170,7 +85475,7 @@ exports.permuteDomain = require('./permuteDomain').permuteDomain;
 exports.permutePath = permutePath;
 exports.canonicalDomain = canonicalDomain;
 
-},{"../package.json":353,"./memstore":348,"./pathMatch":349,"./permuteDomain":350,"./pubsuffix-psl":351,"./store":352,"net":1,"punycode":144,"url":181,"util":185}],348:[function(require,module,exports){
+},{"../package.json":424,"./memstore":419,"./pathMatch":420,"./permuteDomain":421,"./pubsuffix-psl":422,"./store":423,"net":1,"punycode":144,"url":181,"util":185}],419:[function(require,module,exports){
 /*!
  * Copyright (c) 2015, Salesforce.com, Inc.
  * All rights reserved.
@@ -74348,7 +85653,7 @@ MemoryCookieStore.prototype.getAllCookies = function(cb) {
   cb(null, cookies);
 };
 
-},{"./pathMatch":349,"./permuteDomain":350,"./store":352,"util":185}],349:[function(require,module,exports){
+},{"./pathMatch":420,"./permuteDomain":421,"./store":423,"util":185}],420:[function(require,module,exports){
 /*!
  * Copyright (c) 2015, Salesforce.com, Inc.
  * All rights reserved.
@@ -74411,7 +85716,7 @@ function pathMatch (reqPath, cookiePath) {
 
 exports.pathMatch = pathMatch;
 
-},{}],350:[function(require,module,exports){
+},{}],421:[function(require,module,exports){
 /*!
  * Copyright (c) 2015, Salesforce.com, Inc.
  * All rights reserved.
@@ -74469,7 +85774,7 @@ function permuteDomain (domain) {
 
 exports.permuteDomain = permuteDomain;
 
-},{"./pubsuffix-psl":351}],351:[function(require,module,exports){
+},{"./pubsuffix-psl":422}],422:[function(require,module,exports){
 /*!
  * Copyright (c) 2018, Salesforce.com, Inc.
  * All rights reserved.
@@ -74509,7 +85814,7 @@ function getPublicSuffix(domain) {
 
 exports.getPublicSuffix = getPublicSuffix;
 
-},{"psl":344}],352:[function(require,module,exports){
+},{"psl":401}],423:[function(require,module,exports){
 /*!
  * Copyright (c) 2015, Salesforce.com, Inc.
  * All rights reserved.
@@ -74582,7 +85887,7 @@ Store.prototype.getAllCookies = function(cb) {
   throw new Error('getAllCookies is not implemented (therefore jar cannot be serialized)');
 };
 
-},{}],353:[function(require,module,exports){
+},{}],424:[function(require,module,exports){
 module.exports={
   "_from": "tough-cookie@>=0.12.0",
   "_id": "tough-cookie@2.4.3",
@@ -74678,6 +85983,8 @@ module.exports={
   "version": "2.4.3"
 }
 
-},{}],354:[function(require,module,exports){
+},{}],425:[function(require,module,exports){
+arguments[4][183][0].apply(exports,arguments)
+},{"dup":183}],426:[function(require,module,exports){
 arguments[4][187][0].apply(exports,arguments)
 },{"dup":187}]},{},[188]);

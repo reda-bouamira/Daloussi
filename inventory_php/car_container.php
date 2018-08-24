@@ -1,8 +1,5 @@
 <?php 
-	$cars_xml = simplexml_load_file('xml/cars.xml');
-
-	$json = json_encode($cars_xml);
-	$cars = json_decode($json,TRUE);
+	require('php/select_cars.php');
 
 	$selected_cars = array();
 
@@ -10,19 +7,19 @@
         $sort_option = filter_input(INPUT_GET, 'sort', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         if ($sort_option == 'lyear') {
-			usort($cars['car'], function($a, $b) {
+			usort($cars, function($a, $b) {
 			    return $a['year'] <=> $b['year'];
 			});
 		} elseif ($sort_option == 'hyear') {
-			usort($cars['car'], function($a, $b) {
+			usort($cars, function($a, $b) {
 			    return $b['year'] <=> $a['year'];
 			});
 		} elseif ($sort_option == 'hprice') {
-			usort($cars['car'], function($a, $b) {
+			usort($cars, function($a, $b) {
 			    return $b['price'] <=> $a['price'];
 			});
 		} elseif ($sort_option == 'lprice') {
-			usort($cars['car'], function($a, $b) {
+			usort($cars, function($a, $b) {
 			    return $a['price'] <=> $b['price'];
 			});
 		}
@@ -89,7 +86,7 @@
     		}
     	}
     } else{
-    	$selected_cars = $cars['car'];
+    	$selected_cars = $cars;
     }
 
     $cars_count = count($cars);
@@ -99,7 +96,7 @@
 	<?php foreach ($selected_cars as $car): ?>
 		<div class="row border justify-content-center my_car_container">
 			<div class="col-sm-5 pl-0">
-				<img class="img-fluid border" src="xml/car_pics/<?= $car['pics'] ?>/main.jpg">
+				<img class="img-fluid border" src="<?= $car['main_image'] ?>">
 			</div>
 			<div class="col-sm-7 pl-5">
 				<div class="row pt-3">

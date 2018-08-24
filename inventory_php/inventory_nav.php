@@ -1,47 +1,45 @@
 <?php
-  $get_values = "?";
-  if (isset($_GET['sort'])) {
-    $sort_option = filter_input(INPUT_GET, 'sort', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-      if ($sort_option != "") {
-        $get_values = "?sort=" . $sort_option . "&";
-      }
-  }
+    require('php/select_cars.php');
+    $get_values = "?";
+    if (isset($_GET['sort'])) {
+        $sort_option = filter_input(INPUT_GET, 'sort', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if ($sort_option != "") {
+            $get_values = "?sort=" . $sort_option . "&";
+        }
+    }
 
+    $cars_array = $cars;
 
-  $cars_xml = simplexml_load_file('xml/cars.xml');
-  $json_decode_cars = json_decode(  json_encode($cars_xml), true);
-  $cars_array = array_values($json_decode_cars);
+    $car_years = array();
+    foreach ($cars_array as $car) {
+        array_push($car_years, $car['year']);
+    }
+    $car_years = array_unique($car_years);
+    rsort($car_years);
 
-  $car_years = array();
-  foreach ($cars_array[0] as $car) {
-    array_push($car_years, $car['year']);
-  }
-  $car_years = array_unique($car_years);
-  rsort($car_years);
+    $car_makes = array();
+    foreach ($cars_array as $car) {
+        array_push($car_makes, $car['make']);
+    }
+    $car_makes = array_unique($car_makes);
+    sort($car_makes);
 
-  $car_makes = array();
-  foreach ($cars_array[0] as $car) {
-    array_push($car_makes, $car['make']);
-  }
-  $car_makes = array_unique($car_makes);
-  sort($car_makes);
+    // $car_types = array();
+    // foreach ($cars_array[0] as $car) {
+    //   array_push($car_types, $car['type']);
+    // }
+    // $car_types = array_unique($car_types);
+    // sort($car_types);
 
-  // $car_types = array();
-  // foreach ($cars_array[0] as $car) {
-  //   array_push($car_types, $car['type']);
-  // }
-  // $car_types = array_unique($car_types);
-  // sort($car_types);
+    $car_transmissions = array("Automatic", "Manual");
+    $car_fuels = array("Gasoline", "Diesel");
 
-  $car_transmissions = array("Automatic", "Manual");
-  $car_fuels = array("Gasoline", "Diesel");
-
-  $car_colours = array();
-  foreach ($cars_array[0] as $car) {
-    array_push($car_colours, $car['colour']);
-  }
-  $car_colours = array_unique($car_colours);
-  sort($car_colours);
+    $car_colours = array();
+    foreach ($cars_array as $car) {
+        array_push($car_colours, $car['colour']);
+    }
+    $car_colours = array_unique($car_colours);
+    sort($car_colours);
 ?>
 
 <ul class="nav justify-content-center bg-dark">

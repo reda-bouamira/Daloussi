@@ -1,21 +1,10 @@
 <?php   
-    require 'php/select.php';
-
-        if (isset($_GET['sort'])) {
-            $sort_option = filter_input(INPUT_GET, 'sort', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        }
-
-        if (isset($_POST['car']))   {
-            print_r($_POST['car']);
-        }
-        else{
-            print_r($_POST);
-        } 
-
-        print_r($urls);
-
-        $urls_js = json_encode($urls);
-        ?>
+    require('php/db_connect.php');
+    
+    if (isset($_GET['sort'])) {
+        $sort_option = filter_input(INPUT_GET, 'sort', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    }
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,8 +12,8 @@
     	<?php include 'php/head.php' ?>
     </head>
     <!-- <script src="js/kijiji-scraper/bundle.js"></script> -->
-        <!--Start of Tawk.to Script-->
-    <!-- <script type="text/javascript">
+        <!-- Start of Tawk.to Script-->
+    <script type="text/javascript">
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
     (function(){
     var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
@@ -34,67 +23,9 @@
     s1.setAttribute('crossorigin','*');
     s0.parentNode.insertBefore(s1,s0);
     })();
-    </script> -->
-    <!--End of Tawk.to Script-->
-    <script>
-        function ajax_kijiji(){
-            var urls = <?php echo $urls_js; ?>;
-            
-            var i;
-            for(i=0; i < urls.length; i++) {
-                var promiseAd = getAd(urls[i]['url']);
-                
-                var ad = promiseAd.then(function(value){
-                    // var car = 
-                    //     {   year : value.attributes.caryear,
-                    //         make : value.attributes.carmake;,
-                    //         model : value.attributes.carmodel,
-                    //         trim : value.attributes.cartrim,
-                    //         price : ad.attributes.price;
-                    //         km : ad.attributes.carmileageinkms;
-                    //         bodytype : ad.attributes.carbodytype;
-                    //         engine : "n/a";
-                    //         colour : ad.attributes.carcolor;
-                    //         transmission : transmissions[ad.attributes.cartransmission - 1];
-                    //         fuel : ad.attributes.carfueltype;
-                    //         drivetrain : ad.attributes.drivetrain;
-                    //         pics : ad.attributes.caryear;
-                    //         description : ad.description;}
-                    // ;
-
-                    // Create our XMLHttpRequest object
-                    var hr = new XMLHttpRequest();
-                    // Create some variables we need to send to our PHP file
-                    var url = "php/kijiji.php";
-                    var vars = value.url + "=" + JSON.stringify(value);
-                    
-                    // alert(vars);
-
-                    hr.open("POST", url, true);
-                    // Set content type header information for sending url encoded variables in the request
-                    hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    // Access the onreadystatechange event for the XMLHttpRequest object
-                    hr.onreadystatechange = function() {
-                        if(hr.readyState == 4 && hr.status == 200) {
-                            var return_data = hr.responseText;
-                            alert('success');
-                            // document.getElementById("status").innerHTML = return_data;
-                        }
-                    }
-                    // Send the data to PHP now... and wait for response to update the status div
-                    hr.send(vars); // Actually execute the request
-
-                    // console.log(car);
-                    
-
-
-                    return value
-                });
-                console.log(ad);
-            }
-        }	
     </script>
-    <body class="p-0" onload='ajax_kijiji()'>
+    <!--End of Tawk.to Script-->
+    <body class="p-0">
         <header>
             <?php include 'php/header.php' ?>
         </header>
